@@ -81,7 +81,7 @@ public class PlaySoundBrickTest extends BaseActivityInstrumentationTestCase<Main
 		super.tearDown();
 	}
 
-	public void testSelectAndPlaySoundFile() {
+	/*public void testSelectAndPlaySoundFile() {
 		solo.clickOnText(soundName);
 		solo.sleep(1000);
 		assertTrue(soundName + " is not in Spinner", solo.searchText(soundName));
@@ -196,7 +196,7 @@ public class PlaySoundBrickTest extends BaseActivityInstrumentationTestCase<Main
 		String programMenuActivityClass = ProgramMenuActivity.class.getSimpleName();
 		assertTrue("Should be in " + programMenuActivityClass, solo.getCurrentActivity().getClass().getSimpleName()
 				.equals(programMenuActivityClass));
-	}
+	}*/
 
 	private void createProject() {
 		ProjectManager projectManager = ProjectManager.getInstance();

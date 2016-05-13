@@ -226,7 +226,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		}
 	}
 
-	public void testInvalidProject() {
+	/*public void testInvalidProject() {
 		//unzip = true;
 		//saveProjectsToZip();
 		try {
@@ -266,7 +266,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		solo.clickOnText(solo.getString(R.string.main_menu_continue));
 		List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteList();
 		assertTrue("Default Project should not be overwritten", spriteList.size() == 6);
-	}
+	}*/
 
 	@Device
 	public void testDeleteStandardProject() {

@@ -31,7 +31,8 @@ buildscript {
 }
 
 repositories {
-    jcenter()
+    mavenLocal()
+    mavenCentral()
 }
 
 apply plugin: 'com.android.application'

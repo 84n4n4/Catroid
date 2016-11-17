@@ -27,6 +27,7 @@ import android.test.InstrumentationTestCase;
 import android.util.Log;
 
 import org.catrobat.catroid.ProjectManager;
+import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.SingleSprite;
 import org.catrobat.catroid.content.Sprite;
@@ -44,8 +45,6 @@ import java.util.Locale;
 
 public class UtilFileTest extends InstrumentationTestCase {
 	private static final String TAG = UtilFileTest.class.getSimpleName();
-	private static final String CATROID_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath()
-			+ "/Pocket Code";
 
 	private File testDirectory;
 	private File subDirectory;
@@ -58,10 +57,10 @@ public class UtilFileTest extends InstrumentationTestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 
-		UtilFile.deleteDirectory(new File(CATROID_DIRECTORY + "/testDirectory"));
+		UtilFile.deleteDirectory(new File(Constants.DEFAULT_ROOT));
 		TestUtils.deleteTestProjects(projectName);
 
-		testDirectory = new File(CATROID_DIRECTORY + "/testDirectory");
+		testDirectory = new File(Constants.DEFAULT_ROOT + "/testDirectory");
 		testDirectory.mkdir();
 		file1 = new File(testDirectory.getAbsolutePath() + "/file1");
 		file1.createNewFile();
@@ -135,7 +134,7 @@ public class UtilFileTest extends InstrumentationTestCase {
 		project.getDefaultScene().addSprite(sprite);
 		StorageHandler.getInstance().saveProject(project);
 
-		File catroidDirectoryFile = new File(CATROID_DIRECTORY);
+		File catroidDirectoryFile = new File(Constants.DEFAULT_ROOT);
 		File project1Directory = new File(catroidDirectoryFile + "/" + projectName);
 
 		List<String> projectList = UtilFile.getProjectNames(catroidDirectoryFile);

@@ -31,6 +31,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -42,10 +46,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
-import android.support.test.espresso.IdlingResource;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -78,7 +78,6 @@ import org.catrobat.catroid.utils.UtilFile;
 import org.catrobat.catroid.utils.UtilUi;
 import org.catrobat.catroid.utils.UtilZip;
 import org.catrobat.catroid.utils.Utils;
-import org.catrobat.catroid.utils.idlingResources.BooleanInitiallyBusyIdlingResource;
 import org.rauschig.jarchivelib.Archiver;
 import org.rauschig.jarchivelib.ArchiverFactory;
 
@@ -110,8 +109,7 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 	private SignInDialog signInDialog;
 	private Menu mainMenu;
 
-	@Nullable
-	private BooleanInitiallyBusyIdlingResource mIdlingResource;
+	CountingIdlingResource mIdlingResource = new CountingIdlingResource(TAG);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +165,7 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 
 		findViewById(R.id.progress_circle).setVisibility(View.VISIBLE);
 		final Activity activity = this;
+		mIdlingResource.increment();
 		Runnable r = new Runnable() {
 			@Override
 			public void run() {
@@ -263,9 +262,7 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 			intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 			startActivity(intent);
 		}
-		if (mIdlingResource != null) {
-			mIdlingResource.setIdleState(true);
-		}
+		mIdlingResource.decrement();
 	}
 
 	// needed because of android:onClick in activity_main_menu.xml
@@ -540,9 +537,6 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 	@VisibleForTesting
 	@NonNull
 	public IdlingResource getIdlingResource() {
-		if (mIdlingResource == null) {
-			mIdlingResource = new BooleanInitiallyBusyIdlingResource();
-		}
 		return mIdlingResource;
 	}
 }

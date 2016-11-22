@@ -41,19 +41,6 @@ public class SmokeTest{
 
 	}
 
-//
-//	@Test
-//	public void testYay(){
-//		onView(withId(R.id.main_menu_button_new))
-//				.perform(click());
-//		try {
-//			Thread.sleep(10000);
-//		}
-//		catch (InterruptedException e) {
-//			//donothing
-//		}
-//	}
-
 	@Test
 	public void newProject(){
 		onView(withId(R.id.main_menu_button_new)).perform(click());

@@ -42,6 +42,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -74,6 +78,7 @@ import org.catrobat.catroid.utils.UtilFile;
 import org.catrobat.catroid.utils.UtilUi;
 import org.catrobat.catroid.utils.UtilZip;
 import org.catrobat.catroid.utils.Utils;
+import org.catrobat.catroid.utils.idlingResources.BooleanInitiallyBusyIdlingResource;
 import org.rauschig.jarchivelib.Archiver;
 import org.rauschig.jarchivelib.ArchiverFactory;
 
@@ -104,6 +109,9 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 	private CallbackManager callbackManager;
 	private SignInDialog signInDialog;
 	private Menu mainMenu;
+
+	@Nullable
+	private BooleanInitiallyBusyIdlingResource mIdlingResource;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +159,6 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 		if (!Utils.checkForExternalStorageAvailableAndDisplayErrorIfNot(this)) {
 			return;
 		}
-
 		AppEventsLogger.activateApp(this);
 
 		SettingsActivity.setLegoMindstormsNXTSensorChooserEnabled(this, false);
@@ -255,6 +262,9 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 			intent.putExtra(ProjectActivity.EXTRA_FRAGMENT_POSITION, ProjectActivity.FRAGMENT_SCENES);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 			startActivity(intent);
+		}
+		if (mIdlingResource != null) {
+			mIdlingResource.setIdleState(true);
 		}
 	}
 
@@ -525,5 +535,14 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 		//ProjectManager.getInstance().getCurrentProject().getUserVariables().resetAllUserVariables();
 		Intent intent = new Intent(this, PreStageActivity.class);
 		startActivityForResult(intent, PreStageActivity.REQUEST_RESOURCES_INIT);
+	}
+
+	@VisibleForTesting
+	@NonNull
+	public IdlingResource getIdlingResource() {
+		if (mIdlingResource == null) {
+			mIdlingResource = new BooleanInitiallyBusyIdlingResource();
+		}
+		return mIdlingResource;
 	}
 }

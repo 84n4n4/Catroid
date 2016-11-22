@@ -1,6 +1,9 @@
 package org.catrobat.catroid.uiespresso;
 
+import android.app.Instrumentation;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.IdlingResource;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.catrobat.catroid.R;
@@ -21,15 +24,23 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class SmokeTest{
 	private static final String TAG = SmokeTest.class.getSimpleName();
+	private IdlingResource mIdlingResource;
 
 	@Rule
 	public BaseActivityInstrumentationRule<MainMenuActivity> BaseActivityTestRule = new
 			BaseActivityInstrumentationRule<>(MainMenuActivity.class);
 
 	@Before
+	public void registerIdlingResource() {
+		mIdlingResource = BaseActivityTestRule.getActivity().getIdlingResource();
+		Espresso.registerIdlingResources(mIdlingResource);
+	}
+
+	@Before
 	public void setUp() throws Exception {
 
 	}
+
 //
 //	@Test
 //	public void testYay(){
@@ -45,12 +56,6 @@ public class SmokeTest{
 
 	@Test
 	public void newProject(){
-		try {
-			Thread.sleep(2000);
-		}
-		catch (InterruptedException e) {
-			//donothing
-		}
 		onView(withId(R.id.main_menu_button_new)).perform(click());
 		onView(withId(R.id.project_name_edittext)).perform(typeText("TestProject"));
 		onView(withText(R.string.ok)).perform(click());
@@ -59,5 +64,10 @@ public class SmokeTest{
 
 	@After
 	public void tearDown() throws Exception {
+	}
+
+	@After
+	public void unregisterResource() {
+		Espresso.unregisterIdlingResources(mIdlingResource);
 	}
 }

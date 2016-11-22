@@ -49,6 +49,10 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
+    packagingOptions {
+        exclude 'META-INF/maven/com.google.guava/guava/pom.properties'
+        exclude 'META-INF/maven/com.google.guava/guava/pom.xml'
+    }
     buildTypes {
 
         debug {
@@ -152,6 +156,9 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
     androidTestCompile 'com.android.support:support-annotations:24.1.1'
+
+    compile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    compile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'

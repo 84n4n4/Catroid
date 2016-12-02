@@ -1,24 +1,21 @@
 package org.catrobat.catroid.uiespresso;
 
+import android.app.Instrumentation;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingResource;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.ui.MainMenuActivity;
-import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.uiespresso.util.BaseActivityInstrumentationRule;
-import org.catrobat.catroid.uiespresso.util.UiTestUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.onData;
-import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -26,12 +23,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-import static junit.framework.Assert.assertTrue;
-
-import static java.lang.Character.toUpperCase;
-
 @RunWith(AndroidJUnit4.class)
-public class SmokeTest{
+public class MainMenuActivityTest{
 	private static final String TAG = SmokeTest.class.getSimpleName();
 	private IdlingResource mIdlingResource;
 
@@ -65,23 +58,9 @@ public class SmokeTest{
 
 		//check if orientation dialog is displayed
 		onView(withText(R.string.project_orientation_title)).check(matches(isDisplayed()));
-		//onView(withId(R.id.landscape_mode)).perform(click());
 		onView(withText(R.string.ok)).perform(click());
 
-		//check if user ends up in right activity either by checking activity itself:
-		assertTrue(UiTestUtils.getCurrentActivity() instanceof ProjectActivity);
 
-		//or better by checking on ui elements that identify this activity
-		//onView(withText(toUpperCase(R.string.spritelist_background_headline))).check(matches(isDisplayed()));
-		//onView(withText(toUpperCase(R.string.sprites))).check(matches(isDisplayed()));
-
-		//add sprite
-		onView(withId(R.id.button_add)).perform(click());
-
-		//check if new object dialog is displayed
-		onView(withText(R.string.new_sprite_dialog_title)).check(matches(isDisplayed()));
-		//cancel by back
-		pressBack();
 	}
 
 	@After

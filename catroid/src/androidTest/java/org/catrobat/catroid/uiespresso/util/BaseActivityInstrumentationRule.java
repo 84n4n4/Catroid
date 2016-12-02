@@ -35,7 +35,6 @@ public class BaseActivityInstrumentationRule<T extends Activity> extends Activit
 	protected void beforeActivityLaunched() {
 		super.beforeActivityLaunched();
 		Reflection.setPrivateField(StageListener.class, "checkIfAutomaticScreenshotShouldBeTaken", false);
-
 		Reflection.setPrivateField(Constants.class, "DEFAULT_ROOT", Environment.getExternalStorageDirectory().getAbsolutePath()
 				+ "/Pocket Code uiTest");
 		File uiTestFolder = new File(Constants.DEFAULT_ROOT);

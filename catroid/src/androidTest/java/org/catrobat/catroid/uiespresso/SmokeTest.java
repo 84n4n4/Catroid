@@ -9,6 +9,9 @@ import org.catrobat.catroid.ui.MainMenuActivity;
 import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.uiespresso.util.BaseActivityInstrumentationRule;
 import org.catrobat.catroid.uiespresso.util.UiTestUtils;
+import org.catrobat.catroid.uiespresso.actions.CustomActions;
+import org.catrobat.catroid.uiespresso.actions.WaitAction;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,6 +26,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -82,6 +86,10 @@ public class SmokeTest{
 		onView(withText(R.string.new_sprite_dialog_title)).check(matches(isDisplayed()));
 		//cancel by back
 		pressBack();
+
+		//something you shouldnt do in the first place, but heres how to wait:
+		onView(isRoot()).perform(CustomActions.wait(5000));
+		onView(isRoot()).perform(new WaitAction(5000));
 	}
 
 	@After

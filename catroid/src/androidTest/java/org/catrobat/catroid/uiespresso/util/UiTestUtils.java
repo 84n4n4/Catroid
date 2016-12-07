@@ -10,6 +10,8 @@ import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.StartScript;
 import org.catrobat.catroid.content.bricks.SetVariableBrick;
+import org.catrobat.catroid.formulaeditor.DataContainer;
+import org.catrobat.catroid.formulaeditor.UserVariable;
 
 import java.util.Collection;
 
@@ -32,11 +34,15 @@ public class UiTestUtils {
 		return currentActivity[0];
 	}
 
-	public void createProject(String projectName) {
+	public static Project createProject(String projectName) {
 		Project project = new Project(null, projectName);
 		Sprite sprite = new Sprite("testSprite");
 		Script script = new StartScript();
+
 		SetVariableBrick setVariableBrick = new SetVariableBrick();
+		DataContainer dataContainer = project.getDefaultScene().getDataContainer();
+		UserVariable userVariable = dataContainer.addProjectUserVariable("Global1");
+		setVariableBrick.setUserVariable(userVariable);
 
 		script.addBrick(setVariableBrick);
 		sprite.addScript(script);
@@ -44,7 +50,8 @@ public class UiTestUtils {
 
 		ProjectManager.getInstance().setProject(project);
 		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
+
+		return project;
 	}
 
 }

@@ -59,8 +59,6 @@ public class MainMenuActivityTest{
 		//check if orientation dialog is displayed
 		onView(withText(R.string.project_orientation_title)).check(matches(isDisplayed()));
 		onView(withText(R.string.ok)).perform(click());
-
-
 	}
 
 	@After

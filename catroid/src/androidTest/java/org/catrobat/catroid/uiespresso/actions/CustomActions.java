@@ -23,6 +23,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static org.hamcrest.core.AllOf.allOf;
 
 public class CustomActions {
+
 	public static ViewAction wait(final int milliSeconds) {
 		return new ViewAction() {
 			@Override
@@ -104,4 +105,6 @@ public class CustomActions {
 			}
 		};
 	}
+
+
 }

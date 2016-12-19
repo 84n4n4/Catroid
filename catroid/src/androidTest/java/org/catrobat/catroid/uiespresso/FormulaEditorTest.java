@@ -47,13 +47,10 @@ public class FormulaEditorTest {
 
 	@Test
 	public void numericValuesTest(){
-		onView(withId(brick_set_variable_edit_text)).perform(click());
+		onView(withId(R.id.brick_set_variable_edit_text)).perform(click());
 		onView(isRoot()).perform(CustomActions.wait(1000));
 
-		//typeText not working for formula editor, so use CustomActionsSetFormulaEditorText
-		//onView(withId(R.id.formula_editor_edit_field)).perform(typeText("1+2"));
-		//onView(withId(R.id.formula_editor_edit_field)).perform(CustomActions.setFormulaEditorText("1+2"));
-
+		//typeText not working for formula editor, so use CustomActions.typeInValue
 		onView(withId(R.id.formula_editor_edit_field)).perform(CustomActions.typeInValue("12345,678"));
 		onView(isRoot()).perform(CustomActions.wait(3000));
 

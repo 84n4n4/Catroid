@@ -89,7 +89,6 @@ public class SmokeTest{
 
 		//something you shouldnt do in the first place, but heres how to wait:
 		onView(isRoot()).perform(CustomActions.wait(5000));
-		onView(isRoot()).perform(new WaitAction(5000));
 	}
 
 	@After

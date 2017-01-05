@@ -15,25 +15,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-
-import static junit.framework.Assert.assertTrue;
-
-import static org.catrobat.catroid.R.id.brick_set_variable_edit_text;
-
-import static java.lang.Character.toUpperCase;
 
 @RunWith(AndroidJUnit4.class)
 public class FormulaEditorTest {
 	private static final String TAG = FormulaEditorTest.class.getSimpleName();
 
 	private Project project;
-	private BaseActivity scriptActivity;
 
 	@Rule
 	public BaseActivityInstrumentationRule<ScriptActivity> BaseActivityTestRule = new

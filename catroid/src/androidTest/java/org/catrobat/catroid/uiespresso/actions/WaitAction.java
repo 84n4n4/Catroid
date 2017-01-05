@@ -8,7 +8,7 @@ import org.hamcrest.Matcher;
 
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 
-
+//another way of implementing a custom action
 public class WaitAction implements ViewAction {
 
 	int milliSeconds;

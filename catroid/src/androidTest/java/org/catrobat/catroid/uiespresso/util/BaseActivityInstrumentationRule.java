@@ -19,11 +19,13 @@ public class BaseActivityInstrumentationRule<T extends Activity> extends Activit
 	public BaseActivityInstrumentationRule(Class<T> activityClass, boolean initialTouchMode, boolean launchActivity){
 		super(activityClass, initialTouchMode, launchActivity);
 		clazz = activityClass;
+		setUpTestProjectFolder();
 	}
 
 	public BaseActivityInstrumentationRule(Class<T> activityClass, boolean initialTouchMode){
 		super(activityClass, initialTouchMode);
 		clazz = activityClass;
+		setUpTestProjectFolder();
 	}
 
 	public BaseActivityInstrumentationRule(Class<T> activityClass){
@@ -34,11 +36,6 @@ public class BaseActivityInstrumentationRule<T extends Activity> extends Activit
 	@Override
 	protected void beforeActivityLaunched() {
 		super.beforeActivityLaunched();
-		Reflection.setPrivateField(StageListener.class, "checkIfAutomaticScreenshotShouldBeTaken", false);
-		Reflection.setPrivateField(Constants.class, "DEFAULT_ROOT", Environment.getExternalStorageDirectory().getAbsolutePath()
-				+ "/Pocket Code uiTest");
-		File uiTestFolder = new File(Constants.DEFAULT_ROOT);
-		if (uiTestFolder.exists()) {deleteRecursive(uiTestFolder);}
 	}
 
 	@Override
@@ -59,5 +56,13 @@ public class BaseActivityInstrumentationRule<T extends Activity> extends Activit
 			for (File child : fileOrDirectory.listFiles())
 				deleteRecursive(child);
 		fileOrDirectory.delete();
+	}
+
+	void setUpTestProjectFolder(){
+		Reflection.setPrivateField(StageListener.class, "checkIfAutomaticScreenshotShouldBeTaken", false);
+		Reflection.setPrivateField(Constants.class, "DEFAULT_ROOT", Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Pocket Code uiTest");
+		File uiTestFolder = new File(Constants.DEFAULT_ROOT);
+		if (uiTestFolder.exists()) {deleteRecursive(uiTestFolder);}
 	}
 }

@@ -62,14 +62,14 @@ public class StageTestSimple {
 
 	@Before
 	public void setUp() throws Exception {
-		Project blueProject = createProjectWithBlueSprite("blueProject");
-		BaseActivityTestRule.launchActivity(null);
+
 
 	}
 
 	@Test
 	public void checkForBlueSpriteColor() {
-
+		Project blueProject = createProjectWithBlueSprite("blueProject");
+		BaseActivityTestRule.launchActivity(null);
 		//for some fucked up reason this isnt working
 		//byte[] testPixels1 = ScreenUtils.getFrameBufferPixels(100,100,1,1,true);
 
@@ -77,10 +77,14 @@ public class StageTestSimple {
 		//byte[] testPixels = StageActivity.stageListener.getPixels(100, 100, 1, 1);
 
 		byte[] blue = { 0, (byte) 162, (byte) 232, (byte) 255 };
+
+		//color matcher only accepts a GL20View, this can be aquired by getting the only focusable element in the stage
 		onView(isFocusable()).check(matches(StageMatchers.isColorAtPx(blue, 1, 1)));
+
 		onView(isRoot()).perform(CustomActions.wait(5000));
 	}
 
+	//how to create a project with a sprite
 	public Project createProjectWithBlueSprite(String projectName){
 		ScreenValues.SCREEN_HEIGHT = PROJECT_HEIGHT;
 		ScreenValues.SCREEN_WIDTH = PROJECT_WIDTH;

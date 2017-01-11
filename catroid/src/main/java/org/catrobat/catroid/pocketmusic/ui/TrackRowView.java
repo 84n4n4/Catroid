@@ -28,6 +28,8 @@ import android.widget.TableRow;
 
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.pocketmusic.note.MusicalBeat;
+import org.catrobat.catroid.pocketmusic.note.NoteLength;
+import org.catrobat.catroid.pocketmusic.note.NoteName;
 import org.catrobat.catroid.pocketmusic.note.trackgrid.GridRow;
 import org.catrobat.catroid.pocketmusic.note.trackgrid.GridRowPosition;
 
@@ -38,29 +40,37 @@ import java.util.List;
 public class TrackRowView extends TableRow {
 
 	public static final int QUARTER_COUNT = 4;
+	private static final int FIRST_GRIDROW_ONLY_UNTIL_SCROLLING_ENABLED = 0;
 	private final MusicalBeat beat;
 	private List<NoteView> noteViews = new ArrayList<>(QUARTER_COUNT);
 	private boolean isBlackRow;
+	private GridRow gridRow;
+	private TrackView trackView;
+	private NoteName noteName;
 
 	public TrackRowView(Context context) {
-		this(context, MusicalBeat.BEAT_4_4, false, null);
+		this(context, MusicalBeat.BEAT_4_4, false, NoteName.C1, null, null);
 	}
 
-	public TrackRowView(Context context, MusicalBeat beat, boolean isBlackRow, GridRow gridRow) {
+	public TrackRowView(Context context, MusicalBeat beat, boolean isBlackRow, NoteName noteName, GridRow gridRow,
+			TrackView trackView) {
 		super(context);
 		this.beat = beat;
+		this.noteName = noteName;
+		this.gridRow = gridRow;
+		this.trackView = trackView;
 		this.setBlackRow(isBlackRow);
 		initializeRow();
 		setWeightSum(QUARTER_COUNT);
-		updateGridRow(gridRow);
+		updateGridRow();
 	}
 
-	public void updateGridRow(GridRow gridRow) {
-		if (gridRow == null) {
+	public void updateGridRow() {
+		if (gridRow == null || gridRow.getGridRowPositions().size() == 0) {
 			return;
 		}
-		for (int i = 0; i < gridRow.getGridRowPositions().get(0).size(); i++) {
-			GridRowPosition position = gridRow.getGridRowPositions().get(0).get(i);
+		for (int i = 0; i < getFirstGridRowPositionsList().size(); i++) {
+			GridRowPosition position = getFirstGridRowPositionsList().get(i);
 			if (position != null) {
 				BigDecimal divident = new BigDecimal(position.getNoteLength().toMilliseconds(1));
 				BigDecimal divisor = new BigDecimal(beat.getNoteLength().toMilliseconds(1));
@@ -77,7 +87,8 @@ public class TrackRowView extends TableRow {
 
 	private void initializeRow() {
 		LayoutParams params = new LayoutParams(0, LayoutParams.MATCH_PARENT, 1.0f);
-		params.leftMargin = params.topMargin = params.rightMargin = params.bottomMargin = 2;
+		params.leftMargin = params.topMargin = params.rightMargin = params.bottomMargin = getResources()
+				.getDimensionPixelSize(R.dimen.pocketmusic_trackrow_margin);
 		int noteColor;
 		if (isBlackRow) {
 			noteColor = ContextCompat.getColor(getContext(), R.color.light_grey);
@@ -85,9 +96,17 @@ public class TrackRowView extends TableRow {
 			noteColor = ContextCompat.getColor(getContext(), R.color.white);
 		}
 		for (int i = 0; i < QUARTER_COUNT; i++) {
-			noteViews.add(new NoteView(getContext(), noteColor));
+			noteViews.add(new NoteView(getContext(), noteColor, this, i));
 			addView(noteViews.get(i), params);
 		}
+	}
+
+	public void updateGridRowPosition(int columnIndex, NoteLength noteLength, boolean toggled) {
+		trackView.updateGridRowPosition(noteName, columnIndex, noteLength, toggled);
+	}
+
+	private List<GridRowPosition> getFirstGridRowPositionsList() {
+		return gridRow.getGridRowPositions().get(FIRST_GRIDROW_ONLY_UNTIL_SCROLLING_ENABLED);
 	}
 
 	public List<NoteView> getNoteViews() {

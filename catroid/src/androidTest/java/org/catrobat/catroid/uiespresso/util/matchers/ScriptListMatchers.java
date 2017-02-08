@@ -47,11 +47,8 @@ public final class ScriptListMatchers {
 
 			@Override
 			protected boolean matchesSafely(View view) {
-				if (view instanceof BrickDragAndDropListView && ((ListView) view).getAdapter()
-						instanceof BrickAdapter) {
-					return true;
-				}
-				return false;
+				return view instanceof BrickDragAndDropListView && ((ListView) view).getAdapter()
+						instanceof BrickAdapter;
 			}
 
 			@Override
@@ -68,7 +65,6 @@ public final class ScriptListMatchers {
 			protected boolean matchesSafely(View view) {
 				if (view instanceof LinearLayout) {
 					return matches(hasDescendant(withText(brickTitle)));
-					//return matches(hasDescendant(withText(brickTitle))) && matches(isDisplayed());
 				}
 				return false;
 			}

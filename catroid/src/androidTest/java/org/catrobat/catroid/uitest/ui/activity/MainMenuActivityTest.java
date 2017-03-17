@@ -61,6 +61,7 @@ import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
 import org.catrobat.catroid.utils.UtilFile;
 import org.catrobat.catroid.utils.Utils;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -95,6 +96,7 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 		super.tearDown();
 	}
 
+	@Test
 	public void testCreateNewProject() {
 		File directory = new File(Constants.DEFAULT_ROOT + "/" + testProject);
 		UtilFile.deleteDirectory(directory);
@@ -126,6 +128,7 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 				solo.searchText(solo.getString(R.string.new_project_dialog_title)));
 	}
 
+	@Test
 	public void testCreateNewProjectErrors() {
 		solo.clickOnButton(solo.getString(R.string.main_menu_new));
 		solo.clearEditText(0);
@@ -159,6 +162,7 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 		UtilFile.deleteDirectory(directory);
 	}
 
+	@Test
 	public void testCreateNewProjectWithNormalAndSpecialChars() {
 		String directoryPath = Utils.buildProjectPath(projectNameWithNormalAndSpecialChars);
 		File directory = new File(directoryPath);
@@ -179,6 +183,7 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 		assertTrue("Project file with normal and special characters was not created!", file.exists());
 	}
 
+	@Test
 	public void testCreateNewProjectsWithNormalAndSpecialCharsTwo() {
 		String directoryPath = Utils.buildProjectPath(projectNameWithNormalAndSpecialChars2);
 		File directory = new File(directoryPath);
@@ -199,6 +204,7 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 		assertTrue("Project file with special characters two was not created!", file.exists());
 	}
 
+	@Test
 	public void testCreateNewProjectsJustSpecialChars() {
 		String directoryPath = Utils.buildProjectPath(projectNameJustSpecialChars);
 		File directory = new File(directoryPath);
@@ -219,6 +225,7 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 		assertTrue("Project file with just special characters was not created!", file.exists());
 	}
 
+	@Test
 	public void testCreateNewProjectsJustSpecialCharsTwo() {
 		String directoryPath = Utils.buildProjectPath(projectNameJustSpecialChars2);
 		File directory = new File(directoryPath);
@@ -239,6 +246,7 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 		assertTrue("Project file with just special characters two was not created!", file.exists());
 	}
 
+	@Test
 	public void testCreateNewProjectJustOneDot() {
 		String directoryPath = Utils.buildProjectPath(projectNameJustOneDot);
 		File directory = new File(directoryPath);
@@ -259,6 +267,7 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 		assertTrue("Project file just one dot was not created!", file.exists());
 	}
 
+	@Test
 	public void testCreateNewProjectJustTwoDots() {
 		String directoryPath = Utils.buildProjectPath(projectNameJustTwoDots);
 		File directory = new File(directoryPath);
@@ -279,6 +288,7 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 		assertTrue("Project file just two dots was not created!", file.exists());
 	}
 
+	@Test
 	public void testOrientation() throws NameNotFoundException {
 		/// Method 1: Assert it is currently in portrait mode.
 		assertEquals("MainMenuActivity not in Portrait mode!", Configuration.ORIENTATION_PORTRAIT, getActivity()
@@ -298,11 +308,13 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 				ActivityInfo.SCREEN_ORIENTATION_PORTRAIT, activityInfo.screenOrientation);
 	}
 
+	@Test
 	public void testBottombarElementsVisibilty() {
 		assertFalse("Add button is visible", solo.searchButton(solo.getString(R.id.button_add)));
 		assertFalse("Play button is visible", solo.searchButton(solo.getString(R.id.button_play)));
 	}
 
+	@Test
 	public void testLoadProject() {
 		File directory = new File(Constants.DEFAULT_ROOT + "/" + testProject2);
 		UtilFile.deleteDirectory(directory);
@@ -328,6 +340,7 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 		assertEquals("Sprite at index 4 is not \"pig\"!", "pig", fourth.getName());
 	}
 
+	@Test
 	public void testResume() {
 		File directory = new File(Constants.DEFAULT_ROOT + "/" + testProject3);
 		UtilFile.deleteDirectory(directory);
@@ -358,12 +371,14 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 		assertEquals("Sprite at index 4 is not \"pig\"!", "pig", fourth.getName());
 	}
 
+	@Test
 	public void testRateAppMenuExists() {
 		solo.sendKey(Solo.MENU);
 		assertTrue("App rating menu not found in overflow menu!", solo.searchText(solo.getString(R.string.main_menu_rate_app)));
 		solo.goBack();
 	}
 
+	@Test
 	public void testScratchConverterMenuExists() {
 		solo.sendKey(Solo.MENU);
 		assertTrue("Scratch Converter menu item not found in overflow menu!",
@@ -371,6 +386,7 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 		solo.goBack();
 	}
 
+	@Test
 	public void testShouldDisplayDialogIfVersionNumberTooLow() throws Throwable {
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
 
@@ -435,6 +451,7 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 		StorageHandler.getInstance().saveProject(project);
 	}
 
+	@Test
 	public void testOverrideMyFirstProject() {
 		String standardProjectName = solo.getString(R.string.default_project_name);
 		File directory = new File(Constants.DEFAULT_ROOT + "/" + standardProjectName);
@@ -495,6 +512,7 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 				ProjectManager.getInstance().getCurrentProject().getDefaultScene().getSpriteList().get(0).getNumberOfBricks());
 	}
 
+	@Test
 	public void testProjectNameVisible() {
 		createTestProject(testProject);
 		createTestProject(testProject2);
@@ -526,6 +544,7 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 				.getText().toString().endsWith(testProject2));
 	}
 
+	@Test
 	public void testProjectNameWithNormalAndSpecialCharsVisible() {
 		createTestProject(projectNameJustSpecialChars);
 		createTestProject(projectNameWithNormalAndSpecialChars2);
@@ -558,6 +577,7 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 				solo.getButton(0).getText().toString().endsWith(projectNameWithNormalAndSpecialChars2));
 	}
 
+	@Test
 	public void testProjectNameWithDotsVisible() {
 		createTestProject(projectNameJustOneDot);
 		createTestProject(projectNameJustTwoDots);

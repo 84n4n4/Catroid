@@ -66,6 +66,7 @@ import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
 import org.catrobat.catroid.utils.UtilFile;
 import org.catrobat.catroid.utils.Utils;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -144,6 +145,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		super.tearDown();
 	}
 
+	@Test
 	public void testOrientation() throws NameNotFoundException {
 		/// Method 1: Assert it is currently in portrait mode.
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName(), 1000);
@@ -170,6 +172,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		);
 	}
 
+	@Test
 	public void testOverFlowMenuSettings() {
 		solo.clickOnButton(solo.getString(R.string.main_menu_programs));
 		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
@@ -178,6 +181,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		solo.assertCurrentActivity("Not in SettingsActivity", SettingsActivity.class);
 	}
 
+	@Test
 	public void testDeleteSprite() {
 		try {
 			DefaultProjectHandler.createAndSaveDefaultProject(getActivity());
@@ -225,6 +229,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		}
 	}
 
+	@Test
 	@Device
 	public void testDeleteStandardProject() {
 		//unzip = true;
@@ -289,6 +294,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		solo.sleep(3000);
 	}
 
+	@Test
 	@Device
 	public void testProjectsAndImagesVisible() {
 		createProjects();
@@ -351,6 +357,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		}
 	}
 
+	@Test
 	public void testImageCache() {
 		//create first cache test project and set it as current project
 		Project firstCacheTestProject = new Project(getActivity(), "cachetestProject" + 0);
@@ -468,6 +475,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		}
 	}
 
+	@Test
 	public void testDeleteProject() {
 		createProjects();
 		solo.sleep(200);
@@ -500,6 +508,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertTrue("project " + UiTestUtils.PROJECTNAME1 + " not deleted", projectDeleted);
 	}
 
+	@Test
 	public void testChooseNoOnDeleteQuestion() {
 		createProjects();
 		solo.sleep(200);
@@ -517,6 +526,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertTrue("Project was deleted!", solo.searchText(UiTestUtils.PROJECTNAME1));
 	}
 
+	@Test
 	public void testDustbinNotVisible() {
 		createProjects();
 		solo.sleep(200);
@@ -535,6 +545,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertFalse("Dustbin icon found in Actionbar", ids.contains(R.id.delete));
 	}
 
+	@Test
 	public void testChooseNoOnDeleteQuestionInActionMode() { //TODO
 		createProjects();
 		solo.sleep(200);
@@ -574,6 +585,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 				solo.searchText(solo.getString(R.string.new_project_dialog_title)));
 	}
 
+	@Test
 	public void testDeleteCurrentProject() {
 		createProjects();
 		solo.sleep(200);
@@ -600,6 +612,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		}
 	}
 
+	@Test
 	@Device
 	public void testDeleteAllProjects() {
 		//unzip = true;
@@ -663,6 +676,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 				.getCurrentProject().getName());
 	}
 
+	@Test
 	@Device
 	public void testDeleteManyProjects() {
 		for (int count = 0; count < 10; count++) {
@@ -697,6 +711,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertTrue("default project not visible", solo.searchText(solo.getString(R.string.default_project_name)));
 	}
 
+	@Test
 	@Device
 	public void testDeleteProjectsWithSpecialChars() {
 		createProjectsWithSpecialChars();
@@ -742,6 +757,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertTrue("default project not visible", solo.searchText(solo.getString(R.string.default_project_name)));
 	}
 
+	@Test
 	public void testItemClick() {
 		createProjects();
 		solo.sleep(2000);
@@ -765,6 +781,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertFalse("Project not deleted", solo.waitForText(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, 0, 200));
 	}
 
+	@Test
 	public void testDeleteProjectViaActionBar() {
 		String delete = solo.getString(R.string.delete);
 		createProjects();
@@ -810,6 +827,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertTrue(UiTestUtils.PROJECTNAME1 + " has not been deleted!", projectDeleted);
 	}
 
+	@Test
 	public void testMainMenuItemsNotVisible() {
 		createProjects();
 		solo.sleep(200);
@@ -826,6 +844,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.main_menu_about_pocketcode), 1, 1000, false));
 	}
 
+	@Test
 	public void testConfirmDeleteProgramDialogTitleChange() {
 		String delete = solo.getString(R.string.delete);
 		createProjects();
@@ -865,6 +884,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		solo.clickOnText(no);
 	}
 
+	@Test
 	public void testDeleteActionModeTitleChange() {
 		String deleteActionModeTitle = solo.getString(R.string.delete);
 		String singleItemAppendixDeleteActionMode = solo.getString(R.string.program);
@@ -889,6 +909,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 				solo.searchText(deleteActionModeTitle + " 2 " + multipleItemAppendixDeleteActionMode));
 	}
 
+	@Test
 	public void testCancelDeleteActionMode() {
 		// zipping of programs needed for jenkins
 		// test does not work without removing all programs
@@ -924,6 +945,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertTrue("Second project has been deleted!", solo.searchText(UiTestUtils.PROJECTNAME1));
 	}
 
+	@Test
 	public void testLongClickCancelDeleteAndCopy() {
 
 		String delete = solo.getString(R.string.delete);
@@ -942,6 +964,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 				R.id.copy, copy, UiTestUtils.PROJECTNAME1));
 	}
 
+	@Test
 	public void testRenameProject() {
 		createProjects();
 		Reflection.setPrivateField(ProjectManager.class, ProjectManager.getInstance(), "asynchronousTask", false);
@@ -989,6 +1012,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 				.getInstance().getCurrentProject().getName());
 	}
 
+	@Test
 	public void testRenameCurrentProject() {
 		createProjects();
 		solo.sleep(200);
@@ -1010,6 +1034,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 				.getCurrentProject().getName());
 	}
 
+	@Test
 	public void testRenameCurrentProjectViaActionBar() {
 		String rename = solo.getString(R.string.rename);
 		createProjects();
@@ -1050,6 +1075,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 				.getCurrentProject().getName());
 	}
 
+	@Test
 	public void testCancelRenameActionMode() {
 		String rename = solo.getString(R.string.rename);
 		String cancel = solo.getString(R.string.cancel);
@@ -1072,6 +1098,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertFalse("Rename dialog is showing!", (solo.searchText(cancel) && solo.searchText(ok)));
 	}
 
+	@Test
 	public void testRenameCurrentProjectMixedCase() {
 		createProjects();
 		solo.sleep(200);
@@ -1095,6 +1122,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 				.getInstance().getCurrentProject().getName());
 	}
 
+	@Test
 	public void testRenameToSameName() {
 		createProjects();
 		solo.sleep(200);
@@ -1114,6 +1142,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 				.getCurrentProject().getName());
 	}
 
+	@Test
 	public void testRenameWithNoInput() {
 		createProjects();
 		solo.sleep(200);
@@ -1132,6 +1161,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		solo.clickOnButton(solo.getString(R.string.close));
 	}
 
+	@Test
 	public void testRenameProjectWithNormalAndSpecialChars() {
 		createProjects();
 		solo.sleep(200);
@@ -1150,6 +1180,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertTrue("Rename with normal and special characters was not successful", renameDirectory.isDirectory());
 	}
 
+	@Test
 	public void testRenameProjectWithNormalAndSpecialCharsTwo() {
 		createProjects();
 		solo.sleep(200);
@@ -1170,6 +1201,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		UtilFile.deleteDirectory(new File(Utils.buildProjectPath(UiTestUtils.NORMAL_AND_SPECIAL_CHAR_PROJECT_NAME)));
 	}
 
+	@Test
 	public void testRenameProjectJustSpecialCharacters() {
 		createProjects();
 		solo.sleep(200);
@@ -1190,6 +1222,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		UtilFile.deleteDirectory(new File(Utils.buildProjectPath(UiTestUtils.JUST_SPECIAL_CHAR_PROJECT_NAME)));
 	}
 
+	@Test
 	public void testRenameProjectJustSpecialCharactersTwo() {
 		createProjects();
 		solo.sleep(200);
@@ -1209,6 +1242,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		UtilFile.deleteDirectory(new File(Utils.buildProjectPath(UiTestUtils.JUST_SPECIAL_CHAR_PROJECT_NAME2)));
 	}
 
+	@Test
 	public void testRenameProjectJustOneDot() {
 		createProjects();
 		solo.sleep(200);
@@ -1229,6 +1263,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		UtilFile.deleteDirectory(new File(Utils.buildProjectPath(UiTestUtils.JUST_ONE_DOT_PROJECT_NAME)));
 	}
 
+	@Test
 	public void testRenameProjectJustTwoDots() {
 		createProjects();
 		solo.sleep(200);
@@ -1249,6 +1284,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		UtilFile.deleteDirectory(new File(Utils.buildProjectPath(UiTestUtils.JUST_TWO_DOTS_PROJECT_NAME)));
 	}
 
+	@Test
 	public void testRenameToExistingProjectMixedCase() {
 		createProjects();
 		solo.sleep(200);
@@ -1269,6 +1305,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		solo.goBack();
 	}
 
+	@Test
 	public void testProjectDetails() {
 		String showDetailsText = solo.getString(R.string.show_details);
 		String hideDetailsText = solo.getString(R.string.hide_details);
@@ -1313,6 +1350,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertTrue("Menu item still says \"Hide Details\"!", solo.searchText(showDetailsText));
 	}
 
+	@Test
 	public void testProjectDetailsLastAccess() {
 		String showDetailsText = solo.getString(R.string.show_details);
 
@@ -1359,6 +1397,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertTrue("Last access is not correct!", solo.searchText(mediumDateFormat.format(date)));
 	}
 
+	@Test
 	public void testAddNewProject() {
 		createProjects();
 		String buttonMyProjectsText = solo.getString(R.string.main_menu_programs);
@@ -1417,6 +1456,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 				solo.searchText(UiTestUtils.PROJECTNAME2, 1, true));
 	}
 
+	@Test
 	public void testAddNewProjectMixedCase() {
 		createProjects();
 		solo.sleep(200);
@@ -1436,6 +1476,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		solo.clickOnButton(buttonCloseText);
 	}
 
+	@Test
 	public void testSetDescriptionCurrentProject() {
 		createProjects();
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
@@ -1469,6 +1510,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 				.getDescription().equalsIgnoreCase(lorem));
 	}
 
+	@Test
 	public void testSetDescription() {
 		createProjects();
 		Reflection.setPrivateField(ProjectManager.class, ProjectManager.getInstance(), "asynchronousTask", false);
@@ -1524,6 +1566,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 				.getDescription().equalsIgnoreCase(lorem));
 	}
 
+	@Test
 	public void testCopyCurrentProject() {
 		createProjects();
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
@@ -1578,6 +1621,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertTrue("Checksum should be the same", oldChecksum.equals(copiedLookChecksum));
 	}
 
+	@Test
 	public void testCopyProject() {
 		createProjects();
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
@@ -1595,6 +1639,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertTrue("Did not copy the selected project", solo.searchText(UiTestUtils.COPIED_PROJECT_NAME, true));
 	}
 
+	@Test
 	public void testCopyProjectViaActionBar() {
 		String copy = solo.getString(R.string.copy);
 		createProjects();
@@ -1625,6 +1670,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertTrue("Did not copy the selected project", solo.searchText(UiTestUtils.COPIED_PROJECT_NAME, true));
 	}
 
+	@Test
 	public void testCopyProjectMixedCase() {
 		createProjects();
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
@@ -1644,6 +1690,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		solo.clickOnButton(solo.getString(R.string.close));
 	}
 
+	@Test
 	public void testCopyProjectNoName() {
 		createProjects();
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
@@ -1663,6 +1710,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		solo.clickOnButton(solo.getString(R.string.close));
 	}
 
+	@Test
 	public void testCopyProjectJustSpecialCharacters() {
 		createProjects();
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
@@ -1683,6 +1731,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		UtilFile.deleteDirectory(new File(Utils.buildProjectPath(UiTestUtils.JUST_SPECIAL_CHAR_PROJECT_NAME)));
 	}
 
+	@Test
 	public void testCopyProjectJustSpecialCharactersTwo() {
 		createProjects();
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
@@ -1702,6 +1751,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		UtilFile.deleteDirectory(new File(Utils.buildProjectPath(UiTestUtils.JUST_SPECIAL_CHAR_PROJECT_NAME2)));
 	}
 
+	@Test
 	public void testCopyProjectWithNormalAndSpecialCharacters() {
 		createProjects();
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
@@ -1721,6 +1771,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		UtilFile.deleteDirectory(new File(Utils.buildProjectPath(UiTestUtils.NORMAL_AND_SPECIAL_CHAR_PROJECT_NAME)));
 	}
 
+	@Test
 	public void testCopyProjectWithNormalAndSpecialCharactersTwo() {
 		createProjects();
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
@@ -1740,6 +1791,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		UtilFile.deleteDirectory(new File(Utils.buildProjectPath(UiTestUtils.NORMAL_AND_SPECIAL_CHAR_PROJECT_NAME2)));
 	}
 
+	@Test
 	public void testCopyProjectJustDot() {
 		createProjects();
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
@@ -1759,6 +1811,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		UtilFile.deleteDirectory(new File(Utils.buildProjectPath(UiTestUtils.JUST_ONE_DOT_PROJECT_NAME)));
 	}
 
+	@Test
 	public void testCopyProjectJustDots() {
 		createProjects();
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
@@ -1777,6 +1830,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		UtilFile.deleteDirectory(new File(Utils.buildProjectPath(UiTestUtils.JUST_TWO_DOTS_PROJECT_NAME)));
 	}
 
+	@Test
 	public void testBottombarElementsVisibilty() {
 		UiTestUtils.createEmptyProject();
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
@@ -1791,6 +1845,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 				solo.getView(R.id.bottom_bar_separator).getVisibility() == View.GONE);
 	}
 
+	@Test
 	public void testLongProjectName() {
 		// create standard program if needed
 		// missing default program caused testing errors
@@ -1830,6 +1885,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertTrue("Long Projectname not found", solo.searchText(longProjectName));
 	}
 
+	@Test
 	public void testScreenshotUpdate() {
 		createProjectWithBackgrounds();
 
@@ -1879,6 +1935,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertTrue("The screenshot has been changed", UiTestUtils.comparePixelRgbaArrays(greenPixel2, greenPixel3));
 	}
 
+	@Test
 	public void testSelectAllActionModeButton() {
 		createProjectWithBackgrounds();
 
@@ -1925,6 +1982,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		}
 	}
 
+	@Test
 	public void testDeletingProjectAndVerifySettings() {
 		try {
 			DefaultProjectHandler.createAndSaveDefaultProject(getActivity());
@@ -1973,6 +2031,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertFalse(defaultProgramName + " was not deleted in the Preferences!", currentProjectName.equals(defaultProgramName));
 	}
 
+	@Test
 	public void testSceneMerging() {
 		ArrayList<String> namesFirst = new ArrayList<>();
 		ArrayList<String> namesSecond = new ArrayList<>();

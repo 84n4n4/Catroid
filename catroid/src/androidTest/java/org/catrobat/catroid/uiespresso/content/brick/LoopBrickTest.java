@@ -24,11 +24,14 @@
 package org.catrobat.catroid.uiespresso.content.brick;
 
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.CoordinatesProvider;
+import android.support.test.espresso.action.GeneralClickAction;
 import android.support.test.espresso.action.GeneralLocation;
 import android.support.test.espresso.action.GeneralSwipeAction;
 import android.support.test.espresso.action.Press;
 import android.support.test.espresso.action.Swipe;
+import android.support.test.espresso.action.Tap;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
@@ -43,6 +46,7 @@ import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.uiespresso.content.brick.utils.BrickTestUtils;
 import org.catrobat.catroid.uiespresso.util.BaseActivityInstrumentationRule;
 import org.catrobat.catroid.uiespresso.util.UiTestUtils;
+import org.catrobat.catroid.uiespresso.util.actions.CustomActions;
 import org.catrobat.catroid.uiespresso.util.matchers.BrickCategoryListMatchers;
 import org.catrobat.catroid.uiespresso.util.matchers.BrickPrototypeListMatchers;
 import org.junit.Before;
@@ -59,6 +63,7 @@ import static android.support.test.espresso.Espresso.openActionBarOverflowOrOpti
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -202,7 +207,7 @@ public class LoopBrickTest {
 
 	public void dragBrickAtPositionToEdge(int position, final boolean dragToTop) {
 		onScriptList().atPosition(position)
-				.perform(longClick()).perform(new GeneralSwipeAction(Swipe.FAST,
+				.perform(longClick()).perform(new GeneralSwipeAction(Swipe.SLOW,
 				GeneralLocation.TOP_CENTER,
 				new CoordinatesProvider() {
 					@Override
@@ -217,6 +222,58 @@ public class LoopBrickTest {
 					}
 				},
 				Press.FINGER));
+	}
+
+	public static ViewAction swipeBrickUpOrDownByOffset(final int yOffset){
+		return new GeneralSwipeAction(Swipe.SLOW,
+				new CoordinatesProvider() {
+					@Override
+					public float[] calculateCoordinates(View view) {
+						final int[] viewsCoordinates = new int[2];
+						view.getLocationOnScreen(viewsCoordinates);
+						float[] coordinates = {viewsCoordinates[0], viewsCoordinates[1]};
+						return coordinates;
+					}
+				},
+				new CoordinatesProvider() {
+					@Override
+					public float[] calculateCoordinates(View view) {
+						final int[] viewsCoordinates = new int[2];
+						view.getLocationOnScreen(viewsCoordinates);
+						float[] coordinates = {viewsCoordinates[0], viewsCoordinates[1] + yOffset};
+						return coordinates;
+					}
+				},
+				Press.FINGER);
+	}
+
+	public static ViewAction clickWithOffset(final int xOffset, final int yOffset) {
+		return new GeneralClickAction(
+				Tap.LONG,
+				new CoordinatesProvider() {
+					@Override
+					public float[] calculateCoordinates(View view) {
+						final int[] viewsCoordinates = new int[2];
+						view.getLocationOnScreen(viewsCoordinates);
+
+						float[] clickCoordinates = {viewsCoordinates[0] + xOffset, viewsCoordinates[1] + yOffset};
+						return clickCoordinates;
+					}
+				},
+				Press.FINGER);
+	}
+
+	@Test
+	public void swipeTest() throws InterpretationException {
+		onView(isRoot()).perform(CustomActions.wait(4000));
+		onScriptList().atPosition(2)
+				.perform(clickWithOffset(0,0));
+		onView(isRoot()).perform(CustomActions.wait(500));
+
+		onScriptList().atPosition(2)
+				.perform(swipeBrickUpOrDownByOffset(400));
+
+		onView(isRoot()).perform(CustomActions.wait(4000));
 	}
 
 	public void dragBrickAtPositionToTop(int position) {

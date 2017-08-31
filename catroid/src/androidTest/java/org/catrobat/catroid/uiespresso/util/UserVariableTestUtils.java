@@ -23,6 +23,8 @@
 
 package org.catrobat.catroid.uiespresso.util;
 
+import android.util.Log;
+
 import org.catrobat.catroid.formulaeditor.UserVariable;
 import org.catrobat.catroid.uiespresso.util.actions.CustomActions;
 
@@ -30,6 +32,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 
 public final class UserVariableTestUtils {
+	private static final String TAG = UserVariableTestUtils.class.getSimpleName();
 
 	private static final double EPSILON = 0.001;
 
@@ -47,6 +50,7 @@ public final class UserVariableTestUtils {
 			onView(isRoot())
 					.perform(CustomActions.wait(intervalMillis));
 		}
+		Log.e(TAG, "EqualsWithinTimeout - expected: " + expectedValue + " actual: " + userVariable.getValue());
 		return false;
 	}
 
@@ -73,6 +77,7 @@ public final class UserVariableTestUtils {
 			onView(isRoot())
 					.perform(CustomActions.wait(intervalMillis));
 		}
+		Log.e(TAG, "EqualsWithinTimeout - expected: " + expectedValue + " actual: " + userVariable.getValue());
 		return false;
 	}
 

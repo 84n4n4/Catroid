@@ -33,7 +33,7 @@ import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.SingleSprite;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.ui.ScriptActivity;
+import org.catrobat.catroid.ui.SpriteActivity;
 import org.catrobat.catroid.uiespresso.testsuites.Cat;
 import org.catrobat.catroid.uiespresso.testsuites.Level;
 import org.catrobat.catroid.uiespresso.util.rules.BaseActivityInstrumentationRule;
@@ -64,8 +64,8 @@ import static org.hamcrest.Matchers.allOf;
 public class DeleteSoundDialogTest {
 
 	@Rule
-	public BaseActivityInstrumentationRule<ScriptActivity> baseActivityTestRule = new
-			BaseActivityInstrumentationRule<>(ScriptActivity.class, true, false);
+	public BaseActivityInstrumentationRule<SpriteActivity> baseActivityTestRule = new
+			BaseActivityInstrumentationRule<>(SpriteActivity.class, true, false);
 
 	private String toBeDeletedSoundName = "testLook2";
 
@@ -74,7 +74,7 @@ public class DeleteSoundDialogTest {
 		createProject("deleteSoundDialogTest");
 
 		Intent intent = new Intent();
-		intent.putExtra(ScriptActivity.EXTRA_FRAGMENT_POSITION, ScriptActivity.FRAGMENT_SOUNDS);
+		intent.putExtra(SpriteActivity.EXTRA_FRAGMENT_POSITION, SpriteActivity.FRAGMENT_SOUNDS);
 
 		baseActivityTestRule.launchActivity(intent);
 	}
@@ -118,7 +118,7 @@ public class DeleteSoundDialogTest {
 		onView(withText(R.string.dialog_confirm_delete_sound_title)).inRoot(isDialog())
 				.check(matches(isDisplayed()));
 
-		onView(withText(R.string.dialog_confirm_delete_sound_message)).inRoot(isDialog())
+		onView(withText(R.string.dialog_confirm_delete)).inRoot(isDialog())
 				.check(matches(isDisplayed()));
 
 		onView(allOf(withId(android.R.id.button1), withText(R.string.yes)))
@@ -156,17 +156,13 @@ public class DeleteSoundDialogTest {
 
 		List<SoundInfo> soundInfoList = ProjectManager.getInstance().getCurrentSprite().getSoundList();
 		SoundInfo soundInfo = new SoundInfo();
-		soundInfo.setSoundFileName(soundFile.getName());
-		soundInfo.setTitle("testLook1");
+		soundInfo.setFileName(soundFile.getName());
+		soundInfo.setName("testLook1");
 		soundInfoList.add(soundInfo);
-		ProjectManager.getInstance().getFileChecksumContainer()
-				.addChecksum(soundInfo.getChecksum(), soundInfo.getAbsolutePath());
 
 		SoundInfo soundInfo2 = new SoundInfo();
-		soundInfo2.setSoundFileName(soundFile2.getName());
-		soundInfo2.setTitle(toBeDeletedSoundName);
+		soundInfo2.setFileName(soundFile2.getName());
+		soundInfo2.setName(toBeDeletedSoundName);
 		soundInfoList.add(soundInfo2);
-		ProjectManager.getInstance().getFileChecksumContainer()
-				.addChecksum(soundInfo2.getChecksum(), soundInfo2.getAbsolutePath());
 	}
 }

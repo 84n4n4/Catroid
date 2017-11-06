@@ -113,7 +113,7 @@ public class BroadcastForClonesRegressionTest {
 		broadcastReceiveScript.addBrick(new ChangeVariableBrick(new Formula(1), userVariable));
 		sprite.addScript(broadcastReceiveScript);
 
-		ProjectManager.getInstance().addSprite(sprite);
+		ProjectManager.getInstance().getCurrentScene().addSprite(sprite);
 		ProjectManager.getInstance().setCurrentSprite(sprite);
 	}
 }

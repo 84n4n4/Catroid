@@ -74,7 +74,7 @@ public class PhiroSettingsTest extends InstrumentationTestCase {
 		assertTrue("After loading a project which needs phiro it should be enabled",
 				SettingsActivity.isPhiroSharedPreferenceEnabled(context));
 
-		ProjectManager.getInstance().deleteProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, context);
+		//ProjectManager.getInstance().deleteProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, context);
 	}
 
 	private void createProjectPhiro() {

@@ -34,7 +34,7 @@ import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.bricks.PlaySoundAndWaitBrick;
 import org.catrobat.catroid.content.bricks.PlaySoundBrick;
 import org.catrobat.catroid.io.SoundManager;
-import org.catrobat.catroid.ui.ProgramMenuActivity;
+import org.catrobat.catroid.ui.SpriteAttributesActivity;
 import org.catrobat.catroid.uiespresso.content.brick.utils.BrickTestUtils;
 import org.catrobat.catroid.uiespresso.testsuites.Cat;
 import org.catrobat.catroid.uiespresso.testsuites.Level;
@@ -84,8 +84,8 @@ public class PlaySoundAndWaitBrickTest {
 	private int playSoundBrickPosition;
 
 	@Rule
-	public BaseActivityInstrumentationRule<ProgramMenuActivity> programMenuActivityRule = new
-			BaseActivityInstrumentationRule<>(ProgramMenuActivity.class, true, false);
+	public BaseActivityInstrumentationRule<SpriteAttributesActivity> programMenuActivityRule = new
+			BaseActivityInstrumentationRule<>(SpriteAttributesActivity.class, true, false);
 
 	@Before
 	public void setUp() throws Exception {
@@ -268,23 +268,19 @@ public class PlaySoundAndWaitBrickTest {
 				"longsound.mp3", RESOURCE_SOUND, InstrumentationRegistry.getTargetContext(),
 				FileTestUtils.FileTypes.SOUND);
 		SoundInfo soundInfo = new SoundInfo();
-		soundInfo.setSoundFileName(soundFile.getName());
-		soundInfo.setTitle(soundName);
+		soundInfo.setFileName(soundFile.getName());
+		soundInfo.setName(soundName);
 
 		soundFile2 = FileTestUtils.saveFileToProject(projectName, ProjectManager.getInstance().getCurrentScene()
 						.getName(),
 				"testsoundui.mp3", RESOURCE_SOUND2, InstrumentationRegistry.getTargetContext(),
 				FileTestUtils.FileTypes.SOUND);
 		SoundInfo soundInfo2 = new SoundInfo();
-		soundInfo2.setSoundFileName(soundFile2.getName());
-		soundInfo2.setTitle(soundName2);
+		soundInfo2.setFileName(soundFile2.getName());
+		soundInfo2.setName(soundName2);
 
 		soundInfoList = ProjectManager.getInstance().getCurrentSprite().getSoundList();
 		soundInfoList.add(soundInfo);
 		soundInfoList.add(soundInfo2);
-		ProjectManager.getInstance().getFileChecksumContainer()
-				.addChecksum(soundInfo.getChecksum(), soundInfo.getAbsolutePath());
-		ProjectManager.getInstance().getFileChecksumContainer()
-				.addChecksum(soundInfo2.getChecksum(), soundInfo2.getAbsolutePath());
 	}
 }

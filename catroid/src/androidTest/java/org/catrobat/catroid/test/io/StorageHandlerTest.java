@@ -63,7 +63,6 @@ import org.catrobat.catroid.test.utils.Reflection;
 import org.catrobat.catroid.test.utils.TestUtils;
 import org.catrobat.catroid.ui.SettingsActivity;
 import org.catrobat.catroid.ui.controller.BackPackListManager;
-import org.catrobat.catroid.uitest.util.UiTestUtils;
 import org.catrobat.catroid.utils.UtilFile;
 
 import java.io.BufferedReader;
@@ -112,7 +111,7 @@ public class StorageHandlerTest extends InstrumentationTestCase {
 		super.tearDown();
 	}
 
-	public void testSerializeProject() {
+	public void testSerializeProject() throws Exception {
 		final int xPosition = 457;
 		final int yPosition = 598;
 		final float size = 0.8f;
@@ -394,7 +393,7 @@ public class StorageHandlerTest extends InstrumentationTestCase {
 	}
 
 	private File loadBackpackFile(String jsonName) throws IOException {
-		UiTestUtils.clearBackPack(true);
+		StorageHandler.deleteDir(buildPath(Constants.DEFAULT_ROOT, Constants.BACKPACK_DIRECTORY));
 		InputStream inputStream = getInstrumentation().getContext().getResources().getAssets().open(jsonName);
 		File backPackFile = new File(backpackFilePath);
 		assertFalse("Backpack.json should not exist!", backPackFile.exists());

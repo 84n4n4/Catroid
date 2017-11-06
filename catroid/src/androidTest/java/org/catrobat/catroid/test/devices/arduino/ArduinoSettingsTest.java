@@ -71,7 +71,7 @@ public class ArduinoSettingsTest extends InstrumentationTestCase {
 		assertTrue("After loading a project which needs Arduino it should be enabled",
 				SettingsActivity.isArduinoSharedPreferenceEnabled(context));
 
-		ProjectManager.getInstance().deleteProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, context);
+		//ProjectManager.getInstance().deleteProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, context);
 	}
 
 	private void createProjectArduino() {

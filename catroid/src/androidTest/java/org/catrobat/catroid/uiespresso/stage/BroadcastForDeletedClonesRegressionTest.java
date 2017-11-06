@@ -92,7 +92,7 @@ public class BroadcastForDeletedClonesRegressionTest {
 		sprite.addScript(broadcastReceiveScript);
 		broadCastReceived = ScriptEvaluationGateBrick.appendToScript(broadcastReceiveScript);
 
-		ProjectManager.getInstance().addSprite(sprite);
+		ProjectManager.getInstance().getCurrentScene().addSprite(sprite);
 		ProjectManager.getInstance().setCurrentSprite(sprite);
 	}
 }

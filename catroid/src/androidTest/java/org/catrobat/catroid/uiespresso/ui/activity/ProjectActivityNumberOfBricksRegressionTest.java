@@ -39,14 +39,12 @@ import org.catrobat.catroid.uiespresso.testsuites.Cat;
 import org.catrobat.catroid.uiespresso.testsuites.Level;
 import org.catrobat.catroid.uiespresso.util.UiTestUtils;
 import org.catrobat.catroid.uiespresso.util.rules.BaseActivityInstrumentationRule;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -66,33 +64,19 @@ public class ProjectActivityNumberOfBricksRegressionTest {
 	public void setUp() {
 		createProject();
 		baseActivityTestRule.launchActivity(null);
-
-		setShowDetails(true);
-	}
-
-	@After
-	public void tearDown() {
-		setShowDetails(false);
-	}
-
-	private void setShowDetails(final boolean show) {
-		getInstrumentation().runOnMainSync(new Runnable() {
-			public void run() {
-				baseActivityTestRule.getActivity().getSpritesListFragment().setShowDetails(show);
-			}
-		});
+		//showDetails();
 	}
 
 	@Category({Cat.AppUi.class, Level.Smoke.class})
 	@Test
 	public void numberOfBricksDetailsRegressionTest() throws Exception {
-		onView(allOf(withId(R.id.textView_number_of_scripts), isDisplayed()))
+		onView(allOf(withId(R.id.details_left_bottom), isDisplayed()))
 				.check(matches(withText(UiTestUtils.getResourcesString(R.string.number_of_scripts).concat(" 2"))));
 
-		onView(allOf(withId(R.id.textView_number_of_bricks), isDisplayed()))
+		onView(allOf(withId(R.id.details_right_bottom), isDisplayed()))
 				.check(matches(withText(UiTestUtils.getResourcesString(R.string.number_of_bricks).concat(" 7"))));
 
-		onView(allOf(withId(R.id.textView_number_of_looks), isDisplayed()))
+		onView(allOf(withId(R.id.details_left_top), isDisplayed()))
 				.check(matches(withText(UiTestUtils.getResourcesString(R.string.number_of_looks).concat(" 2"))));
 	}
 
@@ -113,14 +97,14 @@ public class ProjectActivityNumberOfBricksRegressionTest {
 		firstSprite.addScript(secondScript);
 
 		LookData lookData = new LookData();
-		lookData.setLookFilename("red");
-		lookData.setLookName("red");
-		firstSprite.getLookDataList().add(lookData);
+		lookData.setFileName("red");
+		lookData.setName("red");
+		firstSprite.getLookList().add(lookData);
 
 		LookData anotherLookData = new LookData();
-		anotherLookData.setLookFilename("blue");
-		anotherLookData.setLookName("blue");
-		firstSprite.getLookDataList().add(anotherLookData);
+		anotherLookData.setFileName("blue");
+		anotherLookData.setName("blue");
+		firstSprite.getLookList().add(anotherLookData);
 
 		project.getDefaultScene().addSprite(firstSprite);
 

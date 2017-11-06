@@ -102,13 +102,8 @@ public class Project implements Serializable {
 		}
 
 		MessageContainer.clear();
-		//This is used for tests
-		if (context == null) {
-			//Because in test project we can't find the string
-			sceneList.add(new Scene(context, "Scene 1", this));
-		} else {
-			sceneList.add(new Scene(context, context.getString(R.string.default_scene_name, 1), this));
-		}
+		sceneList.add(new Scene(context, context.getString(R.string.default_scene_name, 1), this));
+
 		xmlHeader.scenesEnabled = true;
 	}
 
@@ -179,10 +174,6 @@ public class Project implements Serializable {
 		return sceneOrder;
 	}
 
-	public void setSceneList(List<Scene> scenes) {
-		sceneList = scenes;
-	}
-
 	public void addScene(Scene scene) {
 		sceneList.add(scene);
 	}
@@ -248,10 +239,6 @@ public class Project implements Serializable {
 			ScreenValues.SCREEN_HEIGHT = ScreenValues.SCREEN_WIDTH;
 			ScreenValues.SCREEN_WIDTH = tmp;
 		}
-	}
-
-	public boolean isScenesEnabled() {
-		return sceneList.size() > 1;
 	}
 
 	public void setName(String name) {
@@ -363,10 +350,6 @@ public class Project implements Serializable {
 		return null;
 	}
 
-	public boolean containsScene(Scene scene) {
-		return getSceneOrder().contains(scene.getName());
-	}
-
 	public boolean manualScreenshotExists(String manualScreenshotName) {
 
 		String path = Utils.buildProjectPath(getName()) + "/" + manualScreenshotName;
@@ -465,12 +448,6 @@ public class Project implements Serializable {
 
 	public boolean isCastProject() {
 		return xmlHeader.isCastProject();
-	}
-
-	public void refreshSpriteReferences() {
-		for (Scene scene : sceneList) {
-			scene.refreshSpriteReferences();
-		}
 	}
 
 	public void updateCollisionFormulasToVersion(float catroidLanguageVersion) {

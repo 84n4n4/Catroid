@@ -22,6 +22,7 @@
  */
 package org.catrobat.catroid.content.bricks;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.MotionEvent;
@@ -42,14 +43,13 @@ import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.ui.controller.LookController;
-import org.catrobat.catroid.ui.fragment.LookFragment;
-import org.catrobat.catroid.ui.fragment.LookFragment.OnLookDataListChangedAfterNewListener;
+import org.catrobat.catroid.ui.recyclerview.dialog.NewLookDialog;
+import org.catrobat.catroid.ui.recyclerview.dialog.dialoginterface.NewItemInterface;
 
 import java.util.List;
 
-public class SetLookBrick extends BrickBaseType implements OnLookDataListChangedAfterNewListener {
+public class SetLookBrick extends BrickBaseType implements NewItemInterface<LookData> {
 	private static final long serialVersionUID = 1L;
 	protected LookData look;
 	private transient View prototypeView;
@@ -204,12 +204,9 @@ public class SetLookBrick extends BrickBaseType implements OnLookDataListChanged
 		}
 	}
 
-	private void setOnLookDataListChangedAfterNewListener(Context context) {
-		ScriptActivity scriptActivity = (ScriptActivity) context;
-		LookFragment lookFragment = (LookFragment) scriptActivity.getFragment(ScriptActivity.FRAGMENT_LOOKS);
-		if (lookFragment != null) {
-			lookFragment.setOnLookDataListChangedAfterNewListener(this);
-		}
+	private void showNewLookDialog(Activity activity) {
+		NewLookDialog dialog = new NewLookDialog(this);
+		dialog.show(activity.getFragmentManager(), NewLookDialog.TAG);
 	}
 
 	private class SpinnerAdapterWrapper implements SpinnerAdapter {
@@ -265,7 +262,7 @@ public class SetLookBrick extends BrickBaseType implements OnLookDataListChanged
 			if (isTouchInDropDownView) {
 				isTouchInDropDownView = false;
 				if (paramInt == 0) {
-					switchToLookFragmentFromScriptFragment();
+					showNewLookDialog((Activity) context);
 				}
 			}
 			return spinnerAdapter.getView(paramInt, paramView, paramViewGroup);
@@ -300,18 +297,11 @@ public class SetLookBrick extends BrickBaseType implements OnLookDataListChanged
 
 			return dropDownView;
 		}
-
-		private void switchToLookFragmentFromScriptFragment() {
-			ProjectManager.getInstance().setCurrentSprite(getSprite());
-			ScriptActivity scriptActivity = ((ScriptActivity) context);
-			scriptActivity.switchToFragmentFromScriptFragment(ScriptActivity.FRAGMENT_LOOKS);
-
-			setOnLookDataListChangedAfterNewListener(context);
-		}
 	}
 
 	@Override
-	public void onLookDataListChangedAfterNew(LookData lookData) {
+	public void addItem(LookData lookData) {
+		ProjectManager.getInstance().getCurrentSprite().getLookDataList().add(lookData);
 		look = lookData;
 		oldSelectedLook = lookData;
 	}

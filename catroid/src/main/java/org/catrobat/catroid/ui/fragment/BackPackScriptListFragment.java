@@ -143,16 +143,16 @@ public class BackPackScriptListFragment extends BackPackActivityFragment impleme
 		scriptToEdit = scriptAdapter.getItem(selectedScriptPosition);
 		menu.setHeaderTitle(scriptToEdit);
 
-		getActivity().getMenuInflater().inflate(R.menu.context_menu_unpacking, menu);
+		getActivity().getMenuInflater().inflate(R.menu.context_menu_unpack, menu);
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.context_menu_unpacking:
+			case R.id.cm_unpack:
 				unpackCheckedItems(true);
 				break;
-			case R.id.context_menu_delete:
+			case R.id.cm_delete:
 				showDeleteDialog(true);
 				break;
 		}

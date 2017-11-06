@@ -44,7 +44,7 @@
   <string name="move">移動</string>
   <string name="backpack_add">放進背包</string>
   <string name="backpack">背包</string>
-  <string name="packing">打包</string>
+  <string name="pack">打包</string>
   <string name="unpack">取出</string>
   <string name="unpack_bg">取出設為背景</string>
   <string name="unpack_object">取出作為對象</string>

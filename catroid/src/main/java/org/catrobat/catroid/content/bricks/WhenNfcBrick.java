@@ -44,12 +44,10 @@ import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.WhenNfcScript;
 import org.catrobat.catroid.ui.ScriptActivity;
-import org.catrobat.catroid.ui.fragment.NfcTagFragment;
 
 import java.util.List;
 
-public class WhenNfcBrick extends BrickBaseType implements ScriptBrick, NfcTagFragment
-		.OnNfcTagDataListChangedAfterNewListener {
+public class WhenNfcBrick extends BrickBaseType implements ScriptBrick {
 
 	protected WhenNfcScript whenNfcScript;
 	private transient View prototypeView;
@@ -221,14 +219,6 @@ public class WhenNfcBrick extends BrickBaseType implements ScriptBrick, NfcTagFr
 		return prototypeView;
 	}
 
-	private void setOnNfcTagDataListChangedAfterNewListener(Context context) {
-		ScriptActivity scriptActivity = (ScriptActivity) context;
-		NfcTagFragment nfcTagFragment = (NfcTagFragment) scriptActivity.getFragment(ScriptActivity.FRAGMENT_NFCTAGS);
-		if (nfcTagFragment != null) {
-			nfcTagFragment.setOnNfcTagDataListChangedAfterNewListener(this);
-		}
-	}
-
 	private class SpinnerAdapterWrapper implements SpinnerAdapter {
 
 		protected Context context;
@@ -321,20 +311,12 @@ public class WhenNfcBrick extends BrickBaseType implements ScriptBrick, NfcTagFr
 		private void switchToNfcTagFragmentFromScriptFragment() {
 			ScriptActivity scriptActivity = ((ScriptActivity) context);
 			scriptActivity.switchToFragmentFromScriptFragment(ScriptActivity.FRAGMENT_NFCTAGS);
-
-			setOnNfcTagDataListChangedAfterNewListener(context);
 		}
 	}
 
 	@Override
 	public int getRequiredResources() {
 		return NFC_ADAPTER;
-	}
-
-	@Override
-	public void onNfcTagDataListChangedAfterNew(NfcTagData nfcTagData) {
-		oldSelectedNfcTag = nfcTagData;
-		setNfcTag(nfcTagData);
 	}
 
 	@Override

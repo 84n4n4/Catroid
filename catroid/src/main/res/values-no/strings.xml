@@ -44,7 +44,7 @@
   <string name="move">Flytt</string>
   <string name="backpack_add">Legg til i backpack</string>
   <string name="backpack">Backpack</string>
-  <string name="packing">Pakk sammen</string>
+  <string name="pack">Pakk sammen</string>
   <string name="unpack">Pakk ut</string>
   <string name="unpack_bg">Pakk ut som bakgrunn</string>
   <string name="unpack_object">Pakk ut som objekt</string>

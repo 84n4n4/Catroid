@@ -44,24 +44,19 @@ import android.widget.TextView;
 
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.ui.fragment.BackPackActivityFragment;
-import org.catrobat.catroid.ui.fragment.BackPackLookListFragment;
 import org.catrobat.catroid.ui.fragment.BackPackSceneListFragment;
 import org.catrobat.catroid.ui.fragment.BackPackScriptListFragment;
-import org.catrobat.catroid.ui.fragment.BackPackSoundListFragment;
 import org.catrobat.catroid.ui.fragment.BackPackSpriteListFragment;
 
 public class BackPackActivity extends BaseActivity {
 	public static final int FRAGMENT_BACKPACK_SCRIPTS = 0;
-	public static final int FRAGMENT_BACKPACK_LOOKS = 1;
-	public static final int FRAGMENT_BACKPACK_SOUNDS = 2;
 	public static final int FRAGMENT_BACKPACK_SPRITES = 3;
 	public static final int FRAGMENT_BACKPACK_SCENES = 4;
 
 	public static final String EXTRA_FRAGMENT_POSITION = "org.catrobat.catroid.ui.fragmentPosition";
 	private static int currentFragmentPosition;
 	private FragmentManager fragmentManager = getFragmentManager();
-	private BackPackSoundListFragment backPackSoundListFragment = null;
-	private BackPackLookListFragment backPackLookListFragment = null;
+
 	private BackPackScriptListFragment backPackScriptListFragment = null;
 	private BackPackSpriteListFragment backPackSpriteListFragment = null;
 	private BackPackSceneListFragment backPackSceneListFragment = null;
@@ -161,12 +156,6 @@ public class BackPackActivity extends BaseActivity {
 			case FRAGMENT_BACKPACK_SCRIPTS:
 				fragment = backPackScriptListFragment;
 				break;
-			case FRAGMENT_BACKPACK_LOOKS:
-				fragment = backPackLookListFragment;
-				break;
-			case FRAGMENT_BACKPACK_SOUNDS:
-				fragment = backPackSoundListFragment;
-				break;
 			case FRAGMENT_BACKPACK_SPRITES:
 				fragment = backPackSpriteListFragment;
 				break;
@@ -186,22 +175,6 @@ public class BackPackActivity extends BaseActivity {
 				currentFragment = backPackScriptListFragment;
 				currentFragmentPosition = FRAGMENT_BACKPACK_SCRIPTS;
 				currentFragmentTag = BackPackScriptListFragment.TAG;
-				break;
-			case FRAGMENT_BACKPACK_LOOKS:
-				if (backPackLookListFragment == null) {
-					backPackLookListFragment = new BackPackLookListFragment();
-				}
-				currentFragment = backPackLookListFragment;
-				currentFragmentPosition = FRAGMENT_BACKPACK_LOOKS;
-				currentFragmentTag = BackPackLookListFragment.TAG;
-				break;
-			case FRAGMENT_BACKPACK_SOUNDS:
-				if (backPackSoundListFragment == null) {
-					backPackSoundListFragment = new BackPackSoundListFragment();
-				}
-				currentFragment = backPackSoundListFragment;
-				currentFragmentPosition = FRAGMENT_BACKPACK_SOUNDS;
-				currentFragmentTag = BackPackSoundListFragment.TAG;
 				break;
 			case FRAGMENT_BACKPACK_SPRITES:
 				if (backPackSpriteListFragment == null) {

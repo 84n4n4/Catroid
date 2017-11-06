@@ -29,12 +29,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.ui.dialogs.NewProjectDialog;
-import org.catrobat.catroid.ui.fragment.ProjectListFragment;
+import org.catrobat.catroid.ui.recyclerview.fragment.ProjectFragment;
 import org.catrobat.catroid.utils.SnackbarUtil;
 
 import java.util.concurrent.locks.Lock;
@@ -45,7 +44,7 @@ public class MyProjectsActivity extends BaseCastActivity {
 	public static final String ACTION_PROJECT_LIST_INIT = "org.catrobat.catroid.PROJECT_LIST_INIT";
 
 	private Lock viewSwitchLock = new ViewSwitchLock();
-	private ProjectListFragment projectListFragment;
+	private ProjectFragment projectListFragment;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -55,8 +54,8 @@ public class MyProjectsActivity extends BaseCastActivity {
 
 		BottomBar.hidePlayButton(this);
 
-		loadFragment(ProjectListFragment.class, false);
-		projectListFragment = (ProjectListFragment) getFragmentManager().findFragmentById(R.id.fragment_container);
+		loadFragment(ProjectFragment.class, false);
+		projectListFragment = (ProjectFragment) getFragmentManager().findFragmentById(R.id.fragment_container);
 		SnackbarUtil.showHintSnackbar(this, R.string.hint_merge);
 	}
 
@@ -96,40 +95,8 @@ public class MyProjectsActivity extends BaseCastActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_myprojects, menu);
+		getMenuInflater().inflate(R.menu.menu_projects_activity, menu);
 		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		handleShowDetails(projectListFragment.getShowDetails(), menu.findItem(R.id.show_details));
-		return super.onPrepareOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				onBackPressed();
-				return true;
-
-			case R.id.copy:
-				projectListFragment.startCopyActionMode();
-				break;
-
-			case R.id.delete:
-				projectListFragment.startDeleteActionMode();
-				break;
-
-			case R.id.rename:
-				projectListFragment.startRenameActionMode();
-				break;
-
-			case R.id.show_details:
-				handleShowDetails(!projectListFragment.getShowDetails(), item);
-				break;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	private void setUpActionBar() {
@@ -148,15 +115,9 @@ public class MyProjectsActivity extends BaseCastActivity {
 		dialog.show(getFragmentManager(), NewProjectDialog.DIALOG_FRAGMENT_TAG);
 	}
 
-	private void handleShowDetails(boolean showDetails, MenuItem item) {
-		projectListFragment.setShowDetails(showDetails);
-
-		item.setTitle(showDetails ? R.string.hide_details : R.string.show_details);
-	}
-
 	@Override
 	public void onBackPressed() {
-		projectListFragment.cancelLoadProjectTask();
+		//projectListFragment.cancelLoadProjectTask();
 		super.onBackPressed();
 	}
 }

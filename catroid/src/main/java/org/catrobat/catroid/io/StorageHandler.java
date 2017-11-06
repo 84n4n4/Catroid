@@ -23,10 +23,18 @@
 package org.catrobat.catroid.io;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import com.google.common.base.Charsets;
@@ -233,6 +241,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
 import java.nio.channels.FileChannel;
 import java.util.HashSet;
 import java.util.List;
@@ -1270,26 +1281,26 @@ public final class StorageHandler {
 	}
 
 	public void fillChecksumContainer() {
-		Project currentProject = ProjectManager.getInstance().getCurrentProject();
-		if (currentProject == null) {
-			return;
-		}
-
-		ProjectManager.getInstance().setFileChecksumContainer(new FileChecksumContainer());
-		FileChecksumContainer container = ProjectManager.getInstance().getFileChecksumContainer();
-
-		Project newProject = ProjectManager.getInstance().getCurrentProject();
-		for (Scene scene : newProject.getSceneList()) {
-			for (Sprite currentSprite : scene.getSpriteList()) {
-				for (SoundInfo soundInfo : currentSprite.getSoundList()) {
-					container.addChecksum(soundInfo.getChecksum(), soundInfo.getAbsolutePath());
-				}
-
-				for (LookData lookData : currentSprite.getLookDataList()) {
-					container.addChecksum(lookData.getChecksum(), lookData.getAbsolutePath());
-				}
-			}
-		}
+//		Project currentProject = ProjectManager.getInstance().getCurrentProject();
+//		if (currentProject == null) {
+//			return;
+//		}
+//
+//		ProjectManager.getInstance().setFileChecksumContainer(new FileChecksumContainer());
+//		FileChecksumContainer container = ProjectManager.getInstance().getFileChecksumContainer();
+//
+//		Project newProject = ProjectManager.getInstance().getCurrentProject();
+//		for (Scene scene : newProject.getSceneList()) {
+//			for (Sprite currentSprite : scene.getSpriteList()) {
+//				for (SoundInfo soundInfo : currentSprite.getSoundList()) {
+//					container.addChecksum(soundInfo.getChecksum(), soundInfo.getAbsolutePath());
+//				}
+//
+//				for (LookData lookData : currentSprite.getLookDataList()) {
+//					container.addChecksum(lookData.getChecksum(), lookData.getAbsolutePath());
+//				}
+//			}
+//		}
 	}
 
 	public String getXMLStringOfAProject(Project project) {
@@ -1382,5 +1393,185 @@ public final class StorageHandler {
 	public void updateCodefileOnDownload(String projectName) {
 		File projectCodeFile = new File(buildProjectPath(projectName), PROJECTCODE_NAME);
 		xstream.updateCollisionReceiverBrickMessage(projectCodeFile);
+	}
+
+	// TODO: THIS IS NEW, In the course of refactoring this should probably moved somewhere else.
+	// in general this should be wrapped into a new version of filePathInfo.
+	// here are some more utility functions concerned with storage operations.
+
+	private static final String FILE_NAME_APPENDIX = "_#";
+
+	public static String getPathFromUri(ContentResolver contentResolver, Uri uri) {
+
+		if (uri.getScheme().equalsIgnoreCase("file")) {
+			return uri.getPath();
+		}
+
+		String[] projection = { MediaStore.MediaColumns.DATA };
+		String[] arguments;
+		String selection = null;
+		String[] selectionArgs = null;
+
+		if (uri.getScheme().equalsIgnoreCase("content")) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+				String identifier = DocumentsContract.getDocumentId(uri);
+
+				// Downloads
+				if (uri.getAuthority().equalsIgnoreCase("com.android.providers.downloads.documents")) {
+					uri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
+							Long.valueOf(identifier));
+					return resolveContent(contentResolver, uri, projection, selection, selectionArgs);
+				}
+
+				arguments = identifier.split(":");
+				selection = "_id=?";
+
+				// Media Documents
+				if (uri.getAuthority().equalsIgnoreCase("com.android.providers.media.documents")) {
+					if (arguments[0].equalsIgnoreCase("audio")) {
+						uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+					}
+					if (arguments[0].equalsIgnoreCase("image")) {
+						uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+					}
+					if (arguments[0].equalsIgnoreCase("video")) {
+						uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+					}
+
+					selectionArgs = new String[]{ arguments[1] };
+					return resolveContent(contentResolver, uri, projection, selection, selectionArgs);
+				}
+
+				// Google Photos
+				if (uri.getAuthority().equalsIgnoreCase("com.google.android.apps.photos.content")){
+					selectionArgs = new String[]{ arguments[1] };
+					return resolveContent(contentResolver, uri, projection, selection, selectionArgs);
+				}
+			}
+		}
+
+		return "";
+	}
+
+	private static String resolveContent(ContentResolver contentResolver,
+			Uri uri,
+			String[] projection,
+			String selection,
+			String[] selectionArgs) {
+
+		String path = "";
+		Cursor cursor = contentResolver.query(uri, projection, selection, selectionArgs, null);
+		cursor.moveToFirst();
+		int index = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
+		try {
+			path = cursor.getString(index);
+		} catch (CursorIndexOutOfBoundsException e) {
+			Log.e(TAG, Log.getStackTraceString(e));
+		}
+		finally {
+			cursor.close();
+		}
+		return path;
+	}
+
+	public static String getSanitizedFileName(File file) {
+		if(file.isDirectory()) {
+			return file.getName();
+		}
+
+		String name = file.getName();
+		int extensionStartIndex = name.lastIndexOf('.');
+		int appendixStartIndex = name.lastIndexOf(FILE_NAME_APPENDIX);
+
+		if (appendixStartIndex == -1) {
+			appendixStartIndex = extensionStartIndex;
+		}
+
+		if (appendixStartIndex == -1) {
+			return name;
+		}
+
+		return name.substring(0, appendixStartIndex);
+	}
+
+	public static File copyFile(String srcPath) throws IOException {
+		String dstPath = new File(srcPath).getParent();
+		return copyFile(srcPath, dstPath);
+	}
+
+	public static File copyFile(String srcPath, String dstPath) throws IOException {
+		File srcFile = new File(srcPath);
+		if (!srcFile.exists()) {
+			throw new FileNotFoundException("File: " + srcPath + "does not exist.");
+		}
+
+		File dstFile = getUniqueFile(srcFile.getName(), dstPath);
+		copyFile(srcFile, dstFile);
+
+		return dstFile;
+	}
+
+	public static File copyFile(Uri uri, String dstPath,ContentResolver contentResolver) throws IOException {
+		String srcPath = getPathFromUri(contentResolver, uri);
+
+		File srcFile = new File(srcPath);
+		if (!srcFile.exists()) {
+			throw new FileNotFoundException("File: " + srcPath + "does not exist.");
+		}
+		return copyFile(srcPath, dstPath);
+	}
+
+	private static synchronized File getUniqueFile(String originalName, String dstDirectory) throws IOException {
+		int extensionStartIndex = originalName.lastIndexOf('.');
+		int appendixStartIndex = originalName.lastIndexOf(FILE_NAME_APPENDIX);
+
+		if (appendixStartIndex == -1) {
+			appendixStartIndex = extensionStartIndex;
+		}
+
+		String extension = originalName.substring(extensionStartIndex);
+		String fileName = originalName.substring(0, appendixStartIndex);
+
+		int appendix = 0;
+
+		while (appendix < Integer.MAX_VALUE) {
+			String dstFileName = fileName + FILE_NAME_APPENDIX + appendix + extension;
+			File dstFile = new File(dstDirectory, dstFileName);
+
+			if (!dstFile.exists()) {
+				return dstFile;
+			}
+
+			appendix++;
+		}
+
+		throw new IOException("Could not find a unique file name in " + dstDirectory + ".");
+	}
+
+	private static void copyFile(File srcFile, File dstFile) throws IOException {
+		FileChannel ic = new FileInputStream(srcFile).getChannel();
+		FileChannel oc = new FileOutputStream(dstFile).getChannel();
+
+		try {
+			ic.transferTo(0, ic.size(), oc);
+		} finally {
+			if (ic != null) {
+				ic.close();
+			}
+			if (oc != null) {
+				oc.close();
+			}
+		}
+	}
+
+	public static void deleteFile(String srcPath) throws IOException {
+		File file = new File(srcPath);
+		if (!file.exists()) {
+			throw new FileNotFoundException("File: " + srcPath + "does not exist.");
+		}
+		if (!file.delete()) {
+			throw new IOException("File: " + srcPath + " could not be deleted.");
+		}
 	}
 }

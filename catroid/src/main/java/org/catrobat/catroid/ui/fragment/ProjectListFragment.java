@@ -205,7 +205,7 @@ public class ProjectListFragment extends ListActivityFragment implements LoadPro
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.context_menu_delete:
+			case R.id.cm_delete:
 				showDeleteDialog();
 				break;
 			case R.id.context_menu_copy:

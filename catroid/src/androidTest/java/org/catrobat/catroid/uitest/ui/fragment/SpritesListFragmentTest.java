@@ -158,7 +158,7 @@ public class SpritesListFragmentTest extends BaseActivityInstrumentationTestCase
 		unpackAsObject = solo.getString(R.string.unpack_object);
 		unpackAsBackGround = solo.getString(R.string.unpack_bg);
 		backpack = solo.getString(R.string.backpack);
-		backpackAdd = solo.getString(R.string.packing);
+		backpackAdd = solo.getString(R.string.pack);
 		backpackReplaceDialogMultiple = solo.getString(R.string.backpack_replace_object_multiple);
 		upload = solo.getString(R.string.upload_button);
 		next = solo.getString(R.string.next);

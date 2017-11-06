@@ -58,7 +58,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class FormulaEditorCategoryListFragment extends ListFragment implements Dialog.OnKeyListener, CategoryListAdapter.OnListItemClickListener {
+public class FormulaEditorCategoryListFragment extends ListFragment implements Dialog.OnKeyListener,
+		CategoryListAdapter.OnListItemClickListener {
 
 	public static final String TAG = FormulaEditorCategoryListFragment.class.getSimpleName();
 	public static final String OBJECT_TAG = "objectFragment";

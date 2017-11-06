@@ -44,7 +44,7 @@
   <string name="move">Přesunout</string>
   <string name="backpack_add">Přidat do batohu</string>
   <string name="backpack">Batoh</string>
-  <string name="packing">Zabalit</string>
+  <string name="pack">Zabalit</string>
   <string name="unpack">Vybalit</string>
   <string name="unpack_bg">Vybal jako pozadí</string>
   <string name="unpack_object">Vybal jako objekt</string>

@@ -2674,8 +2674,8 @@ public final class UiTestUtils {
 		openActionMode(solo, solo.getString(R.string.backpack), R.id.backpack);
 		solo.waitForDialogToOpen();
 		solo.sleep(50);
-		solo.waitForText(solo.getString(R.string.packing));
-		solo.clickOnText(solo.getString(R.string.packing));
+		solo.waitForText(solo.getString(R.string.pack));
+		solo.clickOnText(solo.getString(R.string.pack));
 		solo.sleep(500);
 	}
 

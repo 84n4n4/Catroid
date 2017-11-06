@@ -44,7 +44,7 @@
   <string name="move">Déplacer</string>
   <string name="backpack_add">Ajouter au sac à dos</string>
   <string name="backpack">Sac à dos</string>
-  <string name="packing">Grouper</string>
+  <string name="pack">Grouper</string>
   <string name="unpack">Dégrouper</string>
   <string name="unpack_bg">Dégrouper comme arrière-plan</string>
   <string name="unpack_object">Dégrouper comme objet</string>

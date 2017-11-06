@@ -37,7 +37,7 @@ public class SoundInfo implements Serializable, Comparable<SoundInfo>, Cloneable
 	private static final long serialVersionUID = 1L;
 	private static final String TAG = SoundInfo.class.getSimpleName();
 	public transient boolean isPlaying;
-	private transient boolean isBackpackSoundInfo;
+	public transient boolean isBackpackSoundInfo = false;
 	private String name;
 	private String fileName;
 

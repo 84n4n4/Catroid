@@ -44,7 +44,7 @@
   <string name="move">Desplaça</string>
   <string name="backpack_add">Afegir a la motxilla</string>
   <string name="backpack">Motxilla</string>
-  <string name="packing">Empaquetar</string>
+  <string name="pack">Empaquetar</string>
   <string name="unpack">Desempaquetar</string>
   <string name="unpack_bg">Desempaquetar com a fons</string>
   <string name="unpack_object">Desempaquetar com a objecte</string>

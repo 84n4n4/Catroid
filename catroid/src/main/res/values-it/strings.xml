@@ -44,7 +44,7 @@
   <string name="move">Muovi</string>
   <string name="backpack_add">Aggiungi allo zaino</string>
   <string name="backpack">Zaino</string>
-  <string name="packing">Impacchetta</string>
+  <string name="pack">Impacchetta</string>
   <string name="unpack">Scompatta</string>
   <string name="unpack_bg">Scompatta come sfondo</string>
   <string name="unpack_object">Scompatta come oggetto</string>

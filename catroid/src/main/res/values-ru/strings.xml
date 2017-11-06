@@ -44,7 +44,7 @@
   <string name="move">Рука</string>
   <string name="backpack_add">Положить в рюкзак</string>
   <string name="backpack">Положить в рюкзак</string>
-  <string name="packing">Упаковать</string>
+  <string name="pack">Упаковать</string>
   <string name="unpack">Вытащить</string>
   <string name="unpack_bg">Вытащить и сделать фоном</string>
   <string name="unpack_object">Вытащить и сделать объектом</string>

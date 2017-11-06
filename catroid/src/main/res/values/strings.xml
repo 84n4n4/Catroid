@@ -44,7 +44,7 @@
     <string name="move">Move</string>
     <string name="backpack_add">Add to backpack</string>
     <string name="backpack">Backpack</string>
-    <string name="packing">Pack</string>
+    <string name="pack">Pack</string>
     <string name="unpack">Unpack</string>
     <string name="unpack_bg">Unpack as background</string>
     <string name="unpack_object">Unpack as object</string>
@@ -77,11 +77,6 @@
     <string name="new_group">New group</string>
     <string name="my_group">My group</string>
     <string name="name">Name:</string>
-    <string name="nothing_to_copy">Nothing to copy</string>
-    <string name="nothing_to_backpack_and_unpack">Nothing to backpack and unpack</string>
-    <string name="nothing_to_unpack">Nothing to unpack</string>
-    <string name="nothing_to_delete">Nothing to delete</string>
-    <string name="nothing_to_rename">Nothing to rename</string>
     <string name="unpack_background">Program\'s background will be replaced</string>
     <string name="degrees">degrees</string>
     <string name="landscape">landscape</string>
@@ -250,6 +245,11 @@
     <string name="reconvert_dialog_reconvert">Reconvert this program</string>
     <!--  -->
 
+    <string name="nothing_to_copy">Nothing to copy</string>
+    <string name="nothing_to_backpack_and_unpack">Nothing to backpack and unpack</string>
+    <string name="nothing_to_unpack">Nothing to unpack</string>
+    <string name="nothing_to_delete">Nothing to delete</string>
+    <string name="nothing_to_rename">Nothing to rename</string>
 
     <!-- New Object Dialog -->
     <string name="dialog_new_object_pocketpaint">Draw image</string>
@@ -259,6 +259,107 @@
     <string name="dialog_new_object_name">Object name</string>
     <string name="dialog_new_object_switch_title">New object created</string>
     <string name="dialog_new_object_switch_message">Switch to new object?</string>
+    <!--  -->
+
+    <!-- ERRORS -->
+    <string name="wtf_error">An unexpected Error occurred: Could NOT restore default Project.</string>
+
+    <!-- Recycler View -->
+    <string name="am_empty_list">There are no items in this list yet.</string>
+    <string name="am_backpack">Pack</string>
+    <string name="am_unpack">Unpack</string>
+    <string name="am_copy">Copy</string>
+    <string name="am_delete">Delete</string>
+    <string name="am_rename">Rename</string>
+    <!-- Action Mode Titles -->
+    <plurals name="am_projects_title">
+        <item quantity="one">%d Project</item>
+        <item quantity="other">%d Projects</item>
+    </plurals>
+    <plurals name="am_looks_title">
+        <item quantity="one">%d Look</item>
+        <item quantity="other">%d Looks</item>
+    </plurals>
+    <plurals name="am_sounds_title">
+        <item quantity="one">%d Sound</item>
+        <item quantity="other">%d Sounds</item>
+    </plurals>
+    <plurals name="am_nfc_tags_title">
+        <item quantity="one">%d NFC Tag</item>
+        <item quantity="other">%d NFC Tags</item>
+    </plurals>
+
+    <!-- Delete Dialog Titles -->
+    <plurals name="delete_projects">
+        <item quantity="one">Delete this Project?</item>
+        <item quantity="other">Delete these Projects?</item>
+    </plurals>
+    <plurals name="delete_looks">
+        <item quantity="one">Delete this Look?</item>
+        <item quantity="other">Delete these Looks?</item>
+    </plurals>
+    <plurals name="delete_sounds">
+        <item quantity="one">Delete this Sound?</item>
+        <item quantity="other">Delete these Sounds?</item>
+    </plurals>
+    <plurals name="delete_nfc_tags">
+        <item quantity="one">Delete this Tag?</item>
+        <item quantity="other">Delete these Tags?</item>
+    </plurals>
+
+    <!-- Action Toasts -->
+    <plurals name="packed_looks">
+        <item quantity="one">Backpacked %d Look!</item>
+        <item quantity="other">Backpacked %d Looks!</item>
+    </plurals>
+    <plurals name="packed_sounds">
+        <item quantity="one">Backpacked %d Sound!</item>
+        <item quantity="other">Backpacked %d Sounds!</item>
+    </plurals>
+
+    <plurals name="unpacked_looks">
+        <item quantity="one">Unpacked %d Look!</item>
+        <item quantity="other">Unpacked %d Looks!</item>
+    </plurals>
+    <plurals name="unpacked_sounds">
+        <item quantity="one">Unpacked %d Sound!</item>
+        <item quantity="other">Unpacked %d Sounds!</item>
+    </plurals>
+
+    <plurals name="copied_looks">
+        <item quantity="one">Copied %d Look!</item>
+        <item quantity="other">Copied %d Looks!</item>
+    </plurals>
+    <plurals name="copied_sounds">
+        <item quantity="one">Copied %d Sound!</item>
+        <item quantity="other">Copied %d Sounds!</item>
+    </plurals>
+    <plurals name="copied_nfc_tags">
+        <item quantity="one">Copied %d NFC Tag!</item>
+        <item quantity="other">Copied %d NFC Tags!</item>
+    </plurals>
+
+    <plurals name="deleted_projects">
+        <item quantity="one">Deleted %d Project!</item>
+        <item quantity="other">Deleted %d Projects!</item>
+    </plurals>
+    <plurals name="deleted_looks">
+        <item quantity="one">Deleted %d Look!</item>
+        <item quantity="other">Deleted %d Looks!</item>
+    </plurals>
+    <plurals name="deleted_sounds">
+        <item quantity="one">Deleted %d Sound!</item>
+        <item quantity="other">Deleted %d Sounds!</item>
+    </plurals>
+    <plurals name="deleted_nfc_tags">
+        <item quantity="one">Deleted %d NFC Tag!</item>
+        <item quantity="other">Deleted %d NFC Tags!</item>
+    </plurals>
+    <!--  -->
+
+    <!-- Backpack -->
+    <string name="backpack_title">Your Backpack</string>
+
     <!--  -->
 
     <!-- Privacy Policy -->
@@ -452,7 +553,6 @@
     <!-- Sound fragment -->
     <string name="fragment_sound_text_description">Tap \"+\" to add sounds</string>
     <string name="rename_sound_dialog">Rename sound</string>
-    <string name="backpack_title">Your backpack</string>
     <string name="sound_play">play</string>
     <string name="sound_stop">stop</string>
     <string name="sound_select_source">Select a sound</string>

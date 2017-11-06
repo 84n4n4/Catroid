@@ -325,7 +325,7 @@ public class ProjectActivity extends BaseCastActivity {
 		if (numberOfItemsInBackpack == 0) {
 			actionListener.startBackPackActionMode();
 		} else {
-			items = new CharSequence[] {getString(R.string.packing), getString(R.string.unpack)};
+			items = new CharSequence[] {getString(R.string.pack), getString(R.string.unpack)};
 			builder.setItems(items, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {

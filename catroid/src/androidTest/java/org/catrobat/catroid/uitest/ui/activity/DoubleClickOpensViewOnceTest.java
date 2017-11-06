@@ -49,9 +49,9 @@ import org.catrobat.catroid.ui.dialogs.NewProjectDialog;
 import org.catrobat.catroid.ui.dialogs.NewSpriteDialog;
 import org.catrobat.catroid.ui.dialogs.SignInDialog;
 import org.catrobat.catroid.ui.fragment.BrickCategoryFragment;
-import org.catrobat.catroid.ui.fragment.LookFragment;
 import org.catrobat.catroid.ui.fragment.ScriptFragment;
-import org.catrobat.catroid.ui.fragment.SoundFragment;
+import org.catrobat.catroid.ui.recyclerview.fragment.LookFragment;
+import org.catrobat.catroid.ui.recyclerview.fragment.SoundFragment;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 import java.io.File;

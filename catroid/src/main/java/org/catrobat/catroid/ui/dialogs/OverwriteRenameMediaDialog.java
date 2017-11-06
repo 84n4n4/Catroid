@@ -47,7 +47,7 @@ import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.io.StorageHandler;
 import org.catrobat.catroid.ui.WebViewActivity;
-import org.catrobat.catroid.ui.fragment.LookFragment;
+import org.catrobat.catroid.ui.recyclerview.fragment.LookFragment;
 import org.catrobat.catroid.utils.DownloadUtil;
 import org.catrobat.catroid.utils.ToastUtil;
 import org.catrobat.catroid.utils.Utils;

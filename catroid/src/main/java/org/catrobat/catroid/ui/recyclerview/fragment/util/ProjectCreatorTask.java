@@ -20,9 +20,36 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.catrobat.catroid.ui;
 
-public interface DeleteModeListener {
+package org.catrobat.catroid.ui.recyclerview.fragment.util;
 
-	void startDeleteActionMode();
+import android.content.Context;
+import android.os.AsyncTask;
+
+import org.catrobat.catroid.ProjectManager;
+
+public class ProjectCreatorTask extends AsyncTask<Void, Void, Boolean> {
+
+	private Context context;
+	private ProjectCreatorListener listener;
+
+	public ProjectCreatorTask(Context context, ProjectCreatorListener listener) {
+		this.context = context;
+		this.listener = listener;
+	}
+
+	@Override
+	protected Boolean doInBackground(Void... voids) {
+		return ProjectManager.getInstance().initializeDefaultProject(context);
+	}
+
+	@Override
+	protected void onPostExecute(Boolean aBoolean) {
+		listener.onCreateFinished(aBoolean);
+	}
+
+	public interface ProjectCreatorListener {
+
+		void onCreateFinished(boolean success);
+	}
 }

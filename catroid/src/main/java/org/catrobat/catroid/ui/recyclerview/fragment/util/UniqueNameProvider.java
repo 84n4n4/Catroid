@@ -20,9 +20,42 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.catrobat.catroid.ui;
 
-public interface BackPackModeListener {
+package org.catrobat.catroid.ui.recyclerview.fragment.util;
 
-	void startBackPackActionMode();
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class UniqueNameProvider {
+
+	public String getUniqueName(String name, Set<String> scope) {
+		if (!scope.contains(name)) {
+			return name;
+		}
+
+		Pattern pattern = Pattern.compile("(\\(\\d+\\))");
+		Matcher matcher = pattern.matcher(name);
+
+		int n = 1;
+
+		if (matcher.find()) {
+			String match = matcher.group(0);
+			name = name.replace(match, "");
+			name = name.trim();
+			match = match.replace("(", "");
+			match = match.replace(")", "");
+			n = Integer.parseInt(match);
+		}
+
+		while (n < Integer.MAX_VALUE) {
+			String newName = name + " (" + n +")";
+			if (!scope.contains(newName)) {
+				return newName;
+			}
+			n++;
+		}
+
+		return name;
+	}
 }

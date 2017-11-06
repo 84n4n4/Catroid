@@ -20,20 +20,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.catrobat.catroid.ui;
 
-import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+package org.catrobat.catroid.ui.recyclerview.adapter.draganddrop;
 
-public class BackPackGroupViewHolder {
-	public ImageView backPackGroupImageView;
-	public CheckBox checkbox;
-	public TextView backPackGroupNameTextView;
-	public LinearLayout backPackGroupDetailsLinearLayout;
-	public TextView backPackGroupNumberOfBricksTextView;
-	public TextView backPackGroupNumberOfBricksValue;
-	public RelativeLayout backPackGroupElement;
+public interface TouchHelperAdapterInterface {
+
+	boolean onItemMove(int srcPosition, int targetPosition);
 }

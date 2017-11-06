@@ -44,7 +44,7 @@
   <string name="move">Przenieś</string>
   <string name="backpack_add">Dodaj do plecaka</string>
   <string name="backpack">Plecak</string>
-  <string name="packing">Zapakuj</string>
+  <string name="pack">Zapakuj</string>
   <string name="unpack">Rozpakuj</string>
   <string name="unpack_bg">Rozpakuj jako tło</string>
   <string name="unpack_object">Rozpakuj jako obiekt</string>

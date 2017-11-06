@@ -22,6 +22,7 @@
  */
 package org.catrobat.catroid.content.bricks;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.MotionEvent;
@@ -41,15 +42,14 @@ import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.ui.controller.SoundController;
-import org.catrobat.catroid.ui.fragment.SoundFragment;
-import org.catrobat.catroid.ui.fragment.SoundFragment.OnSoundInfoListChangedAfterNewListener;
+import org.catrobat.catroid.ui.recyclerview.dialog.NewSoundDialog;
+import org.catrobat.catroid.ui.recyclerview.dialog.dialoginterface.NewItemInterface;
 
 import java.util.List;
 
 public class PlaySoundBrick extends BrickBaseType implements OnItemSelectedListener,
-		OnSoundInfoListChangedAfterNewListener {
+		NewItemInterface<SoundInfo> {
 	private static final long serialVersionUID = 1L;
 
 	private SoundInfo sound;
@@ -185,12 +185,9 @@ public class PlaySoundBrick extends BrickBaseType implements OnItemSelectedListe
 		return sound;
 	}
 
-	private void setOnSoundInfoListChangedAfterNewListener(Context context) {
-		ScriptActivity scriptActivity = (ScriptActivity) context;
-		SoundFragment soundFragment = (SoundFragment) scriptActivity.getFragment(ScriptActivity.FRAGMENT_SOUNDS);
-		if (soundFragment != null) {
-			soundFragment.setOnSoundInfoListChangedAfterNewListener(this);
-		}
+	private void showNewSoundDialog(Activity activity) {
+		NewSoundDialog dialog = new NewSoundDialog(this);
+		dialog.show(activity.getFragmentManager(), NewSoundDialog.TAG);
 	}
 
 	private class SpinnerAdapterWrapper implements SpinnerAdapter {
@@ -246,7 +243,7 @@ public class PlaySoundBrick extends BrickBaseType implements OnItemSelectedListe
 			if (isTouchInDropDownView) {
 				isTouchInDropDownView = false;
 				if (paramInt == 0) {
-					switchToSoundFragmentFromScriptFragment();
+					showNewSoundDialog((Activity) context);
 				}
 			}
 			return spinnerAdapter.getView(paramInt, paramView, paramViewGroup);
@@ -281,17 +278,11 @@ public class PlaySoundBrick extends BrickBaseType implements OnItemSelectedListe
 
 			return dropDownView;
 		}
-
-		private void switchToSoundFragmentFromScriptFragment() {
-			ScriptActivity scriptActivity = ((ScriptActivity) context);
-			scriptActivity.switchToFragmentFromScriptFragment(ScriptActivity.FRAGMENT_SOUNDS);
-
-			setOnSoundInfoListChangedAfterNewListener(context);
-		}
 	}
 
 	@Override
-	public void onSoundInfoListChangedAfterNew(SoundInfo soundInfo) {
+	public void addItem(SoundInfo soundInfo) {
+		ProjectManager.getInstance().getCurrentSprite().getSoundList().add(soundInfo);
 		sound = soundInfo;
 		oldSelectedSound = soundInfo;
 	}

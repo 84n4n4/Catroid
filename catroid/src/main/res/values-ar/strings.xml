@@ -44,7 +44,7 @@
   <string name="move">تحرك</string>
   <string name="backpack_add">إضافة الى حزمة الظهر</string>
   <string name="backpack">حقيبة الظهر</string>
-  <string name="packing">حزمة</string>
+  <string name="pack">حزمة</string>
   <string name="unpack">فك الحزمة</string>
   <string name="unpack_bg">فك الحزمة كخلفية</string>
   <string name="unpack_object">فك الحزمة ككائن</string>

@@ -44,7 +44,7 @@
   <string name="move">حر کت</string>
   <string name="backpack_add">بستہ میں جمع کریں</string>
   <string name="backpack">بستہ</string>
-  <string name="packing">Pack</string>
+  <string name="pack">Pack</string>
   <string name="unpack">Unpack</string>
   <string name="unpack_bg">Unpack as background</string>
   <string name="unpack_object">Unpack as object</string>

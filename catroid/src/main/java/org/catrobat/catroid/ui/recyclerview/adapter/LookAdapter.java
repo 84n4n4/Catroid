@@ -20,11 +20,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.catrobat.catroid.ui.adapter;
 
-import android.content.Context;
+package org.catrobat.catroid.ui.recyclerview.adapter;
+
 import android.view.View;
-import android.view.ViewGroup;
 
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.LookData;
@@ -33,37 +32,34 @@ import org.catrobat.catroid.utils.UtilFile;
 import java.io.File;
 import java.util.List;
 
-public class LookListAdapter extends CheckBoxListAdapter<LookData> {
+public class LookAdapter extends RecyclerViewAdapter<LookData> {
 
-	public static final String TAG = LookListAdapter.class.getSimpleName();
-
-	public LookListAdapter(Context context, int resource, List<LookData> listItems) {
-		super(context, resource, listItems);
+	public LookAdapter(List<LookData> items) {
+		super(items);
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View listItemView = super.getView(position, convertView, parent);
+	public void onBindViewHolder(final ViewHolder holder, int position) {
+		super.onBindViewHolder(holder, position);
 
-		ListItemViewHolder listItemViewHolder = (ListItemViewHolder) listItemView.getTag();
-		LookData lookData = getItem(position);
+		LookData item = items.get(position);
 
-		listItemViewHolder.name.setText(lookData.getLookName());
-		listItemViewHolder.image.setImageBitmap(lookData.getThumbnailBitmap());
+		holder.name.setText(item.getLookName());
+		holder.image.setImageBitmap(item.getThumbnailBitmap());
+
+		holder.details.setVisibility(View.GONE);
 
 		if (showDetails) {
-			listItemViewHolder.details.setVisibility(View.VISIBLE);
+			holder.details.setVisibility(View.VISIBLE);
 
-			listItemViewHolder.leftBottomDetails.setText(R.string.look_measure);
-			int[] measure = lookData.getMeasure();
+			holder.leftBottomDetails.setText(R.string.look_measure);
+			int[] measure = item.getMeasure();
 			String measureString = measure[0] + " x " + measure[1];
-			listItemViewHolder.rightBottomDetails.setText(measureString);
+			holder.rightBottomDetails.setText(measureString);
 
-			listItemViewHolder.leftTopDetails.setText(R.string.size);
-			listItemViewHolder.rightTopDetails.setText(UtilFile.getSizeAsString(new File(lookData.getAbsolutePath()),
-					getContext()));
+			holder.leftTopDetails.setText(R.string.size);
+			holder.rightTopDetails.setText(UtilFile.getSizeAsString(new File(item.getAbsolutePath()), holder.itemView
+					.getContext()));
 		}
-
-		return listItemView;
 	}
 }

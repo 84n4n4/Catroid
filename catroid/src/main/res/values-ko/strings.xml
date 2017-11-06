@@ -44,7 +44,7 @@
   <string name="move">움직이기</string>
   <string name="backpack_add">스크립트 모음에 추가</string>
   <string name="backpack">스크립트 모음</string>
-  <string name="packing">묶기</string>
+  <string name="pack">묶기</string>
   <string name="unpack">풀기</string>
   <string name="unpack_bg">배경으로 모음 풀기</string>
   <string name="unpack_object">오브젝트로 모음 풀기</string>

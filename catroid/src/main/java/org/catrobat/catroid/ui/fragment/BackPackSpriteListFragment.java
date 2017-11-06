@@ -162,7 +162,7 @@ public class BackPackSpriteListFragment extends BackPackActivityFragment impleme
 			case R.id.context_menu_unpacking_object:
 				unpackCheckedItems(true);
 				break;
-			case R.id.context_menu_delete:
+			case R.id.cm_delete:
 				showDeleteDialog(true);
 				break;
 		}

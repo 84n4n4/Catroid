@@ -22,13 +22,7 @@
  */
 package org.catrobat.catroid.ui.controller;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.res.Resources;
-
 import org.catrobat.catroid.ProjectManager;
-import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.Script;
@@ -36,85 +30,19 @@ import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.content.bricks.PlaySoundBrick;
 import org.catrobat.catroid.content.bricks.SetLookBrick;
-import org.catrobat.catroid.ui.dialogs.CustomAlertDialogBuilder;
 import org.catrobat.catroid.utils.Utils;
 
 import java.util.List;
 
 public final class BackPackSpriteController {
-	private static final BackPackSpriteController INSTANCE = new BackPackSpriteController();
 
-	private OnBackpackSpriteCompleteListener onBackpackSpriteCompleteListener;
+	private static final BackPackSpriteController INSTANCE = new BackPackSpriteController();
 
 	private BackPackSpriteController() {
 	}
 
 	public static BackPackSpriteController getInstance() {
 		return INSTANCE;
-	}
-
-	public boolean checkSpriteReplaceInBackpack(List<Sprite> currentSpriteList) {
-		for (Sprite sprite : currentSpriteList) {
-			if (checkSpriteReplaceInBackpack(sprite)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean checkSpriteReplaceInBackpack(Sprite currentSprite) {
-		return BackPackListManager.getInstance().backPackedSpritesContains(currentSprite, true);
-	}
-
-	public void showBackPackReplaceDialog(final List<Sprite> currentSpriteList, final Context context) {
-		Resources resources = context.getResources();
-		String replaceLookMessage = resources.getString(R.string.backpack_replace_object_multiple);
-
-		AlertDialog dialog = new CustomAlertDialogBuilder(context)
-				.setTitle(R.string.backpack)
-				.setMessage(replaceLookMessage)
-				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						for (Sprite currentSprite : currentSpriteList) {
-							backpackVisibleSprite(currentSprite);
-						}
-						onBackpackSpriteCompleteListener.onBackpackSpriteComplete(true);
-						dialog.dismiss();
-					}
-				}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						onBackpackSpriteCompleteListener.onBackpackSpriteComplete(false);
-						dialog.dismiss();
-					}
-				}).create();
-		dialog.setCanceledOnTouchOutside(true);
-		dialog.show();
-	}
-
-	public void showBackPackReplaceDialog(final Sprite currentSprite, final Context context) {
-		Resources resources = context.getResources();
-		String replaceLookMessage = resources.getString(R.string.backpack_replace_object, currentSprite.getName());
-
-		AlertDialog dialog = new CustomAlertDialogBuilder(context)
-				.setTitle(R.string.backpack)
-				.setMessage(replaceLookMessage)
-				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						backpackVisibleSprite(currentSprite);
-						onBackpackSpriteCompleteListener.onBackpackSpriteComplete(true);
-						dialog.dismiss();
-					}
-				}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				}).create();
-		dialog.setCanceledOnTouchOutside(true);
-		dialog.show();
 	}
 
 	public void backpackVisibleSprite(Sprite spriteToEdit) {
@@ -145,7 +73,7 @@ public final class BackPackSpriteController {
 
 		for (LookData lookData : spriteToEdit.getLookDataList()) {
 			if (!lookDataIsUsedInScript(lookData, ProjectManager.getInstance().getCurrentSprite())) {
-				backPackSprite.getLookDataList().add(LookController.getInstance().backPackHiddenLook(lookData));
+				backPackSprite.getLookDataList().add(BackPackLookController.getInstance().backPackHiddenLook(lookData));
 			}
 		}
 		for (SoundInfo soundInfo : spriteToEdit.getSoundList()) {
@@ -179,7 +107,7 @@ public final class BackPackSpriteController {
 
 		for (LookData lookData : selectedSprite.getLookDataList()) {
 			if (!lookDataIsUsedInScript(lookData, selectedSprite)) {
-				LookController.getInstance().unpack(lookData, delete, true);
+				BackPackLookController.getInstance().unpack(lookData, delete, true);
 			}
 		}
 		for (SoundInfo soundInfo : selectedSprite.getSoundList()) {
@@ -229,13 +157,5 @@ public final class BackPackSpriteController {
 			}
 		}
 		return false;
-	}
-
-	public void setOnBackpackSpriteCompleteListener(OnBackpackSpriteCompleteListener listener) {
-		onBackpackSpriteCompleteListener = listener;
-	}
-
-	public interface OnBackpackSpriteCompleteListener {
-		void onBackpackSpriteComplete(boolean startBackpackActivity);
 	}
 }

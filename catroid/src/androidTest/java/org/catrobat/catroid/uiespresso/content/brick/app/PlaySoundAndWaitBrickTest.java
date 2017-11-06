@@ -34,7 +34,7 @@ import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.bricks.PlaySoundAndWaitBrick;
 import org.catrobat.catroid.content.bricks.PlaySoundBrick;
 import org.catrobat.catroid.io.SoundManager;
-import org.catrobat.catroid.ui.ProgramMenuActivity;
+import org.catrobat.catroid.ui.SpriteAttributesActivity;
 import org.catrobat.catroid.uiespresso.content.brick.utils.BrickTestUtils;
 import org.catrobat.catroid.uiespresso.testsuites.Cat;
 import org.catrobat.catroid.uiespresso.testsuites.Level;
@@ -84,8 +84,8 @@ public class PlaySoundAndWaitBrickTest {
 	private int playSoundBrickPosition;
 
 	@Rule
-	public BaseActivityInstrumentationRule<ProgramMenuActivity> programMenuActivityRule = new
-			BaseActivityInstrumentationRule<>(ProgramMenuActivity.class, true, false);
+	public BaseActivityInstrumentationRule<SpriteAttributesActivity> programMenuActivityRule = new
+			BaseActivityInstrumentationRule<>(SpriteAttributesActivity.class, true, false);
 
 	@Before
 	public void setUp() throws Exception {

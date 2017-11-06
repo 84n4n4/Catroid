@@ -35,7 +35,7 @@ import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.MainMenuActivity;
-import org.catrobat.catroid.ui.ProgramMenuActivity;
+import org.catrobat.catroid.ui.SpriteAttributesActivity;
 import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.ui.SettingsActivity;
 import org.catrobat.catroid.uitest.annotation.Device;
@@ -135,7 +135,7 @@ public class ScriptActivityTest extends BaseActivityInstrumentationTestCase<Main
 		checkSettingsAndGoBack();
 
 		solo.goBack();
-		solo.waitForActivity(ProgramMenuActivity.class);
+		solo.waitForActivity(SpriteAttributesActivity.class);
 		solo.clickOnText(solo.getString(R.string.backgrounds));
 		UiTestUtils.waitForFragment(solo, R.id.fragment_look);
 		assertEquals("Current sprite name is not shown as actionbar title or is wrong", "cat", currentSprite);
@@ -143,7 +143,7 @@ public class ScriptActivityTest extends BaseActivityInstrumentationTestCase<Main
 		checkSettingsAndGoBack();
 
 		solo.goBack();
-		solo.waitForActivity(ProgramMenuActivity.class);
+		solo.waitForActivity(SpriteAttributesActivity.class);
 		solo.clickOnText(solo.getString(R.string.sounds));
 		UiTestUtils.waitForFragment(solo, R.id.fragment_sprites_list);
 		assertEquals("Current sprite name is not shown as actionbar title or is wrong", "cat", currentSprite);
@@ -151,7 +151,7 @@ public class ScriptActivityTest extends BaseActivityInstrumentationTestCase<Main
 		checkSettingsAndGoBack();
 
 		solo.goBack();
-		solo.waitForActivity(ProgramMenuActivity.class);
+		solo.waitForActivity(SpriteAttributesActivity.class);
 		solo.clickOnText(solo.getString(R.string.nfctags));
 		UiTestUtils.waitForFragment(solo, R.id.fragment_nfctags);
 		assertEquals("Current sprite name is not shown as actionbar title or is wrong", "cat", currentSprite);

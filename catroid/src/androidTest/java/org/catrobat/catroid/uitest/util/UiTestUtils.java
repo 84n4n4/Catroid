@@ -147,7 +147,7 @@ import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.stage.StageListener;
 import org.catrobat.catroid.test.utils.Reflection;
 import org.catrobat.catroid.ui.MainMenuActivity;
-import org.catrobat.catroid.ui.ProgramMenuActivity;
+import org.catrobat.catroid.ui.SpriteAttributesActivity;
 import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.ui.SettingsActivity;
@@ -252,7 +252,7 @@ public final class UiTestUtils {
 	public static String gplusTestuserId;
 	static {
 		FRAGMENT_INDEX_LIST.add(R.id.fragment_script);
-		FRAGMENT_INDEX_LIST.add(R.id.fragment_look);
+//		FRAGMENT_INDEX_LIST.add(R.id.fragment_look);
 		FRAGMENT_INDEX_LIST.add(R.id.fragment_sprites_list);
 		FRAGMENT_INDEX_LIST.add(R.id.fragment_nfctags);
 	}
@@ -2137,7 +2137,7 @@ public final class UiTestUtils {
 		solo.sleep(200);
 
 		solo.clickInList(spriteIndex);
-		solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
+		solo.waitForActivity(SpriteAttributesActivity.class.getSimpleName());
 	}
 
 	public static void getIntoSoundsFromMainMenu(Solo solo) {
@@ -2364,7 +2364,7 @@ public final class UiTestUtils {
 
 	public static void switchToFragmentInScriptActivity(Solo solo, int fragmentIndex) {
 		solo.goBack();
-		solo.waitForActivity(ProgramMenuActivity.class);
+		solo.waitForActivity(SpriteAttributesActivity.class);
 		solo.clickOnButton(fragmentIndex);
 		solo.waitForActivity(ScriptActivity.class);
 		int id = FRAGMENT_INDEX_LIST.get(fragmentIndex);
@@ -2473,7 +2473,7 @@ public final class UiTestUtils {
 		assertEquals("Not in expected object", true, solo.waitForText(spriteName, 0, 500));
 		assertEquals("Not in expected fragment", true, solo.waitForText(solo.getString(R.string.scripts), 0, 500));
 		solo.goBack();
-		solo.waitForActivity(ProgramMenuActivity.class);
+		solo.waitForActivity(SpriteAttributesActivity.class);
 		assertEquals("Not in expected fragment", true, solo.waitForText(solo.getString(R.string.scripts), 0, 500));
 		assertEquals("Not in expected fragment", true, solo.waitForText(solo.getString(R.string.looks), 0, 500));
 		assertEquals("Not in expected fragment", true, solo.waitForText(solo.getString(R.string.sounds), 0, 500));
@@ -2674,8 +2674,8 @@ public final class UiTestUtils {
 		openActionMode(solo, solo.getString(R.string.backpack), R.id.backpack);
 		solo.waitForDialogToOpen();
 		solo.sleep(50);
-		solo.waitForText(solo.getString(R.string.packing));
-		solo.clickOnText(solo.getString(R.string.packing));
+		solo.waitForText(solo.getString(R.string.pack));
+		solo.clickOnText(solo.getString(R.string.pack));
 		solo.sleep(500);
 	}
 

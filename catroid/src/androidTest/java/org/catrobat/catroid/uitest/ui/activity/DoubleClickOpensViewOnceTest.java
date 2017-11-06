@@ -41,7 +41,7 @@ import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.test.utils.Reflection;
 import org.catrobat.catroid.ui.MainMenuActivity;
 import org.catrobat.catroid.ui.MyProjectsActivity;
-import org.catrobat.catroid.ui.ProgramMenuActivity;
+import org.catrobat.catroid.ui.SpriteAttributesActivity;
 import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.ui.adapter.BrickAdapter;
@@ -49,9 +49,9 @@ import org.catrobat.catroid.ui.dialogs.NewProjectDialog;
 import org.catrobat.catroid.ui.dialogs.NewSpriteDialog;
 import org.catrobat.catroid.ui.dialogs.SignInDialog;
 import org.catrobat.catroid.ui.fragment.BrickCategoryFragment;
-import org.catrobat.catroid.ui.fragment.LookFragment;
 import org.catrobat.catroid.ui.fragment.ScriptFragment;
-import org.catrobat.catroid.ui.fragment.SoundFragment;
+import org.catrobat.catroid.ui.recyclerview.fragment.LookFragment;
+import org.catrobat.catroid.ui.recyclerview.fragment.SoundFragment;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 import java.io.File;
@@ -303,18 +303,18 @@ public class DoubleClickOpensViewOnceTest extends TestSuite {
 	}
 
 	public static class ProgramMenuActivityDoubleClickOpensViewOnceTest extends
-			ActivityInstrumentationTestBase<ProgramMenuActivity> {
-		private ProgramMenuActivity activity;
+			ActivityInstrumentationTestBase<SpriteAttributesActivity> {
+		private SpriteAttributesActivity activity;
 
 		public ProgramMenuActivityDoubleClickOpensViewOnceTest() {
-			super(ProgramMenuActivity.class);
+			super(SpriteAttributesActivity.class);
 		}
 
 		@Override
 		public void setUp() throws Exception {
 			UiTestUtils.createTestProject();
 			super.setUp();
-			activity = (ProgramMenuActivity) solo.getCurrentActivity();
+			activity = (SpriteAttributesActivity) solo.getCurrentActivity();
 		}
 
 		@Override

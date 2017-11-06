@@ -22,14 +22,9 @@
  */
 package org.catrobat.catroid.ui.controller;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.util.Log;
 
 import org.catrobat.catroid.ProjectManager;
-import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
@@ -37,8 +32,6 @@ import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.content.bricks.SceneStartBrick;
 import org.catrobat.catroid.content.bricks.SceneTransitionBrick;
 import org.catrobat.catroid.io.StorageHandler;
-import org.catrobat.catroid.ui.dialogs.CustomAlertDialogBuilder;
-import org.catrobat.catroid.ui.fragment.SceneListFragment;
 import org.catrobat.catroid.utils.UtilFile;
 import org.catrobat.catroid.utils.Utils;
 
@@ -58,55 +51,6 @@ public final class BackPackSceneController {
 
 	public static BackPackSceneController getInstance() {
 		return INSTANCE;
-	}
-
-	public boolean checkScenesReplaceInBackpack(List<Scene> currentSceneList) {
-		for (Scene scene : currentSceneList) {
-			if (checkSceneReplaceInBackpack(scene)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean checkSceneReplaceInBackpack(Scene currentScene) {
-		return BackPackListManager.getInstance().backPackedScenesContains(currentScene, true);
-	}
-
-	public void showBackPackReplaceDialog(final List<Scene> currentSceneList, final SceneListFragment fragment) {
-		final Context context = fragment.getActivity();
-		Resources resources = context.getResources();
-		String replaceSceneMessage;
-		if (currentSceneList.size() == 1) {
-			replaceSceneMessage = resources.getString(R.string.backpack_replace_scene, currentSceneList.get(0)
-					.getName());
-		} else {
-			replaceSceneMessage = resources.getString(R.string.backpack_replace_scene_multiple);
-		}
-
-		AlertDialog dialog = new CustomAlertDialogBuilder(context)
-				.setTitle(R.string.backpack)
-				.setMessage(replaceSceneMessage)
-				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						fragment.showProgressCircle();
-						fragment.packScenes(currentSceneList);
-					}
-				}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						fragment.clearCheckedItems();
-						dialog.dismiss();
-					}
-				}).setOnCancelListener(new DialogInterface.OnCancelListener() {
-					@Override
-					public void onCancel(DialogInterface dialogInterface) {
-						fragment.clearCheckedItems();
-					}
-				}).create();
-		dialog.setCanceledOnTouchOutside(true);
-		dialog.show();
 	}
 
 	public boolean backpackScenes(List<Scene> scenes) {

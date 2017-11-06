@@ -44,7 +44,7 @@
   <string name="move">Yerini dəyiş</string>
   <string name="backpack_add">Bel çantasına qoy</string>
   <string name="backpack">Bel çantası</string>
-  <string name="packing">Qablaşdır</string>
+  <string name="pack">Qablaşdır</string>
   <string name="unpack">Aç</string>
   <string name="unpack_bg">Arxa fon kimi aç</string>
   <string name="unpack_object">Obyekt kimi aç</string>

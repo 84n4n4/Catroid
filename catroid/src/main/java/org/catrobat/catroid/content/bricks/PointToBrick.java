@@ -22,10 +22,7 @@
  */
 package org.catrobat.catroid.content.bricks;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.DataSetObserver;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,10 +42,8 @@ import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.GroupSprite;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.ui.ProgramMenuActivity;
 import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.ui.controller.BackPackSpriteController;
-import org.catrobat.catroid.ui.dialogs.CustomAlertDialogBuilder;
 import org.catrobat.catroid.ui.dialogs.NewSpriteDialog;
 
 import java.util.ArrayList;
@@ -310,38 +305,7 @@ public class PointToBrick extends BrickBaseType implements BrickWithSpriteRefere
 					pointedObject = sprite;
 				}
 			}
-
-			setSpinnerSelection(spinner);
-
-			AlertDialog dialog = new CustomAlertDialogBuilder(context)
-					.setTitle(R.string.dialog_new_object_switch_title)
-					.setMessage(R.string.dialog_new_object_switch_message)
-					.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							ProjectManager.getInstance().setCurrentSprite(pointedObject);
-
-							Intent intent = new Intent(context, ProgramMenuActivity.class);
-							intent.putExtra(ProgramMenuActivity.FORWARD_TO_SCRIPT_ACTIVITY,
-									ScriptActivity.FRAGMENT_SCRIPTS);
-							intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-							intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-							context.startActivity(intent);
-
-							dialog.dismiss();
-						}
-					}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							spinnerAdapter.notifyDataSetChanged();
-							dialog.dismiss();
-						}
-					}).create();
-			dialog.setCanceledOnTouchOutside(true);
-			dialog.show();
+			spinnerAdapter.notifyDataSetChanged();
 		}
 
 		public void updateSpinner() {

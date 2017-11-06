@@ -130,7 +130,7 @@ public class UserBrickElementEditorFragment extends Fragment implements OnKeyLis
 		fragmentManager.popBackStack();
 
 		if (activity instanceof ScriptActivity) {
-			((ScriptActivity) activity).setupActionBar();
+			//((ScriptActivity) activity).setupActionBar();
 			((ScriptActivity) activity).redrawBricks();
 		} else {
 			Log.e(TAG, "UserBrickDataEditor.onUserDismiss() called when the parent activity is not a UserBrickScriptActivity!\n"

@@ -24,9 +24,7 @@ package org.catrobat.catroid.ui.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,11 +42,10 @@ import org.catrobat.catroid.ui.BottomBar;
 import org.catrobat.catroid.ui.adapter.CheckBoxListAdapter;
 import org.catrobat.catroid.ui.adapter.SpriteListAdapter;
 import org.catrobat.catroid.ui.controller.BackPackListManager;
+import org.catrobat.catroid.ui.controller.BackPackLookController;
 import org.catrobat.catroid.ui.controller.BackPackSpriteController;
-import org.catrobat.catroid.ui.controller.LookController;
 import org.catrobat.catroid.ui.controller.SoundController;
 import org.catrobat.catroid.ui.dialogs.CustomAlertDialogBuilder;
-import org.catrobat.catroid.utils.Utils;
 
 import java.util.List;
 
@@ -108,34 +105,6 @@ public class BackPackSpriteListFragment extends BackPackActivityFragment impleme
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
-
-		if (!Utils.checkForExternalStorageAvailableAndDisplayErrorIfNot(getActivity())) {
-			return;
-		}
-
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity()
-				.getApplicationContext());
-
-		setShowDetails(settings.getBoolean(SpritesListFragment.SHARED_PREFERENCE_NAME, false));
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-
-		BackPackListManager.getInstance().saveBackpack();
-
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity()
-				.getApplicationContext());
-		SharedPreferences.Editor editor = settings.edit();
-
-		editor.putBoolean(SpritesListFragment.SHARED_PREFERENCE_NAME, getShowDetails());
-		editor.commit();
-	}
-
-	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
 		if (BackPackListManager.getInstance().getBackPackedSprites().isEmpty()) {
@@ -162,7 +131,7 @@ public class BackPackSpriteListFragment extends BackPackActivityFragment impleme
 			case R.id.context_menu_unpacking_object:
 				unpackCheckedItems(true);
 				break;
-			case R.id.context_menu_delete:
+			case R.id.cm_delete:
 				showDeleteDialog(true);
 				break;
 		}
@@ -212,7 +181,7 @@ public class BackPackSpriteListFragment extends BackPackActivityFragment impleme
 
 	private void removeLooksAndSounds() {
 		for (LookData currentLookData : spriteToEdit.getLookDataList()) {
-			if (!LookController.getInstance().otherLookDataItemsHaveAFileReference(currentLookData)) {
+			if (!BackPackLookController.getInstance().otherLookDataItemsHaveAFileReference(currentLookData)) {
 				StorageHandler.getInstance().deleteFile(currentLookData.getAbsolutePath(), true);
 			}
 			BackPackListManager.getInstance().removeItemFromLookHiddenBackpack(currentLookData);

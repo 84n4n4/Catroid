@@ -31,6 +31,6 @@
         android:title="@string/unpack_object" />
 
     <item
-        android:id="@+id/context_menu_delete"
+        android:id="@+id/cm_delete"
         android:title="@string/delete" />
 </menu>

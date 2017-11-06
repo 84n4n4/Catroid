@@ -45,7 +45,7 @@
   <string name="move">移動</string>
   <string name="backpack_add">バックパックに追加</string>
   <string name="backpack">バックパック</string>
-  <string name="packing">パック</string>
+  <string name="pack">パック</string>
   <string name="unpack">解凍</string>
   <string name="unpack_bg">背景として解凍</string>
   <string name="unpack_object">オブジェクトとして解凍</string>

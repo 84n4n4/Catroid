@@ -44,7 +44,7 @@
   <string name="move">Mover</string>
   <string name="backpack_add">Adicionar para mochila</string>
   <string name="backpack">Mochila</string>
-  <string name="packing">Pacote</string>
+  <string name="pack">Pacote</string>
   <string name="unpack">Descompactar</string>
   <string name="unpack_bg">Definir como Pano de fundo</string>
   <string name="unpack_object">Descompacte como objeto</string>

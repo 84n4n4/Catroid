@@ -101,7 +101,7 @@ public class SignInDialog extends DialogFragment implements
 		if (getActivity() instanceof MainMenuActivity) {
 			((MainMenuActivity) getActivity()).setSignInDialog(this);
 		} else if (getActivity() instanceof ProjectActivity) {
-			((ProjectActivity) getActivity()).setSignInDialog(this);
+			//((ProjectActivity) getActivity()).setSignInDialog(this);
 		}
 
 		initializeGooglePlus();

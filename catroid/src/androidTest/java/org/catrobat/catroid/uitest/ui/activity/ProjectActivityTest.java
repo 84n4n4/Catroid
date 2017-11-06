@@ -71,7 +71,7 @@ import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.test.utils.Reflection;
 import org.catrobat.catroid.ui.MainMenuActivity;
 import org.catrobat.catroid.ui.MyProjectsActivity;
-import org.catrobat.catroid.ui.ProgramMenuActivity;
+import org.catrobat.catroid.ui.SpriteAttributesActivity;
 import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.ui.SettingsActivity;
@@ -763,7 +763,7 @@ public class ProjectActivityTest extends BaseActivityInstrumentationTestCase<Mai
 		solo.goBack();
 
 		solo.clickOnText(TEST_SPRITE_NAME);
-		solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
+		solo.waitForActivity(SpriteAttributesActivity.class.getSimpleName());
 		solo.goBack();
 
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());

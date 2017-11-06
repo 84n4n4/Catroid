@@ -39,8 +39,8 @@ import org.catrobat.catroid.transfers.ProjectDownloadService;
 import org.catrobat.catroid.ui.WebViewActivity;
 import org.catrobat.catroid.ui.dialogs.OverwriteRenameDialog;
 import org.catrobat.catroid.ui.dialogs.OverwriteRenameMediaDialog;
-import org.catrobat.catroid.ui.fragment.LookFragment;
-import org.catrobat.catroid.ui.fragment.SoundFragment;
+import org.catrobat.catroid.ui.recyclerview.fragment.LookFragment;
+import org.catrobat.catroid.ui.recyclerview.fragment.SoundFragment;
 import org.catrobat.catroid.web.ProgressResponseBody;
 
 import java.io.UnsupportedEncodingException;

@@ -39,8 +39,8 @@ import org.catrobat.catroid.ui.BottomBar;
 import org.catrobat.catroid.ui.adapter.BackPackScriptListAdapter;
 import org.catrobat.catroid.ui.adapter.CheckBoxListAdapter;
 import org.catrobat.catroid.ui.controller.BackPackListManager;
+import org.catrobat.catroid.ui.controller.BackPackLookController;
 import org.catrobat.catroid.ui.controller.BackPackScriptController;
-import org.catrobat.catroid.ui.controller.LookController;
 import org.catrobat.catroid.utils.Utils;
 
 import java.util.List;
@@ -91,7 +91,7 @@ public class BackPackScriptListFragment extends BackPackActivityFragment impleme
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		outState.putSerializable(LookController.BUNDLE_ARGUMENTS_SELECTED_LOOK, scriptToEdit);
+		outState.putSerializable(BackPackLookController.BUNDLE_ARGUMENTS_SELECTED_LOOK, scriptToEdit);
 		super.onSaveInstanceState(outState);
 	}
 
@@ -143,16 +143,16 @@ public class BackPackScriptListFragment extends BackPackActivityFragment impleme
 		scriptToEdit = scriptAdapter.getItem(selectedScriptPosition);
 		menu.setHeaderTitle(scriptToEdit);
 
-		getActivity().getMenuInflater().inflate(R.menu.context_menu_unpacking, menu);
+		getActivity().getMenuInflater().inflate(R.menu.context_menu_unpack, menu);
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.context_menu_unpacking:
+			case R.id.cm_unpack:
 				unpackCheckedItems(true);
 				break;
-			case R.id.context_menu_delete:
+			case R.id.cm_delete:
 				showDeleteDialog(true);
 				break;
 		}

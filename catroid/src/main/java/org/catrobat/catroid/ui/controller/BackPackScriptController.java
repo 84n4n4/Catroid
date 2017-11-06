@@ -186,7 +186,7 @@ public final class BackPackScriptController {
 
 	private void handleLookBrickUnpacking(Brick brickOfScript, boolean deleteUnpackedItems) {
 		SetLookBrick brick = (SetLookBrick) brickOfScript;
-		LookData newLookData = LookController.getInstance().unpack(brick.getLook(), deleteUnpackedItems, true);
+		LookData newLookData = BackPackLookController.getInstance().unpack(brick.getLook(), deleteUnpackedItems, true);
 		if (newLookData != null) {
 			brick.setLook(newLookData);
 		}

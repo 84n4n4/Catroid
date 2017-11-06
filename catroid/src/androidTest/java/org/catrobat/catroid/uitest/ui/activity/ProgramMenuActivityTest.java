@@ -46,7 +46,7 @@ import org.catrobat.catroid.content.bricks.SetXBrick;
 import org.catrobat.catroid.content.bricks.SetYBrick;
 import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.MainMenuActivity;
-import org.catrobat.catroid.ui.ProgramMenuActivity;
+import org.catrobat.catroid.ui.SpriteAttributesActivity;
 import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.ui.SettingsActivity;
 import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
@@ -83,7 +83,7 @@ public class ProgramMenuActivityTest extends BaseActivityInstrumentationTestCase
 		/// Method 1: Assert it is currently in portrait mode.
 		solo.clickOnText(solo.getString(R.string.main_menu_continue));
 		solo.clickOnText(backgroundName);
-		solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
+		solo.waitForActivity(SpriteAttributesActivity.class.getSimpleName());
 		assertEquals("ProgramMenuActivity not in Portrait mode!", Configuration.ORIENTATION_PORTRAIT, solo
 				.getCurrentActivity().getResources().getConfiguration().orientation);
 
@@ -98,7 +98,7 @@ public class ProgramMenuActivityTest extends BaseActivityInstrumentationTestCase
 		solo.setActivityOrientation(Solo.LANDSCAPE);
 		solo.sleep(200);
 
-		assertEquals(ProgramMenuActivity.class.getSimpleName()
+		assertEquals(SpriteAttributesActivity.class.getSimpleName()
 						+ " not set to be in portrait mode in AndroidManifest.xml!", ActivityInfo.SCREEN_ORIENTATION_PORTRAIT,
 				activityInfo.screenOrientation);
 	}
@@ -112,7 +112,7 @@ public class ProgramMenuActivityTest extends BaseActivityInstrumentationTestCase
 
 		UiTestUtils.addNewSprite(solo, spriteName, lookFile, null);
 		solo.clickOnText(backgroundName);
-		solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
+		solo.waitForActivity(SpriteAttributesActivity.class.getSimpleName());
 
 		String currentSpriteName = ProjectManager.getInstance().getCurrentSprite().getName();
 
@@ -124,7 +124,7 @@ public class ProgramMenuActivityTest extends BaseActivityInstrumentationTestCase
 		solo.waitForFragmentById(R.id.fragment_container);
 		solo.waitForText(spriteName);
 		solo.clickOnText(spriteName);
-		solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
+		solo.waitForActivity(SpriteAttributesActivity.class.getSimpleName());
 
 		currentSpriteName = ProjectManager.getInstance().getCurrentSprite().getName();
 
@@ -138,7 +138,7 @@ public class ProgramMenuActivityTest extends BaseActivityInstrumentationTestCase
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
 		UiTestUtils.addNewSprite(solo, spriteName, lookFile, null);
 		solo.clickOnText(spriteName);
-		solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
+		solo.waitForActivity(SpriteAttributesActivity.class.getSimpleName());
 		assertTrue("Text on look button is not 'Looks'", solo.searchText(solo.getString(R.string.looks)));
 		solo.goBack();
 		solo.goBack();
@@ -165,8 +165,8 @@ public class ProgramMenuActivityTest extends BaseActivityInstrumentationTestCase
 		solo.assertCurrentActivity("Not in StageActivity", StageActivity.class);
 		solo.goBack();
 		solo.goBack();
-		solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
-		solo.assertCurrentActivity("Not in ProgramMenuActivity", ProgramMenuActivity.class);
+		solo.waitForActivity(SpriteAttributesActivity.class.getSimpleName());
+		solo.assertCurrentActivity("Not in ProgramMenuActivity", SpriteAttributesActivity.class);
 	}
 
 	public void testMainMenuItemsNotVisible() {

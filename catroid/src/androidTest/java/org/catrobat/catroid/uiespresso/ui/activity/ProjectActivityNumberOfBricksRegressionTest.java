@@ -78,7 +78,7 @@ public class ProjectActivityNumberOfBricksRegressionTest {
 	private void setShowDetails(final boolean show) {
 		getInstrumentation().runOnMainSync(new Runnable() {
 			public void run() {
-				baseActivityTestRule.getActivity().getSpritesListFragment().setShowDetails(show);
+//				baseActivityTestRule.getActivity().getSpritesListFragment().setShowDetails(show);
 			}
 		});
 	}

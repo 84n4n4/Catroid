@@ -22,14 +22,8 @@
  */
 package org.catrobat.catroid.ui.fragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ListFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,7 +31,6 @@ import android.util.Log;
 import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,7 +40,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -68,8 +60,12 @@ import org.catrobat.catroid.ui.dialogs.NewDataDialog.NewUserListDialogListener;
 import org.catrobat.catroid.ui.dialogs.RenameVariableDialog;
 import org.catrobat.catroid.utils.UtilUi;
 
-public class FormulaEditorDataFragment extends ListFragment implements Dialog.OnKeyListener,
-		DataAdapter.OnCheckedChangeListener, DataAdapter.OnListItemClickListener, NewUserListDialogListener, NewDataDialog.NewVariableDialogListener {
+public class FormulaEditorDataFragment extends ListFragment implements
+		DataAdapter.OnCheckedChangeListener,
+		DataAdapter.OnListItemClickListener,
+		NewUserListDialogListener,
+		NewDataDialog.NewVariableDialogListener {
+
 	private static final String TAG = FormulaEditorDataFragment.class.getSimpleName();
 
 	public static final String USER_DATA_TAG = "userDataFragment";
@@ -144,10 +140,6 @@ public class FormulaEditorDataFragment extends ListFragment implements Dialog.On
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case android.R.id.home:
-				closeFormulaEditorDataFragment();
-				return true;
-
 			case R.id.formula_editor_data_item_delete:
 				inContextMode = true;
 				contextActionMode = getActivity().startActionMode(contextModeCallback);
@@ -170,8 +162,7 @@ public class FormulaEditorDataFragment extends ListFragment implements Dialog.On
 				}
 				formulaEditor.updateButtonsOnKeyboardAndInvalidateOptionsMenu();
 			}
-			KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK);
-			onKey(null, keyEvent.getKeyCode(), keyEvent);
+			getActivity().onBackPressed();
 		}
 	}
 
@@ -198,7 +189,6 @@ public class FormulaEditorDataFragment extends ListFragment implements Dialog.On
 
 	@Override
 	public void onStart() {
-
 		this.registerForContextMenu(getListView());
 		getListView().setItemsCanFocus(true);
 		getListView().setLongClickable(true);
@@ -215,24 +205,24 @@ public class FormulaEditorDataFragment extends ListFragment implements Dialog.On
 			}
 		});
 
-		setAddButtonListener(getActivity());
+		BottomBar.showBottomBar(getActivity());
+		BottomBar.hidePlayButton(getActivity());
 
 		adapter.notifyDataSetChanged();
-
 		super.onStart();
 	}
 
-	public void setAddButtonListener(final Activity activity) {
-		ImageButton buttonAdd = (ImageButton) activity.findViewById(R.id.button_add);
-		buttonAdd.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				NewDataDialog dialog = new NewDataDialog(NewDataDialog.DialogType.SHOW_LIST_CHECKBOX);
-				dialog.addUserListDialogListener(FormulaEditorDataFragment.this);
-				dialog.addVariableDialogListener(FormulaEditorDataFragment.this);
-				dialog.show(activity.getFragmentManager(), NewDataDialog.DIALOG_FRAGMENT_TAG);
-			}
-		});
+	@Override
+	public void onStop() {
+		BottomBar.hideBottomBar(getActivity());
+		super.onStop();
+	}
+
+	public void handleAddButton() {
+		NewDataDialog dialog = new NewDataDialog(NewDataDialog.DialogType.SHOW_LIST_CHECKBOX);
+		dialog.addUserListDialogListener(FormulaEditorDataFragment.this);
+		dialog.addVariableDialogListener(FormulaEditorDataFragment.this);
+		dialog.show(getFragmentManager(), NewDataDialog.DIALOG_FRAGMENT_TAG);
 	}
 
 	@Override
@@ -296,26 +286,6 @@ public class FormulaEditorDataFragment extends ListFragment implements Dialog.On
 		adapter.notifyDataSetChanged();
 	}
 
-	public void showFragment(Context context) {
-		Activity activity = (Activity) context;
-		FragmentManager fragmentManager = activity.getFragmentManager();
-		FragmentTransaction fragTransaction = fragmentManager.beginTransaction();
-
-		Fragment formulaEditorFragment = fragmentManager
-				.findFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
-		fragTransaction.hide(formulaEditorFragment);
-
-		BottomBar.showBottomBar(activity);
-		BottomBar.hidePlayButton(activity);
-
-		fragTransaction.show(this);
-		fragTransaction.commit();
-
-		if (adapter != null) {
-			initializeDataAdapter();
-		}
-	}
-
 	private void initializeDataAdapter() {
 		Scene currentScene = ProjectManager.getInstance().getCurrentScene();
 		Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
@@ -326,33 +296,6 @@ public class FormulaEditorDataFragment extends ListFragment implements Dialog.On
 		adapter.setOnCheckedChangeListener(this);
 		adapter.setOnListItemClickListener(this);
 		adapter.notifyDataSetChanged();
-	}
-
-	@Override
-	public boolean onKey(DialogInterface d, int keyCode, KeyEvent event) {
-		switch (keyCode) {
-			case KeyEvent.KEYCODE_BACK:
-				closeFormulaEditorDataFragment();
-				return true;
-			default:
-				break;
-		}
-		return false;
-	}
-
-	private void closeFormulaEditorDataFragment() {
-		BottomBar.hideBottomBar(getActivity());
-		((ScriptActivity) getActivity()).updateHandleAddButtonClickListener();
-
-		FragmentTransaction fragmentTransaction = getActivity().getFragmentManager()
-				.beginTransaction();
-		fragmentTransaction.hide(this);
-		FormulaEditorFragment formulaEditorFragment = (FormulaEditorFragment) getActivity()
-				.getFragmentManager().findFragmentByTag(
-						FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
-		formulaEditorFragment.updateBrickView();
-		fragmentTransaction.show(formulaEditorFragment);
-		fragmentTransaction.commit();
 	}
 
 	private void addSelectAllActionModeButton(ActionMode mode, Menu menu) {

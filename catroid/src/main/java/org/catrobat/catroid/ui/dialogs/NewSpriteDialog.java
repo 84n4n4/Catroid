@@ -56,13 +56,11 @@ import org.catrobat.catroid.content.SingleSprite;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.PointToBrick.SpinnerAdapterWrapper;
 import org.catrobat.catroid.io.StorageHandler;
-import org.catrobat.catroid.ui.ProgramMenuActivity;
 import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.ui.SettingsActivity;
 import org.catrobat.catroid.ui.WebViewActivity;
 import org.catrobat.catroid.ui.controller.PocketPaintExchangeHandler;
 import org.catrobat.catroid.ui.fragment.SpriteFactory;
-import org.catrobat.catroid.ui.fragment.SpritesListFragment;
 import org.catrobat.catroid.utils.ImageEditing;
 import org.catrobat.catroid.utils.UtilCamera;
 import org.catrobat.catroid.utils.Utils;
@@ -373,7 +371,6 @@ public class NewSpriteDialog extends DialogFragment {
 					String url = Constants.LIBRARY_LOOKS_URL;
 
 					intent.putExtra(WebViewActivity.INTENT_PARAMETER_URL, url);
-					intent.putExtra(WebViewActivity.CALLING_ACTIVITY, SpritesListFragment.TAG);
 					startActivityForResult(intent, REQUEST_MEDIA_LIBRARY);
 				}
 			}
@@ -477,13 +474,6 @@ public class NewSpriteDialog extends DialogFragment {
 			getActivity().sendBroadcast(broadcastIntent);
 		}
 
-		if (requestedAction == ActionAfterFinished.ACTION_FORWARD_TO_NEW_OBJECT) {
-			projectManager.setCurrentSprite(sprite);
-
-			Intent intent = new Intent(getActivity(), ProgramMenuActivity.class);
-			intent.putExtra(ProgramMenuActivity.FORWARD_TO_SCRIPT_ACTIVITY, ScriptActivity.FRAGMENT_SCRIPTS);
-			startActivity(intent);
-		}
 		dismiss();
 		return true;
 	}

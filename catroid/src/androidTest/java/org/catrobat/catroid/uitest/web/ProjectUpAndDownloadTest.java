@@ -43,7 +43,7 @@ import org.catrobat.catroid.exceptions.ProjectException;
 import org.catrobat.catroid.io.StorageHandler;
 import org.catrobat.catroid.test.utils.Reflection;
 import org.catrobat.catroid.ui.MainMenuActivity;
-import org.catrobat.catroid.ui.ProgramMenuActivity;
+import org.catrobat.catroid.ui.SpriteAttributesActivity;
 import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
@@ -495,7 +495,7 @@ public class ProjectUpAndDownloadTest extends BaseActivityInstrumentationTestCas
 		preUploadProject();
 
 		solo.clickOnText(solo.getString(R.string.main_menu_programs));
-		solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
+		solo.waitForActivity(SpriteAttributesActivity.class.getSimpleName());
 
 		String upload = solo.getString(R.string.upload_button);
 		solo.clickLongOnText(testProject);
@@ -510,7 +510,7 @@ public class ProjectUpAndDownloadTest extends BaseActivityInstrumentationTestCas
 		preUploadProject();
 
 		solo.clickOnText(solo.getString(R.string.main_menu_programs));
-		solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
+		solo.waitForActivity(SpriteAttributesActivity.class.getSimpleName());
 		solo.clickOnText(testProject);
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
 		UiTestUtils.clickOnActionBar(solo, R.id.upload);

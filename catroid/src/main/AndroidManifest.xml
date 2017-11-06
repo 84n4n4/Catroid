@@ -156,6 +156,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.recyclerview.backpack.BackpackActivity"
+            android:noHistory="true"
+
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".ui.BackPackActivity"
             android:noHistory="true"
 
@@ -189,7 +195,7 @@
              android:name=".ui.BaseActivity"
              android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.ProgramMenuActivity"
+            android:name=".ui.SpriteAttributesActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.ScriptActivity"
@@ -248,7 +254,7 @@
              android:configChanges="orientation|keyboardHidden|screenSize"
              android:label="@string/app_name"
              android:screenOrientation="portrait">
-        </activity>
+        </activity><activity android:name=".ui.recyclerview.activity.SceneActivity" /><activity android:name=".ui.recyclerview.activity.SpriteActivity" />
         <service android:name=".transfers.ProjectUploadService" />
         <service android:name=".transfers.ProjectDownloadService" />
         <service android:name=".transfers.MediaDownloadService" />

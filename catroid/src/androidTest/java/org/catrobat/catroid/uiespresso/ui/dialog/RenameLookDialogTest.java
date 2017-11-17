@@ -25,19 +25,26 @@ package org.catrobat.catroid.uiespresso.ui.dialog;
 
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.common.SoundInfo;
+import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.SingleSprite;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.ui.ScriptActivity;
+import org.catrobat.catroid.uiespresso.pocketmusic.RecyclerViewMatcher;
 import org.catrobat.catroid.uiespresso.testsuites.Cat;
 import org.catrobat.catroid.uiespresso.testsuites.Level;
+import org.catrobat.catroid.uiespresso.util.actions.CustomActions;
 import org.catrobat.catroid.uiespresso.util.rules.BaseActivityInstrumentationRule;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -50,10 +57,13 @@ import java.util.List;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -61,75 +71,71 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
-public class DeleteSoundDialogTest {
+public class RenameLookDialogTest {
 
 	@Rule
 	public BaseActivityInstrumentationRule<ScriptActivity> baseActivityTestRule = new
 			BaseActivityInstrumentationRule<>(ScriptActivity.class, true, false);
 
-	private String toBeDeletedSoundName = "testSound2";
+	private String oldLookName = "testLook2";
+	private String newLookName = "renamedLook";
 
 	@Before
 	public void setUp() throws Exception {
-		createProject("deleteSoundDialogTest");
+		createProject("renameLooksDialogTest");
 
 		Intent intent = new Intent();
-		intent.putExtra(ScriptActivity.EXTRA_FRAGMENT_POSITION, ScriptActivity.FRAGMENT_SOUNDS);
+		intent.putExtra(ScriptActivity.EXTRA_FRAGMENT_POSITION, ScriptActivity.FRAGMENT_LOOKS);
 
 		baseActivityTestRule.launchActivity(intent);
 	}
 
 	@Category({Cat.AppUi.class, Level.Smoke.class})
 	@Test
-	public void deleteSoundDialogTest() {
+	public void renameLookDialogTest() {
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
-		onView(withText(R.string.delete)).perform(click());
+		onView(withText(R.string.rename)).perform(click());
 
-		onView(withText(toBeDeletedSoundName)).perform(click());
+		onView(withId(R.id.recycler_view))
+				.perform(RecyclerViewActions.actionOnItemAtPosition(1,clickChildViewWithId(R.id.list_item_checkbox)));
+
 		onView(withContentDescription("Done")).perform(click());
 
-		onView(withText(R.string.dialog_confirm_delete_sound_title)).inRoot(isDialog())
+		onView(withText(R.string.rename_look_dialog)).inRoot(isDialog())
 				.check(matches(isDisplayed()));
-
-		onView(withText(R.string.dialog_confirm_delete_sound_message)).inRoot(isDialog())
-				.check(matches(isDisplayed()));
-
-		onView(allOf(withId(android.R.id.button1), withText(R.string.yes)))
-				.check(matches(isDisplayed()));
-		onView(allOf(withId(android.R.id.button2), withText(R.string.no)))
-				.check(matches(isDisplayed()));
-
-		onView(allOf(withId(android.R.id.button1), withText(R.string.yes)))
+		onView(allOf(withId(R.id.edit_text), withText(oldLookName), isDisplayed()))
+				.perform(replaceText(newLookName));
+		closeSoftKeyboard();
+		onView(allOf(withId(android.R.id.button1), withText(R.string.ok)))
 				.perform(click());
 
-		onView(withText(toBeDeletedSoundName))
+		onView(withText(newLookName))
+				.check(matches(isDisplayed()));
+		onView(withText(oldLookName))
 				.check(doesNotExist());
 	}
 
 	@Category({Cat.AppUi.class, Level.Smoke.class})
 	@Test
-	public void cancelDeleteSoundDialogTest() {
+	public void cancelRenameLookDialogTest() {
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
-		onView(withText(R.string.delete)).perform(click());
+		onView(withText(R.string.rename)).perform(click());
 
-		onView(withText(toBeDeletedSoundName)).perform(click());
+		onView(withId(R.id.recycler_view))
+				.perform(RecyclerViewActions.actionOnItemAtPosition(1,clickChildViewWithId(R.id.list_item_checkbox)));
+
 		onView(withContentDescription("Done")).perform(click());
 
-		onView(withText(R.string.dialog_confirm_delete_sound_title)).inRoot(isDialog())
+		onView(withText(R.string.rename_look_dialog)).inRoot(isDialog())
 				.check(matches(isDisplayed()));
+		onView(allOf(withId(R.id.edit_text), withText(oldLookName), isDisplayed()))
+				.perform(replaceText(newLookName));
+		closeSoftKeyboard();
 
-		onView(withText(R.string.dialog_confirm_delete_sound_message)).inRoot(isDialog())
-				.check(matches(isDisplayed()));
-
-		onView(allOf(withId(android.R.id.button1), withText(R.string.yes)))
-				.check(matches(isDisplayed()));
-		onView(allOf(withId(android.R.id.button2), withText(R.string.no)))
-				.check(matches(isDisplayed()));
-
-		onView(allOf(withId(android.R.id.button2), withText(R.string.no)))
+		onView(allOf(withId(android.R.id.button2), withText(R.string.cancel)))
 				.perform(click());
 
-		onView(withText(toBeDeletedSoundName))
+		onView(withText(oldLookName))
 				.check(matches(isDisplayed()));
 	}
 
@@ -142,31 +148,54 @@ public class DeleteSoundDialogTest {
 		ProjectManager.getInstance().setProject(project);
 		ProjectManager.getInstance().setCurrentSprite(sprite);
 
-		File soundFile = UiTestUtils.saveFileToProject(
-				projectName, ProjectManager.getInstance().getCurrentScene().getName(), "longsound.mp3",
-				org.catrobat.catroid.test.R.raw.longsound, InstrumentationRegistry.getTargetContext(),
-				UiTestUtils.FileTypes.SOUND
+		File imageFile = UiTestUtils.saveFileToProject(
+				projectName, ProjectManager.getInstance().getCurrentScene().getName(), "catroid_sunglasses.png",
+				org.catrobat.catroid.test.R.drawable.catroid_banzai, InstrumentationRegistry.getTargetContext(),
+				UiTestUtils.FileTypes.IMAGE
 		);
 
-		File soundFile2 = UiTestUtils.saveFileToProject(
-				projectName, ProjectManager.getInstance().getCurrentScene().getName(), "testsoundui.mp3",
-				org.catrobat.catroid.test.R.raw.testsoundui, InstrumentationRegistry.getTargetContext(),
-				UiTestUtils.FileTypes.SOUND
+		File imageFile2 = UiTestUtils.saveFileToProject(
+				projectName, ProjectManager.getInstance().getCurrentScene().getName(), "catroid_banzai.png",
+				org.catrobat.catroid.test.R.drawable.catroid_banzai, InstrumentationRegistry.getTargetContext(),
+				UiTestUtils.FileTypes.IMAGE
 		);
 
-		List<SoundInfo> soundInfoList = ProjectManager.getInstance().getCurrentSprite().getSoundList();
-		SoundInfo soundInfo = new SoundInfo();
-		soundInfo.setSoundFileName(soundFile.getName());
-		soundInfo.setTitle("testLook1");
-		soundInfoList.add(soundInfo);
+		List<LookData> lookDataList = ProjectManager.getInstance().getCurrentSprite().getLookDataList();
+		LookData lookData = new LookData();
+		lookData.setLookFilename(imageFile.getName());
+		lookData.setLookName("testLook1");
+		lookDataList.add(lookData);
 		ProjectManager.getInstance().getFileChecksumContainer()
-				.addChecksum(soundInfo.getChecksum(), soundInfo.getAbsolutePath());
+				.addChecksum(lookData.getChecksum(), lookData.getAbsolutePath());
 
-		SoundInfo soundInfo2 = new SoundInfo();
-		soundInfo2.setSoundFileName(soundFile2.getName());
-		soundInfo2.setTitle(toBeDeletedSoundName);
-		soundInfoList.add(soundInfo2);
+		LookData lookData2 = new LookData();
+		lookData2.setLookFilename(imageFile2.getName());
+		lookData2.setLookName(oldLookName);
+		lookDataList.add(lookData2);
 		ProjectManager.getInstance().getFileChecksumContainer()
-				.addChecksum(soundInfo2.getChecksum(), soundInfo2.getAbsolutePath());
+				.addChecksum(lookData2.getChecksum(), lookData2.getAbsolutePath());
+	}
+
+	public static ViewAction clickChildViewWithId(final int id) {
+		return new ViewAction() {
+			@Override
+			public Matcher<View> getConstraints() {
+				return null;
+			}
+
+			@Override
+			public String getDescription() {
+				return "Click on a child view with specified id.";
+			}
+
+			@Override
+			public void perform(UiController uiController, View view) {
+				View v = view.findViewById(id);
+				if(v == null) {
+					throw new AssertionError("cannot find view with id:" + view.getId());
+				}
+				v.performClick();
+			}
+		};
 	}
 }

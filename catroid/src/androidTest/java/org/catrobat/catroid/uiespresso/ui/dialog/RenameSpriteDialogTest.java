@@ -35,6 +35,7 @@ import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.uiespresso.annotations.Flaky;
 import org.catrobat.catroid.uiespresso.testsuites.Cat;
 import org.catrobat.catroid.uiespresso.testsuites.Level;
+import org.catrobat.catroid.uiespresso.util.actions.CustomActions;
 import org.catrobat.catroid.uiespresso.util.rules.BaseActivityInstrumentationRule;
 import org.junit.Before;
 import org.junit.Rule;
@@ -51,6 +52,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.doesNotExis
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -97,9 +99,9 @@ public class RenameSpriteDialogTest {
 
 		onView(withText(R.string.rename_sprite_dialog)).inRoot(isDialog())
 				.check(matches(isDisplayed()));
+		onView(isRoot()).perform(CustomActions.wait(4000));
 		onView(allOf(withId(R.id.edit_text), withText(oldSpriteName), isDisplayed()))
 				.perform(replaceText(newSpriteName));
-
 		closeSoftKeyboard();
 
 		onView(allOf(withId(android.R.id.button1), withText(R.string.ok)))

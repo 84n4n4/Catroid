@@ -34,11 +34,11 @@ import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.SingleSprite;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.ui.ScriptActivity;
-import org.catrobat.catroid.uiespresso.pocketmusic.RecyclerViewMatcher;
 import org.catrobat.catroid.uiespresso.testsuites.Cat;
 import org.catrobat.catroid.uiespresso.testsuites.Level;
+import org.catrobat.catroid.uiespresso.util.FileTestUtils;
+import org.catrobat.catroid.uiespresso.util.UiTestUtils;
 import org.catrobat.catroid.uiespresso.util.rules.BaseActivityInstrumentationRule;
-import org.catrobat.catroid.uitest.util.UiTestUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -59,6 +59,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+import static org.catrobat.catroid.uiespresso.ui.fragment.rvutils.RecyclerViewInteractionWrapper.onRVAtPosition;
 import static org.hamcrest.Matchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
@@ -86,19 +87,18 @@ public class DeleteSoundFragmentTest {
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
 		onView(withText(R.string.delete)).perform(click());
 
-		onView(new RecyclerViewMatcher(R.id.recycler_view).atPositionOnView(1, R.id.list_item_checkbox)).perform(click());
+		onRVAtPosition(1)
+				.performCheckItem();
 
 		onView(withContentDescription("Done")).perform(click());
 
-		onView(withText(org.catrobat.catroid.uiespresso.util.UiTestUtils.getResources().getQuantityString(R.plurals
-				.delete_sounds, 1))).inRoot(isDialog())
+		onView(withText(UiTestUtils.getResources().getQuantityString(R.plurals.delete_sounds, 1)))
+				.inRoot(isDialog())
 				.check(matches(isDisplayed()));
 
 		onView(withText(R.string.dialog_confirm_delete_sound_message)).inRoot(isDialog())
 				.check(matches(isDisplayed()));
 
-		onView(allOf(withId(android.R.id.button1), withText(R.string.yes)))
-				.check(matches(isDisplayed()));
 		onView(allOf(withId(android.R.id.button2), withText(R.string.no)))
 				.check(matches(isDisplayed()));
 
@@ -115,20 +115,19 @@ public class DeleteSoundFragmentTest {
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
 		onView(withText(R.string.delete)).perform(click());
 
-		onView(new RecyclerViewMatcher(R.id.recycler_view).atPositionOnView(1, R.id.list_item_checkbox)).perform(click());
+		onRVAtPosition(1)
+				.performCheckItem();
 
 		onView(withContentDescription("Done")).perform(click());
 
-		onView(withText(org.catrobat.catroid.uiespresso.util.UiTestUtils.getResources().getQuantityString(R.plurals
-				.delete_sounds, 1))).inRoot(isDialog())
+		onView(withText(UiTestUtils.getResources().getQuantityString(R.plurals.delete_sounds, 1)))
+				.inRoot(isDialog())
 				.check(matches(isDisplayed()));
 
 		onView(withText(R.string.dialog_confirm_delete_sound_message)).inRoot(isDialog())
 				.check(matches(isDisplayed()));
 
 		onView(allOf(withId(android.R.id.button1), withText(R.string.yes)))
-				.check(matches(isDisplayed()));
-		onView(allOf(withId(android.R.id.button2), withText(R.string.no)))
 				.check(matches(isDisplayed()));
 
 		onView(allOf(withId(android.R.id.button2), withText(R.string.no)))
@@ -147,16 +146,16 @@ public class DeleteSoundFragmentTest {
 		ProjectManager.getInstance().setProject(project);
 		ProjectManager.getInstance().setCurrentSprite(sprite);
 
-		File soundFile = UiTestUtils.saveFileToProject(
+		File soundFile = FileTestUtils.saveFileToProject(
 				projectName, ProjectManager.getInstance().getCurrentScene().getName(), "longsound.mp3",
-				org.catrobat.catroid.test.R.raw.longsound, InstrumentationRegistry.getTargetContext(),
-				UiTestUtils.FileTypes.SOUND
+				org.catrobat.catroid.test.R.raw.longsound, InstrumentationRegistry.getContext(),
+				FileTestUtils.FileTypes.SOUND
 		);
 
-		File soundFile2 = UiTestUtils.saveFileToProject(
+		File soundFile2 = FileTestUtils.saveFileToProject(
 				projectName, ProjectManager.getInstance().getCurrentScene().getName(), "testsoundui.mp3",
-				org.catrobat.catroid.test.R.raw.testsoundui, InstrumentationRegistry.getTargetContext(),
-				UiTestUtils.FileTypes.SOUND
+				org.catrobat.catroid.test.R.raw.testsoundui, InstrumentationRegistry.getContext(),
+				FileTestUtils.FileTypes.SOUND
 		);
 
 		List<SoundInfo> soundInfoList = ProjectManager.getInstance().getCurrentSprite().getSoundList();

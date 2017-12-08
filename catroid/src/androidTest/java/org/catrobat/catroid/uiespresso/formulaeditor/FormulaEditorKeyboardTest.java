@@ -22,6 +22,7 @@
  */
 package org.catrobat.catroid.uiespresso.formulaeditor;
 
+import android.content.Intent;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.catrobat.catroid.ProjectManager;
@@ -63,7 +64,9 @@ public class FormulaEditorKeyboardTest {
 	@Before
 	public void setUp() throws Exception {
 		createProject("formulaEditorKeyboardTest");
-		baseActivityTestRule.launchActivity(null);
+		Intent intent = new Intent();
+		intent.putExtra(ScriptActivity.EXTRA_FRAGMENT_POSITION, ScriptActivity.FRAGMENT_SCRIPTS);
+		baseActivityTestRule.launchActivity(intent);
 	}
 
 	@Category({Cat.AppUi.class, Level.Smoke.class})
@@ -85,7 +88,7 @@ public class FormulaEditorKeyboardTest {
 		onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
 		onView(withId(R.id.formula_editor_keyboard_ok)).perform(click());
 
-		onView(withId(R.id.formula_editor_edit_field))
+		onView(withId(R.id.brick_set_variable_edit_text))
 				.check(matches(withText("1234567890"
 						+ UiTestUtils.getResourcesString(R.string.formula_editor_decimal_mark) + "1 ")));
 	}
@@ -110,7 +113,7 @@ public class FormulaEditorKeyboardTest {
 		onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
 		onView(withId(R.id.formula_editor_keyboard_ok)).perform(click());
 
-		onView(withId(R.id.formula_editor_edit_field))
+		onView(withId(R.id.brick_set_variable_edit_text))
 				.check(matches(withText("( 1 ) + 1 - 1 × 1 ÷ 1 = 1 ")));
 	}
 
@@ -131,7 +134,7 @@ public class FormulaEditorKeyboardTest {
 
 		onView(withId(R.id.formula_editor_keyboard_ok))
 				.perform(click());
-		onView(withId(R.id.formula_editor_edit_field))
+		onView(withId(R.id.brick_set_variable_edit_text))
 				.check(matches(withText("'Foo' ")));
 	}
 

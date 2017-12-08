@@ -475,7 +475,7 @@ public class DoubleClickOpensViewOnceTest extends TestSuite {
 			}, R.id.fragment_container, ScriptFragment.TAG);
 		}
 
-		public void testBrickAdapterOnItemClick() {
+/*		public void testBrickAdapterOnItemClick() {
 			final View brickView = solo.getView(R.id.brick_hide_layout);
 			ScriptActivity activity = (ScriptActivity) solo.getCurrentActivity();
 			ScriptFragment scriptFragment = (ScriptFragment) activity.getFragment(ScriptActivity.FRAGMENT_SCRIPTS);
@@ -487,7 +487,7 @@ public class DoubleClickOpensViewOnceTest extends TestSuite {
 					brickAdapter.onClick(brickView);
 				}
 			}, R.id.brick_hide_layout, getActivity().getApplicationContext().getText(R.string.brick_context_dialog_delete_brick).toString());
-		}
+		}*/
 
 		public void testBrickCategoryFragmentOnItemClick() {
 			View addButton = solo.getView(R.id.button_add);

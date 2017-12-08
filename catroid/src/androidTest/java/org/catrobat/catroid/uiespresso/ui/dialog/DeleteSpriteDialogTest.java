@@ -52,6 +52,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+import static org.catrobat.catroid.uiespresso.ui.fragment.rvutils.RecyclerViewInteractionWrapper.onRVAtPosition;
 import static org.hamcrest.Matchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
@@ -75,8 +76,10 @@ public class DeleteSpriteDialogTest {
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
 		onView(withText(R.string.delete)).perform(click());
 
-		onView(withText(toBeDeletedSpriteName)).perform(click());
-		onView(withContentDescription("Done")).perform(click());
+		onRVAtPosition(1)
+				.performCheckItem();
+
+		onView(withContentDescription(R.string.done)).perform(click());
 
 		onView(withText(R.string.dialog_confirm_delete_object_title)).inRoot(isDialog())
 				.check(matches(isDisplayed()));
@@ -102,8 +105,10 @@ public class DeleteSpriteDialogTest {
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
 		onView(withText(R.string.delete)).perform(click());
 
-		onView(withText(toBeDeletedSpriteName)).perform(click());
-		onView(withContentDescription("Done")).perform(click());
+		onRVAtPosition(1)
+				.performCheckItem();
+
+		onView(withContentDescription(R.string.done)).perform(click());
 
 		onView(withText(R.string.dialog_confirm_delete_object_title)).inRoot(isDialog())
 				.check(matches(isDisplayed()));

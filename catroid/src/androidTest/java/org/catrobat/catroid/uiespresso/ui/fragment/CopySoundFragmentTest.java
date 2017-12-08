@@ -34,11 +34,10 @@ import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.SingleSprite;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.ui.ScriptActivity;
-import org.catrobat.catroid.uiespresso.pocketmusic.RecyclerViewMatcher;
 import org.catrobat.catroid.uiespresso.testsuites.Cat;
 import org.catrobat.catroid.uiespresso.testsuites.Level;
+import org.catrobat.catroid.uiespresso.util.FileTestUtils;
 import org.catrobat.catroid.uiespresso.util.rules.BaseActivityInstrumentationRule;
-import org.catrobat.catroid.uitest.util.UiTestUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -55,6 +54,8 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+
+import static org.catrobat.catroid.uiespresso.ui.fragment.rvutils.RecyclerViewInteractionWrapper.onRVAtPosition;
 
 @RunWith(AndroidJUnit4.class)
 public class CopySoundFragmentTest {
@@ -81,9 +82,8 @@ public class CopySoundFragmentTest {
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
 		onView(withText(R.string.copy)).perform(click());
 
-		onView(new RecyclerViewMatcher(R.id.recycler_view)
-				.atPositionOnView(0, R.id.list_item_checkbox))
-				.perform(click());
+		onRVAtPosition(0)
+				.performCheckItem();
 
 		onView(withContentDescription("Done")).perform(click());
 
@@ -103,10 +103,10 @@ public class CopySoundFragmentTest {
 		ProjectManager.getInstance().setProject(project);
 		ProjectManager.getInstance().setCurrentSprite(sprite);
 
-		File soundFile = UiTestUtils.saveFileToProject(
+		File soundFile = FileTestUtils.saveFileToProject(
 				projectName, ProjectManager.getInstance().getCurrentScene().getName(), "longsound.mp3",
-				org.catrobat.catroid.test.R.raw.longsound, InstrumentationRegistry.getTargetContext(),
-				UiTestUtils.FileTypes.SOUND
+				org.catrobat.catroid.test.R.raw.longsound, InstrumentationRegistry.getContext(),
+				FileTestUtils.FileTypes.SOUND
 		);
 
 		List<SoundInfo> soundInfoList = ProjectManager.getInstance().getCurrentSprite().getSoundList();

@@ -53,9 +53,10 @@ import org.junit.runner.RunWith;
 
 import java.util.Locale;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -85,21 +86,14 @@ public class HindiNumberAtShowDetailsAtProjectActivityTest {
 		SettingsActivity.updateLocale(getTargetContext(), "ar", "");
 		baseActivityTestRule.launchActivity(null);
 
-		setShowDetails(true);
-	}
-
-	private void setShowDetails(final boolean show) {
-		getInstrumentation().runOnMainSync(new Runnable() {
-			public void run() {
-				baseActivityTestRule.getActivity().getSpritesListFragment().setShowDetails(show);
-			}
-		});
+		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+		onView(withText(R.string.show_details)).perform(click());
 	}
 
 	@After
 	public void tearDown() {
-		resetToDefaultLanguage();
-		setShowDetails(false);
+		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+		onView(withText(R.string.hide_details)).perform(click());
 	}
 
 	@Category({Cat.AppUi.class, Level.Smoke.class})
@@ -108,16 +102,16 @@ public class HindiNumberAtShowDetailsAtProjectActivityTest {
 		assertEquals(Locale.getDefault().getDisplayLanguage(), arLocale.getDisplayLanguage());
 		assertTrue(RtlUiTestUtils.checkTextDirection(Locale.getDefault().getDisplayName()));
 
-		onView(allOf(withId(R.id.textView_number_of_scripts), isDisplayed()))
+		onView(allOf(withId(R.id.details_left_bottom), isDisplayed()))
 				.check(matches(withText(UiTestUtils.getResourcesString(R.string.number_of_scripts) + " " + expectedHindiNumberOfScripts)));
 
-		onView(allOf(withId(R.id.textView_number_of_bricks), isDisplayed()))
+		onView(allOf(withId(R.id.details_right_bottom), isDisplayed()))
 				.check(matches(withText(UiTestUtils.getResourcesString(R.string.number_of_bricks) + " " + expectedHindiNumberOfBricks)));
 
-		onView(allOf(withId(R.id.textView_number_of_looks), isDisplayed()))
+		onView(allOf(withId(R.id.details_left_top), isDisplayed()))
 				.check(matches(withText(UiTestUtils.getResourcesString(R.string.number_of_looks) + " " + expectedHindiNumberOfLooks)));
 
-		onView(allOf(withId(R.id.textView_number_of_sounds), isDisplayed()))
+		onView(allOf(withId(R.id.details_right_top), isDisplayed()))
 				.check(matches(withText(UiTestUtils.getResourcesString(R.string.number_of_sounds) + " " + expectedHindiNumberOfSounds)));
 	}
 

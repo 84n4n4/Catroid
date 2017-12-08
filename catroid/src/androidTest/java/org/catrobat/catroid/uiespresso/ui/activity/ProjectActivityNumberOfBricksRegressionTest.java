@@ -23,6 +23,7 @@
 
 package org.catrobat.catroid.uiespresso.ui.activity;
 
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.catrobat.catroid.ProjectManager;
@@ -46,8 +47,9 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -67,33 +69,30 @@ public class ProjectActivityNumberOfBricksRegressionTest {
 		createProject();
 		baseActivityTestRule.launchActivity(null);
 
-		setShowDetails(true);
+		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+		onView(withText(R.string.show_details)).perform(click());
 	}
 
 	@After
 	public void tearDown() {
-		setShowDetails(false);
-	}
-
-	private void setShowDetails(final boolean show) {
-		getInstrumentation().runOnMainSync(new Runnable() {
-			public void run() {
-//				baseActivityTestRule.getActivity().getSpritesListFragment().setShowDetails(show);
-			}
-		});
+		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+		onView(withText(R.string.hide_details)).perform(click());
 	}
 
 	@Category({Cat.AppUi.class, Level.Smoke.class})
 	@Test
 	public void numberOfBricksDetailsRegressionTest() throws Exception {
-		onView(allOf(withId(R.id.textView_number_of_scripts), isDisplayed()))
+		onView(allOf(withId(R.id.details_left_bottom), isDisplayed()))
 				.check(matches(withText(UiTestUtils.getResourcesString(R.string.number_of_scripts).concat(" 2"))));
 
-		onView(allOf(withId(R.id.textView_number_of_bricks), isDisplayed()))
+		onView(allOf(withId(R.id.details_right_bottom), isDisplayed()))
 				.check(matches(withText(UiTestUtils.getResourcesString(R.string.number_of_bricks).concat(" 7"))));
 
-		onView(allOf(withId(R.id.textView_number_of_looks), isDisplayed()))
+		onView(allOf(withId(R.id.details_left_top), isDisplayed()))
 				.check(matches(withText(UiTestUtils.getResourcesString(R.string.number_of_looks).concat(" 2"))));
+
+		onView(allOf(withId(R.id.details_right_top), isDisplayed()))
+				.check(matches(withText(UiTestUtils.getResourcesString(R.string.number_of_sounds).concat(" 0"))));
 	}
 
 	private void createProject() {

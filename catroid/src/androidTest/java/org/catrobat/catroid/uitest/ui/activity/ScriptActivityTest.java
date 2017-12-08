@@ -81,7 +81,7 @@ public class ScriptActivityTest extends BaseActivityInstrumentationTestCase<Main
 				ActivityInfo.SCREEN_ORIENTATION_PORTRAIT, activityInfo.screenOrientation);
 	}
 
-	public void testMainMenuButton() {
+/*	public void testMainMenuButton() {
 		UiTestUtils.waitForFragment(solo, R.id.fragment_script);
 
 		checkMainMenuButton();
@@ -100,7 +100,7 @@ public class ScriptActivityTest extends BaseActivityInstrumentationTestCase<Main
 		UiTestUtils.waitForFragment(solo, R.id.fragment_nfctags);
 
 		checkMainMenuButton();
-	}
+	}*/
 
 	public void testPlayProgramButton() {
 		UiTestUtils.waitForFragment(solo, R.id.fragment_script);
@@ -126,7 +126,7 @@ public class ScriptActivityTest extends BaseActivityInstrumentationTestCase<Main
 		checkplayProgramButton();
 	}
 
-	public void testOverflowMenuItemSettings() {
+	/*public void testOverflowMenuItemSettings() {
 		UiTestUtils.waitForFragment(solo, R.id.fragment_script);
 
 		String currentSprite = ProjectManager.getInstance().getCurrentSprite().getName();
@@ -157,7 +157,7 @@ public class ScriptActivityTest extends BaseActivityInstrumentationTestCase<Main
 		assertEquals("Current sprite name is not shown as actionbar title or is wrong", "cat", currentSprite);
 
 		checkSettingsAndGoBack();
-	}
+	}*/
 
 	//regression test for issue#626; Android version < 4.2
 	@Device

@@ -23,6 +23,7 @@
 
 package org.catrobat.catroid.uiespresso.content.brick.stage;
 
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import junit.framework.Assert;
@@ -81,7 +82,7 @@ public class WhenNfcBrickHardwareStageTest {
 	}
 
 	private void createProjectWithNfcAndSetVariable() {
-		Project project = new Project(null, "whenNfcBrickHardwareTest");
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), "whenNfcBrickHardwareTest");
 		DataContainer dataContainer = project.getDefaultScene().getDataContainer();
 		numDetectedTags = dataContainer.addProjectUserVariable(NUM_DETECTED_TAGS);
 		readTagId = dataContainer.addProjectUserVariable(READ_TAG_ID);

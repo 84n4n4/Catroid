@@ -67,6 +67,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.catrobat.catroid.uiespresso.content.brick.utils.BrickDataInteractionWrapper.onBrickAtPosition;
+import static org.catrobat.catroid.uiespresso.ui.fragment.rvutils.RecyclerViewInteractionWrapper.onRVAtPosition;
 import static org.hamcrest.Matchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
@@ -126,7 +127,7 @@ public class PlaySoundAndWaitBrickTest {
 				.checkShowsText(soundName);
 		pressBack();
 
-		deleteSoundByName(soundName);
+		deleteSound(0);
 
 		onView(withId(R.id.program_menu_button_scripts))
 				.perform(click());
@@ -175,7 +176,7 @@ public class PlaySoundAndWaitBrickTest {
 
 		pressBack();
 
-		renameSound(soundName, newName);
+		renameSound(0, soundName, newName);
 
 		onView(withId(R.id.program_menu_button_scripts))
 				.perform(click());
@@ -186,14 +187,14 @@ public class PlaySoundAndWaitBrickTest {
 				.checkShowsText(newName);
 	}
 
-	private void deleteSoundByName(String soundName) {
+	private void deleteSound(int position) {
 		onView(withId(R.id.program_menu_button_sounds))
 				.perform(click());
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
 		onView(withText(R.string.delete))
 				.perform(click());
-		onView(withText(soundName))
-				.perform(click());
+		onRVAtPosition(position)
+				.performCheckItem();
 		onView(withContentDescription(R.string.done))
 				.perform(click());
 
@@ -208,14 +209,14 @@ public class PlaySoundAndWaitBrickTest {
 		pressBack();
 	}
 
-	private void renameSound(String oldName, String newName) {
+	private void renameSound(int position, String oldName, String newName) {
 		onView(withId(R.id.program_menu_button_sounds))
 				.perform(click());
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
 		onView(withText(R.string.rename))
 				.perform(click());
-		onView(withText(oldName))
-				.perform(click());
+		onRVAtPosition(position)
+				.performCheckItem();
 		onView(withContentDescription(R.string.done))
 				.perform(click());
 
@@ -265,7 +266,7 @@ public class PlaySoundAndWaitBrickTest {
 
 		soundFile = FileTestUtils.saveFileToProject(projectName, ProjectManager.getInstance().getCurrentScene()
 						.getName(),
-				"longsound.mp3", RESOURCE_SOUND, InstrumentationRegistry.getTargetContext(),
+				"longsound.mp3", RESOURCE_SOUND, InstrumentationRegistry.getContext(),
 				FileTestUtils.FileTypes.SOUND);
 		SoundInfo soundInfo = new SoundInfo();
 		soundInfo.setFileName(soundFile.getName());
@@ -273,7 +274,7 @@ public class PlaySoundAndWaitBrickTest {
 
 		soundFile2 = FileTestUtils.saveFileToProject(projectName, ProjectManager.getInstance().getCurrentScene()
 						.getName(),
-				"testsoundui.mp3", RESOURCE_SOUND2, InstrumentationRegistry.getTargetContext(),
+				"testsoundui.mp3", RESOURCE_SOUND2, InstrumentationRegistry.getContext(),
 				FileTestUtils.FileTypes.SOUND);
 		SoundInfo soundInfo2 = new SoundInfo();
 		soundInfo2.setFileName(soundFile2.getName());

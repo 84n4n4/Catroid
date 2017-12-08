@@ -91,7 +91,7 @@ public class BroadcastBricksStageTest {
 	private Script createProjectAndGetStartScriptWithImages(String projectName) {
 		String defaultMessage = "defaultMessage";
 
-		Project project = new Project(null, projectName);
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), projectName);
 		Sprite sprite = new Sprite("testSprite");
 		Script script = new StartScript();
 

@@ -33,12 +33,11 @@ import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.SingleSprite;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.ui.ScriptActivity;
-import org.catrobat.catroid.uiespresso.pocketmusic.RecyclerViewMatcher;
+import org.catrobat.catroid.ui.SpriteActivity;
 import org.catrobat.catroid.uiespresso.testsuites.Cat;
 import org.catrobat.catroid.uiespresso.testsuites.Level;
+import org.catrobat.catroid.uiespresso.util.FileTestUtils;
 import org.catrobat.catroid.uiespresso.util.rules.BaseActivityInstrumentationRule;
-import org.catrobat.catroid.uitest.util.UiTestUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -52,6 +51,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
@@ -60,14 +60,15 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+import static org.catrobat.catroid.uiespresso.ui.fragment.rvutils.RecyclerViewInteractionWrapper.onRVAtPosition;
 import static org.hamcrest.Matchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
 public class RenameLookFragmentTest {
 
 	@Rule
-	public BaseActivityInstrumentationRule<ScriptActivity> baseActivityTestRule = new
-			BaseActivityInstrumentationRule<>(ScriptActivity.class, true, false);
+	public BaseActivityInstrumentationRule<SpriteActivity> baseActivityTestRule = new
+			BaseActivityInstrumentationRule<>(SpriteActivity.class, true, false);
 
 	private String oldLookName = "oldLookName";
 	private String newLookName = "newLookName";
@@ -77,7 +78,7 @@ public class RenameLookFragmentTest {
 		createProject("renameLookFragmentTest");
 
 		Intent intent = new Intent();
-		intent.putExtra(ScriptActivity.EXTRA_FRAGMENT_POSITION, ScriptActivity.FRAGMENT_LOOKS);
+		intent.putExtra(SpriteActivity.EXTRA_FRAGMENT_POSITION, SpriteActivity.FRAGMENT_LOOKS);
 
 		baseActivityTestRule.launchActivity(intent);
 	}
@@ -88,21 +89,18 @@ public class RenameLookFragmentTest {
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
 		onView(withText(R.string.rename)).perform(click());
 
-		onView(new RecyclerViewMatcher(R.id.recycler_view)
-				.atPositionOnView(0, R.id.list_item_checkbox))
-				.perform(click());
+		onRVAtPosition(0)
+				.performCheckItem();
 
 		onView(withContentDescription("Done")).perform(click());
 
 		onView(withText(R.string.rename_look_dialog)).inRoot(isDialog())
 				.check(matches(isDisplayed()));
 
-		onView(allOf(withId(android.R.id.button1), withText(R.string.ok)))
-				.check(matches(isDisplayed()));
+		onView(withId(R.id.edit_text)).perform(clearText(), typeText(newLookName), closeSoftKeyboard());
+
 		onView(allOf(withId(android.R.id.button2), withText(R.string.cancel)))
 				.check(matches(isDisplayed()));
-
-		onView(withId(R.id.edit_text)).perform(clearText(), typeText(newLookName));
 
 		onView(allOf(withId(android.R.id.button1), withText(R.string.ok)))
 				.perform(click());
@@ -116,9 +114,8 @@ public class RenameLookFragmentTest {
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
 		onView(withText(R.string.rename)).perform(click());
 
-		onView(new RecyclerViewMatcher(R.id.recycler_view)
-				.atPositionOnView(0, R.id.list_item_checkbox))
-				.perform(click());
+		onRVAtPosition(0)
+				.performCheckItem();
 
 		onView(withContentDescription("Done")).perform(click());
 
@@ -126,8 +123,6 @@ public class RenameLookFragmentTest {
 				.check(matches(isDisplayed()));
 
 		onView(allOf(withId(android.R.id.button1), withText(R.string.ok)))
-				.check(matches(isDisplayed()));
-		onView(allOf(withId(android.R.id.button2), withText(R.string.cancel)))
 				.check(matches(isDisplayed()));
 
 		onView(allOf(withId(android.R.id.button2), withText(R.string.cancel)))
@@ -137,7 +132,7 @@ public class RenameLookFragmentTest {
 	}
 
 	private void createProject(String projectName) {
-		Project project = new Project(null, projectName);
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), projectName);
 
 		Sprite sprite = new SingleSprite("testSprite");
 		project.getDefaultScene().addSprite(sprite);
@@ -145,18 +140,16 @@ public class RenameLookFragmentTest {
 		ProjectManager.getInstance().setProject(project);
 		ProjectManager.getInstance().setCurrentSprite(sprite);
 
-		File imageFile = UiTestUtils.saveFileToProject(
+		File imageFile = FileTestUtils.saveFileToProject(
 				projectName, ProjectManager.getInstance().getCurrentScene().getName(), "catroid_sunglasses.png",
-				org.catrobat.catroid.test.R.drawable.catroid_banzai, InstrumentationRegistry.getTargetContext(),
-				UiTestUtils.FileTypes.IMAGE
+				org.catrobat.catroid.test.R.drawable.catroid_banzai, InstrumentationRegistry.getContext(),
+				FileTestUtils.FileTypes.IMAGE
 		);
 
-		List<LookData> lookDataList = ProjectManager.getInstance().getCurrentSprite().getLookDataList();
+		List<LookData> lookDataList = ProjectManager.getInstance().getCurrentSprite().getLookList();
 		LookData lookData = new LookData();
-		lookData.setLookFilename(imageFile.getName());
-		lookData.setLookName(oldLookName);
+		lookData.setFileName(imageFile.getName());
+		lookData.setName(oldLookName);
 		lookDataList.add(lookData);
-		ProjectManager.getInstance().getFileChecksumContainer()
-				.addChecksum(lookData.getChecksum(), lookData.getAbsolutePath());
 	}
 }

@@ -160,6 +160,7 @@ import org.catrobat.catroid.ui.SpriteActivity;
 import org.catrobat.catroid.uiespresso.testsuites.Cat;
 import org.catrobat.catroid.uiespresso.testsuites.Level;
 import org.catrobat.catroid.uiespresso.util.UiTestUtils;
+import org.catrobat.catroid.uiespresso.util.actions.CustomActions;
 import org.catrobat.catroid.uiespresso.util.matchers.BrickCategoryListMatchers;
 import org.catrobat.catroid.uiespresso.util.matchers.BrickPrototypeListMatchers;
 import org.catrobat.catroid.uiespresso.util.rules.BaseActivityInstrumentationRule;
@@ -180,6 +181,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -574,12 +576,12 @@ public class BrickValueParameterTest {
 				R.id.brick_when_background_spinner,
 				R.string.brick_variable_spinner_create_new_variable);
 
-		checkIfBrickAtPositionShowsText(SetBackgroundBrick.class, 0, R.string.brick_set_look);
+		checkIfBrickAtPositionShowsText(SetBackgroundBrick.class, 0, R.string.brick_set_background);
 		checkIfBrickAtPositionShowsSpinnerWithText(SetBackgroundBrick.class, 0,
 				R.id.brick_set_look_spinner,
 				R.string.brick_variable_spinner_create_new_variable);
 
-		checkIfBrickAtPositionShowsText(SetBackgroundAndWaitBrick.class, 0, R.string.brick_set_look);
+		checkIfBrickAtPositionShowsText(SetBackgroundAndWaitBrick.class, 0, R.string.brick_set_background);
 		checkIfBrickAtPositionShowsText(SetBackgroundAndWaitBrick.class, 0, R.string.brick_and_wait);
 		checkIfBrickAtPositionShowsSpinnerWithText(SetBackgroundAndWaitBrick.class, 0,
 				R.id.brick_set_look_spinner,
@@ -1150,7 +1152,7 @@ public class BrickValueParameterTest {
 	private void createProject(String projectName) {
 		String nameSpriteTwo = "testSpriteTwo";
 
-		Project project = new Project(null, projectName);
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), projectName);
 		Sprite spriteOne = new Sprite(nameSpriteOne);
 		project.getDefaultScene().addSprite(spriteOne);
 

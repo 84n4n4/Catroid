@@ -83,7 +83,7 @@ public class StageSimpleTest {
 		ScreenValues.SCREEN_HEIGHT = PROJECT_HEIGHT;
 		ScreenValues.SCREEN_WIDTH = PROJECT_WIDTH;
 
-		Project project = new Project(null, projectName);
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), projectName);
 
 		// blue Sprite
 		Sprite blueSprite = new SingleSprite("blueSprite");

@@ -31,6 +31,7 @@ import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.Sprite;
 
 import java.util.List;
+import java.util.Locale;
 
 public class SpriteAdapter extends RecyclerViewAdapter<Sprite> {
 
@@ -60,20 +61,20 @@ public class SpriteAdapter extends RecyclerViewAdapter<Sprite> {
 			holder.leftBottomDetails.setText(context
 					.getString(R.string.number_of_scripts)
 					.concat(" ")
-					.concat(Integer.toString(item.getNumberOfScripts())));
+					.concat(String.format(Locale.getDefault(), "%d", item.getNumberOfScripts())));
 			holder.rightBottomDetails.setText(context
 					.getString(R.string.number_of_bricks)
 					.concat(" ")
-					.concat(Integer.toString(item.getNumberOfBricks())));
+					.concat(String.format(Locale.getDefault(), "%d", item.getNumberOfBricks())));
 
 			holder.leftTopDetails.setText(context
 					.getString(R.string.number_of_looks)
 					.concat(" ")
-					.concat(Integer.toString(item.getLookList().size())));
+					.concat(String.format(Locale.getDefault(), "%d", item.getLookList().size())));
 			holder.rightTopDetails.setText(context
 					.getString(R.string.number_of_sounds)
 					.concat(" ")
-					.concat(Integer.toString(item.getSoundList().size())));
+					.concat(String.format(Locale.getDefault(), "%d", item.getSoundList().size())));
 		} else {
 			holder.details.setVisibility(View.GONE);
 		}

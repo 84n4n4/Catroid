@@ -24,6 +24,7 @@
 package org.catrobat.catroid.test.devices.arduino;
 
 import android.content.Context;
+import android.support.test.InstrumentationRegistry;
 import android.test.InstrumentationTestCase;
 
 import org.catrobat.catroid.ProjectManager;
@@ -75,7 +76,7 @@ public class ArduinoSettingsTest extends InstrumentationTestCase {
 	}
 
 	private void createProjectArduino() {
-		Project projectArduino = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+		Project projectArduino = new Project(InstrumentationRegistry.getTargetContext(), UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 		Sprite sprite = new SingleSprite("Arduino");
 		StartScript startScript = new StartScript();
 		ArduinoSendPWMValueBrick arduinoArduinoSendPWMValueBrick = new ArduinoSendPWMValueBrick(3, 255);
@@ -83,7 +84,6 @@ public class ArduinoSettingsTest extends InstrumentationTestCase {
 		sprite.addScript(startScript);
 		projectArduino.getDefaultScene().addSprite(sprite);
 
-		Reflection.setPrivateField(ProjectManager.getInstance(), "asynchronousTask", false);
 		ProjectManager.getInstance().setProject(projectArduino);
 		ProjectManager.getInstance().saveProject(context);
 		ProjectManager.getInstance().setProject(null);

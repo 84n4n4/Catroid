@@ -24,6 +24,7 @@
 package org.catrobat.catroid.uiespresso.content.brick.stage;
 
 import android.nfc.NdefMessage;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import junit.framework.Assert;
@@ -149,7 +150,7 @@ public class WhenNfcBrickStageFromScriptTest {
 	}
 
 	private Script createProjectWithNfcAndSetVariable() {
-		Project project = new Project(null, "nfcTestProject");
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), "nfcTestProject");
 
 		DataContainer dataContainer = project.getDefaultScene().getDataContainer();
 

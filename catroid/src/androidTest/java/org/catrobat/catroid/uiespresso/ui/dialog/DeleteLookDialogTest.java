@@ -36,8 +36,9 @@ import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.ui.SpriteActivity;
 import org.catrobat.catroid.uiespresso.testsuites.Cat;
 import org.catrobat.catroid.uiespresso.testsuites.Level;
+import org.catrobat.catroid.uiespresso.util.FileTestUtils;
+import org.catrobat.catroid.uiespresso.util.UiTestUtils;
 import org.catrobat.catroid.uiespresso.util.rules.BaseActivityInstrumentationRule;
-import org.catrobat.catroid.uitest.util.UiTestUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -58,6 +59,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+import static org.catrobat.catroid.uiespresso.ui.fragment.rvutils.RecyclerViewInteractionWrapper.onRVAtPosition;
 import static org.hamcrest.Matchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
@@ -85,10 +87,13 @@ public class DeleteLookDialogTest {
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
 		onView(withText(R.string.delete)).perform(click());
 
-		onView(withText(toBeDeletedLookName)).perform(click());
-		onView(withContentDescription("Done")).perform(click());
+		onRVAtPosition(1)
+				.performCheckItem();
 
-		onView(withText(R.string.dialog_confirm_delete_look_title)).inRoot(isDialog())
+		onView(withContentDescription(R.string.done)).perform(click());
+
+		onView(withText(UiTestUtils.getResources().getQuantityString(R.plurals.delete_looks, 1)))
+				.inRoot(isDialog())
 				.check(matches(isDisplayed()));
 
 		onView(withText(R.string.dialog_confirm_delete_look_message)).inRoot(isDialog())
@@ -112,10 +117,13 @@ public class DeleteLookDialogTest {
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
 		onView(withText(R.string.delete)).perform(click());
 
-		onView(withText(toBeDeletedLookName)).perform(click());
-		onView(withContentDescription("Done")).perform(click());
+		onRVAtPosition(1)
+				.performCheckItem();
 
-		onView(withText(R.string.dialog_confirm_delete_look_title)).inRoot(isDialog())
+		onView(withContentDescription(R.string.done)).perform(click());
+
+		onView(withText(UiTestUtils.getResources().getQuantityString(R.plurals.delete_looks, 1)))
+				.inRoot(isDialog())
 				.check(matches(isDisplayed()));
 
 		onView(withText(R.string.dialog_confirm_delete_look_message)).inRoot(isDialog())
@@ -134,7 +142,7 @@ public class DeleteLookDialogTest {
 	}
 
 	private void createProject(String projectName) {
-		Project project = new Project(null, projectName);
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), projectName);
 
 		Sprite sprite = new SingleSprite("testSprite");
 		project.getDefaultScene().addSprite(sprite);
@@ -142,16 +150,16 @@ public class DeleteLookDialogTest {
 		ProjectManager.getInstance().setProject(project);
 		ProjectManager.getInstance().setCurrentSprite(sprite);
 
-		File imageFile = UiTestUtils.saveFileToProject(
+		File imageFile = FileTestUtils.saveFileToProject(
 				projectName, ProjectManager.getInstance().getCurrentScene().getName(), "catroid_sunglasses.png",
 				org.catrobat.catroid.test.R.drawable.catroid_banzai, InstrumentationRegistry.getTargetContext(),
-				UiTestUtils.FileTypes.IMAGE
+				FileTestUtils.FileTypes.IMAGE
 		);
 
-		File imageFile2 = UiTestUtils.saveFileToProject(
+		File imageFile2 = FileTestUtils.saveFileToProject(
 				projectName, ProjectManager.getInstance().getCurrentScene().getName(), "catroid_banzai.png",
 				org.catrobat.catroid.test.R.drawable.catroid_banzai, InstrumentationRegistry.getTargetContext(),
-				UiTestUtils.FileTypes.IMAGE
+				FileTestUtils.FileTypes.IMAGE
 		);
 
 		List<LookData> lookDataList = ProjectManager.getInstance().getCurrentSprite().getLookList();

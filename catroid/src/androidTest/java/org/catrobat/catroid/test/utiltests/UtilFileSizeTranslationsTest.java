@@ -85,7 +85,7 @@ public class UtilFileSizeTranslationsTest {
 
 	public void createProjectWithFiles() {
 		String projectName = "fileSizeArabicTest";
-		Project project = new Project(null, projectName);
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), projectName);
 		StorageHandler.getInstance().saveProject(project);
 
 		projectFolder = new File(Utils.buildProjectPath(projectName));

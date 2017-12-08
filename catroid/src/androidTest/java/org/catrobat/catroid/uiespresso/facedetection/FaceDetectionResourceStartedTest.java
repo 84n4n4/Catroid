@@ -22,6 +22,7 @@
  */
 package org.catrobat.catroid.uiespresso.facedetection;
 
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.catrobat.catroid.ProjectManager;
@@ -138,7 +139,7 @@ public class FaceDetectionResourceStartedTest {
 	}
 
 	private void createProject() {
-		Project project = new Project(null, "FaceDetectionResourceStartedTest");
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), "FaceDetectionResourceStartedTest");
 		Sprite sprite = new Sprite("testSprite");
 		Script startScript = new StartScript();
 		SetSizeToBrick setSizeToBrick = new SetSizeToBrick(formula);

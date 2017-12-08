@@ -33,12 +33,12 @@ import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.SingleSprite;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.ui.ScriptActivity;
-import org.catrobat.catroid.uiespresso.pocketmusic.RecyclerViewMatcher;
+import org.catrobat.catroid.ui.SpriteActivity;
 import org.catrobat.catroid.uiespresso.testsuites.Cat;
 import org.catrobat.catroid.uiespresso.testsuites.Level;
+import org.catrobat.catroid.uiespresso.util.FileTestUtils;
+import org.catrobat.catroid.uiespresso.util.UiTestUtils;
 import org.catrobat.catroid.uiespresso.util.rules.BaseActivityInstrumentationRule;
-import org.catrobat.catroid.uitest.util.UiTestUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -59,14 +59,15 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+import static org.catrobat.catroid.uiespresso.ui.fragment.rvutils.RecyclerViewInteractionWrapper.onRVAtPosition;
 import static org.hamcrest.Matchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
 public class DeleteLookFragmentTest {
 
 	@Rule
-	public BaseActivityInstrumentationRule<ScriptActivity> baseActivityTestRule = new
-			BaseActivityInstrumentationRule<>(ScriptActivity.class, true, false);
+	public BaseActivityInstrumentationRule<SpriteActivity> baseActivityTestRule = new
+			BaseActivityInstrumentationRule<>(SpriteActivity.class, true, false);
 
 	private String toBeDeletedLookName = "testLook2";
 
@@ -75,7 +76,7 @@ public class DeleteLookFragmentTest {
 		createProject("deleteLookFragmentTest");
 
 		Intent intent = new Intent();
-		intent.putExtra(ScriptActivity.EXTRA_FRAGMENT_POSITION, ScriptActivity.FRAGMENT_LOOKS);
+		intent.putExtra(SpriteActivity.EXTRA_FRAGMENT_POSITION, SpriteActivity.FRAGMENT_LOOKS);
 
 		baseActivityTestRule.launchActivity(intent);
 	}
@@ -86,19 +87,18 @@ public class DeleteLookFragmentTest {
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
 		onView(withText(R.string.delete)).perform(click());
 
-		onView(new RecyclerViewMatcher(R.id.recycler_view).atPositionOnView(1, R.id.list_item_checkbox)).perform(click());
+		onRVAtPosition(1)
+				.performCheckItem();
 
 		onView(withContentDescription("Done")).perform(click());
 
-		onView(withText(org.catrobat.catroid.uiespresso.util.UiTestUtils.getResources().
-				getQuantityString(R.plurals.delete_looks, 1))).inRoot(isDialog())
+		onView(withText(UiTestUtils.getResources().getQuantityString(R.plurals.delete_looks, 1)))
+				.inRoot(isDialog())
 				.check(matches(isDisplayed()));
 
 		onView(withText(R.string.dialog_confirm_delete_look_message)).inRoot(isDialog())
 				.check(matches(isDisplayed()));
 
-		onView(allOf(withId(android.R.id.button1), withText(R.string.yes)))
-				.check(matches(isDisplayed()));
 		onView(allOf(withId(android.R.id.button2), withText(R.string.no)))
 				.check(matches(isDisplayed()));
 
@@ -115,20 +115,19 @@ public class DeleteLookFragmentTest {
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
 		onView(withText(R.string.delete)).perform(click());
 
-		onView(new RecyclerViewMatcher(R.id.recycler_view).atPositionOnView(1, R.id.list_item_checkbox)).perform(click());
+		onRVAtPosition(1)
+				.performCheckItem();
 
 		onView(withContentDescription("Done")).perform(click());
 
-		onView(withText(org.catrobat.catroid.uiespresso.util.UiTestUtils.getResources().
-				getQuantityString(R.plurals.delete_looks, 1))).inRoot(isDialog())
+		onView(withText(UiTestUtils.getResources().getQuantityString(R.plurals.delete_looks, 1)))
+				.inRoot(isDialog())
 				.check(matches(isDisplayed()));
 
 		onView(withText(R.string.dialog_confirm_delete_look_message)).inRoot(isDialog())
 				.check(matches(isDisplayed()));
 
 		onView(allOf(withId(android.R.id.button1), withText(R.string.yes)))
-				.check(matches(isDisplayed()));
-		onView(allOf(withId(android.R.id.button2), withText(R.string.no)))
 				.check(matches(isDisplayed()));
 
 		onView(allOf(withId(android.R.id.button2), withText(R.string.no)))
@@ -139,7 +138,7 @@ public class DeleteLookFragmentTest {
 	}
 
 	private void createProject(String projectName) {
-		Project project = new Project(null, projectName);
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), projectName);
 
 		Sprite sprite = new SingleSprite("testSprite");
 		project.getDefaultScene().addSprite(sprite);
@@ -147,31 +146,27 @@ public class DeleteLookFragmentTest {
 		ProjectManager.getInstance().setProject(project);
 		ProjectManager.getInstance().setCurrentSprite(sprite);
 
-		File imageFile = UiTestUtils.saveFileToProject(
+		File imageFile = FileTestUtils.saveFileToProject(
 				projectName, ProjectManager.getInstance().getCurrentScene().getName(), "catroid_sunglasses.png",
-				org.catrobat.catroid.test.R.drawable.catroid_banzai, InstrumentationRegistry.getTargetContext(),
-				UiTestUtils.FileTypes.IMAGE
+				org.catrobat.catroid.test.R.drawable.catroid_banzai, InstrumentationRegistry.getContext(),
+				FileTestUtils.FileTypes.IMAGE
 		);
 
-		File imageFile2 = UiTestUtils.saveFileToProject(
+		File imageFile2 = FileTestUtils.saveFileToProject(
 				projectName, ProjectManager.getInstance().getCurrentScene().getName(), "catroid_banzai.png",
-				org.catrobat.catroid.test.R.drawable.catroid_banzai, InstrumentationRegistry.getTargetContext(),
-				UiTestUtils.FileTypes.IMAGE
+				org.catrobat.catroid.test.R.drawable.catroid_banzai, InstrumentationRegistry.getContext(),
+				FileTestUtils.FileTypes.IMAGE
 		);
 
-		List<LookData> lookDataList = ProjectManager.getInstance().getCurrentSprite().getLookDataList();
+		List<LookData> lookDataList = ProjectManager.getInstance().getCurrentSprite().getLookList();
 		LookData lookData = new LookData();
-		lookData.setLookFilename(imageFile.getName());
-		lookData.setLookName("testLook1");
+		lookData.setFileName(imageFile.getName());
+		lookData.setName("testLook1");
 		lookDataList.add(lookData);
-		ProjectManager.getInstance().getFileChecksumContainer()
-				.addChecksum(lookData.getChecksum(), lookData.getAbsolutePath());
 
 		LookData lookData2 = new LookData();
-		lookData2.setLookFilename(imageFile2.getName());
-		lookData2.setLookName(toBeDeletedLookName);
+		lookData2.setFileName(imageFile2.getName());
+		lookData2.setName(toBeDeletedLookName);
 		lookDataList.add(lookData2);
-		ProjectManager.getInstance().getFileChecksumContainer()
-				.addChecksum(lookData2.getChecksum(), lookData2.getAbsolutePath());
 	}
 }

@@ -329,7 +329,7 @@ public class WhenNfcBrickTest {
 	}
 
 	private void createProjectWithNfcAndSetVariable() {
-		Project project = new Project(null, "nfcTestProject");
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), "nfcTestProject");
 
 		DataContainer dataContainer = project.getDefaultScene().getDataContainer();
 

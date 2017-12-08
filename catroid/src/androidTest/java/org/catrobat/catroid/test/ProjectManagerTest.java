@@ -55,7 +55,6 @@ public class ProjectManagerTest extends InstrumentationTestCase {
 		super.setUp();
 		UtilUi.updateScreenWidthAndHeight(getInstrumentation().getTargetContext());
 		projectManager = ProjectManager.getInstance();
-		Reflection.setPrivateField(ProjectManager.class, ProjectManager.getInstance(), "asynchronousTask", false);
 	}
 
 	@Override

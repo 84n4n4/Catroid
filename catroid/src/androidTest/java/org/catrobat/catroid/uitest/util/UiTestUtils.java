@@ -30,6 +30,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.support.test.InstrumentationRegistry;
 import android.test.ActivityInstrumentationTestCase2;
 import android.text.InputType;
 import android.util.Log;
@@ -762,7 +763,7 @@ public final class UiTestUtils {
 	}
 
 	public static void createEmptyProject() {
-		Project project = new Project(null, DEFAULT_TEST_PROJECT_NAME);
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), DEFAULT_TEST_PROJECT_NAME);
 		Sprite firstSprite = new SingleSprite("cat");
 		Script testScript = new StartScript();
 

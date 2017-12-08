@@ -22,6 +22,7 @@
  */
 package org.catrobat.catroid.uiespresso.facedetection;
 
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.catrobat.catroid.ProjectManager;
@@ -94,7 +95,7 @@ public class FaceDetectionFormulaEditorComputeDialogTest {
 	}
 
 	public Project createProject(String projectName) {
-		Project project = new Project(null, projectName);
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), projectName);
 		Sprite sprite = new Sprite("testSprite");
 		Script script = new StartScript();
 

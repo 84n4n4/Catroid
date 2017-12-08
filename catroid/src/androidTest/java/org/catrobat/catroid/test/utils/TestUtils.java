@@ -26,6 +26,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.test.InstrumentationRegistry;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -148,7 +149,7 @@ public final class TestUtils {
 
 	public static Project createTestProjectOnLocalStorageWithCatrobatLanguageVersionAndName(
 			float catrobatLanguageVersion, String name) {
-		Project project = new Project(null, name);
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), name);
 		project.setCatrobatLanguageVersion(catrobatLanguageVersion);
 
 		Sprite firstSprite = new SingleSprite("cat");
@@ -165,7 +166,7 @@ public final class TestUtils {
 
 	public static List<Brick> createTestProjectWithWrongIfClauseReferences() {
 		ProjectManager projectManager = ProjectManager.getInstance();
-		Project project = new Project(null, CORRUPT_PROJECT_NAME);
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), CORRUPT_PROJECT_NAME);
 		Sprite firstSprite = new SingleSprite("corruptReferences");
 
 		Script testScript = new StartScript();
@@ -219,7 +220,7 @@ public final class TestUtils {
 	}
 
 	public static Project createEmptyProject() {
-		Project project = new Project(null, EMPTY_PROJECT);
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), EMPTY_PROJECT);
 		StorageHandler.getInstance().saveProject(project);
 		return project;
 	}

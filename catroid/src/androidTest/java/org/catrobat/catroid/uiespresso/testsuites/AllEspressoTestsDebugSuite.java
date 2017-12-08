@@ -109,6 +109,7 @@ import org.catrobat.catroid.uiespresso.content.brick.app.VariableBrickTest;
 import org.catrobat.catroid.uiespresso.content.brick.app.WaitBrickTest;
 import org.catrobat.catroid.uiespresso.content.brick.app.WhenNfcBrickTest;
 import org.catrobat.catroid.uiespresso.content.brick.app.WhenStartedBrickTest;
+import org.catrobat.catroid.uiespresso.content.brick.rtl.RtlBrickTest;
 import org.catrobat.catroid.uiespresso.content.brick.stage.AskBrickStageTest;
 import org.catrobat.catroid.uiespresso.content.brick.stage.BroadcastBricksStageTest;
 import org.catrobat.catroid.uiespresso.content.brick.stage.CameraResourceTest;
@@ -140,128 +141,24 @@ import org.catrobat.catroid.uiespresso.ui.dialog.DeleteSpriteDialogTest;
 import org.catrobat.catroid.uiespresso.ui.dialog.FormulaEditorComputeDialogTest;
 import org.catrobat.catroid.uiespresso.ui.dialog.RenameSpriteDialogTest;
 import org.catrobat.catroid.uiespresso.ui.dialog.TermsOfUseDialogTest;
+import org.catrobat.catroid.uiespresso.ui.fragment.RenameLookFragmentTest;
+import org.catrobat.catroid.uiespresso.ui.fragment.RenameSoundFragmentTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		PocketMusicActivityTest.class,
-		SmokeTest.class,
-		FlakyTestTest.class,
-		FaceDetectionFormulaEditorComputeDialogTest.class,
-		FaceDetectionResourceStartedTest.class,
-		LegoEv3PlayToneBrickTest.class,
-		ThinkBubbleBrickTest.class,
-		SetYBrickTest.class,
-		ComeToFrontBrickTest.class,
-		ARDroneTurnLeftBrickTest.class,
-		SetBrightnessBrickTest.class,
-		HideBrickTest.class,
-		ChangeTransparencyByNBrickTest.class,
-		SetRotationStyleBrickTest.class,
-		RepeatUntilBrickTest.class,
-		SceneTransmitionBrickTest.class,
-		DragNDropBricksTest.class,
-		GoNStepsBackTest.class,
-		PhiroMoveMotorForwardBrickTest.class,
-		RepeatBrickTest.class,
-		PointInDirectionBrickTest.class,
-		BroadcastBricksTest.class,
-		SpeakAndWaitBrickTest.class,
-		SpeakBrickTest.class,
-		VariableBrickTest.class,
-		ChangeVolumeByNBrickTest.class,
-		AskBrickTest.class,
-		BrickValueParameterTest.class,
-		ArduinoSendPWMValueBrickTest.class,
-		ARDroneTurnRightBrickTest.class,
-		NextLookBrickTest.class,
-		ARDroneMoveRightBrickTest.class,
-		ThinkForBubbleBrickTest.class,
-		ChangeColorByNBrickTest.class,
-		ArduinoSendDigitalValueBrickTest.class,
-		PlaceAtBrickTest.class,
-		ARDroneMoveForwardBrickTest.class,
-		DeleteItemOfUserListBrickTest.class,
-		ReplaceItemInUserListTest.class,
-		StopAllSoundsBrickTest.class,
-		StopScriptBrickTest.class,
-		SetTransparencyBrickTest.class,
-		GlideToBrickTest.class,
-		MoveNStepsBrickTest.class,
-		WaitBrickTest.class,
-		PlaySoundAndWaitBrickTest.class,
-		ChangeYByNBrickTest.class,
-		LegoNXTMotorStopBrickTest.class,
-		PhiroIfBrickTest.class,
-		PhiroMoveMotorBackwardBrickTest.class,
-		TurnRightBrickTest.class,
-		ARDroneMoveUpBrickTest.class,
-		PhiroPlayToneBrickTest.class,
-		GoToBrickTest.class,
-		WhenNfcBrickTest.class,
-		SetVolumeToBrickTest.class,
-		SetSizeToBrickTest.class,
-		PointToBrickTest.class,
-		PhiroStopMotorBrickTest.class,
-		LegoEV3SetLedBrickTest.class,
-		LegoEv3MotorMoveBrickTest.class,
-		NoteBrickTest.class,
-		LegoNxtPlayToneBrickTest.class,
-		SayForBubbleBrickTest.class,
-		SetLookByIndexBrickTest.class,
-		ChangeBrightnessByNBrickTest.class,
-		ChangeXByNBrickTest.class,
-		ShowBrickTest.class,
-		ARDroneMoveDownBrickTest.class,
-		SetColorBrickTest.class,
-		SayBubbleBrickTest.class,
-		CameraBrickTest.class,
-		ARDroneMoveLeftBrickTest.class,
-		LoopBrickTest.class,
-		ShowTextBrickTest.class,
-		LegoEv3MotorStopBrickTest.class,
-		LegoNxtMotorTurnAngleBrickTest.class,
-		ForeverBrickTest.class,
-		ChangeSizeByNBrickTest.class,
-		AddItemToUserListTest.class,
-		ClearGraphicEffectBrickTest.class,
-		IfThenBrickTest.class,
-		LegoNXTMotorMoveBrickTest.class,
-		WhenStartedBrickTest.class,
-		LegoEv3MotorTurnAngleBrickTest.class,
-		ARDroneMoveBackwardBrickTest.class,
-		TurnLeftBrickTest.class,
-		SetXBrickTest.class,
-		IfThenElseBrickTest.class,
-		WhenNfcBrickStageTest.class,
-		CameraResourceTest.class,
-		SayBubbleBrickStageTest.class,
-		SayForBubbleBrickStageTest.class,
-		WhenNfcBrickStageFromScriptTest.class,
-		ThinkBubbleBrickStageTest.class,
-		BroadcastBricksStageTest.class,
-		ThinkForBubbleBrickStageTest.class,
-		AskBrickStageTest.class,
-		StagePausedTest.class,
-		BroadcastForClonesRegressionTest.class,
-		StageSimpleTest.class,
-		ObjectVariableTest.class,
-		MultipleBroadcastsTest.class,
-		BroadcastReceiverRegressionTest.class,
-		FormulaEditorKeyboardTest.class,
-		FormulaEditorTest.class,
-		LanguageSwitchMainMenuTest.class,
-		HindiNumberAtShowDetailsAtProjectActivityTest.class,
-		ProjectActivityNumberOfBricksRegressionTest.class,
-		SettingsActivityTest.class,
-		FormulaEditorComputeDialogTest.class,
-		RenameSpriteDialogTest.class,
-		DeleteSpriteDialogTest.class,
-		DeleteSoundDialogTest.class,
-		TermsOfUseDialogTest.class,
-		DeleteLookDialogTest.class,
-		AboutDialogTest.class
+		BroadcastBricksTest.class, // known bug, fails also in develop
+		DeleteItemOfUserListBrickTest.class, // fails rightly, user list still available in bricks spinner
+		IfThenBrickTest.class, // fails, probably not rightly, looping brick references wrong, something took care of
+		// this in the past when creating projects in that manner, but not anymore....
+		IfThenElseBrickTest.class, // fails, probably not rightly, looping brick references wrong, something took
+		// care of this in the past when creating projects in that manner, but not anymore....
+		FormulaEditorKeyboardTest.class, // fails rightly, something majorly wrong with formula editor
+		ObjectVariableTest.class, // fails rightly, something wrong with layer change / initial layer in which sprite
+		// lives
+		ProjectActivityNumberOfBricksRegressionTest.class, // fails rightly, number of bricks incorrect
+		HindiNumberAtShowDetailsAtProjectActivityTest.class, // fails rightly, number of bricks incorrect
 })
 public class AllEspressoTestsDebugSuite {
 }

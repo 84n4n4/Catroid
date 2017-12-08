@@ -22,6 +22,7 @@
  */
 package org.catrobat.catroid.uiespresso.stage;
 
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.catrobat.catroid.ProjectManager;
@@ -109,8 +110,9 @@ public class ObjectVariableTest {
 	}
 
 	private void createProject(String projectName) {
-		Project project = new Project(null, projectName);
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), projectName);
 		ProjectManager.getInstance().setProject(project);
+		ProjectManager.getInstance().setCurrentScene(project.getDefaultScene());
 		ProjectManager.getInstance().getCurrentScene().addSprite(new SingleSprite("background"));
 		ProjectManager.getInstance().getCurrentScene().addSprite(new SingleSprite("sprite1"));
 		ProjectManager.getInstance().getCurrentScene().addSprite(new SingleSprite("sprite2"));

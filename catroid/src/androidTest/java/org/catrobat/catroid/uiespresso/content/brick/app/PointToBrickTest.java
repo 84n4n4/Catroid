@@ -73,7 +73,7 @@ public class PointToBrickTest {
 				.checkShowsText(R.string.brick_variable_spinner_create_new_variable)
 				.performSelect(R.string.brick_variable_spinner_create_new_variable);
 
-		onView(withText(R.string.new_sprite_dialog_title))
+		onView(withText(R.string.new_look_dialog_title))
 				.check(matches(isDisplayed()));
 	}
 

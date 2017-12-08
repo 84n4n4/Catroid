@@ -310,8 +310,6 @@ public class StorageHandlerTest extends InstrumentationTestCase {
 				NXTSensor.Sensor.LIGHT_INACTIVE, NXTSensor.Sensor.ULTRASONIC
 		};
 
-		Reflection.setPrivateField(ProjectManager.getInstance(), "asynchronousTask", false);
-
 		Project project = generateMultiplePermissionsProject();
 		ProjectManager.getInstance().setProject(project);
 

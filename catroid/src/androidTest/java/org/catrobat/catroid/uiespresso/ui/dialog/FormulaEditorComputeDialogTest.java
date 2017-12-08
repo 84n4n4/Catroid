@@ -22,6 +22,8 @@
  */
 package org.catrobat.catroid.uiespresso.ui.dialog;
 
+import android.content.Intent;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.CoordinatesProvider;
 import android.support.test.espresso.action.GeneralClickAction;
@@ -69,7 +71,11 @@ public class FormulaEditorComputeDialogTest {
 	@Before
 	public void setUp() throws Exception {
 		createProject("formulaEditorComputeDialogTest");
-		baseActivityTestRule.launchActivity(null);
+
+		Intent intent = new Intent();
+		intent.putExtra(SpriteActivity.EXTRA_FRAGMENT_POSITION, SpriteActivity.FRAGMENT_SCRIPTS);
+
+		baseActivityTestRule.launchActivity(intent);
 	}
 
 	private void openComputeDialog() {
@@ -127,7 +133,7 @@ public class FormulaEditorComputeDialogTest {
 	}
 
 	public Project createProject(String projectName) {
-		Project project = new Project(null, projectName);
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), projectName);
 		Sprite sprite = new Sprite("testSprite");
 		Script script = new StartScript();
 

@@ -66,6 +66,7 @@ public class SpriteActivity extends BaseActivity implements PlaySceneDialog.Play
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		SettingsActivity.setToChosenLanguage(this);
 
 		setContentView(R.layout.activity_script);
 

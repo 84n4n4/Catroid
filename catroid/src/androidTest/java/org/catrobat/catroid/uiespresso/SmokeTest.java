@@ -22,6 +22,7 @@
  */
 package org.catrobat.catroid.uiespresso;
 
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.IdlingResource;
 import android.support.test.runner.AndroidJUnit4;
@@ -31,7 +32,9 @@ import org.catrobat.catroid.ui.MainMenuActivity;
 import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.uiespresso.testsuites.Level;
 import org.catrobat.catroid.uiespresso.util.UiTestUtils;
+import org.catrobat.catroid.uiespresso.util.actions.CustomActions;
 import org.catrobat.catroid.uiespresso.util.rules.DontGenerateDefaultProjectActivityInstrumentationRule;
+import org.catrobat.catroid.utils.Utils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -45,6 +48,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -96,12 +100,17 @@ public class SmokeTest {
 		//onView(withText(toUpperCase(R.string.spritelist_background_headline))).check(matches(isDisplayed()));
 		//onView(withText(toUpperCase(R.string.sprites))).check(matches(isDisplayed()));
 
+		//open scene
+		String sceneName = UiTestUtils.getResources().getString(R.string.default_scene_name, 1);
+		onView(withText(sceneName))
+				.perform(click());
+
 		//add sprite
 		onView(withId(R.id.button_add))
 				.perform(click());
 
 		//check if new object dialog is displayed
-		onView(withText(R.string.new_sprite_dialog_title))
+		onView(withText(R.string.new_look_dialog_title))
 				.check(matches(isDisplayed()));
 		//cancel by back
 		pressBack();

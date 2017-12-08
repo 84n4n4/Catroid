@@ -33,12 +33,11 @@ import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.SingleSprite;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.ui.ScriptActivity;
-import org.catrobat.catroid.uiespresso.pocketmusic.RecyclerViewMatcher;
+import org.catrobat.catroid.ui.SpriteActivity;
 import org.catrobat.catroid.uiespresso.testsuites.Cat;
 import org.catrobat.catroid.uiespresso.testsuites.Level;
+import org.catrobat.catroid.uiespresso.util.FileTestUtils;
 import org.catrobat.catroid.uiespresso.util.rules.BaseActivityInstrumentationRule;
-import org.catrobat.catroid.uitest.util.UiTestUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -56,12 +55,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+import static org.catrobat.catroid.uiespresso.ui.fragment.rvutils.RecyclerViewInteractionWrapper.onRVAtPosition;
+
 @RunWith(AndroidJUnit4.class)
 public class CopySoundFragmentTest {
 
 	@Rule
-	public BaseActivityInstrumentationRule<ScriptActivity> baseActivityTestRule = new
-			BaseActivityInstrumentationRule<>(ScriptActivity.class, true, false);
+	public BaseActivityInstrumentationRule<SpriteActivity> baseActivityTestRule = new
+			BaseActivityInstrumentationRule<>(SpriteActivity.class, true, false);
 
 	private String toBeCopiedSoundName = "testSound";
 
@@ -70,7 +71,7 @@ public class CopySoundFragmentTest {
 		createProject("copySoundFragmentTest");
 
 		Intent intent = new Intent();
-		intent.putExtra(ScriptActivity.EXTRA_FRAGMENT_POSITION, ScriptActivity.FRAGMENT_SOUNDS);
+		intent.putExtra(SpriteActivity.EXTRA_FRAGMENT_POSITION, SpriteActivity.FRAGMENT_SOUNDS);
 
 		baseActivityTestRule.launchActivity(intent);
 	}
@@ -81,9 +82,8 @@ public class CopySoundFragmentTest {
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
 		onView(withText(R.string.copy)).perform(click());
 
-		onView(new RecyclerViewMatcher(R.id.recycler_view)
-				.atPositionOnView(0, R.id.list_item_checkbox))
-				.perform(click());
+		onRVAtPosition(0)
+				.performCheckItem();
 
 		onView(withContentDescription("Done")).perform(click());
 
@@ -95,7 +95,7 @@ public class CopySoundFragmentTest {
 	}
 
 	private void createProject(String projectName) {
-		Project project = new Project(null, projectName);
+		Project project = new Project(InstrumentationRegistry.getTargetContext(), projectName);
 
 		Sprite sprite = new SingleSprite("testSprite");
 		project.getDefaultScene().addSprite(sprite);
@@ -103,18 +103,16 @@ public class CopySoundFragmentTest {
 		ProjectManager.getInstance().setProject(project);
 		ProjectManager.getInstance().setCurrentSprite(sprite);
 
-		File soundFile = UiTestUtils.saveFileToProject(
+		File soundFile = FileTestUtils.saveFileToProject(
 				projectName, ProjectManager.getInstance().getCurrentScene().getName(), "longsound.mp3",
-				org.catrobat.catroid.test.R.raw.longsound, InstrumentationRegistry.getTargetContext(),
-				UiTestUtils.FileTypes.SOUND
+				org.catrobat.catroid.test.R.raw.longsound, InstrumentationRegistry.getContext(),
+				FileTestUtils.FileTypes.SOUND
 		);
 
 		List<SoundInfo> soundInfoList = ProjectManager.getInstance().getCurrentSprite().getSoundList();
 		SoundInfo soundInfo = new SoundInfo();
-		soundInfo.setSoundFileName(soundFile.getName());
-		soundInfo.setTitle(toBeCopiedSoundName);
+		soundInfo.setFileName(soundFile.getName());
+		soundInfo.setName(toBeCopiedSoundName);
 		soundInfoList.add(soundInfo);
-		ProjectManager.getInstance().getFileChecksumContainer()
-				.addChecksum(soundInfo.getChecksum(), soundInfo.getAbsolutePath());
 	}
 }

@@ -57,7 +57,6 @@ public class ScriptTest extends AndroidTestCase {
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		StorageHandler.deleteDir(Utils.buildProjectPath(DEFAULT_TEST_PROJECT_NAME));
 	}
 
 	public void testAddBricks() {

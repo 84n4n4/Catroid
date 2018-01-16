@@ -153,7 +153,6 @@ public class ProjectListFragment extends RecyclerViewFragment<ProjectData> imple
 	@Override
 	protected void deleteItems(List<ProjectData> selectedItems) {
 		finishActionMode();
-
 		for (ProjectData item : selectedItems) {
 			try {
 				projectController.delete(item);

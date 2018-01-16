@@ -263,7 +263,7 @@ public class WhenNfcBrickTest {
 				.perform(click());
 		onView(withText(R.string.rename_nfctag_dialog)).inRoot(isDialog())
 				.check(matches(isDisplayed()));
-		onView(allOf(withId(R.id.edit_text), withText(tagName), isDisplayed()))
+		onView(allOf(withText(tagName), isDisplayed()))
 				.perform(replaceText(renameString));
 		closeSoftKeyboard();
 		onView(allOf(withId(android.R.id.button1), withText(R.string.ok)))

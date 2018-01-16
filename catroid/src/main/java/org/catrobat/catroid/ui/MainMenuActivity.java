@@ -22,7 +22,6 @@
  */
 package org.catrobat.catroid.ui;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,6 +35,7 @@ import android.support.test.espresso.IdlingResource;
 import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.media.MediaRouter;
+import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -97,7 +97,6 @@ public class MainMenuActivity extends BaseCastActivity implements OnLoadProjectC
 	private static final String ZIP_FILE_NAME = START_PROJECT + ".zip";
 	private static final String STANDALONE_PROJECT_NAME = BuildConfig.PROJECT_NAME;
 
-	public static final String SHARED_PREFERENCES_SHOW_BROWSER_WARNING = "shared_preferences_browser_warning";
 	public static final int REQUEST_CODE_GOOGLE_PLUS_SIGNIN = 100;
 
 	private static final String TYPE_FILE = "file";
@@ -123,24 +122,16 @@ public class MainMenuActivity extends BaseCastActivity implements OnLoadProjectC
 		UtilUi.updateScreenWidthAndHeight(this);
 
 		if (STANDALONE_MODE) {
-			/*requestWindowFeature(Window.FEATURE_NO_TITLE);
-			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
-			getActionBar().hide();
 			setContentView(R.layout.activity_main_menu_splashscreen);
 			unzipProgram();
 		} else {
 			setContentView(R.layout.activity_main_menu);
 
-			final ActionBar actionBar = getActionBar();
-			actionBar.setDisplayUseLogoEnabled(true);
-			actionBar.setHomeButtonEnabled(false);
-			actionBar.setDisplayHomeAsUpEnabled(false);
-			actionBar.setTitle(R.string.app_name);
+			setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+			getSupportActionBar().setTitle(R.string.app_name);
 
 			findViewById(R.id.main_menu_button_continue).setEnabled(false);
 
-			// Load external project from URL or local file system.
 			Uri loadExternalProjectUri = getIntent().getData();
 			getIntent().setData(null);
 
@@ -387,7 +378,7 @@ public class MainMenuActivity extends BaseCastActivity implements OnLoadProjectC
 	}
 
 	private void setMainMenuButtonContinueText() {
-		Button mainMenuButtonContinue = (Button) this.findViewById(R.id.main_menu_button_continue);
+		Button mainMenuButtonContinue = this.findViewById(R.id.main_menu_button_continue);
 		TextAppearanceSpan textAppearanceSpan = new TextAppearanceSpan(this, R.style.MainMenuButtonTextSecondLine);
 		SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
 		String mainMenuContinue = this.getString(R.string.main_menu_continue);
@@ -531,7 +522,6 @@ public class MainMenuActivity extends BaseCastActivity implements OnLoadProjectC
 	}
 
 	private void startStageProject() {
-		//ProjectManager.getInstance().getCurrentProject().getUserVariables().resetAllUserVariables();
 		Intent intent = new Intent(this, PreStageActivity.class);
 		startActivityForResult(intent, PreStageActivity.REQUEST_RESOURCES_INIT);
 	}

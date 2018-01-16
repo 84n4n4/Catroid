@@ -22,6 +22,8 @@
  */
 package org.catrobat.catroid.ui.dialogs;
 
+import org.catrobat.catroid.ui.recyclerview.dialog.TextDialog;
+
 public class BrickTextDialog extends TextDialog {
 
 	public BrickTextDialog(int title, int inputLabel, String previousText) {

@@ -20,60 +20,53 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.catrobat.catroid.ui.dialogs;
+package org.catrobat.catroid.ui.recyclerview.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import org.catrobat.catroid.R;
 
 public abstract class TextDialog extends DialogFragment {
 
-	protected EditText input;
-
+	protected TextInputLayout inputLayout;
 	protected int title;
-	protected int inputLabel;
-	protected String previousText;
+	protected int label;
+	protected String defaultText;
 	protected boolean allowEmptyInput;
 
-	public TextDialog(int title, int inputLabel, String previousText, boolean allowEmptyInput) {
+	public TextDialog(int title, int label, @Nullable String defaultText, boolean allowEmptyInput) {
 		this.title = title;
-		this.inputLabel = inputLabel;
-		this.previousText = previousText;
+		this.label = label;
+		this.defaultText = defaultText;
 		this.allowEmptyInput = allowEmptyInput;
 	}
 
-	protected View inflateLayout() {
-		final LayoutInflater inflater = getActivity().getLayoutInflater();
-		return inflater.inflate(R.layout.dialog_text_input, null);
-	}
-
 	@Override
+	@SuppressLint("InflateParams")
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-		View view = inflateLayout();
+		inputLayout = (TextInputLayout) LayoutInflater.from(getActivity()).inflate(R.layout.dialog_text_input, null);
 
 		builder.setTitle(title);
-		builder.setView(view);
+		builder.setView(inputLayout);
 
-		final TextView inputLabelView = (TextView) view.findViewById(R.id.input_label);
-		inputLabelView.setText(inputLabel);
-
-		input = (EditText) view.findViewById(R.id.edit_text);
-		input.setText(previousText);
+		inputLayout.getEditText().setText(defaultText);
+		inputLayout.setHint(getActivity().getString(label));
 
 		builder.setPositiveButton(R.string.ok, null);
 		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -96,9 +89,8 @@ public abstract class TextDialog extends DialogFragment {
 						}
 					}
 				});
-				if (!allowEmptyInput) {
-					input.addTextChangedListener(getInputTextWatcher(buttonPositive));
-				}
+
+				inputLayout.getEditText().addTextChangedListener(getInputWatcher(buttonPositive));
 			}
 		});
 
@@ -116,16 +108,22 @@ public abstract class TextDialog extends DialogFragment {
 	protected abstract void handleNegativeButtonClick();
 
 	protected void showKeyboard() {
-		if (input.requestFocus()) {
+		if (inputLayout.getEditText().requestFocus()) {
 			InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
+			imm.showSoftInput(inputLayout, InputMethodManager.SHOW_IMPLICIT);
 		}
 	}
 
-	protected TextWatcher getInputTextWatcher(final Button positiveButton) {
+	protected TextWatcher getInputWatcher(final Button positiveButton) {
 		return new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				inputLayout.setError(null);
+
+				if (allowEmptyInput) {
+					return;
+				}
+
 				if (s.length() == 0) {
 					positiveButton.setEnabled(false);
 				} else {

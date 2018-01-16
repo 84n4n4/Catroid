@@ -26,6 +26,7 @@ import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -201,7 +202,7 @@ public class FormulaEditorDataFragment extends ListFragment implements
 
 	@Override
 	public void onResume() {
-		getActivity().getActionBar().setTitle(R.string.category_data);
+		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.category_data);
 		BottomBar.showBottomBar(getActivity());
 		BottomBar.hidePlayButton(getActivity());
 		super.onResume();

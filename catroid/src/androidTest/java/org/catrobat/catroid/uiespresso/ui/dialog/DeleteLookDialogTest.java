@@ -55,7 +55,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.doesNotExis
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -90,7 +89,7 @@ public class DeleteLookDialogTest {
 		onRVAtPosition(1)
 				.performCheckItem();
 
-		onView(withContentDescription(R.string.done)).perform(click());
+		onView(withText(R.string.confirm)).perform(click());
 
 		onView(withText(UiTestUtils.getResources().getQuantityString(R.plurals.delete_looks, 1)))
 				.inRoot(isDialog())
@@ -120,7 +119,7 @@ public class DeleteLookDialogTest {
 		onRVAtPosition(1)
 				.performCheckItem();
 
-		onView(withContentDescription(R.string.done)).perform(click());
+		onView(withText(R.string.confirm)).perform(click());
 
 		onView(withText(UiTestUtils.getResources().getQuantityString(R.plurals.delete_looks, 1)))
 				.inRoot(isDialog())

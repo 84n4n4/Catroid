@@ -24,16 +24,19 @@
 package org.catrobat.catroid.ui.recyclerview.dialog;
 
 import org.catrobat.catroid.R;
+import org.catrobat.catroid.ui.controller.BackPackListManager;
 
-public class RenameItemDialog extends TextDialog {
+import java.util.List;
 
-	public static final String TAG = RenameItemDialog.class.getSimpleName();
+public class NewScriptGroupDialog extends TextDialog {
 
-	private RenameItemInterface renameItemInterface;
+	public static final String TAG = NewScriptGroupDialog.class.getSimpleName();
 
-	public RenameItemDialog(int title, int inputLabel, String defaultText, RenameItemInterface renameItemInterface) {
-		super(title, inputLabel, defaultText, false);
-		this.renameItemInterface = renameItemInterface;
+	private BackpackScriptInterface backpackInterface;
+
+	public NewScriptGroupDialog(BackpackScriptInterface backpackInterface) {
+		super(R.string.new_group, R.string.script_group_label, null, false);
+		this.backpackInterface = backpackInterface;
 	}
 
 	@Override
@@ -45,24 +48,27 @@ public class RenameItemDialog extends TextDialog {
 			return false;
 		}
 
-		if (renameItemInterface.isNameUnique(name) || name.equals(defaultText)) {
-			renameItemInterface.renameItem(name);
-			return true;
-		} else {
+		if (getScope().contains(name)) {
 			inputLayout.setError(getString(R.string.name_already_exists));
 			return false;
+		} else {
+			backpackInterface.packItems(name);
+			return true;
 		}
 	}
 
 	@Override
 	protected void handleNegativeButtonClick() {
-		renameItemInterface.renameItem(defaultText);
+		backpackInterface.cancelPacking();
 	}
 
-	public interface RenameItemInterface {
+	private List<String> getScope() {
+		return BackPackListManager.getInstance().getAllBackPackedScriptGroups();
+	}
 
-		boolean isNameUnique(String name);
+	public interface BackpackScriptInterface {
 
-		void renameItem(String name);
+		void packItems(String name);
+		void cancelPacking();
 	}
 }

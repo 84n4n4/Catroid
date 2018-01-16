@@ -27,6 +27,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,6 +63,9 @@ public class ProjectActivity extends BaseCastActivity implements PlaySceneDialog
 		SettingsActivity.setToChosenLanguage(this);
 
 		setContentView(R.layout.activity_recycler);
+		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 		int fragmentPosition = FRAGMENT_SCENES;
 
 		Bundle bundle = getIntent().getExtras();
@@ -108,9 +112,6 @@ public class ProjectActivity extends BaseCastActivity implements PlaySceneDialog
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case android.R.id.home:
-				onBackPressed();
-				break;
 			case R.id.upload:
 				ProjectManager projectManager = ProjectManager.getInstance();
 				projectManager.uploadProject(projectManager.getCurrentProject().getName(), this);

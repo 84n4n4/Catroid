@@ -22,7 +22,6 @@
  */
 package org.catrobat.catroid.ui.fragment;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -35,6 +34,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -97,9 +97,10 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 
 	private long[] confirmSwitchEditTextTimeStamp = {0, 0};
 	private int confirmSwitchEditTextCounter = 0;
-	private CharSequence previousActionBarTitle;
 	private static OnFormulaChangedListener onFormulaChangedListener;
 	private boolean hasFormulaBeenChanged = false;
+
+	private String previousTitle = "";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -123,16 +124,12 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 	}
 
 	private void setUpActionBar() {
-		ActionBar actionBar = getActivity().getActionBar();
-		previousActionBarTitle = ProjectManager.getInstance().getCurrentSprite().getName();
-		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setTitle(R.string.formula_editor_title);
+		previousTitle = ((AppCompatActivity) getActivity()).getSupportActionBar().getTitle().toString();
+		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.formula_editor_title);
 	}
 
 	private void resetActionBar() {
-		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setTitle(previousActionBarTitle);
+		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(previousTitle);
 	}
 
 	private void cloneFormulaBrick(FormulaBrick formulaBrick) {
@@ -146,7 +143,6 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 	}
 
 	private static void showFragment(View view, FormulaBrick formulaBrick, Brick.BrickField brickField, boolean showCustomView) {
-
 		Activity activity = (Activity) view.getContext();
 
 		FormulaEditorFragment formulaEditorFragment = (FormulaEditorFragment) activity.getFragmentManager()
@@ -523,8 +519,6 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 
 		menu.findItem(R.id.menu_undo).setVisible(true);
 		menu.findItem(R.id.menu_redo).setVisible(true);
-		getActivity().getActionBar().setDisplayShowTitleEnabled(true);
-		getActivity().getActionBar().setTitle(getString(R.string.formula_editor_title));
 
 		super.onPrepareOptionsMenu(menu);
 	}
@@ -538,9 +532,6 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case android.R.id.home:
-				exitFormulaEditorFragment();
-				return true;
 			case R.id.menu_undo:
 				formulaEditorEditText.undo();
 				break;

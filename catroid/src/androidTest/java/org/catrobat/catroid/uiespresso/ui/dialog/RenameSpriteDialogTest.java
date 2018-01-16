@@ -103,7 +103,7 @@ public class RenameSpriteDialogTest {
 
 		onView(withText(R.string.rename_sprite_dialog)).inRoot(isDialog())
 				.check(matches(isDisplayed()));
-		onView(allOf(withId(R.id.edit_text), withText(oldSpriteName), isDisplayed()))
+		onView(allOf(withText(oldSpriteName), isDisplayed()))
 				.perform(replaceText(newSpriteName));
 
 		closeSoftKeyboard();

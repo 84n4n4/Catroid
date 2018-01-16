@@ -222,7 +222,7 @@ public class PlaySoundAndWaitBrickTest {
 
 		onView(withText(R.string.rename_sound_dialog)).inRoot(isDialog())
 				.check(matches(isDisplayed()));
-		onView(allOf(withId(R.id.edit_text), withText(oldName), isDisplayed()))
+		onView(allOf(withText(oldName), isDisplayed()))
 				.perform(replaceText(newName));
 
 		Espresso.closeSoftKeyboard();

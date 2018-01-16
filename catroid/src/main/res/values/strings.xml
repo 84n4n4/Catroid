@@ -28,7 +28,7 @@
     <string name="cancel">Cancel</string>
     <string name="next">Next</string>
     <string name="done">Done</string>
-    <string name="select_all">Select All</string>
+    <string name="confirm">Confirm</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="back">Back</string>
@@ -62,10 +62,6 @@
     <string name="undo">Undo</string>
     <string name="name_exists">Name already exists</string>
     <string name="no_name">No name</string>
-
-    <string name="new_group">New group</string>
-    <string name="my_group">My group</string>
-    <string name="name">Name:</string>
 
     <string name="degrees">degrees</string>
     <string name="landscape">landscape</string>
@@ -254,7 +250,6 @@
     <string name="am_rename">Rename</string>
     <string name="dialog_confirm_delete">This cannot be undone!</string>
 
-    <string name="list_headline_background">Background</string>
     <string name="list_headline_sprites">Objects</string>
 
     <!-- Options Menu Options -->
@@ -298,7 +293,6 @@
 
     <!-- New Dialog Titles -->
     <string name="new_scene_dialog">New Scene</string>
-    <string name="scene_name">Scene name:</string>
 
     <!-- Delete Dialog Titles -->
     <plurals name="delete_projects">
@@ -335,10 +329,12 @@
     </plurals>
 
     <!-- Dialog Labels -->
-    <string name="project_name_label">Program:</string>
-    <string name="sprite_name_label">Object name:</string>
-    <string name="look_name_label">Look name:</string>
-    <string name="sound_name_label">Sound name:</string>
+    <string name="project_name_label">Program Name</string>
+    <string name="scene_name">Scene Name</string>
+    <string name="sprite_name_label">Object Name</string>
+    <string name="script_group_label">Script Group Name</string>
+    <string name="look_name_label">Look Name</string>
+    <string name="sound_name_label">Sound Name</string>
 
     <!-- Details Labels -->
     <string name="number_of_scripts">Scripts:</string>
@@ -354,6 +350,9 @@
     <string name="rename_look_dialog">Rename Look</string>
     <string name="rename_sound_dialog">Rename Sound</string>
     <string name="rename_nfctag_dialog">Rename NFC tag</string>
+
+    <!-- New Script Group Dialog -->
+    <string name="new_group">New group</string>
 
     <!-- Action Toasts -->
     <plurals name="packed_scenes">
@@ -629,7 +628,7 @@
     <string name="dialog_about_title">About this app</string>
     <string name="dialog_about_license_info">This app offers a programming
         environment and interpreter for the visual
-        programming language Catrobat.\n\n
+        programming language Catrobat.\n
         The source code of this app is mainly licensed under the GNU AGPL v3 License.
         For further details on the license see the link below.\n</string>
     <string name="dialog_about_license_link_text">Source Code License</string>
@@ -708,7 +707,6 @@
     <string name="register_code_terms_of_use_text">Terms of Use and Services</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
-    <string name="or">OR</string>
     <string name="password_confirm">Confirm Password</string>
     <string name="accountName">E-Mail</string>
     <string name="signin_thanks">Thank you for signing up!</string>
@@ -1086,7 +1084,6 @@
     <!-- Error messages -->
     <string name="error_no_writiable_external_storage_available">This app requires writable external storage like a SD card in order to run, but none was found.\nYou can fix this by making the external storage writable or inserting a SD card, then trying again.</string>
     <string name="error_no_program_name_entered">Please enter a program name.</string>
-    <string name="error_no_userbrick_name_entered">Please enter a brick name.</string>
     <string name="error_project_exists">Please choose another program name.</string>
     <string name="error_project_upload">An error occurred while uploading the program.</string>
     <string name="error_project_download">An error occurred while downloading the program.</string>
@@ -1709,9 +1706,6 @@
 
     <!-- User Bricks strings -->
     <string name="define">Define</string>
-    <string name="new_user_brick">New Brick</string>
-    <string name="new_user_brick_variable">Variable</string>
-    <string name="new_user_brick_name">Please choose a brick name:</string>
     <!--  -->
 
 
@@ -1788,10 +1782,6 @@
     <!--  -->
 
     <!-- Crash report dialog -->
-    <string name="app_has_crashed">The app has crashed!</string>
-    <string name="crash_dialog_text">Please help to improve our app by sending us anonymous crash reports!</string>
-    <string name="crash_dialog_always_send">Always send</string>
-    <string name="crash_dialog_send">Send</string>
     <string name="plus" translatable="false">+</string>
     <!--  -->
 

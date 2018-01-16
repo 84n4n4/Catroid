@@ -52,7 +52,6 @@ import static android.support.test.espresso.Espresso.openActionBarOverflowOrOpti
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.catrobat.catroid.uiespresso.ui.fragment.rvutils.RecyclerViewInteractionWrapper.onRVAtPosition;
@@ -85,7 +84,7 @@ public class CopyLookTest {
 		onRVAtPosition(0)
 			.performCheckItem();
 
-		onView(withContentDescription("Done")).perform(click());
+		onView(withText(R.string.confirm)).perform(click());
 
 		onView(withText(toBeCopiedLookName))
 				.check(matches(isDisplayed()));

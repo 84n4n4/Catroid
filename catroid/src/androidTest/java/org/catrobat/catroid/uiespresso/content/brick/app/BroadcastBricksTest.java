@@ -152,14 +152,14 @@ public class BroadcastBricksTest {
 		return script;
 	}
 
-	public static void createNewMessageOnSpinner(int spinnerResourceId, int position, String message) {
+	public void createNewMessageOnSpinner(int spinnerResourceId, int position, String message) {
 		onBrickAtPosition(position).onSpinner(spinnerResourceId)
 				.perform(click());
 
 		onView(withText(R.string.brick_variable_spinner_create_new_variable))
 				.perform(click());
 
-		onView(withId(R.id.edit_text))
+		onView(withText(defaultMessage))
 				.perform(clearText(), typeText(message), closeSoftKeyboard());
 
 		onView(withId(android.R.id.button1))

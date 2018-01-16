@@ -56,7 +56,6 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -92,12 +91,13 @@ public class RenameLookTest {
 		onRVAtPosition(0)
 				.performCheckItem();
 
-		onView(withContentDescription("Done")).perform(click());
+		onView(withText(R.string.confirm)).perform(click());
 
 		onView(withText(R.string.rename_look_dialog)).inRoot(isDialog())
 				.check(matches(isDisplayed()));
 
-		onView(withId(R.id.edit_text)).perform(clearText(), typeText(newLookName), closeSoftKeyboard());
+		onView(allOf(withText(oldLookName), isDisplayed()))
+				.perform(clearText(), typeText(newLookName), closeSoftKeyboard());
 
 		onView(allOf(withId(android.R.id.button2), withText(R.string.cancel)))
 				.check(matches(isDisplayed()));
@@ -117,7 +117,7 @@ public class RenameLookTest {
 		onRVAtPosition(0)
 				.performCheckItem();
 
-		onView(withContentDescription("Done")).perform(click());
+		onView(withText(R.string.confirm)).perform(click());
 
 		onView(withText(R.string.rename_look_dialog)).inRoot(isDialog())
 				.check(matches(isDisplayed()));

@@ -22,11 +22,7 @@
  */
 package org.catrobat.catroid.ui.dialogs;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
-
-import org.catrobat.catroid.R;
+import org.catrobat.catroid.ui.recyclerview.dialog.TextDialog;
 
 public class SetDescriptionDialog extends TextDialog {
 
@@ -41,17 +37,8 @@ public class SetDescriptionDialog extends TextDialog {
 	}
 
 	@Override
-	protected View inflateLayout() {
-		final LayoutInflater inflater = getActivity().getLayoutInflater();
-		View view = inflater.inflate(R.layout.dialog_text_input, null);
-		EditText input = (EditText) view.findViewById(R.id.edit_text);
-		input.setSingleLine(false);
-		return view;
-	}
-
-	@Override
 	protected boolean handlePositiveButtonClick() {
-		String newDescription = input.getText().toString().trim();
+		String newDescription = inputLayout.getEditText().getText().toString().trim();
 		descriptionInterface.setDescription(newDescription);
 		return true;
 	}

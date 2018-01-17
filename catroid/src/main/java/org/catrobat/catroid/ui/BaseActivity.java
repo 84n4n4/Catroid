@@ -62,6 +62,9 @@ public abstract class BaseActivity extends Activity {
 		if (SettingsActivity.isCastSharedPreferenceEnabled(this)) {
 			CastManager.getInstance().initializeCast(this);
 		}
+		this.getTheme().applyStyle(R.style.FontSizeLarge, true);
+
+		this.getTheme().applyStyle(R.style.BlaTheme, true);
 	}
 
 	@SuppressWarnings("PMD.DoNotCallGarbageCollectionExplicitly")

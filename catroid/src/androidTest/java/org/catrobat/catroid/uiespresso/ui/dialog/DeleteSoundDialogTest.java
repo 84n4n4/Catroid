@@ -23,7 +23,6 @@
 
 package org.catrobat.catroid.uiespresso.ui.dialog;
 
-import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -66,18 +65,15 @@ public class DeleteSoundDialogTest {
 
 	@Rule
 	public BaseActivityInstrumentationRule<SpriteActivity> baseActivityTestRule = new
-			BaseActivityInstrumentationRule<>(SpriteActivity.class, true, false);
-
+			BaseActivityInstrumentationRule<>(SpriteActivity.class, SpriteActivity.EXTRA_FRAGMENT_POSITION,
+			SpriteActivity.FRAGMENT_SOUNDS);
 	private String toBeDeletedSoundName = "testLook2";
 
 	@Before
 	public void setUp() throws Exception {
 		createProject("deleteSoundDialogTest");
 
-		Intent intent = new Intent();
-		intent.putExtra(SpriteActivity.EXTRA_FRAGMENT_POSITION, SpriteActivity.FRAGMENT_SOUNDS);
-
-		baseActivityTestRule.launchActivity(intent);
+		baseActivityTestRule.launchActivity();
 	}
 
 	@Category({Cat.AppUi.class, Level.Smoke.class})

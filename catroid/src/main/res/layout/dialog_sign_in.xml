@@ -33,17 +33,19 @@
 
         <Button
             android:id="@+id/dialog_sign_in_login"
+            style="@style/Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/login"
-            android:gravity="center_horizontal" />
+            android:gravity="center" />
 
         <Button
             android:id="@+id/dialog_sign_in_register"
+            style="@style/Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/register"
-            android:gravity="center_horizontal" />
+            android:gravity="center" />
 
         <Button
             android:id="@+id/dialog_sign_in_facebook_login_button"

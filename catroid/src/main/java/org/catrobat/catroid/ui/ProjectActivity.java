@@ -67,8 +67,8 @@ public class ProjectActivity extends BaseCastActivity implements PlaySceneDialog
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		int fragmentPosition = FRAGMENT_SCENES;
-
 		Bundle bundle = getIntent().getExtras();
+
 		if (bundle != null) {
 			fragmentPosition = bundle.getInt(EXTRA_FRAGMENT_POSITION, FRAGMENT_SCENES);
 		}

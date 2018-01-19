@@ -104,8 +104,7 @@ public class ProjectListFragment extends RecyclerViewFragment<ProjectData> imple
 	@Override
 	public void handleAddButton() {
 		NewProjectDialog dialog = new NewProjectDialog();
-		dialog.setOpenedFromProjectList(true);
-		dialog.show(getFragmentManager(), NewProjectDialog.DIALOG_FRAGMENT_TAG);
+		dialog.show(getFragmentManager(), NewProjectDialog.TAG);
 	}
 
 	@Override

@@ -367,10 +367,9 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements
 						dialog.dismiss();
 					}
 				})
-				.setCancelable(false);
-
-		AlertDialog alertDialog = builder.create();
-		alertDialog.show();
+				.setCancelable(false)
+				.create()
+				.show();
 	}
 
 	public void setShowProgressBar(boolean show) {

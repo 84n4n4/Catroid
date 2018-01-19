@@ -77,7 +77,7 @@ public class SmokeTest {
 				.check(matches(isDisplayed()));
 
 		//enter new project name
-		onView(withId(R.id.project_name_edittext))
+		onView(withId(R.id.input))
 				.perform(typeText("TestProject"));
 		onView(withText(R.string.ok))
 				.perform(click());
@@ -91,10 +91,6 @@ public class SmokeTest {
 
 		//check if user ends up in right activity either by checking activity itself:
 		assertTrue(UiTestUtils.getCurrentActivity() instanceof ProjectActivity);
-
-		//or better by checking on ui elements that identify this activity
-		//onView(withText(toUpperCase(R.string.spritelist_background_headline))).check(matches(isDisplayed()));
-		//onView(withText(toUpperCase(R.string.sprites))).check(matches(isDisplayed()));
 
 		//open scene
 		String sceneName = UiTestUtils.getResources().getString(R.string.default_scene_name, 1);

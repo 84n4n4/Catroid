@@ -23,134 +23,88 @@
 
 package org.catrobat.catroid.ui.dialogs;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.ui.SettingsActivity;
-import org.catrobat.catroid.utils.Utils;
+import org.catrobat.catroid.utils.ToastUtil;
 
 import java.io.IOException;
 
 public class OrientationDialog extends DialogFragment {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_orientation_project";
+	public static final String TAG = OrientationDialog.class.getSimpleName();
 
-	private static final String TAG = OrientationDialog.class.getSimpleName();
+	public String name;
+	public boolean createEmptyProject;
 
-	private Dialog orientationDialog;
-	private String projectName;
-	private RadioButton landscapeMode;
-	private RadioButton cast;
-	private boolean createEmptyProject;
-	private boolean createLandscapeProject = false;
-	private boolean createCastProject = false;
-
-	private boolean openedFromProjectList = false;
+	private RadioGroup radioGroup;
 
 	@Override
+	@SuppressLint("InflateParams")
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_orientation, null);
 
-		View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_orientation_new_project, null);
-		boolean castEnabled = SettingsActivity.isCastSharedPreferenceEnabled(getActivity());
-		int title = castEnabled ? R.string.project_select_screen_title : R.string.project_orientation_title;
+		int title = R.string.project_orientation_title;
 
-		orientationDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
-				.setTitle(title)
+		if (SettingsActivity.isCastSharedPreferenceEnabled(getActivity())) {
+			title = R.string.project_select_screen_title;
+			view.findViewById(R.id.cast).setVisibility(View.VISIBLE);
+		}
+
+		radioGroup = view.findViewById(R.id.radio_group);
+
+		builder.setTitle(title)
+				.setView(view)
 				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
+						switch (radioGroup.getCheckedRadioButtonId()) {
+							case R.id.portrait:
+								createProject(false, false);
+								break;
+							case R.id.landscape_mode:
+								createProject(true, false);
+								break;
+							case R.id.cast:
+								createProject(false, true);
+								break;
+							default:
+								throw new IllegalStateException(TAG + ": Cannot find RadioButton.");
+						}
+						dismiss();
 					}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+				})
+				.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 					}
-				}).create();
-
-		orientationDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				if (getActivity() == null) {
-					Log.e(TAG, "onShow() Activity was null!");
-					return;
-				}
-				Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-				positiveButton.setOnClickListener(new View.OnClickListener() {
-
-					@Override
-					public void onClick(View view) {
-						handleOkButtonClick();
-					}
 				});
-			}
-		});
 
-		landscapeMode = (RadioButton) dialogView.findViewById(R.id.landscape_mode);
-		cast = (RadioButton) dialogView.findViewById(R.id.cast);
-
-		if (castEnabled) {
-			cast.setVisibility(View.VISIBLE);
-		}
-
-		return orientationDialog;
+		return builder.create();
 	}
 
-	protected void handleOkButtonClick() {
-
-		createLandscapeProject = landscapeMode.isChecked();
-		createCastProject = cast.isChecked();
-
+	private void createProject(boolean createLandscapeProject, boolean createCastProject) {
 		try {
-			ProjectManager.getInstance().initializeNewProject(projectName, getActivity(), createEmptyProject, false,
+			ProjectManager.getInstance().initializeNewProject(name, getActivity(), createEmptyProject, false,
 					createLandscapeProject, createCastProject, false);
-		} catch (IllegalArgumentException illegalArgumentException) {
-			Utils.showErrorDialog(getActivity(), R.string.error_project_exists);
-			return;
-		} catch (IOException ioException) {
-			Utils.showErrorDialog(getActivity(), R.string.error_new_project);
-			Log.e(TAG, Log.getStackTraceString(ioException));
-			dismiss();
-			return;
+		} catch (IOException e) {
+			ToastUtil.showError(getActivity(), R.string.error_new_project);
 		}
 
 		Intent intent = new Intent(getActivity(), ProjectActivity.class);
-
-		intent.putExtra(Constants.PROJECTNAME_TO_LOAD, projectName);
-
-		if (isOpenedFromProjectList()) {
-			intent.putExtra(Constants.PROJECT_OPENED_FROM_PROJECTS_LIST, true);
-		}
-
 		getActivity().startActivity(intent);
-
-		dismiss();
-	}
-
-	public boolean isOpenedFromProjectList() {
-		return openedFromProjectList;
-	}
-
-	public void setOpenedFromProjectList(boolean openedFromProjectList) {
-		this.openedFromProjectList = openedFromProjectList;
-	}
-
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-
-	public void setCreateEmptyProject(boolean isChecked) {
-		this.createEmptyProject = isChecked;
 	}
 }

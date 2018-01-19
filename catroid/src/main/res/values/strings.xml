@@ -60,7 +60,6 @@
     <string name="settings">Settings</string>
     <string name="redo">Redo</string>
     <string name="undo">Undo</string>
-    <string name="name_exists">Name already exists</string>
     <string name="no_name">No name</string>
 
     <string name="degrees">degrees</string>
@@ -697,8 +696,8 @@
 
     <!-- Sign In dialogs -->
     <string name="sign_in_dialog_title">Sign In</string>
-    <string name="username">Username:</string>
-    <string name="password">Password:</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
     <string name="password_forgotten">Password forgotten?</string>
     <string name="new_user_registered">New account created</string>
     <string name="user_logged_in">Successfully logged in</string>
@@ -1083,8 +1082,6 @@
 
     <!-- Error messages -->
     <string name="error_no_writiable_external_storage_available">This app requires writable external storage like a SD card in order to run, but none was found.\nYou can fix this by making the external storage writable or inserting a SD card, then trying again.</string>
-    <string name="error_no_program_name_entered">Please enter a program name.</string>
-    <string name="error_project_exists">Please choose another program name.</string>
     <string name="error_project_upload">An error occurred while uploading the program.</string>
     <string name="error_project_download">An error occurred while downloading the program.</string>
     <string name="error_new_project">An error occurred while creating a new program.</string>

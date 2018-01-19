@@ -59,7 +59,6 @@ public abstract class TextDialog extends DialogFragment {
 	@SuppressLint("InflateParams")
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
 		inputLayout = (TextInputLayout) LayoutInflater.from(getActivity()).inflate(R.layout.dialog_text_input, null);
 
 		builder.setTitle(title);
@@ -90,7 +89,7 @@ public abstract class TextDialog extends DialogFragment {
 					}
 				});
 
-				inputLayout.getEditText().addTextChangedListener(getInputWatcher(buttonPositive));
+				inputLayout.getEditText().addTextChangedListener(getTextWatcher(buttonPositive));
 			}
 		});
 
@@ -114,20 +113,13 @@ public abstract class TextDialog extends DialogFragment {
 		}
 	}
 
-	protected TextWatcher getInputWatcher(final Button positiveButton) {
+	private TextWatcher getTextWatcher(final Button positiveButton) {
 		return new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				inputLayout.setError(null);
-
-				if (allowEmptyInput) {
-					return;
-				}
-
-				if (s.length() == 0) {
-					positiveButton.setEnabled(false);
-				} else {
-					positiveButton.setEnabled(true);
+				if (!allowEmptyInput) {
+					positiveButton.setEnabled(s.length() > 0);
 				}
 			}
 

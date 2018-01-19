@@ -257,10 +257,9 @@ public abstract class BackpackRecyclerViewFragment<T> extends Fragment implement
 						dialog.dismiss();
 					}
 				})
-				.setCancelable(false);
-
-		AlertDialog alertDialog = builder.create();
-		alertDialog.show();
+				.setCancelable(false)
+				.create()
+				.show();
 	}
 
 	@Override

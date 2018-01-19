@@ -170,7 +170,7 @@ public class ScriptFragment extends ListFragment implements OnCategorySelectedLi
 				copyBricks();
 				break;
 			case DELETE:
-				showConfirmDeleteDialog(false);
+				showDeleteAlert(false);
 				break;
 			case ENABLE_DISABLE:
 				actionMode.finish();
@@ -539,46 +539,32 @@ public class ScriptFragment extends ListFragment implements OnCategorySelectedLi
 		}
 	}
 
-	private void showConfirmDeleteDialog(final boolean fromContextMenu) {
-
-		int checkedItems;
-		if (fromContextMenu) {
-			checkedItems = 1;
-		} else {
-			checkedItems = adapter.getAmountOfCheckedItems();
-		}
+	private void showDeleteAlert(final boolean fromContextMenu) {
+		int checkedItems = fromContextMenu ? 1 : adapter.getAmountOfCheckedItems();
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(getResources().getQuantityString(R.plurals.delete_bricks, checkedItems));
-		builder.setMessage(R.string.dialog_confirm_delete);
-		builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int id) {
-				if (fromContextMenu) {
-					adapter.handleScriptDelete(sprite, scriptToEdit);
-				} else {
-					deleteCheckedBricks();
-					finishActionMode();
-				}
-			}
-		});
-		builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.cancel();
-			}
-		});
-
-		builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				finishActionMode();
-			}
-		});
-
-		AlertDialog alertDialog = builder.create();
-		alertDialog.show();
+		builder.setTitle(getResources().getQuantityString(R.plurals.delete_bricks, checkedItems))
+				.setMessage(R.string.dialog_confirm_delete)
+				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						if (fromContextMenu) {
+							adapter.handleScriptDelete(sprite, scriptToEdit);
+						} else {
+							deleteCheckedBricks();
+							finishActionMode();
+						}
+					}
+				})
+				.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				})
+				.setCancelable(false)
+				.create()
+				.show();
 	}
 
 	public void updateActionModeTitle() {

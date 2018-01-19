@@ -297,7 +297,7 @@ public class MainMenuActivity extends BaseCastActivity implements OnLoadProjectC
 			return;
 		}
 		NewProjectDialog dialog = new NewProjectDialog();
-		dialog.show(getFragmentManager(), NewProjectDialog.DIALOG_FRAGMENT_TAG);
+		dialog.show(getFragmentManager(), NewProjectDialog.TAG);
 	}
 
 	public void handleProgramsButton(View view) {
@@ -343,7 +343,7 @@ public class MainMenuActivity extends BaseCastActivity implements OnLoadProjectC
 		}
 	}
 
-	public void startWebViewActivity(String url) {
+	private void startWebViewActivity(String url) {
 		Intent intent = new Intent(this, WebViewActivity.class);
 		intent.putExtra(WebViewActivity.INTENT_PARAMETER_URL, url);
 		startActivity(intent);

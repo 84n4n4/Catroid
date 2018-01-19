@@ -93,7 +93,7 @@ public class OrientationDialogTest {
 				.perform(click());
 		onView(withText(R.string.new_project_dialog_title))
 				.check(matches(isDisplayed()));
-		onView(withId(R.id.project_name_edittext))
+		onView(withId(R.id.input))
 				.perform(typeText("TestCastProject"));
 		onView(withText(R.string.ok))
 				.perform(click());

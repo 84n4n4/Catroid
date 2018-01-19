@@ -24,8 +24,20 @@
 package org.catrobat.catroid.uiespresso.testsuites;
 
 import org.catrobat.catroid.uiespresso.content.brick.app.BroadcastBricksTest;
+import org.catrobat.catroid.uiespresso.content.brick.app.ChangeVariableTest;
 import org.catrobat.catroid.uiespresso.content.brick.app.DeleteItemOfUserListBrickTest;
+import org.catrobat.catroid.uiespresso.content.brick.app.LoopBrickTest;
+import org.catrobat.catroid.uiespresso.content.brick.app.PlaySoundAndWaitBrickTest;
+import org.catrobat.catroid.uiespresso.content.brick.app.ReplaceItemInUserListTest;
+import org.catrobat.catroid.uiespresso.content.brick.app.VariableBrickTest;
+import org.catrobat.catroid.uiespresso.content.brick.stage.BroadcastBricksStageTest;
+import org.catrobat.catroid.uiespresso.content.brick.stage.CameraResourceTest;
 import org.catrobat.catroid.uiespresso.formulaeditor.FormulaEditorKeyboardTest;
+import org.catrobat.catroid.uiespresso.pocketmusic.PocketMusicActivityTest;
+import org.catrobat.catroid.uiespresso.ui.dialog.RenameSpriteDialogTest;
+import org.catrobat.catroid.uiespresso.ui.fragment.RenameLookTest;
+import org.catrobat.catroid.uiespresso.ui.fragment.RenameProjectTest;
+import org.catrobat.catroid.uiespresso.ui.fragment.RenameSoundTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -33,7 +45,20 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 		BroadcastBricksTest.class, // known bug, fails also in develop
 		DeleteItemOfUserListBrickTest.class, // fails rightly, user list still available in bricks spinner
-		FormulaEditorKeyboardTest.class // fails rightly, something majorly wrong with formula editor
+		FormulaEditorKeyboardTest.class, // fails rightly, something majorly wrong with formula editor
+
+		ChangeVariableTest.class, // fails rightly
+		LoopBrickTest.class, // should be fine
+		PlaySoundAndWaitBrickTest.class, // fails rightly
+		ReplaceItemInUserListTest.class, // fails rightly
+		VariableBrickTest.class, // fails rightly
+		BroadcastBricksStageTest.class, // should be fixed
+		CameraResourceTest.class, // failing only on device
+		PocketMusicActivityTest.class, // no idea whats wrong here
+		RenameSpriteDialogTest.class, // should be fixed
+		RenameLookTest.class, // should be fixed
+		RenameProjectTest.class, // should be fixed
+		RenameSoundTest.class // should be fixed
 })
 public class AllEspressoTestsDebugSuite {
 }

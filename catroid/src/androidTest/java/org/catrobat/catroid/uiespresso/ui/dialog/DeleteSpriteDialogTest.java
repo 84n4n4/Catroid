@@ -99,7 +99,6 @@ public class DeleteSpriteDialogTest {
 		onView(allOf(withId(android.R.id.button1), withText(R.string.yes)))
 				.perform(click());
 
-		onView(isRoot()).perform(CustomActions.wait(5000));
 		onView(withText(toBeDeletedSpriteName))
 				.check(doesNotExist());
 	}

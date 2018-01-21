@@ -25,6 +25,7 @@ package org.catrobat.catroid.uiespresso.content.brick.app;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.EditText;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
@@ -51,14 +52,18 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.catrobat.catroid.uiespresso.content.brick.utils.BrickDataInteractionWrapper.onBrickAtPosition;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.instanceOf;
 
 @RunWith(AndroidJUnit4.class)
 public class BroadcastBricksTest {
 	private String defaultMessage = "defaultMessage";
+
 	private int broadcastSendPosition = 1;
 	private int broadcastReceivePosition = 2;
 
@@ -155,10 +160,10 @@ public class BroadcastBricksTest {
 		onBrickAtPosition(position).onSpinner(spinnerResourceId)
 				.perform(click());
 
-		onView(withText(R.string.brick_variable_spinner_create_new_variable))
+		onView(withText(R.string.new_broadcast_message))
 				.perform(click());
 
-		onView(withText(defaultMessage))
+		onView(allOf(withText(R.string.new_broadcast_message), isDisplayed(), instanceOf(EditText.class)))
 				.perform(replaceText(message));
 		closeSoftKeyboard();
 

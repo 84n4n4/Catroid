@@ -23,7 +23,6 @@
 
 package org.catrobat.catroid.uiespresso.ui.dialog;
 
-import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -63,16 +62,15 @@ public class DeleteSpriteDialogTest {
 
 	@Rule
 	public BaseActivityInstrumentationRule<ProjectActivity> baseActivityTestRule = new
-			BaseActivityInstrumentationRule<>(ProjectActivity.class, true, false);
-
+			BaseActivityInstrumentationRule<>(ProjectActivity.class, ProjectActivity.EXTRA_FRAGMENT_POSITION,
+			ProjectActivity.FRAGMENT_SPRITES);
 	private String toBeDeletedSpriteName = "secondSprite";
 
 	@Before
 	public void setUp() throws Exception {
 		createProject("DeleteSpriteDialogTest");
-		Intent intent = new Intent();
-		intent.putExtra(ProjectActivity.EXTRA_FRAGMENT_POSITION, ProjectActivity.FRAGMENT_SPRITES);
-		baseActivityTestRule.launchActivity(intent);
+
+		baseActivityTestRule.launchActivity();
 	}
 
 	@Category({Cat.AppUi.class, Level.Smoke.class})
@@ -101,7 +99,6 @@ public class DeleteSpriteDialogTest {
 		onView(allOf(withId(android.R.id.button1), withText(R.string.yes)))
 				.perform(click());
 
-		onView(isRoot()).perform(CustomActions.wait(5000));
 		onView(withText(toBeDeletedSpriteName))
 				.check(doesNotExist());
 	}

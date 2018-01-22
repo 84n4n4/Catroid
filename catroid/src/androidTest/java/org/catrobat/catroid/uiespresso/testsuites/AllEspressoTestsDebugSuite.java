@@ -23,17 +23,24 @@
 
 package org.catrobat.catroid.uiespresso.testsuites;
 
-import org.catrobat.catroid.uiespresso.content.brick.app.BroadcastBricksTest;
+import org.catrobat.catroid.uiespresso.content.brick.app.ChangeVariableTest;
 import org.catrobat.catroid.uiespresso.content.brick.app.DeleteItemOfUserListBrickTest;
+import org.catrobat.catroid.uiespresso.content.brick.app.ReplaceItemInUserListTest;
+import org.catrobat.catroid.uiespresso.content.brick.app.VariableBrickTest;
 import org.catrobat.catroid.uiespresso.formulaeditor.FormulaEditorKeyboardTest;
+import org.catrobat.catroid.uiespresso.pocketmusic.PocketMusicActivityTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		BroadcastBricksTest.class, // known bug, fails also in develop
 		DeleteItemOfUserListBrickTest.class, // fails rightly, user list still available in bricks spinner
-		FormulaEditorKeyboardTest.class // fails rightly, something majorly wrong with formula editor
+		FormulaEditorKeyboardTest.class, // fails rightly, something majorly wrong with formula editor
+
+		ChangeVariableTest.class, // fails rightly
+		ReplaceItemInUserListTest.class, // fails rightly
+		VariableBrickTest.class, // fails rightly
+		PocketMusicActivityTest.class, // no idea whats wrong here
 })
 public class AllEspressoTestsDebugSuite {
 }

@@ -55,13 +55,13 @@ import static org.catrobat.catroid.uiespresso.content.brick.utils.BrickDataInter
 public class FormulaEditorRenameVariableTest {
 	@Rule
 	public BaseActivityInstrumentationRule<SpriteActivity> baseActivityTestRule = new
-			BaseActivityInstrumentationRule<>(SpriteActivity.class, true, false);
+			BaseActivityInstrumentationRule<>(SpriteActivity.class, SpriteActivity.EXTRA_FRAGMENT_POSITION, SpriteActivity.FRAGMENT_SCRIPTS);
 
 	@Before
 	public void setUp() throws Exception {
 		Script script = BrickTestUtils.createProjectAndGetStartScript("FormulaEditorRenameVariableTest");
 		script.addBrick(new ChangeSizeByNBrick(0));
-		baseActivityTestRule.launchActivity(null);
+		baseActivityTestRule.launchActivity();
 	}
 
 	private static String variableNameOld = "variableOld";

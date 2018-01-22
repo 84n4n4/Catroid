@@ -58,17 +58,13 @@ public class NewProjectDialog extends DialogFragment {
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		@SuppressLint("InflateParams")
 		View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_new_project, null);
 
 		inputLayout = view.findViewById(R.id.input);
-		radioGroup = view.findViewById(R.id.radio_group);
-
-		builder.setTitle(R.string.new_project_dialog_title);
-		builder.setView(view);
-
 		inputLayout.setHint(getActivity().getString(R.string.project_name_label));
+
+		radioGroup = view.findViewById(R.id.radio_group);
 
 		if (DroneServiceWrapper.isDroneSharedPreferenceEnabled()) {
 			view.findViewById(R.id.project_default_drone_radio_button).setVisibility(View.VISIBLE);
@@ -78,6 +74,9 @@ public class NewProjectDialog extends DialogFragment {
 			view.findViewById(R.id.project_default_jumping_sumo_radio_button).setVisibility(View.VISIBLE);
 		}
 
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle(R.string.new_project_dialog_title);
+		builder.setView(view);
 		builder.setPositiveButton(R.string.ok, null);
 		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {

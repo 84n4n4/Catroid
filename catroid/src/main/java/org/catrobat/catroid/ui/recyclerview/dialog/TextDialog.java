@@ -22,7 +22,6 @@
  */
 package org.catrobat.catroid.ui.recyclerview.dialog;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -56,16 +55,15 @@ public abstract class TextDialog extends DialogFragment {
 	}
 
 	@Override
-	@SuppressLint("InflateParams")
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	public Dialog onCreateDialog(Bundle bundle) {
 		inputLayout = (TextInputLayout) LayoutInflater.from(getActivity()).inflate(R.layout.dialog_text_input, null);
-
-		builder.setTitle(title);
-		builder.setView(inputLayout);
 
 		inputLayout.getEditText().setText(defaultText);
 		inputLayout.setHint(getActivity().getString(label));
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle(title);
+		builder.setView(inputLayout);
 
 		builder.setPositiveButton(R.string.ok, null);
 		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

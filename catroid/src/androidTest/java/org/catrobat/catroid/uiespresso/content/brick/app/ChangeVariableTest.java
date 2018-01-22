@@ -139,7 +139,7 @@ public class ChangeVariableTest {
 				.perform(click());
 		onView(withId(R.id.button_add))
 				.perform(click());
-		onView(withId(R.id.dialog_formula_editor_data_name_edit_text))
+		onView(withId(R.id.input_edit_text))
 				.perform(typeText(variableName));
 		onView(withText(R.string.ok))
 				.perform(click());

@@ -133,9 +133,9 @@ public class ReplaceItemInUserListTest {
 				.perform(click());
 		onView(withId(R.id.button_add))
 				.perform(click());
-		onView(withId(R.id.dialog_formula_editor_data_name_edit_text))
+		onView(withId(R.id.input_edit_text))
 				.perform(typeText(userListName), closeSoftKeyboard());
-		onView(withId(R.id.dialog_formula_editor_data_is_list_checkbox))
+		onView(withId(R.id.make_list))
 				.perform(click());
 		onView(allOf(withId(android.R.id.button1), withText(R.string.ok)))
 				.perform(click());

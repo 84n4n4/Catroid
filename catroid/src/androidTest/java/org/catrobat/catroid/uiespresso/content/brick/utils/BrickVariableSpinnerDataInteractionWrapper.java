@@ -27,7 +27,6 @@ import android.support.test.espresso.DataInteraction;
 
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.formulaeditor.UserVariable;
-import org.catrobat.catroid.uiespresso.util.actions.CustomActions;
 
 import java.util.List;
 
@@ -39,7 +38,6 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -65,7 +63,7 @@ public class BrickVariableSpinnerDataInteractionWrapper extends BrickSpinnerData
 		dataInteraction.onChildView(withText(R.string.brick_variable_spinner_create_new_variable))
 				.perform(click());
 
-		enterTextOnDialogue(R.id.dialog_formula_editor_data_name_edit_text, variableName);
+		enterTextOnDialogue(R.id.input_edit_text, variableName);
 
 		return new BrickVariableSpinnerDataInteractionWrapper(dataInteraction);
 	}
@@ -76,7 +74,7 @@ public class BrickVariableSpinnerDataInteractionWrapper extends BrickSpinnerData
 		onView(withText(R.string.brick_variable_spinner_create_new_variable))
 				.perform(click());
 
-		enterTextOnDialogue(R.id.dialog_formula_editor_data_name_edit_text, variableName);
+		enterTextOnDialogue(R.id.input_edit_text, variableName);
 		// todo: CAT-2359 to fix this:
 		checkShowsText(variableName);
 

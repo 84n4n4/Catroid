@@ -21,34 +21,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.catrobat.catroid.uiespresso.util.matchers;
+package org.catrobat.catroid.uiespresso.formulaeditor.utils;
 
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import org.catrobat.catroid.R;
 
-import org.catrobat.catroid.ui.recyclerview.adapter.DataListAdapter;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 
-public final class FormulaEditorDataListMatchers {
-	private FormulaEditorDataListMatchers() {
-		throw new AssertionError();
+public final class UserListDataItemRVInteractionWrapper extends
+		UserDataItemRVInteractionWrapper<UserListDataItemRVInteractionWrapper> {
+
+	private UserListDataItemRVInteractionWrapper(int position) {
+		super(position);
+		onRVAtPosition(position).onChildView(R.id.spinner)
+				.check(matches(isDisplayed()));
 	}
 
-	public static Matcher<View> isDataListView() {
-		return new TypeSafeMatcher<View>() {
-
-			@Override
-			protected boolean matchesSafely(View view) {
-				return view instanceof RecyclerView
-						&& ((RecyclerView) view).getAdapter() instanceof DataListAdapter;
-			}
-
-			@Override
-			public void describeTo(Description description) {
-				description.appendText("Data list View");
-			}
-		};
+	static UserListDataItemRVInteractionWrapper onListAtPosition(int position) {
+		return new UserListDataItemRVInteractionWrapper(position);
 	}
 }

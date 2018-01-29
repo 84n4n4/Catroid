@@ -23,15 +23,25 @@
 
 package org.catrobat.catroid.uiespresso.testsuites;
 
+import org.catrobat.catroid.content.bricks.DeleteItemOfUserListBrick;
+import org.catrobat.catroid.uiespresso.content.brick.app.ChangeVariableTest;
+import org.catrobat.catroid.uiespresso.content.brick.app.ReplaceItemInUserListTest;
+import org.catrobat.catroid.uiespresso.formulaeditor.DebugTest;
 import org.catrobat.catroid.uiespresso.formulaeditor.FormulaEditorKeyboardTest;
-import org.catrobat.catroid.uiespresso.pocketmusic.PocketMusicActivityTest;
+import org.catrobat.catroid.uiespresso.formulaeditor.FormulaEditorRenameVariableTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		FormulaEditorKeyboardTest.class, // fails rightly, something majorly wrong with formula editor
-		PocketMusicActivityTest.class // no idea whats wrong here
+		//FormulaEditorKeyboardTest.class, // fails rightly, something majorly wrong with formula editor
+		//PocketMusicActivityTest.class, // no idea whats wrong here
+		ChangeVariableTest.class,
+		DeleteItemOfUserListBrick.class,
+		ReplaceItemInUserListTest.class,
+		DebugTest.class,
+		FormulaEditorKeyboardTest.class,
+		FormulaEditorRenameVariableTest.class
 })
 public class AllEspressoTestsDebugSuite {
 }

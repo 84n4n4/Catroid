@@ -86,7 +86,7 @@ public class ChangeVariableTest {
 		onFormulaEditor()
 				.performOpenDataFragment();
 		onDataList()
-				.onVariableWithName(userVariableName).performDelete();
+				.onVariableAtPosition(0).performDelete();
 		onDataList()
 				.performClose();
 

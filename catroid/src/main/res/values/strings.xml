@@ -288,6 +288,10 @@
         <item quantity="one">%d Script</item>
         <item quantity="other">%d Scripts</item>
     </plurals>
+    <plurals name="am_user_data_items_title">
+        <item quantity="one">%d Data Item</item>
+        <item quantity="other">%d Data Items</item>
+    </plurals>
 
     <!-- New Dialog Titles -->
     <string name="new_scene_dialog">New Scene</string>
@@ -350,6 +354,7 @@
     <string name="rename_look_dialog">Rename Look</string>
     <string name="rename_sound_dialog">Rename Sound</string>
     <string name="rename_nfctag_dialog">Rename NFC tag</string>
+    <string name="rename_data_dialog">Rename</string>
 
     <!-- New Script Group Dialog -->
     <string name="new_group">New group</string>
@@ -443,6 +448,10 @@
     <plurals name="deleted_scripts">
         <item quantity="one">Deleted %d Script!</item>
         <item quantity="other">Deleted %d Scripts!</item>
+    </plurals>
+    <plurals name="deleted_Items">
+        <item quantity="one">Deleted %d Item!</item>
+        <item quantity="other">Deleted %d Items!</item>
     </plurals>
     <!--  -->
 

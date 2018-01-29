@@ -20,57 +20,32 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.catrobat.catroid.formulaeditor;
 
-import java.io.Serializable;
+package org.catrobat.catroid.ui.recyclerview.viewholder;
 
-public class UserVariable implements Serializable, UserData {
-	private static final long serialVersionUID = 1L;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-	private String name;
-	private transient Object value;
-	private transient boolean visible = true;
-	private transient boolean dummy = false;
+import org.catrobat.catroid.R;
 
-	public UserVariable(String name) {
-		this.name = name;
-		this.value = 0d;
-	}
+public class ExtendedVH extends ViewHolder {
 
-	public UserVariable(final String name, final Object value) {
-		this.name = name;
-		this.value = value;
-	}
+	public ImageView image;
+	public LinearLayout details;
+	public TextView leftTopDetails;
+	public TextView leftBottomDetails;
+	public TextView rightTopDetails;
+	public TextView rightBottomDetails;
 
-	public Object getValue() {
-		return value;
-	}
-
-	public void setValue(Object value) {
-		this.value = value;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public boolean getVisible() {
-		return visible;
-	}
-
-	public void setVisible(boolean visible) {
-		this.visible = visible;
-	}
-
-	public boolean isDummy() {
-		return dummy;
-	}
-
-	public void setDummy(boolean dummy) {
-		this.dummy = dummy;
+	public ExtendedVH(View view) {
+		super(view);
+		image = view.findViewById(R.id.image_view);
+		details = view.findViewById(R.id.list_item_details);
+		leftTopDetails = view.findViewById(R.id.details_left_top);
+		leftBottomDetails = view.findViewById(R.id.details_left_bottom);
+		rightTopDetails = view.findViewById(R.id.details_right_top);
+		rightBottomDetails = view.findViewById(R.id.details_right_bottom);
 	}
 }

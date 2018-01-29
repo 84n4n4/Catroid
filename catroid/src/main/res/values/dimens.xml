@@ -88,8 +88,9 @@
 
     <!-- RecyclerView ViewHolder -->
     <dimen name="view_holder_height">90dp</dimen>
-    <dimen name="view_holder_padding">8dp</dimen>
-    <dimen name="checkbox_margin">8dp</dimen>
+    <dimen name="view_holder_padding">16dp</dimen>
+    <dimen name="checkbox_margin">16dp</dimen>
+
     <dimen name="view_holder_image_margin">12dp</dimen>
     <dimen name="view_holder_details_spacing">20dp</dimen>
     <dimen name="view_holder_title_text_size">18sp</dimen>

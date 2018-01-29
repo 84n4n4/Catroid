@@ -20,57 +20,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.catrobat.catroid.formulaeditor;
 
-import java.io.Serializable;
+package org.catrobat.catroid.ui.recyclerview.viewholder;
 
-public class UserVariable implements Serializable, UserData {
-	private static final long serialVersionUID = 1L;
+import android.view.View;
+import android.widget.TextView;
 
-	private String name;
-	private transient Object value;
-	private transient boolean visible = true;
-	private transient boolean dummy = false;
+import org.catrobat.catroid.R;
 
-	public UserVariable(String name) {
-		this.name = name;
-		this.value = 0d;
-	}
+public class VariableVH extends ViewHolder {
 
-	public UserVariable(final String name, final Object value) {
-		this.name = name;
-		this.value = value;
-	}
+	public TextView value;
 
-	public Object getValue() {
-		return value;
-	}
-
-	public void setValue(Object value) {
-		this.value = value;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public boolean getVisible() {
-		return visible;
-	}
-
-	public void setVisible(boolean visible) {
-		this.visible = visible;
-	}
-
-	public boolean isDummy() {
-		return dummy;
-	}
-
-	public void setDummy(boolean dummy) {
-		this.dummy = dummy;
+	public VariableVH(View view) {
+		super(view);
+		value = view.findViewById(R.id.value_view);
 	}
 }

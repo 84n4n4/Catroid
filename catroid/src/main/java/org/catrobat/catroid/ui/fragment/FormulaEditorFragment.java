@@ -66,6 +66,7 @@ import org.catrobat.catroid.ui.BottomBar;
 import org.catrobat.catroid.ui.dialogs.FormulaEditorComputeDialog;
 import org.catrobat.catroid.ui.recyclerview.dialog.NewStringDialog;
 import org.catrobat.catroid.ui.recyclerview.dialog.dialoginterface.NewItemInterface;
+import org.catrobat.catroid.ui.recyclerview.fragment.DataListFragment;
 import org.catrobat.catroid.utils.FormulaEditorIntroUtil;
 import org.catrobat.catroid.utils.ToastUtil;
 
@@ -428,8 +429,7 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 									R.string.formula_editor_device);
 							return true;
 						case R.id.formula_editor_keyboard_data:
-							showDataFragment(FormulaEditorDataFragment.USER_DATA_TAG,
-									R.string.formula_editor_data);
+							showDataFragment();
 							return true;
 						case R.id.formula_editor_keyboard_ok:
 							endFormulaEditor();
@@ -766,20 +766,12 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 				.commit();
 	}
 
-	private void showDataFragment(String tag, int actionbarResId) {
-		FormulaEditorDataFragment fragment = new FormulaEditorDataFragment();
-
-		Bundle bundle = new Bundle();
-		bundle.putString(FormulaEditorDataFragment.ACTION_BAR_TITLE_BUNDLE_ARGUMENT,
-				context.getString(actionbarResId));
-		bundle.putString(FormulaEditorDataFragment.FRAGMENT_TAG_BUNDLE_ARGUMENT, tag);
-
-		fragment.setArguments(bundle);
-
+	private void showDataFragment() {
+		Fragment fragment = new DataListFragment();
 		getFragmentManager().beginTransaction()
 				.hide(getFragmentManager().findFragmentByTag(FORMULA_EDITOR_FRAGMENT_TAG))
-				.add(R.id.fragment_container, fragment, tag)
-				.addToBackStack(tag)
+				.add(R.id.fragment_container, fragment, DataListFragment.TAG)
+				.addToBackStack(DataListFragment.TAG)
 				.commit();
 	}
 

@@ -50,7 +50,7 @@ public final class RecyclerViewInteractionWrapper extends ViewInteractionWrapper
 	}
 
 	public RecyclerViewInteractionWrapper performCheckItem() {
-		onChildView(R.id.list_item_checkbox)
+		onChildView(R.id.checkbox)
 				.perform(click());
 		return this;
 	}

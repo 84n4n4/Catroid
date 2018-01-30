@@ -62,6 +62,10 @@ public abstract class BaseActivity extends Activity {
 		if (SettingsActivity.isCastSharedPreferenceEnabled(this)) {
 			CastManager.getInstance().initializeCast(this);
 		}
+		// https://stackoverflow.com/questions/15950010/change-app-wide-font-size-using-a-theme-for-android
+		this.getTheme().applyStyle(R.style.RedFontTheme, true);
+		this.getTheme().applyStyle(R.style.FontSizeLarge, true);
+
 	}
 
 	@SuppressWarnings("PMD.DoNotCallGarbageCollectionExplicitly")

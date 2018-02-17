@@ -100,6 +100,15 @@
         <item name="category_icon_visiblity">0</item>
     </style>
 
+    <!-- Category Icon Visibility -->
+    <style name="CategoryIconSizeRegular">
+        <item name="category_icon_size">40dp</item>
+    </style>
+
+    <style name="CategoryIconSizeBig">
+        <item name="category_icon_size">80dp</item>
+    </style>
+
     <!-- Icon Contrast -->
     <style name="CategoryIconContrastRegular">
         <item name="icon_ardrone">@drawable/ardrone_pos</item>

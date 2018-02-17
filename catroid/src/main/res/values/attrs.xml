@@ -64,7 +64,11 @@
         <attr name="category_icon_visiblity" format="integer"/>
     </declare-styleable>
 
-    <attr name="category_icon" format="reference"/>
+    <!-- Category icons size -->
+    <declare-styleable name="CategoryIconSize">
+        <attr name="category_icon_size" format="dimension"/>
+    </declare-styleable>
+
     <!-- /Accessibility -->
 
     <declare-styleable name="BrickLayout">
@@ -76,6 +80,7 @@
             <enum name="vertical" value="1"/>
         </attr>
         <attr name="debugDraw" format="boolean" />
+        <attr name="category_icon" format="reference"/>
     </declare-styleable>
     <declare-styleable name="BrickLayout_Layout">
         <attr name="layout_textField" format="boolean"/>
@@ -84,5 +89,6 @@
         <attr name="layout_customPadding" format="dimension"/>
         <attr name="layout_horizontalSpacing" format="dimension"/>
         <attr name="layout_verticalSpacing" format="dimension"/>
+        <attr name="layout_category_icon" format="reference"/>
     </declare-styleable>
 </resources>

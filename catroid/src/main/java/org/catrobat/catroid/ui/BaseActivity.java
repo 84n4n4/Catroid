@@ -47,8 +47,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 		getTheme().applyStyle(R.style.ContrastRegular, true);
 		getTheme().applyStyle(R.style.SpacingRegular, true);
 		getTheme().applyStyle(R.style.FontRegular, true);
-		getTheme().applyStyle(R.style.CategoryIconContrastRegular, true);
+		getTheme().applyStyle(R.style.CategoryIconContrastHigh, true);
 		getTheme().applyStyle(R.style.CategoryIconVisible, true);
+		getTheme().applyStyle(R.style.CategoryIconSizeBig, true);
+
 
 		Thread.setDefaultUncaughtExceptionHandler(new BaseExceptionHandler(this));
 		checkIfCrashRecoveryAndFinishActivity(this);

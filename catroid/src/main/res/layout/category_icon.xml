@@ -26,9 +26,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
+        android:id="@+id/brick_category_icon"
         android:layout_marginEnd="10dp"
-
-
         android:src="?attr/icon_motion"
         android:visibility="?attr/category_icon_visiblity"
         android:layout_width="?attr/category_icon_size"

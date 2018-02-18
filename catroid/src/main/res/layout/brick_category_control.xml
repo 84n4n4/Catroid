@@ -24,8 +24,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/BrickCategory" >
 
-    <TextView
-        style="@style/BrickCategoryText.Control"
-        android:text="@string/category_control" />
+    <LinearLayout style="@style/BrickCategoryText.Control">
+            <include layout="@layout/icon_brick_category_control"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:text="@string/category_control" />
+    </LinearLayout>
+
 
 </LinearLayout>

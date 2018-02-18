@@ -80,7 +80,6 @@
             <enum name="vertical" value="1"/>
         </attr>
         <attr name="debugDraw" format="boolean" />
-        <attr name="category_icon" format="reference"/>
     </declare-styleable>
     <declare-styleable name="BrickLayout_Layout">
         <attr name="layout_textField" format="boolean"/>

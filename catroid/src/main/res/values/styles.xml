@@ -178,9 +178,7 @@
         <item name="android:layout_marginBottom">?attr/element_spacing</item>
     </style>
 
-    <style name="BrickContainer.Motion">
-        <item name="category_icon">?attr/icon_motion</item>
-    </style>
+    <style name="BrickContainer.Motion"></style>
 
     <style name="BrickContainer.Motion.Small">
         <item name="android:minHeight">@dimen/brick_height_small</item>
@@ -197,9 +195,7 @@
         <item name="android:background">@drawable/brick_blue_3h</item>
     </style>
 
-    <style name="BrickContainer.Sound">
-        <item name="category_icon">?attr/icon_sound</item>
-    </style>
+    <style name="BrickContainer.Sound"></style>
 
     <style name="BrickContainer.Sound.Small">
         <item name="android:minHeight">@dimen/brick_height_small</item>

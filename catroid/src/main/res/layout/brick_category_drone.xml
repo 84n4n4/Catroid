@@ -24,6 +24,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               style="@style/BrickCategory" >
 
+    <include layout="@layout/icon_brick_category_ardrone"/>
+
     <TextView
         style="@style/BrickCategoryText.Drone"
         android:text="@string/category_drone" >

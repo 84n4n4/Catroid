@@ -24,6 +24,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/BrickCategory" >
 
+    <include layout="@layout/icon_brick_category_legonxt"/>
+
     <TextView
         style="@style/BrickCategoryText.Lego"
         android:text="@string/category_lego_ev3" >

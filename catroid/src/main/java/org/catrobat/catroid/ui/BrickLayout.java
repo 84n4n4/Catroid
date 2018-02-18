@@ -68,7 +68,6 @@ public class BrickLayout extends ViewGroup {
 	private int verticalSpacing = 0;
 	private int orientation = 0;
 	protected boolean debugDraw = true;
-	private Drawable iconDrawable = null;
 
 	protected LinkedList<LineData> lines;
 
@@ -431,11 +430,6 @@ public class BrickLayout extends ViewGroup {
 
 	@Override
 	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-		ImageView iconImageView =  (ImageView) findViewById(R.id.brick_category_icon);
-		if (iconDrawable != null && iconImageView != null) {
-			iconImageView.setImageDrawable(iconDrawable);
-		}
-
 		final int count = getChildCount();
 		for (int i = 0; i < count; i++) {
 			View child = getChildAt(i);
@@ -480,7 +474,6 @@ public class BrickLayout extends ViewGroup {
 			verticalSpacing = styledAttributes.getDimensionPixelSize(R.styleable.BrickLayout_verticalSpacing, 0);
 			orientation = styledAttributes.getInteger(R.styleable.BrickLayout_orientation, HORIZONTAL);
 			debugDraw = styledAttributes.getBoolean(R.styleable.BrickLayout_debugDraw, false);
-			iconDrawable = styledAttributes.getDrawable(R.styleable.BrickLayout_category_icon);
 		} finally {
 			styledAttributes.recycle();
 		}

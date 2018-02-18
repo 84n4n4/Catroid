@@ -24,6 +24,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/BrickCategory" >
 
+    <include layout="@layout/icon_brick_category_arduino"/>
+
     <TextView
         style="@style/BrickCategoryText.Arduino"
         android:text="@string/category_arduino" >

@@ -38,7 +38,7 @@
         android:id="@+id/brick_loop_end_layout"
         style="@style/BrickContainer.Control.Small" >
 
-        <include layout="@layout/category_icon"/>
+        <include layout="@layout/icon_brick_category_control"/>
 
         <TextView
             android:id="@+id/brick_loop_end_label"

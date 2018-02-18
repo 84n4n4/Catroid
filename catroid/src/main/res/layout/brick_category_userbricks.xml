@@ -25,6 +25,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/BrickCategory" >
 
+    <include layout="@layout/icon_brick_category_control"/>
+
     <TextView
         style="@style/BrickCategoryText.UserBricks"
         android:text="@string/category_user_bricks" >

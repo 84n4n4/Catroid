@@ -24,6 +24,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/BrickCategory" >
 
+    <include layout="@layout/icon_brick_category_sound"/>
+
     <TextView
         style="@style/BrickCategoryText.Sounds"
         android:text="@string/category_sound" >

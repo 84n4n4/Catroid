@@ -26,6 +26,7 @@ package org.catrobat.catroid.ui.settingsfragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringDef;
@@ -38,6 +39,8 @@ import org.catrobat.catroid.utils.ToastUtil;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.List;
+import java.util.Locale;
 
 public class AccessibilitySettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 	public static final String TAG = AccessibilitySettingsFragment.class.getSimpleName();
@@ -57,6 +60,11 @@ public class AccessibilitySettingsFragment extends PreferenceFragment implements
 		super.onResume();
 		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getPreferenceScreen().getTitle());
+		if(Locale.getDefault().getLanguage().equals("ar")) {
+			ListPreference fontFaceList = (ListPreference) findPreference("settings_accessibility_font_style");
+			fontFaceList.setEntries(getResources().getStringArray(R.array.accessiblity_font_style_rtl));
+			fontFaceList.setEntryValues(getResources().getStringArray(R.array.accessiblity_font_style_values_rtl));
+		}
 	}
 
 	@Override

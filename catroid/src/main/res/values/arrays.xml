@@ -266,16 +266,20 @@
         <item>@string/accessibility_font_regular</item>
         <item>@string/accessibility_font_serif</item>
         <item>@string/accessibility_font_dyslexic</item>
-        <item>@string/accessibility_font_saudi</item>
-        <item>@string/accessibility_font_stc</item>
     </string-array>
-
     <string-array name="accessiblity_font_style_values">
         <item>regular</item>
         <item>serif</item>
         <item>dyslexic</item>
+    </string-array>
+    <string-array name="accessiblity_font_style_rtl">
+        <item>@string/accessibility_font_regular</item>
+        <item>@string/accessibility_font_saudi</item>
+        <item>@string/accessibility_font_stc</item>
+    </string-array>
+    <string-array name="accessiblity_font_style_values_rtl">
+        <item>regular</item>
         <item>saudi</item>
         <item>stc</item>
     </string-array>
-
 </resources>

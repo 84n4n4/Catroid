@@ -38,6 +38,17 @@ import org.catrobat.catroid.ui.settingsfragments.AccessibilitySettingsFragment;
 import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
 import org.catrobat.catroid.utils.CrashReporter;
 
+import static org.catrobat.catroid.ui.settingsfragments.AccessibilitySettingsFragment.DYSLEXIC;
+import static org.catrobat.catroid.ui.settingsfragments.AccessibilitySettingsFragment.ELEMENT_SPACING;
+import static org.catrobat.catroid.ui.settingsfragments.AccessibilitySettingsFragment.FONT_STYLE;
+import static org.catrobat.catroid.ui.settingsfragments.AccessibilitySettingsFragment.HIGH_CONTRAST;
+import static org.catrobat.catroid.ui.settingsfragments.AccessibilitySettingsFragment.ICONS;
+import static org.catrobat.catroid.ui.settingsfragments.AccessibilitySettingsFragment.ICON_HIGH_CONTRAST;
+import static org.catrobat.catroid.ui.settingsfragments.AccessibilitySettingsFragment.LARGE_ICONS;
+import static org.catrobat.catroid.ui.settingsfragments.AccessibilitySettingsFragment.LARGE_TEXT;
+import static org.catrobat.catroid.ui.settingsfragments.AccessibilitySettingsFragment.REGULAR;
+import static org.catrobat.catroid.ui.settingsfragments.AccessibilitySettingsFragment.SERIF;
+
 public abstract class BaseActivity extends AppCompatActivity {
 
 	public static final String RECOVERED_FROM_CRASH = "RECOVERED_FROM_CRASH";
@@ -57,37 +68,29 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 	private void applyAccessibilityStyles() {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-		if (sharedPreferences.getBoolean("settings_accessibility_large_text", false)) {
+		if (sharedPreferences.getBoolean(LARGE_TEXT, false)) {
 			getTheme().applyStyle(R.style.FontSizeLarge, true);
 		}
-		if (sharedPreferences.getBoolean("settings_accessibility_high_contrast", false)) {
+		if (sharedPreferences.getBoolean(HIGH_CONTRAST, false)) {
 			getTheme().applyStyle(R.style.ContrastHigh, true);
 		}
-		if (sharedPreferences.getBoolean("settings_accessibility_element_spacing", false)) {
+		if (sharedPreferences.getBoolean(ELEMENT_SPACING, false)) {
 			getTheme().applyStyle(R.style.SpacingLarge, true);
 		}
-		if (sharedPreferences.getBoolean("settings_accessibility_category_icons_high_contrast", false)) {
+		if (sharedPreferences.getBoolean(ICON_HIGH_CONTRAST, false)) {
 			getTheme().applyStyle(R.style.CategoryIconContrastHigh, true);
 		}
-		if (sharedPreferences.getBoolean("settings_accessibility_category_icons", false)) {
+		if (sharedPreferences.getBoolean(ICONS, false)) {
 			getTheme().applyStyle(R.style.CategoryIconVisible, true);
 		}
-		if (sharedPreferences.getBoolean("settings_accessibility_category_icons_big", false)) {
+		if (sharedPreferences.getBoolean(LARGE_ICONS, false)) {
 			getTheme().applyStyle(R.style.CategoryIconSizeLarge, true);
 		}
-
-		@AccessibilitySettingsFragment.FontStyle
-		String fontStyle = sharedPreferences.getString("settings_accessibility_font_style",
-				AccessibilitySettingsFragment.REGULAR);
-		switch (fontStyle) {
-			case AccessibilitySettingsFragment.SERIF:
-				getTheme().applyStyle(R.style.FontSerif, true);
-				break;
-			case AccessibilitySettingsFragment.DYSLEXIC:
-				getTheme().applyStyle(R.style.FontDyslexic, true);
-				break;
-			default:
-				break;
+		if (sharedPreferences.getString(FONT_STYLE,	REGULAR).equals(SERIF)) {
+			getTheme().applyStyle(R.style.FontSerif, true);
+		}
+		if (sharedPreferences.getString(FONT_STYLE,	REGULAR).equals(DYSLEXIC)) {
+			getTheme().applyStyle(R.style.FontDyslexic, true);
 		}
 	}
 

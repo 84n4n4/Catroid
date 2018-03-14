@@ -63,7 +63,7 @@ public class AddBrickFragment extends ListFragment {
 
 	private boolean onlyBeginnerBricks() {
 		return PreferenceManager.getDefaultSharedPreferences(getActivity())
-				.getBoolean(AccessibilitySettingsFragment.BEGINNERBRICKS, false);
+				.getBoolean(AccessibilitySettingsFragment.BEGINNER_BRICKS, false);
 	}
 
 	public static AddBrickFragment newInstance(String selectedCategory, ScriptFragment scriptFragment) {

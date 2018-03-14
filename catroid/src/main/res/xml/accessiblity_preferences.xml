@@ -28,6 +28,15 @@
         android:summary="@string/preference_description_accessibility"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
+       <PreferenceCategory android:key="setting_accessibility_profiles_category"
+           android:title="@string/preference_title_accessibility_profiles">
+            <PreferenceScreen
+                android:key="setting_accessibility_profile_screen"
+                android:summary="@string/preference_description_accessibility_profiles"
+                android:title="@string/preference_title_accessibility_profile">
+            </PreferenceScreen>
+       </PreferenceCategory>
+
        <PreferenceCategory android:key="setting_text_appearance_category"
            android:title="@string/preference_title_accessibility_text_appearance">
             <CheckBoxPreference
@@ -79,6 +88,12 @@
                android:key="settings_accessibility_element_spacing"
                android:title="@string/preference_title_accessibility_element_spacing"
                android:summary="@string/preference_description_accessibility_element_spacing"/>
+
+           <CheckBoxPreference
+               android:defaultValue="false"
+               android:key="settings_accessibility_dragndrop_delay"
+               android:title="@string/preference_title_accessibility_dragndrop_delay"
+               android:summary="@string/preference_description_accessibility_dragndrop_delay"/>
 
            <CheckBoxPreference
                android:defaultValue="false"

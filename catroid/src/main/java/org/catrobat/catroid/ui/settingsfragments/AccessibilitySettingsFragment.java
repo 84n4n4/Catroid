@@ -26,7 +26,9 @@ package org.catrobat.catroid.ui.settingsfragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringDef;
 import android.support.v7.app.AppCompatActivity;
@@ -42,14 +44,21 @@ import java.lang.annotation.RetentionPolicy;
 public class AccessibilitySettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 	public static final String TAG = AccessibilitySettingsFragment.class.getSimpleName();
 
-	@Retention(RetentionPolicy.SOURCE)
-	@StringDef({REGULAR, SERIF, DYSLEXIC})
-	public @interface FontStyle{}
 	public static final String REGULAR = "regular";
 	public static final String SERIF = "serif";
 	public static final String DYSLEXIC = "dyslexic";
 	private boolean preferenceChanged = false;
-	public static final String BEGINNERBRICKS = "settings_accessibility_beginner_bricks";
+	private static final String ACCESSIBILITY_PROFILES_SCREEN_KEY = "setting_accessibility_profile_screen";
+
+	public static final String LARGE_TEXT = "settings_accessibility_large_text";
+	public static final String HIGH_CONTRAST = "settings_accessibility_high_contrast";
+	public static final String FONT_STYLE = "settings_accessibility_font_style";
+	public static final String ICONS = "settings_accessibility_category_icons";
+	public static final String LARGE_ICONS = "settings_accessibility_category_icons_big";
+	public static final String ICON_HIGH_CONTRAST = "settings_accessibility_category_icons_high_contrast";
+	public static final String ELEMENT_SPACING = "settings_accessibility_element_spacing";
+	public static final String BEGINNER_BRICKS = "settings_accessibility_beginner_bricks";
+	public static final String DRAGNDROP_DELAY = "settings_accessibility_dragndrop_delay";
 
 	@Override
 	public void onResume() {
@@ -85,5 +94,20 @@ public class AccessibilitySettingsFragment extends PreferenceFragment implements
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
 		preferenceChanged = true;
+	}
+
+	@Override
+	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+		String key = preference.getKey();
+		switch (key) {
+			case ACCESSIBILITY_PROFILES_SCREEN_KEY:
+				getFragmentManager().beginTransaction()
+						.replace(R.id.content_frame, new AccessibilityProfilesFragment(),
+								AccessibilityProfilesFragment.TAG)
+						.addToBackStack(AccessibilityProfilesFragment.TAG)
+						.commit();
+				break;
+		}
+		return super.onPreferenceTreeClick(preferenceScreen, preference);
 	}
 }

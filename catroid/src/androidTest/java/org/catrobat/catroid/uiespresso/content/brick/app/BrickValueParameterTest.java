@@ -115,8 +115,6 @@ import org.catrobat.catroid.content.bricks.RepeatUntilBrick;
 import org.catrobat.catroid.content.bricks.ReplaceItemInUserListBrick;
 import org.catrobat.catroid.content.bricks.SayBubbleBrick;
 import org.catrobat.catroid.content.bricks.SayForBubbleBrick;
-import org.catrobat.catroid.content.bricks.SceneStartBrick;
-import org.catrobat.catroid.content.bricks.SceneTransitionBrick;
 import org.catrobat.catroid.content.bricks.SetBackgroundAndWaitBrick;
 import org.catrobat.catroid.content.bricks.SetBackgroundBrick;
 import org.catrobat.catroid.content.bricks.SetBrightnessBrick;
@@ -1063,14 +1061,14 @@ public class BrickValueParameterTest {
 		checkIfBrickShowsEditTextWithText(RepeatUntilBrick.class, R.id.brick_repeat_until_edit_text, "1 < 2");
 		checkIfBrickShowsText(RepeatUntilBrick.class, R.string.brick_wait_until_second_part);
 
-		//continue scene  - spinner "new..."
-		checkIfBrickShowsText(SceneTransitionBrick.class, R.string.brick_scene_transition);
-		checkIfBrickShowsSpinnerWithText(SceneTransitionBrick.class, R.id.brick_scene_transition_spinner, R.string.new_broadcast_message);
-
-		//start scene - spinner "new..."
-		checkIfBrickShowsText(SceneStartBrick.class, R.string.brick_scene_start);
-		checkIfBrickShowsSpinnerWithText(SceneStartBrick.class, R.id.brick_scene_start_spinner, R.string
-				.new_broadcast_message);
+//		//continue scene  - spinner "new..."
+//		checkIfBrickShowsText(SceneTransitionBrick.class, R.string.brick_scene_transition);
+//		checkIfBrickShowsSpinnerWithText(SceneTransitionBrick.class, R.id.brick_scene_transition_spinner, R.string.new_broadcast_message);
+//
+//		//start scene - spinner "new..."
+//		checkIfBrickShowsText(SceneStartBrick.class, R.string.brick_scene_start);
+//		checkIfBrickShowsSpinnerWithText(SceneStartBrick.class, R.id.brick_scene_start_spinner, R.string
+//				.new_broadcast_message);
 
 		//stop scripts - spinner "stop the script"
 		checkIfBrickShowsText(StopScriptBrick.class, R.string.brick_stop_script);

@@ -122,7 +122,7 @@ public class ScriptController {
 		dstSprite.getScriptList().add(script);
 	}
 
-	public void unpack(Script scriptToUnpack, Sprite dstSprite) throws IOException, CloneNotSupportedException {
+	public void unpack(Script scriptToUnpack, Sprite dstSprite) throws CloneNotSupportedException {
 		Script script = scriptToUnpack.clone();
 
 		for (Brick brick : script.getBrickList()) {

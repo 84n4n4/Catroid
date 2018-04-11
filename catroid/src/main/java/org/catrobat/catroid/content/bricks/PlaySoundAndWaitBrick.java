@@ -22,9 +22,13 @@
  */
 package org.catrobat.catroid.content.bricks;
 
+import android.view.View;
+import android.widget.TextView;
+
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 import org.catrobat.catroid.ProjectManager;
+import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.Sprite;
@@ -39,7 +43,6 @@ public class PlaySoundAndWaitBrick extends PlaySoundBrick {
 	private static final long serialVersionUID = 1L;
 
 	public PlaySoundAndWaitBrick() {
-		wait = true;
 	}
 
 	@Override
@@ -47,6 +50,11 @@ public class PlaySoundAndWaitBrick extends PlaySoundBrick {
 		PlaySoundAndWaitBrick clone = new PlaySoundAndWaitBrick();
 		clone.setSound(sound);
 		return clone;
+	}
+
+	@Override
+	protected void setBrickLabel(View view) {
+		((TextView) view.findViewById(R.id.brick_play_sound_label)).setText(R.string.brick_play_sound_and_wait);
 	}
 
 	@Override

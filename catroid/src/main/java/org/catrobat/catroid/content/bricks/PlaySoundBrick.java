@@ -51,14 +51,12 @@ public class PlaySoundBrick extends BrickBaseType implements
 	private static final long serialVersionUID = 1L;
 
 	protected SoundInfo sound;
-	protected transient boolean wait;
 
 	private transient int spinnerSelectionBuffer = 0;
 	private transient Spinner spinner;
 	private transient SpinnerAdapterWithNewOption spinnerAdapter;
 
 	public PlaySoundBrick() {
-		wait = false;
 	}
 
 	public SoundInfo getSound() {
@@ -119,11 +117,13 @@ public class PlaySoundBrick extends BrickBaseType implements
 		});
 		spinner.setSelection(spinnerAdapter.getPosition(sound != null ? sound.getName() : null));
 
-		if (wait) {
-			((TextView) view.findViewById(R.id.brick_play_sound_label)).setText(R.string.brick_play_sound_and_wait);
-		}
+		setBrickLabel(view);
 
 		return view;
+	}
+
+	protected void setBrickLabel(View view) {
+		((TextView) view.findViewById(R.id.brick_play_sound_label)).setText(R.string.brick_play_sound);
 	}
 
 	@Override
@@ -159,9 +159,7 @@ public class PlaySoundBrick extends BrickBaseType implements
 		spinner.setAdapter(spinnerAdapter);
 		spinner.setSelection(spinnerAdapter.getPosition(sound != null ? sound.getName() : null));
 
-		if (wait) {
-			((TextView) view.findViewById(R.id.brick_play_sound_label)).setText(R.string.brick_play_sound_and_wait);
-		}
+		setBrickLabel(view);
 
 		return view;
 	}

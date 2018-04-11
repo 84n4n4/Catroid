@@ -433,7 +433,7 @@ public class RtlBrickTest {
 		checkIfBrickISRtl(PlaySoundBrick.class, R.id.brick_play_sound_layout);
 
 		// Start sound and wait
-		checkIfBrickISRtl(PlaySoundAndWaitBrick.class, R.id.brick_play_sound_and_wait_layout);
+		checkIfBrickISRtl(PlaySoundAndWaitBrick.class, R.id.brick_play_sound_layout);
 
 		// Stop all sounds
 		checkIfBrickISRtl(StopAllSoundsBrick.class, R.id.brick_stop_all_sounds_layout);

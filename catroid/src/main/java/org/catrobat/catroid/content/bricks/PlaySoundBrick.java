@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
@@ -49,27 +50,29 @@ public class PlaySoundBrick extends BrickBaseType implements
 
 	private static final long serialVersionUID = 1L;
 
-	private SoundInfo sound;
-	private transient SoundInfo previouslySelectedSound;
+	protected SoundInfo sound;
+	protected transient boolean wait;
 
+	private transient int spinnerSelectionBuffer = 0;
 	private transient Spinner spinner;
 	private transient SpinnerAdapterWithNewOption spinnerAdapter;
 
 	public PlaySoundBrick() {
+		wait = false;
 	}
 
 	public SoundInfo getSound() {
 		return sound;
 	}
 
-	public void setSoundInfo(SoundInfo soundInfo) {
-		this.sound = soundInfo;
+	public void setSound(SoundInfo sound) {
+		this.sound = sound;
 	}
 
 	@Override
 	public Brick clone() {
 		PlaySoundBrick clone = new PlaySoundBrick();
-		clone.setSoundInfo(sound);
+		clone.setSound(sound);
 		return clone;
 	}
 
@@ -115,12 +118,17 @@ public class PlaySoundBrick extends BrickBaseType implements
 			}
 		});
 		spinner.setSelection(spinnerAdapter.getPosition(sound != null ? sound.getName() : null));
+
+		if (wait) {
+			((TextView) view.findViewById(R.id.brick_play_sound_label)).setText(R.string.brick_play_sound_and_wait);
+		}
+
 		return view;
 	}
 
 	@Override
 	public boolean onNewOptionInDropDownClicked(View v) {
-		previouslySelectedSound = sound;
+		spinnerSelectionBuffer = spinner.getSelectedItemPosition();
 		new NewSoundDialogFragment(this,
 				ProjectManager.getInstance().getCurrentScene(),
 				ProjectManager.getInstance().getCurrentSprite()) {
@@ -128,8 +136,7 @@ public class PlaySoundBrick extends BrickBaseType implements
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				super.onCancel(dialog);
-				sound = previouslySelectedSound;
-				spinner.setSelection(spinnerAdapter.getPosition(sound != null ? sound.getName() : null));
+				spinner.setSelection(spinnerSelectionBuffer);
 			}
 		}.show(((Activity) v.getContext()).getFragmentManager(), NewSoundDialogFragment.TAG);
 		return false;
@@ -151,6 +158,11 @@ public class PlaySoundBrick extends BrickBaseType implements
 		spinnerAdapter = new SpinnerAdapterWithNewOption(context, getSoundNames());
 		spinner.setAdapter(spinnerAdapter);
 		spinner.setSelection(spinnerAdapter.getPosition(sound != null ? sound.getName() : null));
+
+		if (wait) {
+			((TextView) view.findViewById(R.id.brick_play_sound_label)).setText(R.string.brick_play_sound_and_wait);
+		}
+
 		return view;
 	}
 

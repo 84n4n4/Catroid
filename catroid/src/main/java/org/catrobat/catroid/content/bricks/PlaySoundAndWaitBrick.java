@@ -22,148 +22,48 @@
  */
 package org.catrobat.catroid.content.bricks;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.Spinner;
-
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 import org.catrobat.catroid.ProjectManager;
-import org.catrobat.catroid.R;
+import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.content.bricks.brickspinner.SpinnerAdapterWithNewOption;
 import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.io.SoundManager;
-import org.catrobat.catroid.ui.recyclerview.dialog.NewSoundDialogFragment;
-import org.catrobat.catroid.ui.recyclerview.dialog.dialoginterface.NewItemInterface;
+import org.catrobat.catroid.utils.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class PlaySoundAndWaitBrick extends BrickBaseType implements
-		SpinnerAdapterWithNewOption.OnNewOptionInDropDownClickListener,
-		NewItemInterface<SoundInfo> {
+public class PlaySoundAndWaitBrick extends PlaySoundBrick {
 
 	private static final long serialVersionUID = 1L;
 
-	private SoundInfo sound;
-	private transient SoundInfo previouslySelectedSound;
-
-	private transient Spinner spinner;
-	private transient SpinnerAdapterWithNewOption spinnerAdapter;
-
 	public PlaySoundAndWaitBrick() {
-	}
-
-	public SoundInfo getSound() {
-		return sound;
-	}
-
-	public void setSoundInfo(SoundInfo soundInfo) {
-		this.sound = soundInfo;
-	}
-
-	private SoundInfo getSoundByName(String name) {
-		for (SoundInfo sound : ProjectManager.getInstance().getCurrentSprite().getSoundList()) {
-			if (sound.getName().equals(name)) {
-				return sound;
-			}
-		}
-		return null;
-	}
-
-	private List<String> getSoundNames() {
-		List<String> soundNames = new ArrayList<>();
-		for (SoundInfo sound : ProjectManager.getInstance().getCurrentSprite().getSoundList()) {
-			soundNames.add(sound.getName());
-		}
-		return soundNames;
+		wait = true;
 	}
 
 	@Override
-	public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
-
-		view = View.inflate(context, R.layout.brick_play_sound_and_wait, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
-		setCheckboxView(R.id.brick_play_sound_and_wait_checkbox);
-
-		spinner = view.findViewById(R.id.playsound_spinner);
-		spinnerAdapter = new SpinnerAdapterWithNewOption(context, getSoundNames());
-		spinnerAdapter.setOnDropDownItemClickListener(this);
-
-		spinner.setAdapter(spinnerAdapter);
-		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				if (position != 0) {
-					sound = getSoundByName(spinnerAdapter.getItem(position));
-				}
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-			}
-		});
-		spinner.setSelection(spinnerAdapter.getPosition(sound != null ? sound.getName() : null));
-		return view;
-	}
-
-	@Override
-	public boolean onNewOptionInDropDownClicked(View v) {
-		previouslySelectedSound = sound;
-		new NewSoundDialogFragment(this,
-				ProjectManager.getInstance().getCurrentScene(),
-				ProjectManager.getInstance().getCurrentSprite()) {
-
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				super.onCancel(dialog);
-				sound = previouslySelectedSound;
-				spinner.setSelection(spinnerAdapter.getPosition(sound != null ? sound.getName() : null));
-			}
-		}.show(((Activity) v.getContext()).getFragmentManager(), NewSoundDialogFragment.TAG);
-		return false;
-	}
-
-	@Override
-	public void addItem(SoundInfo item) {
-		ProjectManager.getInstance().getCurrentSprite().getSoundList().add(item);
-		spinnerAdapter.add(item.getName());
-		sound = item;
-		spinner.setSelection(spinnerAdapter.getPosition(item.getName()));
-	}
-
-	@Override
-	public View getPrototypeView(Context context) {
-		View view = View.inflate(context, R.layout.brick_play_sound_and_wait, null);
-		spinner = view.findViewById(R.id.playsound_spinner);
-
-		spinnerAdapter = new SpinnerAdapterWithNewOption(context, getSoundNames());
-		spinner.setAdapter(spinnerAdapter);
-		spinner.setSelection(spinnerAdapter.getPosition(sound != null ? sound.getName() : null));
-		return view;
+	public Brick clone() {
+		PlaySoundAndWaitBrick clone = new PlaySoundAndWaitBrick();
+		clone.setSound(sound);
+		return clone;
 	}
 
 	@Override
 	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
 		sequence.addAction(sprite.getActionFactory().createPlaySoundAction(sprite, sound));
-		sequence.addAction(sprite.getActionFactory().createWaitAction(sprite,
-				new Formula(getDurationOfSoundFile(sprite, sound))));
-		return null;
-	}
 
-	private float getDurationOfSoundFile(Sprite sprite, SoundInfo sound) {
 		float duration = 0;
 
-		if (sound != null && sprite.getSoundList().contains(sound) && sound.getAbsolutePath() != null) {
-			duration = (SoundManager.getInstance().getDurationOfSoundFile(sound.getAbsolutePath())) / 1000;
+		if (sound != null) {
+			String soundPath = Utils.buildPath(ProjectManager.getInstance().getCurrentScene().getPath(),
+					Constants.SOUND_DIRECTORY,
+					sound.getFileName());
+
+			duration = SoundManager.getInstance().getDurationOfSoundFile(soundPath) / 1000;
 		}
 
-		return duration;
+		sequence.addAction(sprite.getActionFactory().createWaitAction(sprite, new Formula(duration)));
+		return null;
 	}
 }

@@ -66,12 +66,12 @@ public class ScriptController {
 			}
 
 			if (brick instanceof PlaySoundBrick) {
-				((PlaySoundBrick) brick).setSoundInfo(soundController
+				((PlaySoundBrick) brick).setSound(soundController
 						.findOrCopy(((PlaySoundBrick) brick).getSound(), srcScene, dstScene, dstSprite));
 			}
 
 			if (brick instanceof PlaySoundAndWaitBrick) {
-				((PlaySoundAndWaitBrick) brick).setSoundInfo(soundController
+				((PlaySoundAndWaitBrick) brick).setSound(soundController
 						.findOrCopy(((PlaySoundAndWaitBrick) brick).getSound(), srcScene, dstScene, dstSprite));
 			}
 		}
@@ -109,12 +109,12 @@ public class ScriptController {
 			}
 
 			if (brick instanceof PlaySoundBrick) {
-				((PlaySoundBrick) brick).setSoundInfo(soundController
+				((PlaySoundBrick) brick).setSound(soundController
 						.packForSprite(((PlaySoundBrick) brick).getSound(), dstSprite));
 			}
 
 			if (brick instanceof PlaySoundAndWaitBrick) {
-				((PlaySoundAndWaitBrick) brick).setSoundInfo(soundController
+				((PlaySoundAndWaitBrick) brick).setSound(soundController
 						.packForSprite(((PlaySoundAndWaitBrick) brick).getSound(), dstSprite));
 			}
 		}
@@ -165,7 +165,7 @@ public class ScriptController {
 
 			if (brick instanceof PlaySoundBrick) {
 				((PlaySoundBrick) brick)
-						.setSoundInfo(soundController
+						.setSound(soundController
 						.unpackForSprite(((PlaySoundBrick) brick).getSound(),
 								dstScene,
 								dstSprite));
@@ -173,7 +173,7 @@ public class ScriptController {
 
 			if (brick instanceof PlaySoundAndWaitBrick) {
 				((PlaySoundAndWaitBrick) brick)
-						.setSoundInfo(soundController
+						.setSound(soundController
 						.unpackForSprite(((PlaySoundAndWaitBrick) brick).getSound(),
 								dstScene,
 								dstSprite));

@@ -51,23 +51,22 @@ public class SetLookBrick extends BrickBaseType implements
 	private static final long serialVersionUID = 1L;
 
 	protected LookData look;
-	private transient LookData previouslySelectedLook;
+	protected transient boolean wait;
 
+	private transient int spinnerSelectionBuffer = 0;
 	private transient Spinner spinner;
 	private transient SpinnerAdapterWithNewOption spinnerAdapter;
-
-	protected transient boolean wait;
 
 	public SetLookBrick() {
 		wait = false;
 	}
 
 	public LookData getLook() {
-		return this.look;
+		return look;
 	}
 
-	public void setLook(LookData lookData) {
-		this.look = lookData;
+	public void setLook(LookData look) {
+		this.look = look;
 	}
 
 	@Override
@@ -78,7 +77,7 @@ public class SetLookBrick extends BrickBaseType implements
 	}
 
 	private LookData getLookByName(String name) {
-		for (LookData look : ProjectManager.getInstance().getCurrentSprite().getLookList()) {
+		for (LookData look : getSprite().getLookList()) {
 			if (look.getName().equals(name)) {
 				return look;
 			}
@@ -88,7 +87,7 @@ public class SetLookBrick extends BrickBaseType implements
 
 	private List<String> getLookNames() {
 		List<String> lookNames = new ArrayList<>();
-		for (LookData look : ProjectManager.getInstance().getCurrentSprite().getLookList()) {
+		for (LookData look : getSprite().getLookList()) {
 			lookNames.add(look.getName());
 		}
 		return lookNames;
@@ -96,7 +95,6 @@ public class SetLookBrick extends BrickBaseType implements
 
 	@Override
 	public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
-
 		view = View.inflate(context, R.layout.brick_set_look, null);
 		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 		setCheckboxView(R.id.brick_set_look_checkbox);
@@ -120,7 +118,7 @@ public class SetLookBrick extends BrickBaseType implements
 		});
 		spinner.setSelection(spinnerAdapter.getPosition(look != null ? look.getName() : null));
 
-		if (getSprite().getName().equals(context.getString(R.string.background))) {
+		if (getSprite().equals(ProjectManager.getInstance().getCurrentScene().getBackgroundSprite())) {
 			TextView textField = view.findViewById(R.id.brick_set_look_prototype_text_view);
 			textField.setText(R.string.brick_set_background);
 		}
@@ -134,7 +132,7 @@ public class SetLookBrick extends BrickBaseType implements
 
 	@Override
 	public boolean onNewOptionInDropDownClicked(View v) {
-		previouslySelectedLook = look;
+		spinnerSelectionBuffer = spinner.getSelectedItemPosition();
 		new NewLookDialogFragment(this,
 				ProjectManager.getInstance().getCurrentScene(),
 				ProjectManager.getInstance().getCurrentSprite()) {
@@ -142,8 +140,7 @@ public class SetLookBrick extends BrickBaseType implements
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				super.onCancel(dialog);
-				look = previouslySelectedLook;
-				spinner.setSelection(spinnerAdapter.getPosition(look != null ? look.getName() : null));
+				spinner.setSelection(spinnerSelectionBuffer);
 			}
 		}.show(((Activity) v.getContext()).getFragmentManager(), NewLookDialogFragment.TAG);
 		return false;
@@ -161,16 +158,16 @@ public class SetLookBrick extends BrickBaseType implements
 	public View getPrototypeView(Context context) {
 		View view = View.inflate(context, R.layout.brick_set_look, null);
 
-		if (getSprite().getName().equals(context.getString(R.string.background))) {
-			TextView textField = view.findViewById(R.id.brick_set_look_prototype_text_view);
-			textField.setText(R.string.brick_set_background);
+		if (getSprite().equals(ProjectManager.getInstance().getCurrentScene().getBackgroundSprite())) {
+			((TextView) view.findViewById(R.id.brick_set_look_prototype_text_view))
+					.setText(R.string.brick_set_background);
 		}
 
 		if (!wait) {
 			view.findViewById(R.id.brick_set_look_and_wait).setVisibility(View.GONE);
 		}
-		spinner = view.findViewById(R.id.brick_set_look_spinner);
 
+		spinner = view.findViewById(R.id.brick_set_look_spinner);
 		spinnerAdapter = new SpinnerAdapterWithNewOption(context, getLookNames());
 		spinner.setAdapter(spinnerAdapter);
 		spinner.setSelection(spinnerAdapter.getPosition(look != null ? look.getName() : null));

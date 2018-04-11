@@ -37,22 +37,20 @@ public class SetBackgroundBrick extends SetLookBrick {
 	}
 
 	@Override
-	protected Sprite getSprite() {
-		return ProjectManager.getInstance().getCurrentScene().getSpriteList().get(0);
-	}
-
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		Sprite backgroundSprite = ProjectManager.getInstance().getSceneToPlay().getSpriteList().get(0);
-		sequence.addAction(sprite.getActionFactory().createSetLookAction(backgroundSprite, look, wait));
-
-		return Collections.emptyList();
-	}
-
-	@Override
 	public Brick clone() {
 		SetBackgroundBrick clonedBrick = new SetBackgroundBrick();
 		clonedBrick.setLook(look);
 		return clonedBrick;
+	}
+
+	@Override
+	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+		sequence.addAction(sprite.getActionFactory().createSetLookAction(getSprite(), look, wait));
+		return Collections.emptyList();
+	}
+
+	@Override
+	protected Sprite getSprite() {
+		return ProjectManager.getInstance().getCurrentScene().getSpriteList().get(0);
 	}
 }

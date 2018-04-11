@@ -49,8 +49,8 @@ public class SceneTransitionBrick extends BrickBaseType implements
 	private static final long serialVersionUID = 1L;
 
 	private String sceneForTransition;
-	private transient String previouslySelectedScene;
 
+	private transient int spinnerSelectionBuffer = 0;
 	private transient Spinner spinner;
 	private transient SpinnerAdapterWithNewOption spinnerAdapter;
 
@@ -105,14 +105,13 @@ public class SceneTransitionBrick extends BrickBaseType implements
 
 	@Override
 	public boolean onNewOptionInDropDownClicked(View v) {
-		previouslySelectedScene = sceneForTransition;
+		spinnerSelectionBuffer = spinner.getSelectedItemPosition();
 		new NewSceneDialogFragment(this, ProjectManager.getInstance().getCurrentProject()) {
 
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				super.onCancel(dialog);
-				sceneForTransition = previouslySelectedScene;
-				spinner.setSelection(spinnerAdapter.getPosition(previouslySelectedScene));
+				spinner.setSelection(spinnerSelectionBuffer);
 			}
 		}.show(((Activity) v.getContext()).getFragmentManager(), NewSceneDialogFragment.TAG);
 		return false;

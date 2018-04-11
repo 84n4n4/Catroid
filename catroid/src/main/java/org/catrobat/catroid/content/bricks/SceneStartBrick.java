@@ -49,13 +49,13 @@ public class SceneStartBrick extends BrickBaseType implements
 	private static final long serialVersionUID = 1L;
 
 	private String sceneToStart;
-	private transient String previouslySelectedScene;
 
+	private transient int spinnerSelectionBuffer = 0;
 	private transient Spinner spinner;
 	private transient SpinnerAdapterWithNewOption spinnerAdapter;
 
-	public SceneStartBrick(String scene) {
-		this.sceneToStart = scene;
+	public SceneStartBrick(String sceneToStart) {
+		this.sceneToStart = sceneToStart;
 	}
 
 	public String getSceneToStart() {
@@ -102,14 +102,13 @@ public class SceneStartBrick extends BrickBaseType implements
 
 	@Override
 	public boolean onNewOptionInDropDownClicked(View v) {
-		previouslySelectedScene = sceneToStart;
+		spinnerSelectionBuffer = spinner.getSelectedItemPosition();
 		new NewSceneDialogFragment(this, ProjectManager.getInstance().getCurrentProject()) {
 
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				super.onCancel(dialog);
-				sceneToStart = previouslySelectedScene;
-				spinner.setSelection(spinnerAdapter.getPosition(previouslySelectedScene));
+				spinner.setSelection(spinnerSelectionBuffer);
 			}
 		}.show(((Activity) v.getContext()).getFragmentManager(), NewSceneDialogFragment.TAG);
 		return false;

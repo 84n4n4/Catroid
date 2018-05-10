@@ -25,8 +25,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginBottom="20dp"
-    android:layout_marginTop="20dp">
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp">
 
     <org.catrobat.catroid.utils.BorderTextView
         android:id="@+id/intro_dialog_title"

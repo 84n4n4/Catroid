@@ -25,25 +25,23 @@ package org.catrobat.catroid.ui.dialogs;
 
 import android.app.Dialog;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
 
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
+import org.catrobat.catroid.utils.SnackbarUtil;
 
 import java.util.LinkedList;
 import java.util.Queue;
-
-import static org.catrobat.catroid.ui.fragment.FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG;
 
 public class FormulaEditorIntroDialog extends Dialog implements View.OnClickListener {
 
@@ -55,12 +53,14 @@ public class FormulaEditorIntroDialog extends Dialog implements View.OnClickList
 	public FormulaEditorIntroDialog(FormulaEditorFragment formulaEditorFragment, int style) {
 		super(formulaEditorFragment.getActivity(), style);
 		this.formulaEditorFragment = formulaEditorFragment;
-		fillIntroDialogSlides();
+		introSlides = getIntroDialogSlides();
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		this.setCanceledOnTouchOutside(false);
 
 		setContentView(R.layout.dialog_formula_editor_intro);
 
@@ -70,12 +70,10 @@ public class FormulaEditorIntroDialog extends Dialog implements View.OnClickList
 		Drawable background = new ColorDrawable(Color.BLACK);
 		background.setAlpha(200);
 		getWindow().setBackgroundDrawable(background);
+
 		getWindow().setDimAmount(0f);
 
-		getWindow().setGravity(Gravity.CENTER);
-
 		introTitle = findViewById(R.id.intro_dialog_title);
-
 		introSummary = findViewById(R.id.intro_dialog_summary);
 
 		(findViewById(R.id.intro_dialog_skip_button)).setOnClickListener(this);
@@ -99,7 +97,7 @@ public class FormulaEditorIntroDialog extends Dialog implements View.OnClickList
 
 	private void nextSlide() {
 		if(introSlides.isEmpty()) {
-			dismiss();
+			onBackPressed();
 		} else {
 			introSlides.remove().applySlide();
 		}
@@ -107,12 +105,15 @@ public class FormulaEditorIntroDialog extends Dialog implements View.OnClickList
 
 	@Override
 	public void onBackPressed() {
-		//TODO write to shared preferences that its been skipped
+		SnackbarUtil.setHintShown(formulaEditorFragment.getActivity(),
+				formulaEditorFragment.getActivity().getResources().getResourceName(R.string.formula_editor_intro_title_formula_editor));
 		super.onBackPressed();
 	}
 
 	private static int NONE = -1;
+	
 	private class IntroSlide {
+
 		int titleStringId;
 		int summaryStringId;
 		int targetViewId;
@@ -149,38 +150,41 @@ public class FormulaEditorIntroDialog extends Dialog implements View.OnClickList
 			targetView.startAnimation(alphaAnimation);
 		}
 
+		private int getViewYCoordinates(int resourceId) {
+			Rect rectangle = new Rect();
+			Window window = getWindow();
+			window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
+			int statusBarHeight = rectangle.top;
+			int contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
+			int titleBarHeight= contentViewTop - statusBarHeight;
+
+			int[] location = new int[2];
+			View view = formulaEditorFragment.getView().findViewById(resourceId);
+			view.getLocationOnScreen(location);
+			return location[1] + titleBarHeight;
+		}
+
 		private void setPosition() {
-			int[] keyboardLocation = new int[2];
-			View computeButtonView = formulaEditorFragment.getView().findViewById(R.id.formula_editor_keyboard_compute);
-			computeButtonView.getLocationOnScreen(keyboardLocation);
-
-			TypedValue tv = new TypedValue();
-			int toolbarLocation = 0;
-			if (formulaEditorFragment.getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
-			{
-				toolbarLocation = TypedValue.complexToDimensionPixelSize(tv.data,formulaEditorFragment.getActivity()
-						.getResources().getDisplayMetrics());
-			}
-
-			int[] targetLocation = new int[2];
-			View targetView = formulaEditorFragment.getView().findViewById(targetViewId);
-			targetView.getLocationOnScreen(targetLocation);
+			int keyboardLocation = getViewYCoordinates(R.id.formula_editor_keyboard_compute);
+			int targetViewLocation = getViewYCoordinates(targetViewId);
+			int toolbarLocation = getViewYCoordinates(R.id.formula_editor_brick_space);
 
 			getWindow().setGravity(Gravity.TOP);
-
 			WindowManager.LayoutParams dialogLayoutParams = getWindow().getAttributes();
-			if(targetLocation[1] >= keyboardLocation[1])
+			if(targetViewLocation >= keyboardLocation)
 			{
 				dialogLayoutParams.y = toolbarLocation;
+
 			} else {
-				dialogLayoutParams.y = keyboardLocation[1];
+				dialogLayoutParams.y = keyboardLocation;
+
 			}
 			getWindow().setAttributes(dialogLayoutParams);
 		}
 	}
 
-	private void fillIntroDialogSlides() {
-		introSlides = new LinkedList<>();
+	private Queue<IntroSlide> getIntroDialogSlides() {
+		Queue<IntroSlide> introSlides = new LinkedList<>();
 		introSlides.add(new IntroSlide(
 				R.string.formula_editor_intro_title_formula_editor,
 				R.string.formula_editor_intro_summary_formula_editor,
@@ -225,5 +229,6 @@ public class FormulaEditorIntroDialog extends Dialog implements View.OnClickList
 				R.string.formula_editor_intro_title_data,
 				R.string.formula_editor_intro_summary_data,
 				R.id.formula_editor_keyboard_data));
+		return introSlides;
 	}
 }

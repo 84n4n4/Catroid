@@ -69,13 +69,14 @@ import org.catrobat.catroid.formulaeditor.UserVariable;
 import org.catrobat.catroid.ui.BottomBar;
 import org.catrobat.catroid.ui.dialogs.FormulaEditorComputeDialog;
 import org.catrobat.catroid.ui.dialogs.FormulaEditorIntroDialog;
-import org.catrobat.catroid.ui.dialogs.StageDialog;
 import org.catrobat.catroid.ui.recyclerview.dialog.NewStringDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.dialog.dialoginterface.NewItemInterface;
 import org.catrobat.catroid.ui.recyclerview.fragment.CategoryListFragment;
 import org.catrobat.catroid.ui.recyclerview.fragment.DataListFragment;
-import org.catrobat.catroid.utils.FormulaEditorIntroUtil;
+import org.catrobat.catroid.utils.SnackbarUtil;
 import org.catrobat.catroid.utils.ToastUtil;
+
+import static org.catrobat.catroid.utils.SnackbarUtil.wasHintAlreadyShown;
 
 public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.OnGlobalLayoutListener,
 		DataListFragment.FormulaEditorDataInterface,
@@ -173,14 +174,16 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 			formulaEditorFragment.updateBrickView();
 			formulaEditorFragment.setInputFormula(brickField, SET_FORMULA_ON_SWITCH_EDIT_TEXT);
 		}
-
-		//FormulaEditorIntroUtil.showIntro(view);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		new FormulaEditorIntroDialog(this, R.style.stage_dialog).show();
+		if (SnackbarUtil.areHintsEnabled(this.getActivity()) &&
+				!wasHintAlreadyShown(getActivity(), getActivity().getResources()
+						.getResourceName(R.string.formula_editor_intro_title_formula_editor))) {
+			new FormulaEditorIntroDialog(this, R.style.stage_dialog).show();
+		}
 	}
 
 	public static boolean saveFormulaForUserBrickParameterChange() {
@@ -292,10 +295,6 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 
 		BottomBar.showBottomBar(getActivity());
 		BottomBar.showPlayButton(getActivity());
-
-		//if (FormulaEditorIntroUtil.isIntroVisible()) {
-		//	FormulaEditorIntroUtil.dismissIntro();
-		//}
 	}
 
 	@Override
@@ -304,8 +303,6 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 		fragmentView = inflater.inflate(R.layout.fragment_formula_editor, container, false);
 		fragmentView.setFocusableInTouchMode(true);
 		fragmentView.requestFocus();
-
-		//FormulaEditorIntroUtil.initializeIntro(getActivity(), (ViewGroup) getView(), inflater);
 
 		context = getActivity();
 

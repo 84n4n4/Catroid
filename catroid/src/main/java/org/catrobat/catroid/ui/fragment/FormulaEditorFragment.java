@@ -68,6 +68,8 @@ import org.catrobat.catroid.formulaeditor.UserList;
 import org.catrobat.catroid.formulaeditor.UserVariable;
 import org.catrobat.catroid.ui.BottomBar;
 import org.catrobat.catroid.ui.dialogs.FormulaEditorComputeDialog;
+import org.catrobat.catroid.ui.dialogs.FormulaEditorIntroDialog;
+import org.catrobat.catroid.ui.dialogs.StageDialog;
 import org.catrobat.catroid.ui.recyclerview.dialog.NewStringDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.dialog.dialoginterface.NewItemInterface;
 import org.catrobat.catroid.ui.recyclerview.fragment.CategoryListFragment;
@@ -172,7 +174,13 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 			formulaEditorFragment.setInputFormula(brickField, SET_FORMULA_ON_SWITCH_EDIT_TEXT);
 		}
 
-		FormulaEditorIntroUtil.showIntro(view);
+		//FormulaEditorIntroUtil.showIntro(view);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		new FormulaEditorIntroDialog(this, R.style.stage_dialog).show();
 	}
 
 	public static boolean saveFormulaForUserBrickParameterChange() {
@@ -285,9 +293,9 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 		BottomBar.showBottomBar(getActivity());
 		BottomBar.showPlayButton(getActivity());
 
-		if (FormulaEditorIntroUtil.isIntroVisible()) {
-			FormulaEditorIntroUtil.dismissIntro();
-		}
+		//if (FormulaEditorIntroUtil.isIntroVisible()) {
+		//	FormulaEditorIntroUtil.dismissIntro();
+		//}
 	}
 
 	@Override
@@ -297,7 +305,7 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 		fragmentView.setFocusableInTouchMode(true);
 		fragmentView.requestFocus();
 
-		FormulaEditorIntroUtil.initializeIntro(getActivity(), (ViewGroup) getView(), inflater);
+		//FormulaEditorIntroUtil.initializeIntro(getActivity(), (ViewGroup) getView(), inflater);
 
 		context = getActivity();
 
@@ -793,7 +801,7 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 		formulaEditorBrick.getGlobalVisibleRect(brickRect);
 		formulaEditorKeyboard.getGlobalVisibleRect(keyboardRec);
 
-		FormulaEditorIntroUtil.prepareIntro(fragmentView);
+		//FormulaEditorIntroUtil.prepareIntro(fragmentView);
 	}
 
 	public void addResourceToActiveFormula(int resource) {

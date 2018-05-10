@@ -34,6 +34,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
 
 import org.catrobat.catroid.R;
@@ -46,8 +47,8 @@ import static org.catrobat.catroid.ui.fragment.FormulaEditorFragment.FORMULA_EDI
 
 public class FormulaEditorIntroDialog extends Dialog implements View.OnClickListener {
 
-	TextView introTitle;
-	TextView introSummary;
+	private TextView introTitle;
+	private TextView introSummary;
 	private Queue<IntroSlide> introSlides;
 	private FormulaEditorFragment formulaEditorFragment;
 
@@ -55,13 +56,6 @@ public class FormulaEditorIntroDialog extends Dialog implements View.OnClickList
 		super(formulaEditorFragment.getActivity(), style);
 		this.formulaEditorFragment = formulaEditorFragment;
 		fillIntroDialogSlides();
-	}
-
-	private FormulaEditorIntroDialog(FormulaEditorFragment formulaEditorFragment, int style,
-			Queue<IntroSlide> remainingIntroslides) {
-		super(formulaEditorFragment.getActivity(), style);
-		this.formulaEditorFragment = formulaEditorFragment;
-		introSlides = remainingIntroslides;
 	}
 
 	@Override
@@ -74,20 +68,20 @@ public class FormulaEditorIntroDialog extends Dialog implements View.OnClickList
 				, WindowManager.LayoutParams.WRAP_CONTENT);
 
 		Drawable background = new ColorDrawable(Color.BLACK);
-		background.setAlpha(130);
+		background.setAlpha(200);
 		getWindow().setBackgroundDrawable(background);
 		getWindow().setDimAmount(0f);
 
 		getWindow().setGravity(Gravity.CENTER);
 
-		introTitle = (TextView) findViewById(R.id.intro_dialog_title);
+		introTitle = findViewById(R.id.intro_dialog_title);
 
-		introSummary = (TextView) findViewById(R.id.intro_dialog_summary);
+		introSummary = findViewById(R.id.intro_dialog_summary);
 
 		(findViewById(R.id.intro_dialog_skip_button)).setOnClickListener(this);
 		(findViewById(R.id.intro_dialog_next_button)).setOnClickListener(this);
 
-		introSlides.remove().applySlide(this);
+		nextSlide();
 	}
 
 	@Override
@@ -107,8 +101,7 @@ public class FormulaEditorIntroDialog extends Dialog implements View.OnClickList
 		if(introSlides.isEmpty()) {
 			dismiss();
 		} else {
-			dismiss();
-			new FormulaEditorIntroDialog(formulaEditorFragment, R.style.stage_dialog, introSlides).show();
+			introSlides.remove().applySlide();
 		}
 	}
 
@@ -132,28 +125,57 @@ public class FormulaEditorIntroDialog extends Dialog implements View.OnClickList
 			this.targetViewId = targetViewId;
 		}
 
-		void applySlide(FormulaEditorIntroDialog dialog) {
-			dialog.introTitle.setText(titleStringId);
-			dialog.introSummary.setText(summaryStringId);
-
+		void applySlide() {
+			setText();
 			if(targetViewId != NONE) {
-				int[] targetLocation = new int[2];
-				formulaEditorFragment.getView().findViewById(targetViewId).getLocationOnScreen(targetLocation); //PX!
-				int fragmentHeight = formulaEditorFragment.getView().getMeasuredHeight();
-				dialog.getWindow().setGravity(Gravity.TOP);
-
-				WindowManager.LayoutParams dialogLayoutParams = dialog.getWindow().getAttributes();
-				if(targetLocation[1] > fragmentHeight / 2)
-				{
-					dialogLayoutParams.y = targetLocation[1] - dialogLayoutParams.height;
-
-				} else {
-					dialogLayoutParams.y = targetLocation[1];
-				}
-				dialog.getWindow().setAttributes(dialogLayoutParams);
+				setAnimation();
+				setPosition();
 			} else {
-				dialog.getWindow().setGravity(Gravity.CENTER);
+				getWindow().setGravity(Gravity.CENTER);
 			}
+		}
+
+		private void setText() {
+			introTitle.setText(titleStringId);
+			introSummary.setText(summaryStringId);
+		}
+
+		private void setAnimation() {
+			View targetView = formulaEditorFragment.getView().findViewById(targetViewId);
+			AlphaAnimation alphaAnimation = new AlphaAnimation(0.1f, 1.0f);
+			alphaAnimation.setDuration(1000);
+			alphaAnimation.setRepeatCount(2);
+			alphaAnimation.setFillAfter(true);
+			targetView.startAnimation(alphaAnimation);
+		}
+
+		private void setPosition() {
+			int[] keyboardLocation = new int[2];
+			View computeButtonView = formulaEditorFragment.getView().findViewById(R.id.formula_editor_keyboard_compute);
+			computeButtonView.getLocationOnScreen(keyboardLocation);
+
+			TypedValue tv = new TypedValue();
+			int toolbarLocation = 0;
+			if (formulaEditorFragment.getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+			{
+				toolbarLocation = TypedValue.complexToDimensionPixelSize(tv.data,formulaEditorFragment.getActivity()
+						.getResources().getDisplayMetrics());
+			}
+
+			int[] targetLocation = new int[2];
+			View targetView = formulaEditorFragment.getView().findViewById(targetViewId);
+			targetView.getLocationOnScreen(targetLocation);
+
+			getWindow().setGravity(Gravity.TOP);
+
+			WindowManager.LayoutParams dialogLayoutParams = getWindow().getAttributes();
+			if(targetLocation[1] >= keyboardLocation[1])
+			{
+				dialogLayoutParams.y = toolbarLocation;
+			} else {
+				dialogLayoutParams.y = keyboardLocation[1];
+			}
+			getWindow().setAttributes(dialogLayoutParams);
 		}
 	}
 

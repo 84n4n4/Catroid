@@ -59,6 +59,7 @@ import org.catrobat.catroid.transfers.GetFacebookUserInfoTask;
 import org.catrobat.catroid.transfers.GoogleExchangeCodeTask;
 import org.catrobat.catroid.transfers.GoogleLogInTask;
 import org.catrobat.catroid.ui.MainMenuActivity;
+import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.ui.recyclerview.dialog.PrivacyPolicyDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.dialog.PrivacyPolicyDialogFragment.PrivacyPolicyListener;
 import org.catrobat.catroid.utils.ToastUtil;
@@ -103,6 +104,12 @@ public class SignInDialog extends DialogFragment implements
 
 	@Override
 	public Dialog onCreateDialog(Bundle bundle) {
+		if (getActivity() instanceof MainMenuActivity) {
+			((MainMenuActivity) getActivity()).setSignInDialog(this);
+		} else if (getActivity() instanceof ProjectActivity) {
+			((ProjectActivity) getActivity()).setSignInDialog(this);
+		}
+
 		initializeGooglePlus();
 
 		View view = View.inflate(getActivity(), R.layout.dialog_sign_in, null);
@@ -197,7 +204,7 @@ public class SignInDialog extends DialogFragment implements
 	}
 
 	private void handleGooglePlusLoginButtonClick() {
-		if (Utils.isNetworkAvailable(getActivity())) {
+		if (!Utils.isNetworkAvailable(getActivity())) {
 			ToastUtil.showError(getActivity(), R.string.error_internet_connection);
 			return;
 		}

@@ -46,7 +46,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 
 import org.catrobat.catroid.BuildConfig;
 import org.catrobat.catroid.ProjectManager;
@@ -58,6 +64,7 @@ import org.catrobat.catroid.formulaeditor.SensorHandler;
 import org.catrobat.catroid.io.ZipArchiver;
 import org.catrobat.catroid.stage.PreStageActivity;
 import org.catrobat.catroid.stage.StageActivity;
+import org.catrobat.catroid.transfers.GetFacebookUserInfoTask;
 import org.catrobat.catroid.ui.dialogs.TermsOfUseDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.asynctask.ProjectLoaderTask;
 import org.catrobat.catroid.ui.recyclerview.dialog.AboutDialogFragment;
@@ -94,9 +101,14 @@ public class MainMenuActivity extends BaseCastActivity implements
 	protected static final int FRAGMENT = 1;
 	protected static final int ERROR = 2;
 
+	private CallbackManager callbackManager;
+	private SignInDialog signInDialog;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		initializeFacebookSdk();
+
 		SettingsFragment.setToChosenLanguage(this);
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
@@ -351,6 +363,39 @@ public class MainMenuActivity extends BaseCastActivity implements
 			}
 		} else {
 			super.onActivityResult(requestCode, resultCode, data);
+			callbackManager.onActivityResult(requestCode, resultCode, data);
 		}
+	}
+
+	public void initializeFacebookSdk() {
+		FacebookSdk.sdkInitialize(getApplicationContext());
+		callbackManager = CallbackManager.Factory.create();
+
+		LoginManager.getInstance().registerCallback(callbackManager,
+				new FacebookCallback<LoginResult>() {
+					@Override
+					public void onSuccess(LoginResult loginResult) {
+						Log.d(TAG, loginResult.toString());
+						AccessToken accessToken = loginResult.getAccessToken();
+						GetFacebookUserInfoTask getFacebookUserInfoTask = new GetFacebookUserInfoTask(MainMenuActivity.this, accessToken.getToken(), accessToken.getUserId());
+						getFacebookUserInfoTask.setOnGetFacebookUserInfoTaskCompleteListener(signInDialog);
+						getFacebookUserInfoTask.execute();
+					}
+
+					@Override
+					public void onCancel() {
+						Log.d(TAG, "cancel");
+					}
+
+					@Override
+					public void onError(FacebookException exception) {
+						ToastUtil.showError(MainMenuActivity.this, exception.getMessage());
+						Log.d(TAG, exception.getMessage());
+					}
+				});
+	}
+
+	public void setSignInDialog(SignInDialog signInDialog) {
+		this.signInDialog = signInDialog;
 	}
 }

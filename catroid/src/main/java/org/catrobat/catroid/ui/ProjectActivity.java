@@ -30,9 +30,18 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.IntDef;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
@@ -46,13 +55,16 @@ import org.catrobat.catroid.facedetection.FaceDetectionHandler;
 import org.catrobat.catroid.formulaeditor.SensorHandler;
 import org.catrobat.catroid.stage.PreStageActivity;
 import org.catrobat.catroid.stage.StageActivity;
+import org.catrobat.catroid.transfers.GetFacebookUserInfoTask;
 import org.catrobat.catroid.ui.dialogs.LegoSensorConfigInfoDialog;
 import org.catrobat.catroid.ui.recyclerview.activity.ProjectUploadActivity;
 import org.catrobat.catroid.ui.recyclerview.dialog.PlaySceneDialogFragment;
+import org.catrobat.catroid.ui.recyclerview.dialog.login.SignInDialog;
 import org.catrobat.catroid.ui.recyclerview.fragment.RecyclerViewFragment;
 import org.catrobat.catroid.ui.recyclerview.fragment.SceneListFragment;
 import org.catrobat.catroid.ui.recyclerview.fragment.SpriteListFragment;
 import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
+import org.catrobat.catroid.utils.ToastUtil;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -60,6 +72,7 @@ import java.lang.annotation.RetentionPolicy;
 public class ProjectActivity extends BaseCastActivity implements PlaySceneDialogFragment.PlaySceneInterface {
 
 	public static final String EXTRA_FRAGMENT_POSITION = "FRAGMENT_POSITION";
+	public static final String TAG = ProjectActivity.class.getSimpleName();
 
 	@Retention(RetentionPolicy.SOURCE)
 	@IntDef({FRAGMENT_SCENES, FRAGMENT_SPRITES})
@@ -67,8 +80,13 @@ public class ProjectActivity extends BaseCastActivity implements PlaySceneDialog
 	public static final int FRAGMENT_SCENES = 0;
 	public static final int FRAGMENT_SPRITES = 1;
 
+	private CallbackManager callbackManager;
+	private SignInDialog signInDialog;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		initializeFacebookSdk();
+
 		super.onCreate(savedInstanceState);
 		SettingsFragment.setToChosenLanguage(this);
 
@@ -166,6 +184,7 @@ public class ProjectActivity extends BaseCastActivity implements PlaySceneDialog
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		callbackManager.onActivityResult(requestCode, resultCode, data);
 
 		switch (requestCode) {
 			case PreStageActivity.REQUEST_RESOURCES_INIT:
@@ -208,5 +227,38 @@ public class ProjectActivity extends BaseCastActivity implements PlaySceneDialog
 			DialogFragment dialog = new LegoSensorConfigInfoDialog(LegoSensorConfigInfoDialog.EV3);
 			dialog.show(getFragmentManager(), LegoSensorConfigInfoDialog.DIALOG_FRAGMENT_TAG);
 		}
+	}
+
+	public void initializeFacebookSdk() {
+		FacebookSdk.sdkInitialize(getApplicationContext());
+		callbackManager = CallbackManager.Factory.create();
+
+		LoginManager.getInstance().registerCallback(callbackManager,
+				new FacebookCallback<LoginResult>() {
+					@Override
+					public void onSuccess(LoginResult loginResult) {
+						Log.d(TAG, loginResult.toString());
+						AccessToken accessToken = loginResult.getAccessToken();
+						GetFacebookUserInfoTask getFacebookUserInfoTask = new GetFacebookUserInfoTask(ProjectActivity.this,
+								accessToken.getToken(), accessToken.getUserId());
+						getFacebookUserInfoTask.setOnGetFacebookUserInfoTaskCompleteListener(signInDialog);
+						getFacebookUserInfoTask.execute();
+					}
+
+					@Override
+					public void onCancel() {
+						Log.d(TAG, "cancel");
+					}
+
+					@Override
+					public void onError(FacebookException exception) {
+						ToastUtil.showError(ProjectActivity.this, exception.getMessage());
+						Log.d(TAG, exception.getMessage());
+					}
+				});
+	}
+
+	public void setSignInDialog(SignInDialog signInDialog) {
+		this.signInDialog = signInDialog;
 	}
 }

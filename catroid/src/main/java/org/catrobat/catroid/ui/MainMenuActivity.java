@@ -69,6 +69,7 @@ import org.catrobat.catroid.ui.dialogs.TermsOfUseDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.asynctask.ProjectLoaderTask;
 import org.catrobat.catroid.ui.recyclerview.dialog.AboutDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.dialog.PrivacyPolicyDialogFragment;
+import org.catrobat.catroid.ui.recyclerview.dialog.login.SignInCompleteListener;
 import org.catrobat.catroid.ui.recyclerview.dialog.login.SignInDialog;
 import org.catrobat.catroid.ui.recyclerview.fragment.MainMenuFragment;
 import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
@@ -85,7 +86,7 @@ import java.lang.annotation.RetentionPolicy;
 
 public class MainMenuActivity extends BaseCastActivity implements
 		ProjectLoaderTask.ProjectLoaderListener,
-		SignInDialog.SignInCompleteListener {
+		SignInCompleteListener {
 
 	public static final String TAG = MainMenuActivity.class.getSimpleName();
 
@@ -101,13 +102,9 @@ public class MainMenuActivity extends BaseCastActivity implements
 	protected static final int FRAGMENT = 1;
 	protected static final int ERROR = 2;
 
-	private CallbackManager callbackManager;
-	private SignInDialog signInDialog;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		initializeFacebookSdk();
 
 		SettingsFragment.setToChosenLanguage(this);
 
@@ -296,9 +293,10 @@ public class MainMenuActivity extends BaseCastActivity implements
 				startActivity(new Intent(this, SettingsActivity.class));
 				break;
 			case R.id.menu_login:
-				SignInDialog dialog = new SignInDialog();
-				dialog.setSignInCompleteListener(this);
-				dialog.show(getFragmentManager(), SignInDialog.TAG);
+				startActivity(new Intent(this, SignInActivity.class));
+				//SignInDialog dialog = new SignInDialog();
+				//dialog.setSignInCompleteListener(this);
+				//dialog.show(getFragmentManager(), SignInDialog.TAG);
 				break;
 			case R.id.menu_logout:
 				Utils.logoutUser(this);
@@ -363,39 +361,10 @@ public class MainMenuActivity extends BaseCastActivity implements
 			}
 		} else {
 			super.onActivityResult(requestCode, resultCode, data);
-			callbackManager.onActivityResult(requestCode, resultCode, data);
 		}
 	}
 
-	public void initializeFacebookSdk() {
-		FacebookSdk.sdkInitialize(getApplicationContext());
-		callbackManager = CallbackManager.Factory.create();
-
-		LoginManager.getInstance().registerCallback(callbackManager,
-				new FacebookCallback<LoginResult>() {
-					@Override
-					public void onSuccess(LoginResult loginResult) {
-						Log.d(TAG, loginResult.toString());
-						AccessToken accessToken = loginResult.getAccessToken();
-						GetFacebookUserInfoTask getFacebookUserInfoTask = new GetFacebookUserInfoTask(MainMenuActivity.this, accessToken.getToken(), accessToken.getUserId());
-						getFacebookUserInfoTask.setOnGetFacebookUserInfoTaskCompleteListener(signInDialog);
-						getFacebookUserInfoTask.execute();
-					}
-
-					@Override
-					public void onCancel() {
-						Log.d(TAG, "cancel");
-					}
-
-					@Override
-					public void onError(FacebookException exception) {
-						ToastUtil.showError(MainMenuActivity.this, exception.getMessage());
-						Log.d(TAG, exception.getMessage());
-					}
-				});
-	}
-
 	public void setSignInDialog(SignInDialog signInDialog) {
-		this.signInDialog = signInDialog;
+
 	}
 }

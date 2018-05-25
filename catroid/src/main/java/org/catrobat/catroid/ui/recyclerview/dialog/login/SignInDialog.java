@@ -566,10 +566,4 @@ public class SignInDialog extends DialogFragment implements
 		SignInDialog signInDialog = new SignInDialog();
 		signInDialog.show(getActivity().getFragmentManager(), SignInDialog.TAG);
 	}
-
-	public interface SignInCompleteListener {
-
-		void onLoginSuccessful(Bundle bundle);
-		void onLoginCancel();
-	}
 }

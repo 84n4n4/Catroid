@@ -46,6 +46,7 @@ import org.catrobat.catroid.transfers.GetTagsTask;
 import org.catrobat.catroid.ui.BaseActivity;
 import org.catrobat.catroid.ui.dialogs.SelectTagsDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.asynctask.ProjectLoaderTask;
+import org.catrobat.catroid.ui.recyclerview.dialog.login.SignInCompleteListener;
 import org.catrobat.catroid.ui.recyclerview.dialog.login.SignInDialog;
 import org.catrobat.catroid.utils.FileMetaDataExtractor;
 import org.catrobat.catroid.utils.PathBuilder;
@@ -58,7 +59,7 @@ import java.util.List;
 
 public class ProjectUploadActivity extends BaseActivity implements
 		ProjectLoaderTask.ProjectLoaderListener,
-		SignInDialog.SignInCompleteListener,
+		SignInCompleteListener,
 		CheckTokenTask.TokenCheckListener,
 		GetTagsTask.TagResponseListener {
 

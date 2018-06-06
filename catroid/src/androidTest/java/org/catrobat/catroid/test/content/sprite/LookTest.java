@@ -70,7 +70,7 @@ public class LookTest extends InstrumentationTestCase {
 		assertEquals(0, look.getZIndex());
 		assertTrue(look.isVisible());
 		assertEquals(Touchable.enabled, look.getTouchable());
-		assertEquals("", look.getImagePath());
+		assertEquals(look.getImagePath());
 	}
 
 	public void testPositions() {

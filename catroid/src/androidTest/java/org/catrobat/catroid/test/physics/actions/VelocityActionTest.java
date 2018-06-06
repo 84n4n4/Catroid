@@ -48,12 +48,12 @@ public class VelocityActionTest extends PhysicsBaseTest {
 	}
 
 	public void testPositiveYVelocityWithoutGravity() {
-		assertEquals("Unexpected initial x-coordinate", 0, physicsObject.getX(), TestUtils.DELTA);
-		assertEquals("Unexpected initial y-coordinate", 0, physicsObject.getY(), TestUtils.DELTA);
+		assertEquals(0, physicsObject.getX(), TestUtils.DELTA);
+		assertEquals(0, physicsObject.getY(), TestUtils.DELTA);
 
 		physicsObject.setVelocity(0.0f, POSITIVE_Y_TEST_VELOCITY);
 
-		assertEquals("Unexpected initial x-velocity", 0, physicsObject.getVelocity().x, TestUtils.DELTA);
+		assertEquals(0, physicsObject.getVelocity().x, TestUtils.DELTA);
 		assertEquals("Unexpected initial y-velocity", POSITIVE_Y_TEST_VELOCITY, physicsObject.getVelocity().y,
 				TestUtils.DELTA);
 
@@ -85,12 +85,12 @@ public class VelocityActionTest extends PhysicsBaseTest {
 	}
 
 	public void testNegativeYVelocityWithoutGravity() {
-		assertEquals("Unexpected initial x-coordinate", 0, physicsObject.getX(), TestUtils.DELTA);
-		assertEquals("Unexpected initial y-coordinate", 0, physicsObject.getY(), TestUtils.DELTA);
+		assertEquals(0, physicsObject.getX(), TestUtils.DELTA);
+		assertEquals(0, physicsObject.getY(), TestUtils.DELTA);
 
 		physicsObject.setVelocity(0.0f, NEGATIVE_Y_TEST_VELOCITY);
 
-		assertEquals("Unexpected initial x-velocity", 0, physicsObject.getVelocity().x, TestUtils.DELTA);
+		assertEquals(0, physicsObject.getVelocity().x, TestUtils.DELTA);
 		assertEquals("Unexpected initial y-velocity", NEGATIVE_Y_TEST_VELOCITY, physicsObject.getVelocity().y,
 				TestUtils.DELTA);
 
@@ -122,14 +122,14 @@ public class VelocityActionTest extends PhysicsBaseTest {
 	}
 
 	public void testPositiveXVelocityWithoutGravity() {
-		assertEquals("Unexpected initial x-coordinate", 0, physicsObject.getX(), TestUtils.DELTA);
-		assertEquals("Unexpected initial y-coordinate", 0, physicsObject.getY(), TestUtils.DELTA);
+		assertEquals(0, physicsObject.getX(), TestUtils.DELTA);
+		assertEquals(0, physicsObject.getY(), TestUtils.DELTA);
 
 		physicsObject.setVelocity(POSITIVE_X_TEST_VELOCITY, 0.0f);
 
 		assertEquals("Unexpected initial x-velocity", POSITIVE_X_TEST_VELOCITY, physicsObject.getVelocity().x,
 				TestUtils.DELTA);
-		assertEquals("Unexpected initial y-velocity", 0.0f, physicsObject.getVelocity().y, TestUtils.DELTA);
+		assertEquals(0.0f, physicsObject.getVelocity().y, TestUtils.DELTA);
 
 		physicsWorld.setGravity(0.0f, 0.0f);
 
@@ -159,14 +159,14 @@ public class VelocityActionTest extends PhysicsBaseTest {
 	}
 
 	public void testNegativeXVelocityWithoutGravity() {
-		assertEquals("Unexpected initial x-coordinate", 0, physicsObject.getX(), TestUtils.DELTA);
-		assertEquals("Unexpected initial y-coordinate", 0, physicsObject.getY(), TestUtils.DELTA);
+		assertEquals(0, physicsObject.getX(), TestUtils.DELTA);
+		assertEquals(0, physicsObject.getY(), TestUtils.DELTA);
 
 		physicsObject.setVelocity(NEGATIVE_X_TEST_VELOCITY, 0.0f);
 
 		assertEquals("Unexpected initial x-velocity", NEGATIVE_X_TEST_VELOCITY, physicsObject.getVelocity().x,
 				TestUtils.DELTA);
-		assertEquals("Unexpected initial y-velocity", 0.0f, physicsObject.getVelocity().y, TestUtils.DELTA);
+		assertEquals(0.0f, physicsObject.getVelocity().y, TestUtils.DELTA);
 
 		physicsWorld.setGravity(0.0f, 0.0f);
 

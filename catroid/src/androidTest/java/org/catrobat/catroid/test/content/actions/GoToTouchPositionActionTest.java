@@ -52,8 +52,8 @@ public class GoToTouchPositionActionTest extends AndroidTestCase {
 		sprite.look.setXInUserInterfaceDimensionUnit(0f);
 		sprite.look.setYInUserInterfaceDimensionUnit(0f);
 
-		assertEquals("Unexpected initial sprite x position", 0f, sprite.look.getXInUserInterfaceDimensionUnit());
-		assertEquals("Unexpected initial sprite y position", 0f, sprite.look.getYInUserInterfaceDimensionUnit());
+		assertEquals(0f, sprite.look.getXInUserInterfaceDimensionUnit());
+		assertEquals(0f, sprite.look.getYInUserInterfaceDimensionUnit());
 
 		TouchUtil.setDummyTouchForTest(EXPECTED_X_POSITION, EXPECTED_Y_POSITION);
 

@@ -45,8 +45,8 @@ public class SetYActionTest extends AndroidTestCase {
 	}
 
 	public void testNormalBehavior() {
-		assertEquals("Unexpected initial sprite x position", 0f, sprite.look.getXInUserInterfaceDimensionUnit());
-		assertEquals("Unexpected initial sprite y position", 0f, sprite.look.getYInUserInterfaceDimensionUnit());
+		assertEquals(0f, sprite.look.getXInUserInterfaceDimensionUnit());
+		assertEquals(0f, sprite.look.getYInUserInterfaceDimensionUnit());
 
 		sprite.getActionFactory().createSetYAction(sprite, yPosition).act(1.0f);
 		assertEquals("Incorrect sprite y position after SetYBrick executed", Y_POSITION,

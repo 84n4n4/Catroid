@@ -136,8 +136,8 @@ public class UtilsTest extends AndroidTestCase {
 	}
 
 	public void testMD5CheckSumOfString() {
-		assertEquals("MD5 sums do not match!", MD5_CATROID.toLowerCase(Locale.US), Utils.md5Checksum("catroid"));
-		assertEquals("MD5 sums do not match!", MD5_EMPTY.toLowerCase(Locale.US), Utils.md5Checksum(""));
+		assertEquals(MD5_CATROID.toLowerCase(Locale.US), Utils.md5Checksum("catroid"));
+		assertEquals(MD5_EMPTY.toLowerCase(Locale.US), Utils.md5Checksum(""));
 		assertEquals("MD5 sums do not match!", MD5_HELLO_WORLD.toLowerCase(Locale.US),
 				Utils.md5Checksum("Hello World!"));
 	}
@@ -170,7 +170,7 @@ public class UtilsTest extends AndroidTestCase {
 		}
 		String projectName = "test?Projekt\"1";
 		String expectedPath = Constants.DEFAULT_ROOT_DIRECTORY.getAbsolutePath() + "/test%3FProjekt%221";
-		assertEquals("Paths are different!", expectedPath, PathBuilder.buildProjectPath(projectName));
+		assertEquals(expectedPath, PathBuilder.buildProjectPath(projectName));
 	}
 
 	public void testCompareProjectToDefaultProject() throws IOException, IllegalArgumentException {
@@ -197,8 +197,8 @@ public class UtilsTest extends AndroidTestCase {
 		final String remixUrlsString = expectedFirstProgramRemixUrl;
 
 		List<String> result = Utils.extractRemixUrlsFromString(remixUrlsString);
-		assertEquals("Invalid number of remix URLs extracted", 1, result.size());
-		assertEquals("Failed to extract remix URL", expectedFirstProgramRemixUrl, result.get(0));
+		assertEquals(1, result.size());
+		assertEquals(expectedFirstProgramRemixUrl, result.get(0));
 	}
 
 	public void testExtractRemixUrlsOfProgramHeaderUrlFieldContainingSingleRelativeUrl() {
@@ -206,8 +206,8 @@ public class UtilsTest extends AndroidTestCase {
 		final String remixUrlsString = expectedFirstProgramRemixUrl;
 
 		List<String> result = Utils.extractRemixUrlsFromString(remixUrlsString);
-		assertEquals("Invalid number of remix URLs extracted", 1, result.size());
-		assertEquals("Failed to extract remix URL", expectedFirstProgramRemixUrl, result.get(0));
+		assertEquals(1, result.size());
+		assertEquals(expectedFirstProgramRemixUrl, result.get(0));
 	}
 
 	public void testExtractRemixUrlsOfMergedProgramHeaderUrlFieldContainingTwoAbsoluteUrls() {
@@ -225,9 +225,9 @@ public class UtilsTest extends AndroidTestCase {
 		final String remixUrlsString = Utils.generateRemixUrlsStringForMergedProgram(headerOfFirstProgram,
 				headerOfSecondProgram);
 		List<String> result = Utils.extractRemixUrlsFromString(remixUrlsString);
-		assertEquals("Invalid number of remix URLs extracted", 2, result.size());
-		assertEquals("Failed to extract URL of first program", expectedFirstProgramRemixUrl, result.get(0));
-		assertEquals("Failed to extract URL of second program", expectedSecondProgramRemixUrl, result.get(1));
+		assertEquals(2, result.size());
+		assertEquals(expectedFirstProgramRemixUrl, result.get(0));
+		assertEquals(expectedSecondProgramRemixUrl, result.get(1));
 	}
 
 	public void testExtractRemixUrlsOfMergedProgramHeaderUrlFieldContainingTwoRelativeUrls() {
@@ -246,9 +246,9 @@ public class UtilsTest extends AndroidTestCase {
 				headerOfSecondProgram);
 
 		List<String> result = Utils.extractRemixUrlsFromString(remixUrlsString);
-		assertEquals("Invalid number of remix URLs extracted", 2, result.size());
-		assertEquals("Failed to extract URL of first program", expectedFirstProgramRemixUrl, result.get(0));
-		assertEquals("Failed to extract URL of second program", expectedSecondProgramRemixUrl, result.get(1));
+		assertEquals(2, result.size());
+		assertEquals(expectedFirstProgramRemixUrl, result.get(0));
+		assertEquals(expectedSecondProgramRemixUrl, result.get(1));
 	}
 
 	public void testExtractRemixUrlsOfMergedProgramHeaderUrlFieldContainingNoUrls() {
@@ -262,7 +262,7 @@ public class UtilsTest extends AndroidTestCase {
 				headerOfSecondProgram);
 
 		List<String> result = Utils.extractRemixUrlsFromString(remixUrlsString);
-		assertEquals("Invalid number of remix URLs extracted", 0, result.size());
+		assertEquals(0, result.size());
 	}
 
 	public void testExtractRemixUrlsOfMergedProgramHeaderUrlFieldContainingMultipleMixedUrls() {
@@ -281,9 +281,9 @@ public class UtilsTest extends AndroidTestCase {
 				headerOfSecondProgram);
 
 		List<String> result = Utils.extractRemixUrlsFromString(remixUrlsString);
-		assertEquals("Invalid number of remix URLs extracted", 2, result.size());
-		assertEquals("Failed to extract URL of first program", expectedFirstProgramRemixUrl, result.get(0));
-		assertEquals("Failed to extract URL of second program", expectedSecondProgramRemixUrl, result.get(1));
+		assertEquals(2, result.size());
+		assertEquals(expectedFirstProgramRemixUrl, result.get(0));
+		assertEquals(expectedSecondProgramRemixUrl, result.get(1));
 	}
 
 	public void testExtractRemixUrlsOfRemergedProgramHeaderUrlFieldContainingMixedUrls() {
@@ -326,11 +326,11 @@ public class UtilsTest extends AndroidTestCase {
 				headerOfFourthProgram);
 
 		List<String> result = Utils.extractRemixUrlsFromString(finalMergedRemixUrlsString);
-		assertEquals("Invalid number of remix URLs extracted", 4, result.size());
-		assertEquals("Failed to extract URL of first program", expectedFirstProgramRemixUrl, result.get(0));
-		assertEquals("Failed to extract URL of second program", expectedSecondProgramRemixUrl, result.get(1));
-		assertEquals("Failed to extract URL of third program", expectedThirdProgramRemixUrl, result.get(2));
-		assertEquals("Failed to extract URL of fourth program", expectedFourthProgramRemixUrl, result.get(3));
+		assertEquals(4, result.size());
+		assertEquals(expectedFirstProgramRemixUrl, result.get(0));
+		assertEquals(expectedSecondProgramRemixUrl, result.get(1));
+		assertEquals(expectedThirdProgramRemixUrl, result.get(2));
+		assertEquals(expectedFourthProgramRemixUrl, result.get(3));
 	}
 
 	public void testExtractRemixUrlsOfRemergedProgramHeaderUrlFieldContainingMissingUrls() {
@@ -369,9 +369,9 @@ public class UtilsTest extends AndroidTestCase {
 				headerOfFourthProgram);
 
 		List<String> result = Utils.extractRemixUrlsFromString(finalMergedRemixUrlsString);
-		assertEquals("Invalid number of remix URLs extracted", 2, result.size());
-		assertEquals("Failed to extract remix URL of second program", expectedSecondProgramRemixUrl, result.get(0));
-		assertEquals("Failed to extract remix URL of fourth program", expectedFourthProgramRemixUrl, result.get(1));
+		assertEquals(2, result.size());
+		assertEquals(expectedSecondProgramRemixUrl, result.get(0));
+		assertEquals(expectedFourthProgramRemixUrl, result.get(1));
 	}
 
 	private void addSpriteAndCompareToDefaultProject() {
@@ -380,7 +380,7 @@ public class UtilsTest extends AndroidTestCase {
 		assertFalse("Failed to recognize that the project is not standard after adding a new SingleSprite",
 				Utils.isDefaultProject(defaultProject, getContext()));
 		defaultProject.getDefaultScene().removeSprite(sprite);
-		assertTrue("Failed to recognize the standard project", Utils.isDefaultProject(defaultProject, getContext()));
+		assertTrue(Utils.isDefaultProject(defaultProject, getContext()));
 	}
 
 	private void addScriptAndCompareToDefalutProject() {
@@ -390,7 +390,7 @@ public class UtilsTest extends AndroidTestCase {
 		assertFalse("Failed to recognize that the project is not standard after adding a new script",
 				Utils.isDefaultProject(defaultProject, getContext()));
 		catroidSprite.removeScript(whenScript);
-		assertTrue("Failed to recognize the standard project", Utils.isDefaultProject(defaultProject, getContext()));
+		assertTrue(Utils.isDefaultProject(defaultProject, getContext()));
 	}
 
 	private void addBrickAndCompareToDefaultProject() {
@@ -401,7 +401,7 @@ public class UtilsTest extends AndroidTestCase {
 		assertFalse("Failed to recognize that the project is not standard after adding a new brick",
 				Utils.isDefaultProject(defaultProject, getContext()));
 		catroidScript.removeBrick(brick);
-		assertTrue("Failed to recognize the standard project", Utils.isDefaultProject(defaultProject, getContext()));
+		assertTrue(Utils.isDefaultProject(defaultProject, getContext()));
 	}
 
 	private void changeParametersOfBricksAndCompareToDefaultProject() {
@@ -455,7 +455,7 @@ public class UtilsTest extends AndroidTestCase {
 				Utils.isDefaultProject(defaultProject, getContext()));
 
 		brickList.add(brick);
-		assertTrue("Failed to recognize the standard project", Utils.isDefaultProject(defaultProject, getContext()));
+		assertTrue(Utils.isDefaultProject(defaultProject, getContext()));
 	}
 
 	private void removeScriptAndCompareToDefaultProject() {
@@ -466,7 +466,7 @@ public class UtilsTest extends AndroidTestCase {
 				Utils.isDefaultProject(defaultProject, getContext()));
 
 		sprite.addScript(catroidScript);
-		assertTrue("Failed to recognize the standard project", Utils.isDefaultProject(defaultProject, getContext()));
+		assertTrue(Utils.isDefaultProject(defaultProject, getContext()));
 	}
 
 	private void removeSpriteAndCompareToDefaultProject() {
@@ -478,7 +478,7 @@ public class UtilsTest extends AndroidTestCase {
 				Utils.isDefaultProject(defaultProject, getContext()));
 
 		spriteList.add(catroidSprite);
-		assertTrue("Failed to recognize the standard project", Utils.isDefaultProject(defaultProject, getContext()));
+		assertTrue(Utils.isDefaultProject(defaultProject, getContext()));
 	}
 
 	public void testSetBitAllOnesSetIndex0To1() {

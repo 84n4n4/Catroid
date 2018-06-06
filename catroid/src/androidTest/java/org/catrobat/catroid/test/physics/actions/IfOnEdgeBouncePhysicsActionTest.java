@@ -55,7 +55,7 @@ public class IfOnEdgeBouncePhysicsActionTest extends PhysicsBaseTest {
 
 	public void testNormalBehavior() {
 
-		assertTrue("getLookData is null", sprite.look.getLookData() != null);
+		assertTrue(sprite.look.getLookData() != null);
 
 		PhysicsObject physicsObject = physicsWorld.getPhysicsObject(sprite);
 		physicsObject.setType(PhysicsObject.Type.DYNAMIC);
@@ -65,7 +65,7 @@ public class IfOnEdgeBouncePhysicsActionTest extends PhysicsBaseTest {
 		float setVelocityYValue = -(IfOnEdgeBouncePhysicsAction.THRESHOLD_VELOCITY_TO_ACTIVATE_BOUNCE - 1.0f);
 		physicsObject.setVelocity(physicsObject.getVelocity().x, setVelocityYValue);
 
-		assertTrue("Unexpected Y-value", sprite.look.getYInUserInterfaceDimensionUnit() == (setYValue));
+		assertTrue(sprite.look.getYInUserInterfaceDimensionUnit() == (setYValue));
 
 		ActionFactory factory = sprite.getActionFactory();
 		Action ifOnEdgeBouncePhysicsAction = factory.createIfOnEdgeBounceAction(sprite);
@@ -82,7 +82,7 @@ public class IfOnEdgeBouncePhysicsActionTest extends PhysicsBaseTest {
 	}
 
 	public void testVelocityThresholdAtTopCollision() {
-		assertTrue("getLookData is null", sprite.look.getLookData() != null);
+		assertTrue(sprite.look.getLookData() != null);
 
 		PhysicsObject physicsObject = physicsWorld.getPhysicsObject(sprite);
 		physicsObject.setType(PhysicsObject.Type.DYNAMIC);
@@ -92,8 +92,8 @@ public class IfOnEdgeBouncePhysicsActionTest extends PhysicsBaseTest {
 		float setVelocityYValue = IfOnEdgeBouncePhysicsAction.THRESHOLD_VELOCITY_TO_ACTIVATE_BOUNCE + 0.5f;
 		physicsObject.setVelocity(physicsObject.getVelocity().x, setVelocityYValue);
 
-		assertTrue("Unexpected Y-value", sprite.look.getY() == setYValue);
-		assertTrue("Unexpected velocity-Y-value", physicsObject.getVelocity().y == setVelocityYValue);
+		assertTrue(sprite.look.getY() == setYValue);
+		assertTrue(physicsObject.getVelocity().y == setVelocityYValue);
 
 		ActionFactory factory = sprite.getActionFactory();
 		Action ifOnEdgeBouncePhysicsAction = factory.createIfOnEdgeBounceAction(sprite);
@@ -112,7 +112,7 @@ public class IfOnEdgeBouncePhysicsActionTest extends PhysicsBaseTest {
 	}
 
 	public void testSpriteOverlapsRightAndTopAxis() {
-		assertTrue("getLookData is null", sprite.look.getLookData() != null);
+		assertTrue(sprite.look.getLookData() != null);
 
 		PhysicsObject physicsObject = physicsWorld.getPhysicsObject(sprite);
 		physicsObject.setType(PhysicsObject.Type.DYNAMIC);
@@ -126,10 +126,10 @@ public class IfOnEdgeBouncePhysicsActionTest extends PhysicsBaseTest {
 		float setVelocityYValue = 400.0f;
 		physicsObject.setVelocity(setVelocityXValue, setVelocityYValue);
 
-		assertTrue("Unexpected X-value", sprite.look.getX() == setXValue);
-		assertTrue("Unexpected Y-value", sprite.look.getY() == setYValue);
-		assertTrue("Unexpected velocity-X-value", physicsObject.getVelocity().x == setVelocityXValue);
-		assertTrue("Unexpected velocity-Y-value", physicsObject.getVelocity().y == setVelocityYValue);
+		assertTrue(sprite.look.getX() == setXValue);
+		assertTrue(sprite.look.getY() == setYValue);
+		assertTrue(physicsObject.getVelocity().x == setVelocityXValue);
+		assertTrue(physicsObject.getVelocity().y == setVelocityYValue);
 
 		ActionFactory factory = sprite.getActionFactory();
 		Action ifOnEdgeBouncePhysicsAction = factory.createIfOnEdgeBounceAction(sprite);
@@ -169,7 +169,7 @@ public class IfOnEdgeBouncePhysicsActionTest extends PhysicsBaseTest {
 	}
 
 	public void testCollisionBroadcastOnIfOnEdgeBounce() {
-		assertTrue("getLookData is null", sprite.look.getLookData() != null);
+		assertTrue(sprite.look.getLookData() != null);
 
 		CollisionScript spriteCollisionScript = new CollisionScript(null);
 		spriteCollisionScript.setSpriteToCollideWithName("");
@@ -190,8 +190,8 @@ public class IfOnEdgeBouncePhysicsActionTest extends PhysicsBaseTest {
 		float setYValue = ScreenValues.SCREEN_HEIGHT / 2 - sprite.look.getLookData().getPixmap().getHeight() / 4;
 		sprite.look.setYInUserInterfaceDimensionUnit(setYValue);
 
-		assertEquals("SetXValue not the same", setXValue, sprite.look.getXInUserInterfaceDimensionUnit());
-		assertEquals("setYValue not the same", setYValue, sprite.look.getYInUserInterfaceDimensionUnit());
+		assertEquals(setXValue, sprite.look.getXInUserInterfaceDimensionUnit());
+		assertEquals(setYValue, sprite.look.getYInUserInterfaceDimensionUnit());
 
 		float setVelocityXValue = 400.0f;
 		float setVelocityYValue = 400.0f;
@@ -205,13 +205,13 @@ public class IfOnEdgeBouncePhysicsActionTest extends PhysicsBaseTest {
 		ArrayList<Sprite> activeHorizontalBounces = (ArrayList<Sprite>) Reflection.getPrivateField(PhysicsWorld.class,
 				physicsWorld, "activeHorizontalBounces");
 
-		assertTrue("Bounce Once Vertical Array is not empty", activeVerticalBounces.isEmpty());
-		assertTrue("Bounce Once Horizontal Array is not empty", activeHorizontalBounces.isEmpty());
+		assertTrue(activeVerticalBounces.isEmpty());
+		assertTrue(activeHorizontalBounces.isEmpty());
 
 		ifOnEdgeBouncePhysicsAction.act(1.0f);
 
-		assertFalse("Bounce Once Vertical Array is empty", activeVerticalBounces.isEmpty());
-		assertFalse("Bounce Once Horizontal Array is empty", activeHorizontalBounces.isEmpty());
+		assertFalse(activeVerticalBounces.isEmpty());
+		assertFalse(activeHorizontalBounces.isEmpty());
 
 		assertTrue("New X value is not smaller after IfOnEdgeBounce act", setXValue > sprite.look
 				.getXInUserInterfaceDimensionUnit());
@@ -220,8 +220,8 @@ public class IfOnEdgeBouncePhysicsActionTest extends PhysicsBaseTest {
 
 		physicsWorld.step(2.0f);
 
-		assertTrue("Bounce Once Vertical Array is not empty after colliding once", activeVerticalBounces.isEmpty());
-		assertTrue("Bounce Once Horizontal Array is not empty after colliding once", activeHorizontalBounces.isEmpty());
+		assertTrue(activeVerticalBounces.isEmpty());
+		assertTrue(activeHorizontalBounces.isEmpty());
 
 		while (!allActionsOfAllSpritesAreFinished()) {
 			for (Sprite spriteOfList : project.getDefaultScene().getSpriteList()) {

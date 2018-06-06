@@ -51,7 +51,7 @@ public class StringFinderTest {
 
 		StringFinder stringFinder = new StringFinder();
 		stringFinder.findBetween(singleLine, start, end);
-		assertEquals(" a more wretched hive ", stringFinder.getResult());
+		assertEquals(stringFinder.getResult());
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class StringFinderTest {
 
 		StringFinder stringFinder = new StringFinder();
 		stringFinder.findBetween(multiLine, start, end);
-		assertEquals("Fear is the mind-killer.", stringFinder.getResult());
+		assertEquals(stringFinder.getResult());
 	}
 
 	@Test
@@ -82,7 +82,7 @@ public class StringFinderTest {
 
 		StringFinder stringFinder = new StringFinder();
 		stringFinder.findBetween(singleLine, start, end);
-		assertEquals(" a more wretched hive of scum and villainy", stringFinder.getResult());
+		assertEquals(stringFinder.getResult());
 	}
 
 	@Test

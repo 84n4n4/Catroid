@@ -143,7 +143,7 @@ public class RepeatUntilActionTest extends InstrumentationTestCase {
 
 		repeatAction.act(1.0f);
 		int repeatCountValue = ((RepeatUntilAction) repeatAction).getExecutedCount();
-		assertEquals("Null Formula should not have been possible to interpret!", 0, repeatCountValue);
+		assertEquals(0, repeatCountValue);
 	}
 
 	public void testNotANumberFormula() {
@@ -194,7 +194,7 @@ public class RepeatUntilActionTest extends InstrumentationTestCase {
 		int valueOfUserVariable = ((Double) userVariable.getValue()).intValue();
 		int valueOfUserVariable2 = ((Double) userVariable2.getValue()).intValue();
 
-		assertEquals("Wrong value for userVariable", TRUE_VALUE, valueOfUserVariable);
-		assertEquals("Wrong value for userVariable2", TRUE_VALUE, valueOfUserVariable2);
+		assertEquals(TRUE_VALUE, valueOfUserVariable);
+		assertEquals(TRUE_VALUE, valueOfUserVariable2);
 	}
 }

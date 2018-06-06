@@ -35,6 +35,6 @@ public class MusicalKeyTest extends AndroidTestCase {
 	}
 
 	public void testGetNoteNameOnMiddleLine2() {
-		assertEquals("Failed to get note name on middle line", NoteName.D3, MusicalKey.BASS.getNoteNameOnMiddleLine());
+		assertEquals(NoteName.D3, MusicalKey.BASS.getNoteNameOnMiddleLine());
 	}
 }

@@ -34,40 +34,40 @@ public class ReflectionTest extends AndroidTestCase {
 
 	public void testPrivateFieldGettersAndSetters() {
 		char secretChar = (Character) Reflection.getPrivateField(SubClass.class, "SECRET_STATIC_CHAR");
-		assertEquals("Getting private static field failed!", SubClass.SECRET_STATIC_CHAR, secretChar);
+		assertEquals(SubClass.SECRET_STATIC_CHAR, secretChar);
 
 		String secretString = (String) Reflection.getPrivateField(new SubClass(), "secretString");
-		assertEquals("Getting private String failed!", new SubClass().secretString, secretString);
+		assertEquals(new SubClass().secretString, secretString);
 
 		int secretInteger = (Integer) Reflection.getPrivateField(new SubClass(), "SECRET_INTEGER");
-		assertEquals("Getting private Integer failed!", new SubClass().SECRET_INTEGER, secretInteger);
+		assertEquals(new SubClass().SECRET_INTEGER, secretInteger);
 
 		float secretFloat = (Float) Reflection.getPrivateField(SuperClass.class, new SubClass(), "SECRET_FLOAT");
-		assertEquals("Getting private Float from super class failed!", new SuperClass().SECRET_FLOAT, secretFloat);
+		assertEquals(new SuperClass().SECRET_FLOAT, secretFloat);
 
 		byte secretByte = (Byte) Reflection.getPrivateField(new SuperClass(), "secretByte");
-		assertEquals("Getting private Float from super class failed!", new SuperClass().secretByte, secretByte);
+		assertEquals(new SuperClass().secretByte, secretByte);
 
 		char newSecretChar = 'n';
 		Reflection.setPrivateField(SubClass.class, "SECRET_STATIC_CHAR", newSecretChar);
 		secretChar = (Character) Reflection.getPrivateField(SubClass.class, "SECRET_STATIC_CHAR");
-		assertEquals("Setting private static field failed!", newSecretChar, secretChar);
+		assertEquals(newSecretChar, secretChar);
 
 		SubClass sub = new SubClass();
 		String newSecretString = "This is a new secret string!";
 		Reflection.setPrivateField(sub, "secretString", newSecretString);
 		secretString = (String) Reflection.getPrivateField(sub, "secretString");
-		assertEquals("Setting private String failed!", newSecretString, secretString);
+		assertEquals(newSecretString, secretString);
 
 		int newSecretInteger = 128;
 		Reflection.setPrivateField(sub, "SECRET_INTEGER", newSecretInteger);
 		secretInteger = (Integer) Reflection.getPrivateField(sub, "SECRET_INTEGER");
-		assertEquals("Setting private Integer failed!", newSecretInteger, secretInteger);
+		assertEquals(newSecretInteger, secretInteger);
 
 		float newSecretFloat = -5.4f;
 		Reflection.setPrivateField(SuperClass.class, sub, "SECRET_FLOAT", newSecretFloat);
 		secretFloat = (Float) Reflection.getPrivateField(SuperClass.class, sub, "SECRET_FLOAT");
-		assertEquals("Setting private Float from super class failed!", newSecretFloat, secretFloat);
+		assertEquals(newSecretFloat, secretFloat);
 	}
 
 	public void testPrivateFieldWithNullObject() {
@@ -82,7 +82,7 @@ public class ReflectionTest extends AndroidTestCase {
 			Reflection.getPrivateField(SubClass.class, nullObject, "SECRET_INTEGER");
 			fail("Getting private field of null object didn't cause an IllegalArgumentException");
 		} catch (Exception exception) {
-			assertEquals("Wrong exception has been thrown", exception.getCause().getClass(), NullPointerException.class);
+			assertEquals(exception.getCause().getClass(), NullPointerException.class);
 		}
 
 		try {
@@ -95,7 +95,7 @@ public class ReflectionTest extends AndroidTestCase {
 			Reflection.setPrivateField(SubClass.class, nullObject, "SECRET_INTEGER", 123);
 			fail("Setting private field of null object didn't cause an IllegalArgumentException");
 		} catch (Exception exception) {
-			assertEquals("Wrong exception has been thrown", exception.getCause().getClass(), NullPointerException.class);
+			assertEquals(exception.getCause().getClass(), NullPointerException.class);
 		}
 	}
 
@@ -153,47 +153,47 @@ public class ReflectionTest extends AndroidTestCase {
 		InvokeMethodClass invokeMethodObject = new InvokeMethodClass();
 
 		String returnValue = (String) Reflection.invokeMethod(invokeMethodObject, "methodWithoutParameters");
-		assertEquals("Wrong return value", "Called methodWithoutParameters!", returnValue);
+		assertEquals("Called methodWithoutParameters!", returnValue);
 
 		String parameter1 = "first parameter";
 		String parameter2 = "second parameter";
 		returnValue = (String) Reflection.invokeMethod(invokeMethodObject, "methodWithParameters", new ParameterList(
 				parameter1, parameter2));
-		assertEquals("Wrong return value", parameter1 + parameter2, returnValue);
+		assertEquals(parameter1 + parameter2, returnValue);
 
 		returnValue = (String) Reflection.invokeMethod(invokeMethodObject, "methodWithParameters", new ParameterList(
 				new Parameter(String.class, null), parameter2));
-		assertEquals("Wrong return value", null + parameter2, returnValue);
+		assertEquals(null + parameter2, returnValue);
 
 		InvokeMethodClass.calledVoidMethod = false;
 		Object voidReturnValue = Reflection.invokeMethod(invokeMethodObject, "voidMethod");
-		assertTrue("Void method hasn't been called", InvokeMethodClass.calledVoidMethod);
-		assertNull("Void method returned a non-null value", voidReturnValue);
+		assertTrue(InvokeMethodClass.calledVoidMethod);
+		assertNull(voidReturnValue);
 
 		String superClassMethodReturnValue = (String) Reflection.invokeMethod(Object.class, invokeMethodObject,
 				"toString");
-		assertNotNull("toString method returned null", superClassMethodReturnValue);
+		assertNotNull(superClassMethodReturnValue);
 	}
 
 	public void testInvokeMethodForClasses() {
 		String returnValue = (String) Reflection.invokeMethod(InvokeMethodClass.class, "staticMethodWithoutParameters");
-		assertEquals("Wrong return value", "Called staticMethodWithoutParameters!", returnValue);
+		assertEquals("Called staticMethodWithoutParameters!", returnValue);
 
 		String parameter1 = "first parameter";
 		String parameter2 = "second parameter";
 		returnValue = (String) Reflection.invokeMethod(InvokeMethodClass.class, "staticMethodWithParameters",
 				new ParameterList(parameter1, parameter2));
-		assertEquals("Wrong return value", parameter1 + parameter2, returnValue);
+		assertEquals(parameter1 + parameter2, returnValue);
 
 		parameter1 = null;
 		returnValue = (String) Reflection.invokeMethod(InvokeMethodClass.class, "staticMethodWithParameters",
 				new ParameterList(new Parameter(String.class, parameter1), parameter2));
-		assertEquals("Wrong return value", parameter1 + parameter2, returnValue);
+		assertEquals(parameter1 + parameter2, returnValue);
 
 		InvokeMethodClass.calledVoidMethod = false;
 		Object voidReturnValue = Reflection.invokeMethod(InvokeMethodClass.class, "staticVoidMethod");
-		assertTrue("Void method hasn't been called", InvokeMethodClass.calledVoidMethod);
-		assertNull("Void method returned a non-null value", voidReturnValue);
+		assertTrue(InvokeMethodClass.calledVoidMethod);
+		assertNull(voidReturnValue);
 	}
 
 	public void testInvokeMethodWithAutoBoxingParameter() {
@@ -201,16 +201,16 @@ public class ReflectionTest extends AndroidTestCase {
 
 		float returnValue = (Float) Reflection.invokeMethod(invokeMethodObject, "methodWithPrimitiveParameter",
 				new ParameterList(3.14f));
-		assertEquals("Method with primitive float parameter hasn't been called", returnValue, 1.0f);
+		assertEquals(returnValue, 1.0f);
 
 		Float floatObject = Float.valueOf(1.234f);
 		returnValue = (Float) Reflection.invokeMethod(invokeMethodObject, "methodWithPrimitiveParameter",
 				new ParameterList(floatObject));
-		assertEquals("Method with float object parameter hasn't been converted into primitive", returnValue, 1.0f);
+		assertEquals(returnValue, 1.0f);
 
 		returnValue = (Float) Reflection.invokeMethod(invokeMethodObject, "methodWithWrappedPrimitiveParameter",
 				new ParameterList(new Parameter(Float.class, Float.valueOf(3.14f))));
-		assertEquals("Method with float object parameter hasn't been called", returnValue, -1.0f);
+		assertEquals(returnValue, -1.0f);
 	}
 
 	public void testConvertObjectsIntoPrimitives() {

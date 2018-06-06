@@ -45,8 +45,8 @@ public class SetSizeToActionTest extends InstrumentationTestCase {
 	}
 
 	public void testSize() {
-		assertEquals("Unexpected initial sprite size value", 1f, sprite.look.getScaleX());
-		assertEquals("Unexpected initial sprite size value", 1f, sprite.look.getScaleY());
+		assertEquals(1f, sprite.look.getScaleX());
+		assertEquals(1f, sprite.look.getScaleY());
 
 		sprite.getActionFactory().createSetSizeToAction(sprite, size).act(1.0f);
 		assertEquals("Incorrect sprite size value after SetSizeToBrick executed", SIZE / 100,
@@ -57,7 +57,7 @@ public class SetSizeToActionTest extends InstrumentationTestCase {
 
 	public void testNegativeSize() {
 		float initialSize = sprite.look.getSizeInUserInterfaceDimensionUnit();
-		assertEquals("Unexpected initial sprite size value", 100f, initialSize);
+		assertEquals(100f, initialSize);
 
 		sprite.getActionFactory().createSetSizeToAction(sprite, new Formula(-10)).act(1.0f);
 		assertEquals("Incorrect sprite size value after SetSizeToBrick executed", 0f,

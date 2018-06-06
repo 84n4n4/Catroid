@@ -79,7 +79,7 @@ public class ComeToFrontActionTest extends AndroidTestCase {
 		parentGroup.addActor(nextSprite.look);
 		project.getDefaultScene().addSprite(nextSprite);
 
-		assertEquals("Unexpected initial z position of topSprite", 3, nextSprite.look.getZIndex());
+		assertEquals(3, nextSprite.look.getZIndex());
 
 		ActionFactory factory2 = middleSprite.getActionFactory();
 		Action action2 = factory2.createComeToFrontAction(bottomSprite);

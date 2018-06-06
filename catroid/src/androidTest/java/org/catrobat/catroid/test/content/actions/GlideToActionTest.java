@@ -51,8 +51,8 @@ public class GlideToActionTest extends AndroidTestCase {
 	}
 
 	public void testNormalBehavior() throws InterruptedException {
-		assertEquals("Unexpected initial sprite x position", 0f, sprite.look.getXInUserInterfaceDimensionUnit());
-		assertEquals("Unexpected initial sprite y position", 0f, sprite.look.getYInUserInterfaceDimensionUnit());
+		assertEquals(0f, sprite.look.getXInUserInterfaceDimensionUnit());
+		assertEquals(0f, sprite.look.getYInUserInterfaceDimensionUnit());
 		sprite.look.setWidth(100.0f);
 		sprite.look.setHeight(50.0f);
 

@@ -110,14 +110,14 @@ public class CatroidFieldKeySorterTest extends AndroidTestCase {
 		FieldKey fieldKey = new FieldKey("b", SortAlphabeticallyWithAliases.class, 0);
 		String fieldName = CatroidFieldKeySorter.getAliasOrFieldName(fieldKey);
 
-		assertEquals("Wrong field name", "b", fieldName);
+		assertEquals("b", fieldName);
 	}
 
 	public void testGetFieldAlias() {
 		FieldKey fieldKeyWithAlias = new FieldKey("a", SortAlphabeticallyWithAliases.class, 0);
 		String fieldAlias = CatroidFieldKeySorter.getAliasOrFieldName(fieldKeyWithAlias);
 
-		assertEquals("Wrong field alias", "x", fieldAlias);
+		assertEquals("x", fieldAlias);
 	}
 
 	public void testSortAlphabeticallyWithAliases() {

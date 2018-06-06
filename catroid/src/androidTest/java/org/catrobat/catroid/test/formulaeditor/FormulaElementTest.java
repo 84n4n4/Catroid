@@ -51,8 +51,8 @@ public class FormulaElementTest extends InstrumentationTestCase {
 		InternFormulaParser internParser = new InternFormulaParser(internTokenList);
 		FormulaElement parseTree = internParser.parseFormula();
 
-		assertNotNull("Formula is not parsed correctly: ( - 1 )", parseTree);
-		assertEquals("Formula interpretation is not as expected", -1d, parseTree.interpretRecursive(null));
+		assertNotNull(parseTree);
+		assertEquals(-1d, parseTree.interpretRecursive(null));
 
 		List<InternToken> internTokenListAfterConversion = parseTree.getInternTokenList();
 		assertEquals("Generate InternTokenList from Tree error", internTokenListAfterConversion.size(),
@@ -88,7 +88,7 @@ public class FormulaElementTest extends InstrumentationTestCase {
 		FormulaElement formulaElement = new FormulaElement(ElementType.OPERATOR, Operators.PLUS.name(), null, null,
 				new FormulaElement(ElementType.NUMBER, "1.0", null));
 
-		assertEquals("Not existing unary operator misinterpretation", 0d, formulaElement.interpretRecursive(null));
+		assertEquals(0d, formulaElement.interpretRecursive(null));
 	}
 
 	public void testCheckDegeneratedDoubleValues() {
@@ -97,30 +97,30 @@ public class FormulaElementTest extends InstrumentationTestCase {
 				new FormulaElement(ElementType.NUMBER, Double.toString(Double.MAX_VALUE), null), new FormulaElement(
 				ElementType.NUMBER, Double.toString(Double.MAX_VALUE), null));
 
-		assertEquals("Degenerated double values error", Double.MAX_VALUE, formulaElement.interpretRecursive(null));
+		assertEquals(Double.MAX_VALUE, formulaElement.interpretRecursive(null));
 
 		formulaElement = new FormulaElement(ElementType.OPERATOR, Operators.MINUS.name(), null, new FormulaElement(
 				ElementType.NUMBER, Double.toString(Double.MAX_VALUE * -1d), null), new FormulaElement(
 				ElementType.NUMBER, Double.toString(Double.MAX_VALUE), null));
 
-		assertEquals("Degenerated double values error", Double.MAX_VALUE * -1d, formulaElement.interpretRecursive(null));
+		assertEquals(Double.MAX_VALUE * -1d, formulaElement.interpretRecursive(null));
 
 		formulaElement = new FormulaElement(ElementType.OPERATOR, Operators.DIVIDE.name(), null, new FormulaElement(
 				ElementType.NUMBER, "0", null), new FormulaElement(ElementType.NUMBER, "0", null));
 
-		assertEquals("Degenerated double values error", Double.NaN, formulaElement.interpretRecursive(null));
+		assertEquals(Double.NaN, formulaElement.interpretRecursive(null));
 	}
 
 	public void testIsLogicalOperator() {
 		FormulaElement formulaElement = new FormulaElement(ElementType.USER_VARIABLE, "notExistingUserVariable", null);
-		assertFalse("isLogicalOperator found logical operator but was userVariable", formulaElement.isLogicalOperator());
+		assertFalse(formulaElement.isLogicalOperator());
 	}
 
 	public void testContainsElement() {
 		FormulaElement formulaElement = new FormulaElement(ElementType.OPERATOR, Operators.MINUS.name(), null,
 				new FormulaElement(ElementType.NUMBER, "0.0", null), new FormulaElement(ElementType.USER_VARIABLE,
 				"user-variable", null));
-		assertTrue("ContainsElement: uservariable not found", formulaElement.containsElement(ElementType.USER_VARIABLE));
+		assertTrue(formulaElement.containsElement(ElementType.USER_VARIABLE));
 
 		formulaElement = new FormulaElement(ElementType.FUNCTION, Functions.SIN.name(), null, new FormulaElement(
 				ElementType.OPERATOR, "+", null), null);

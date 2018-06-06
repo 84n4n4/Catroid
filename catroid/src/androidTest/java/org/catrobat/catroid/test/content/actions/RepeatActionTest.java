@@ -182,7 +182,7 @@ public class RepeatActionTest extends InstrumentationTestCase {
 		}
 		int executedCount = (Integer) Reflection.getPrivateField(repeatAction, "executedCount");
 
-		assertEquals("Executed the wrong number of times!", 0, executedCount);
+		assertEquals(0, executedCount);
 	}
 
 	public void testZeroRepeats() {
@@ -197,7 +197,7 @@ public class RepeatActionTest extends InstrumentationTestCase {
 
 		int executedCount = (Integer) Reflection.getPrivateField(repeatAction, "executedCount");
 
-		assertEquals("Executed the wrong number of times!", 0, executedCount);
+		assertEquals(0, executedCount);
 		assertEquals("Loop was executed although repeats were set to zero!", expectedDeltaY,
 				testSprite.look.getYInUserInterfaceDimensionUnit());
 	}
@@ -217,7 +217,7 @@ public class RepeatActionTest extends InstrumentationTestCase {
 		Action repeatAction = testSprite.getActionFactory().createRepeatAction(testSprite, null, repeatedAction);
 		repeatAction.act(1.0f);
 		Object repeatCountValue = Reflection.getPrivateField(repeatAction, "repeatCountValue");
-		assertEquals("Null Formula should not have been possible to interpret!", 0, repeatCountValue);
+		assertEquals(0, repeatCountValue);
 	}
 
 	public void testNotANumberFormula() {

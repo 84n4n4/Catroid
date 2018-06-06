@@ -155,10 +155,10 @@ public class PhysicsShapeBuilderTest extends InstrumentationTestCase {
 	private void checkBuiltShapes(Shape[] shapes, int expectedPolynomCount, int[] expectedVertices) {
 		boolean debug = false;
 
-		assertNotNull("Shapes should not be null", shapes);
+		assertNotNull(shapes);
 
 		if (!debug) {
-			assertEquals("Polynom count is not correct", expectedPolynomCount, shapes.length);
+			assertEquals(expectedPolynomCount, shapes.length);
 		}
 		if (!debug) {
 			assertEquals("The array expectedVertices must have length of expectedPolynomCount", expectedPolynomCount,
@@ -186,7 +186,7 @@ public class PhysicsShapeBuilderTest extends InstrumentationTestCase {
 						Log.d(TAG, "x=" + vertex.x + ";y=" + vertex.y);
 					}
 					if (!debug) {
-						assertEquals("vertex count is not correct", expectedVertices[idx], vertexCount);
+						assertEquals(expectedVertices[idx], vertexCount);
 					}
 					break;
 			}

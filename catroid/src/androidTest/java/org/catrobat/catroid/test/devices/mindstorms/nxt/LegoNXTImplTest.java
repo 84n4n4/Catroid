@@ -72,23 +72,23 @@ public class LegoNXTImplTest extends AndroidTestCase {
 
 		nxt.initialise();
 
-		assertNotNull("Motor A not initialized correctly", nxt.getMotorA());
-		assertNotNull("Motor B not initialized correctly", nxt.getMotorB());
-		assertNotNull("Motor C not initialized correctly", nxt.getMotorC());
+		assertNotNull(nxt.getMotorA());
+		assertNotNull(nxt.getMotorB());
+		assertNotNull(nxt.getMotorC());
 
-		assertNotNull("Sensor 1 not initialized correctly", nxt.getSensor1());
+		assertNotNull(nxt.getSensor1());
 		assertTrue("Sensor 1 is of wrong instance, SensorFactory may has an error",
 				nxt.getSensor1() instanceof NXTLightSensor);
 
-		assertNotNull("Sensor 2 not initialized correctly", nxt.getSensor2());
+		assertNotNull(nxt.getSensor2());
 		assertTrue("Sensor 2 is of wrong instance, SensorFactory may has an error",
 				nxt.getSensor2() instanceof NXTSoundSensor);
 
-		assertNotNull("Sensor 3 not initialized correctly", nxt.getSensor3());
+		assertNotNull(nxt.getSensor3());
 		assertTrue("Sensor 3 is of wrong instance, SensorFactory may has an error",
 				nxt.getSensor3() instanceof NXTTouchSensor);
 
-		assertNotNull("Sensor 4 not initialized correctly", nxt.getSensor4());
+		assertNotNull(nxt.getSensor4());
 		assertTrue("Sensor 4 is of wrong instance, SensorFactory may has an error",
 				nxt.getSensor4() instanceof NXTI2CUltraSonicSensor);
 	}
@@ -108,7 +108,7 @@ public class LegoNXTImplTest extends AndroidTestCase {
 
 		Thread.sleep(PREFERENCES_SAVE_BROADCAST_DELAY);
 
-		assertNotNull("Sensor 1 not initialized correctly", nxt.getSensor1());
+		assertNotNull(nxt.getSensor1());
 		assertTrue("Sensor 1 is of wrong instance, SensorFactory may has an error",
 				nxt.getSensor1() instanceof NXTLightSensor);
 
@@ -117,7 +117,7 @@ public class LegoNXTImplTest extends AndroidTestCase {
 
 		Thread.sleep(PREFERENCES_SAVE_BROADCAST_DELAY);
 
-		assertNotNull("Sensor 1 not reinitialized correctly", nxt.getSensor1());
+		assertNotNull(nxt.getSensor1());
 		assertTrue("Sensor 1 is of wrong instance now, SensorFactory may has an error",
 				nxt.getSensor1() instanceof NXTTouchSensor);
 	}
@@ -133,8 +133,8 @@ public class LegoNXTImplTest extends AndroidTestCase {
 
 		byte[] setOutputState = logger.getNextSentMessage(0, 2);
 
-		assertEquals("Expected Hz not same as input Hz", (byte) expectedHz, setOutputState[2]);
-		assertEquals("Expected Hz not same as input Hz", (byte) (expectedHz >> 8), setOutputState[3]);
+		assertEquals((byte) expectedHz, setOutputState[2]);
+		assertEquals((byte) (expectedHz >> 8), setOutputState[3]);
 	}
 
 	public void testPlayToneHzOverMaxValue() {
@@ -149,8 +149,8 @@ public class LegoNXTImplTest extends AndroidTestCase {
 
 		byte[] setOutputState = logger.getNextSentMessage(0, 2);
 
-		assertEquals("Expected Hz over maximum Value (max. Value = 14000)", (byte) expectedHz, setOutputState[2]);
-		assertEquals("Expected Hz over maximum Value (max. Value = 14000)", (byte) (expectedHz >> 8), setOutputState[3]);
+		assertEquals((byte) expectedHz, setOutputState[2]);
+		assertEquals((byte) (expectedHz >> 8), setOutputState[3]);
 	}
 
 	public void testCheckDurationOfTone() {
@@ -166,8 +166,8 @@ public class LegoNXTImplTest extends AndroidTestCase {
 
 		byte[] setOutputState = logger.getNextSentMessage(0, 2);
 
-		assertEquals("Expected Duration not same as Input Duration", (byte) expectedDurationInMs, setOutputState[4]);
-		assertEquals("Expected Duration not same as Input Duration", (byte) (expectedDurationInMs >> 8), setOutputState[5]);
+		assertEquals((byte) expectedDurationInMs, setOutputState[4]);
+		assertEquals((byte) (expectedDurationInMs >> 8), setOutputState[5]);
 	}
 
 	public void testWithZeroDuration() {
@@ -180,6 +180,6 @@ public class LegoNXTImplTest extends AndroidTestCase {
 
 		ArrayList<byte[]> commands = logger.getSentMessages(2, 0);
 
-		assertEquals("No commands should be sent", 0, commands.size());
+		assertEquals(0, commands.size());
 	}
 }

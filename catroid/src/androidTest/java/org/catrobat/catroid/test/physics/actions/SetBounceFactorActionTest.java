@@ -96,7 +96,7 @@ public class SetBounceFactorActionTest extends PhysicsCollisionBaseTest {
 	public void testNullFormula() {
 		PhysicsObject physicsObject = physicsWorld.getPhysicsObject(sprite);
 		sprite.getActionFactory().createSetBounceFactorAction(sprite, null).act(1.0f);
-		assertEquals("Unexpected bounce-factor value", 0f, physicsObject.getBounceFactor());
+		assertEquals(0f, physicsObject.getBounceFactor());
 	}
 
 	public void testNotANumberFormula() {

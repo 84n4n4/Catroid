@@ -45,18 +45,18 @@ public class SetColorActionTest extends InstrumentationTestCase {
 	}
 
 	public void testColorEffect() {
-		assertEquals("Unexpected initial color value", (int) 0, (int) sprite.look.getColorInUserInterfaceDimensionUnit());
+		assertEquals((int) 0, (int) sprite.look.getColorInUserInterfaceDimensionUnit());
 		sprite.getActionFactory().createSetColorAction(sprite, color).act(1.0f);
-		assertEquals("Incorrect color value after SetColorTo executed", COLOR, sprite.look.getColorInUserInterfaceDimensionUnit());
+		assertEquals(COLOR, sprite.look.getColorInUserInterfaceDimensionUnit());
 		sprite.getActionFactory().createSetColorAction(sprite, color);
 	}
 
 	public void testValueAboveMax() {
 		final float highColor = 1000;
 
-		assertEquals("Unexpected initial color value", (int) 0, (int) sprite.look.getColorInUserInterfaceDimensionUnit());
+		assertEquals((int) 0, (int) sprite.look.getColorInUserInterfaceDimensionUnit());
 		sprite.getActionFactory().createSetColorAction(sprite, new Formula(highColor)).act(1.0f);
-		assertEquals("Incorrect color value after SetColorTo executed", (highColor % 200), sprite.look.getColorInUserInterfaceDimensionUnit());
+		assertEquals((highColor % 200), sprite.look.getColorInUserInterfaceDimensionUnit());
 	}
 
 	public void testNullSprite() {
@@ -65,7 +65,7 @@ public class SetColorActionTest extends InstrumentationTestCase {
 			action.act(1.0f);
 			fail("Execution of SetColorToBrick with null Sprite did not cause a NullPointerException to be thrown");
 		} catch (NullPointerException expected) {
-			assertTrue("Exception thrown as expected", true);
+			assertTrue(true);
 		}
 	}
 

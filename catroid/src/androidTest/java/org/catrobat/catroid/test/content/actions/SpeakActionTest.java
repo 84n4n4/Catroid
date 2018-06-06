@@ -59,7 +59,7 @@ public class SpeakActionTest extends AndroidTestCase {
 
 		assertEquals("Text is not updated after SpeakBrick executed", text, speakBrick
 				.getFormulaWithBrickField(Brick.BrickField.SPEAK));
-		assertEquals("Text is not updated after SpeakBrick executed", text, textAfterExecution);
+		assertEquals(text, textAfterExecution);
 
 		speakBrick = new SpeakBrick(text2);
 		action = factory.createSpeakAction(sprite, text);
@@ -67,7 +67,7 @@ public class SpeakActionTest extends AndroidTestCase {
 
 		assertEquals("Text is not updated after SpeakBrick executed", text2, speakBrick
 				.getFormulaWithBrickField(Brick.BrickField.SPEAK));
-		assertEquals("Text is not updated after SpeakBrick executed", text, textAfterExecution);
+		assertEquals(text, textAfterExecution);
 	}
 
 	public void testNullSprite() {
@@ -85,7 +85,7 @@ public class SpeakActionTest extends AndroidTestCase {
 
 	public void testRequirements() {
 		SpeakBrick speakBrick = new SpeakBrick(new Formula(""));
-		assertEquals("Wrong required brick resources", Brick.TEXT_TO_SPEECH, speakBrick.getRequiredResources());
+		assertEquals(Brick.TEXT_TO_SPEECH, speakBrick.getRequiredResources());
 	}
 
 	public void testBrickWithStringFormula() {

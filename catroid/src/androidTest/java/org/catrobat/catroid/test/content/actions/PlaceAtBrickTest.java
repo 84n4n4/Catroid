@@ -45,8 +45,8 @@ public class PlaceAtBrickTest extends AndroidTestCase {
 	}
 
 	public void testNormalBehavior() {
-		assertEquals("Unexpected initial sprite x position", 0f, sprite.look.getXInUserInterfaceDimensionUnit());
-		assertEquals("Unexpected initial sprite y position", 0f, sprite.look.getYInUserInterfaceDimensionUnit());
+		assertEquals(0f, sprite.look.getXInUserInterfaceDimensionUnit());
+		assertEquals(0f, sprite.look.getYInUserInterfaceDimensionUnit());
 
 		sprite.getActionFactory().createPlaceAtAction(sprite, xPosition, yPosition).act(1.0f);
 		assertEquals("Incorrect sprite x position after PlaceAtBrick executed", X_POSITION_VALUE,

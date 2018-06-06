@@ -131,11 +131,11 @@ public class ParserTestSensors {
 		FaceDetector faceDetector = (FaceDetector) Reflection.getPrivateField(FaceDetectionHandler.class,
 				"faceDetector");
 
-		assertNotNull("SensorHandler was not registered as a listener at FaceDetectionHandler", faceDetector);
+		assertNotNull(faceDetector);
 
 		assertEquals("Face detection status initial value error", 0d,
 				SensorHandler.getSensorValue(Sensors.FACE_DETECTED));
-		assertEquals("Face detection size initial value error", 0d, SensorHandler.getSensorValue(Sensors.FACE_SIZE));
+		assertEquals(0d, SensorHandler.getSensorValue(Sensors.FACE_SIZE));
 
 		Method[] methods = faceDetector.getClass().getSuperclass().getDeclaredMethods();
 		for (Method method : methods) {
@@ -208,9 +208,9 @@ public class ParserTestSensors {
 		Reflection.setPrivateField(loudnessSensor, "recorder", simulatedSoundRecorder);
 
 		SensorHandler.startSensorListener(getInstrumentation().getTargetContext());
-		assertTrue("LoudnessSensor dit not start recording, isRecording()", simulatedSoundRecorder.isRecording());
+		assertTrue(simulatedSoundRecorder.isRecording());
 		SensorHandler.stopSensorListeners();
-		assertFalse("LoudnessSensor did not stop recording, isRecording()", simulatedSoundRecorder.isRecording());
+		assertFalse(simulatedSoundRecorder.isRecording());
 	}
 
 	private Formula createFormulaWithSensor(Sensors sensor) {

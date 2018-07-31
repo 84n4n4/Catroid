@@ -130,7 +130,7 @@ public class IfThenElseBrickTest {
 		ifThenElseBeginBrickPosition = 1;
 		IfLogicBeginBrick ifBrick = new IfLogicBeginBrick(condition);
 		IfLogicElseBrick elseBrick = new IfLogicElseBrick(ifBrick);
-		IfLogicEndBrick endBrick = new IfLogicEndBrick(elseBrick, ifBrick);
+		IfLogicEndBrick endBrick = new IfLogicEndBrick(ifBrick, elseBrick);
 
 		Script script = BrickTestUtils.createProjectAndGetStartScript("IfThenElseBrickTest");
 		script.addBrick(ifBrick);

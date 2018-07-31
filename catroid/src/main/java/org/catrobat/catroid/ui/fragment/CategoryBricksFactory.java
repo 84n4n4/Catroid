@@ -462,7 +462,7 @@ public class CategoryBricksFactory {
 		if (!isBackground(sprite)) {
 			penBrickList.add(new PenDownBrick());
 			penBrickList.add(new PenUpBrick());
-			penBrickList.add(new SetPenSizeBrick(4));
+			penBrickList.add(new SetPenSizeBrick(BrickValues.PEN_SIZE));
 			penBrickList.add(new SetPenColorBrick(0, 0, 255));
 			penBrickList.add(new StampBrick());
 		}

@@ -29,7 +29,6 @@ import android.widget.TextView;
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.actions.ScriptSequenceAction;
-import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.datacontainer.DataContainer;
 import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
 
@@ -45,32 +44,6 @@ public class UserBrickParameter extends FormulaBrick {
 	private transient TextView prototypeView;
 
 	private transient UserBrick parent;
-
-	public UserBrickParameter(UserBrick parent, UserScriptDefinitionBrickElement element) {
-		this.parent = parent;
-		this.element = element;
-		addAllowedBrickField(BrickField.USER_BRICK);
-		setFormulaWithBrickField(BrickField.USER_BRICK, new Formula(0));
-	}
-
-	public UserBrickParameter(Formula parameter) {
-		addAllowedBrickField(BrickField.USER_BRICK);
-		setFormulaWithBrickField(BrickField.USER_BRICK, parameter);
-	}
-
-	@Override
-	public UserBrickParameter clone() {
-		UserBrickParameter clonedBrick = new UserBrickParameter(getFormulaWithBrickField(
-				BrickField.USER_BRICK).clone());
-		if (textView != null) {
-			clonedBrick.getFormulaWithBrickField(BrickField.USER_BRICK).setTextFieldId(textView.getId());
-		}
-		clonedBrick.parent = parent;
-		clonedBrick.element = element;
-		clonedBrick.textView = textView;
-		clonedBrick.prototypeView = prototypeView;
-		return clonedBrick;
-	}
 
 	@Override
 	public int getViewResource() {
@@ -88,8 +61,9 @@ public class UserBrickParameter extends FormulaBrick {
 		DataContainer dataContainer = ProjectManager.getInstance().getCurrentlyEditedScene().getDataContainer();
 		String variableName = element.getText();
 
-		sequence.addAction(sprite.getActionFactory().createSetVariableAction(sprite,
-				getFormulaWithBrickField(BrickField.VARIABLE), dataContainer.getUserVariable(sprite, parent, variableName)));
+		sequence.addAction(sprite.getActionFactory()
+				.createSetVariableAction(sprite, getFormulaWithBrickField(BrickField.VARIABLE),
+						dataContainer.getUserVariable(sprite, parent, variableName)));
 		return null;
 	}
 

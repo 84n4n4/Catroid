@@ -28,23 +28,17 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.common.BrickValues;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.actions.ScriptSequenceAction;
 import org.catrobat.catroid.formulaeditor.Formula;
-import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
-import org.catrobat.catroid.utils.Utils;
 
 import java.util.List;
 
 public class PhiroPlayToneBrick extends FormulaBrick {
 
 	private static final long serialVersionUID = 1L;
-
-	private transient View prototypeView;
 
 	private String tone;
 	private transient Tone toneEnum;
@@ -53,20 +47,15 @@ public class PhiroPlayToneBrick extends FormulaBrick {
 		DO, RE, MI, FA, SO, LA, TI
 	}
 
-	public PhiroPlayToneBrick() {
-		addAllowedBrickField(BrickField.PHIRO_DURATION_IN_SECONDS);
+	public PhiroPlayToneBrick(Tone tone, int duration) {
+		this(tone, new Formula(duration));
 	}
 
-	public PhiroPlayToneBrick(Tone tone, int durationValue) {
+	public PhiroPlayToneBrick(Tone tone, Formula formula) {
 		this.toneEnum = tone;
 		this.tone = toneEnum.name();
-		initializeBrickFields(new Formula(durationValue));
-	}
-
-	public PhiroPlayToneBrick(Tone tone, Formula durationFormula) {
-		this.toneEnum = tone;
-		this.tone = toneEnum.name();
-		initializeBrickFields(durationFormula);
+		addAllowedBrickField(BrickField.PHIRO_DURATION_IN_SECONDS, R.id.brick_phiro_play_tone_duration_edit_text);
+		setFormulaWithBrickField(BrickField.PHIRO_DURATION_IN_SECONDS, formula);
 	}
 
 	protected Object readResolve() {
@@ -76,51 +65,37 @@ public class PhiroPlayToneBrick extends FormulaBrick {
 		return this;
 	}
 
-	private void initializeBrickFields(Formula duration) {
-		addAllowedBrickField(BrickField.PHIRO_DURATION_IN_SECONDS);
-		setFormulaWithBrickField(BrickField.PHIRO_DURATION_IN_SECONDS, duration);
-	}
-
-	@Override
-	public int getRequiredResources() {
-		return BLUETOOTH_PHIRO | getFormulaWithBrickField(BrickField.PHIRO_DURATION_IN_SECONDS).getRequiredResources();
-	}
-
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = super.getPrototypeView(context);
-		TextView textDuration = (TextView) prototypeView.findViewById(R.id.brick_phiro_play_tone_duration_edit_text);
-		textDuration.setText(formatNumberForPrototypeView(BrickValues.PHIRO_DURATION));
-		TextView times = (TextView) prototypeView.findViewById(R.id.brick_phiro_play_tone_seconds_text_view);
-		times.setText(context.getResources().getQuantityString(R.plurals.second_plural,
-				Utils.convertDoubleToPluralInteger(BrickValues.PHIRO_DURATION)));
-
-		Spinner phiroProToneSpinner = (Spinner) prototypeView.findViewById(R.id.brick_phiro_select_tone_spinner);
-
-		ArrayAdapter<CharSequence> toneAdapter = ArrayAdapter.createFromResource(context, R.array.brick_phiro_select_tone_spinner,
-				android.R.layout.simple_spinner_item);
-		toneAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-		phiroProToneSpinner.setAdapter(toneAdapter);
-		phiroProToneSpinner.setSelection(toneEnum.ordinal());
-		return prototypeView;
-	}
-
 	@Override
 	public int getViewResource() {
 		return R.layout.brick_phiro_play_tone;
 	}
 
 	@Override
+	public View getPrototypeView(Context context) {
+		View prototypeView = super.getPrototypeView(context);
+
+		Spinner phiroProToneSpinner = prototypeView.findViewById(R.id.brick_phiro_select_tone_spinner);
+
+		ArrayAdapter<CharSequence> toneAdapter = ArrayAdapter
+				.createFromResource(context, R.array.brick_phiro_select_tone_spinner, android.R.layout.simple_spinner_item);
+
+		toneAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		phiroProToneSpinner.setAdapter(toneAdapter);
+		phiroProToneSpinner.setSelection(toneEnum.ordinal());
+
+		setSecondsLabel(prototypeView, BrickField.PHIRO_DURATION_IN_SECONDS);
+		return prototypeView;
+	}
+
+	@Override
 	public View getView(Context context) {
 		super.getView(context);
-		setSecondText(view, R.id.brick_phiro_play_tone_seconds_text_view, R.id.brick_phiro_play_tone_duration_edit_text, BrickField.PHIRO_DURATION_IN_SECONDS);
 
-		ArrayAdapter<CharSequence> toneAdapter = ArrayAdapter.createFromResource(context, R.array.brick_phiro_select_tone_spinner,
-				android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> toneAdapter = ArrayAdapter
+				.createFromResource(context, R.array.brick_phiro_select_tone_spinner, android.R.layout.simple_spinner_item);
+
 		toneAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		Spinner toneSpinner = (Spinner) view.findViewById(R.id.brick_phiro_select_tone_spinner);
-
+		Spinner toneSpinner = view.findViewById(R.id.brick_phiro_select_tone_spinner);
 		toneSpinner.setAdapter(toneAdapter);
 		toneSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -134,25 +109,29 @@ public class PhiroPlayToneBrick extends FormulaBrick {
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
+
 		if (toneEnum == null) {
 			readResolve();
 		}
+
 		toneSpinner.setSelection(toneEnum.ordinal());
+		setSecondsLabel(view, BrickField.PHIRO_DURATION_IN_SECONDS);
 
 		return view;
 	}
 
 	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.PHIRO_DURATION_IN_SECONDS);
+	public int getRequiredResources() {
+		return BLUETOOTH_PHIRO | getFormulaWithBrickField(BrickField.PHIRO_DURATION_IN_SECONDS).getRequiredResources();
 	}
 
 	@Override
 	public List<ScriptSequenceAction> addActionToSequence(Sprite sprite, ScriptSequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createPhiroPlayToneActionAction(sprite, toneEnum,
-				getFormulaWithBrickField(BrickField.PHIRO_DURATION_IN_SECONDS)));
-		sequence.addAction(sprite.getActionFactory().createDelayAction(sprite, getFormulaWithBrickField(BrickField
-				.PHIRO_DURATION_IN_SECONDS)));
+		sequence.addAction(sprite.getActionFactory()
+				.createPhiroPlayToneActionAction(sprite, toneEnum,
+						getFormulaWithBrickField(BrickField.PHIRO_DURATION_IN_SECONDS)));
+		sequence.addAction(sprite.getActionFactory()
+				.createDelayAction(sprite, getFormulaWithBrickField(BrickField.PHIRO_DURATION_IN_SECONDS)));
 		return null;
 	}
 }

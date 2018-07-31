@@ -289,8 +289,6 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 	private void onUserDismiss() {
 		refreshFormulaPreviewString(currentFormula.getTrimmedFormulaString(getActivity()));
 		formulaEditorEditText.endEdit();
-		currentFormula.prepareToRemove();
-
 		getFragmentManager().popBackStack();
 
 		BottomBar.showBottomBar(getActivity());
@@ -566,7 +564,7 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 		switch (mode) {
 			case SET_FORMULA_ON_CREATE_VIEW:
 				formulaEditorEditText.enterNewFormula(currentFormula.getInternFormulaState());
-				currentFormula.highlightTextField(brickView);
+				//TODO currentFormula.highlightTextField(brickView);
 				refreshFormulaPreviewString();
 				break;
 
@@ -739,10 +737,10 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 	public void refreshFormulaPreviewString(String newString) {
 		currentFormula.setDisplayText(newString);
 		updateBrickView();
-		currentFormula.refreshTextField(brickView, newString);
-		if (!showCustomView) {
-			currentFormula.highlightTextField(brickView);
-		}
+		//TODO: Refresh brick view
+		//if (!showCustomView) {
+			//TODO: currentFormula.highlightTextField(brickView);
+		//}
 	}
 
 	private void showCategoryListFragment(String tag, int actionbarResId) {

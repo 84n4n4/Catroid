@@ -23,9 +23,7 @@
 package org.catrobat.catroid.formulaeditor;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.View;
-import android.widget.TextView;
 
 import org.catrobat.catroid.CatroidApplication;
 import org.catrobat.catroid.ProjectManager;
@@ -35,13 +33,12 @@ import org.catrobat.catroid.formulaeditor.FormulaElement.ElementType;
 import org.catrobat.catroid.formulaeditor.datacontainer.DataContainer;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class Formula implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private FormulaElement formulaTree;
-	private transient Integer formulaTextFieldId = null;
+
 	private transient InternFormula internFormula = null;
 	private transient String displayText = null;
 
@@ -93,11 +90,6 @@ public class Formula implements Serializable {
 		internFormula.updateVariableReferences(oldName, newName, context);
 		formulaTree.updateVariableReferences(oldName, newName);
 		displayText = null;
-	}
-
-	public void getVariableAndListNames(List<String> variables, List<String> lists) {
-		internFormula.getVariableAndListNames(variables, lists);
-		formulaTree.getVariableAndListNames(variables, lists);
 	}
 
 	public void updateCollisionFormulas(String oldName, String newName, Context context) {
@@ -195,7 +187,7 @@ public class Formula implements Serializable {
 	}
 
 	public void setTextFieldId(int id) {
-		formulaTextFieldId = id;
+		//formulaTextFieldId = id;
 	}
 
 	public String getDisplayString(Context context) {
@@ -210,36 +202,11 @@ public class Formula implements Serializable {
 	}
 
 	public void refreshTextField(View view) {
-		refreshTextField(view, getTrimmedFormulaString(view.getContext()));
-	}
-
-	public void refreshTextField(View view, String formulaString) {
-		if (formulaTextFieldId != null && formulaTree != null && view != null) {
-			TextView formulaTextField = (TextView) view.findViewById(formulaTextFieldId);
-			if (formulaTextField != null) {
-				formulaTextField.setText(formulaString);
-			}
-		}
-	}
-
-	@SuppressWarnings("deprecation")
-	public void highlightTextField(View brickView) {
-		Drawable highlightBackground;
-		highlightBackground = brickView.getResources().getDrawable(R.drawable.textfield_pressed_android4);
-
-		TextView formulaTextField = (TextView) brickView.findViewById(formulaTextFieldId);
-
-		if (formulaTextField != null) {
-			formulaTextField.setBackgroundDrawable(highlightBackground);
-		}
+		//TODO
 	}
 
 	public String getTrimmedFormulaString(Context context) {
 		return internFormula.trimExternFormulaString(context);
-	}
-
-	public void prepareToRemove() {
-		formulaTextFieldId = null;
 	}
 
 	public InternFormulaState getInternFormulaState() {

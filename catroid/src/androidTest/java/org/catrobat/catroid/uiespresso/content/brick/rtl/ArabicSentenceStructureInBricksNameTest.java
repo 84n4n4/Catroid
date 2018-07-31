@@ -204,13 +204,13 @@ public class ArabicSentenceStructureInBricksNameTest {
 				.check(matches(isDisplayed()))
 				.check(isBelow(withId(R.id.brick_jumping_sumo_move_backward_label)));
 
-		onView(withId(R.id.brick_jumping_sumo_move_forward_text_second))
+		onView(withId(R.id.brick_seconds_label))
 				.check(matches(isDisplayed()))
 				.check(isLeftOf(withId(R.id.brick_jumping_sumo_move_backward_edit_text_second)));
 
 		onView(withId(R.id.brick_jumping_sumo_move_backward_text_with))
 				.check(matches(isDisplayed()))
-				.check(isLeftOf(withId(R.id.brick_jumping_sumo_move_forward_text_second)));
+				.check(isLeftOf(withId(R.id.brick_seconds_label)));
 
 		onView(withId(R.id.brick_jumping_sumo_move_backward_set_power))
 				.check(matches(isDisplayed()))
@@ -233,13 +233,13 @@ public class ArabicSentenceStructureInBricksNameTest {
 				.check(matches(isDisplayed()))
 				.check(isBelow(withId(R.id.brick_jumping_sumo_move_forward_label)));
 
-		onView(withId(R.id.brick_jumping_sumo_move_forward_text_second))
+		onView(withId(R.id.brick_seconds_label))
 				.check(matches(isDisplayed()))
 				.check(isLeftOf(withId(R.id.brick_jumping_sumo_move_forward_edit_text_second)));
 
 		onView(withId(R.id.brick_jumping_sumo_move_forward_text_with))
 				.check(matches(isDisplayed()))
-				.check(isLeftOf(withId(R.id.brick_jumping_sumo_move_forward_text_second)));
+				.check(isLeftOf(withId(R.id.brick_seconds_label)));
 
 		onView(withId(R.id.brick_jumping_sumo_move_forward_set_power))
 				.check(matches(isDisplayed()))
@@ -331,13 +331,13 @@ public class ArabicSentenceStructureInBricksNameTest {
 				.check(matches(isDisplayed()))
 				.check(isBelow(withId(R.id.brick_drone_move_down_label)));
 
-		onView(withId(R.id.brick_drone_move_down_text_second))
+		onView(withId(R.id.brick_seconds_label))
 				.check(matches(isDisplayed()))
 				.check(isLeftOf(withId(R.id.brick_drone_move_down_edit_text_second)));
 
 		onView(withId(R.id.brick_drone_move_down_text_with))
 				.check(matches(isDisplayed()))
-				.check(isLeftOf(withId(R.id.brick_drone_move_down_text_second)));
+				.check(isLeftOf(withId(R.id.brick_seconds_label)));
 
 		onView(withId(R.id.brick_drone_move_down_power))
 				.check(matches(isDisplayed()))
@@ -360,13 +360,13 @@ public class ArabicSentenceStructureInBricksNameTest {
 				.check(matches(isDisplayed()))
 				.check(isBelow(withId(R.id.brick_drone_move_up_label)));
 
-		onView(withId(R.id.brick_drone_move_up_text_second))
+		onView(withId(R.id.brick_seconds_label))
 				.check(matches(isDisplayed()))
 				.check(isLeftOf(withId(R.id.brick_drone_move_up_edit_text_second)));
 
 		onView(withId(R.id.brick_drone_move_up_text_with))
 				.check(matches(isDisplayed()))
-				.check(isLeftOf(withId(R.id.brick_drone_move_up_text_second)));
+				.check(isLeftOf(withId(R.id.brick_seconds_label)));
 
 		onView(withId(R.id.brick_drone_move_up_power))
 				.check(matches(isDisplayed()))
@@ -389,13 +389,13 @@ public class ArabicSentenceStructureInBricksNameTest {
 				.check(matches(isDisplayed()))
 				.check(isBelow(withId(R.id.brick_drone_move_left_label)));
 
-		onView(withId(R.id.brick_drone_move_left_text_second))
+		onView(withId(R.id.brick_seconds_label))
 				.check(matches(isDisplayed()))
 				.check(isLeftOf(withId(R.id.brick_drone_move_left_edit_text_second)));
 
 		onView(withId(R.id.brick_drone_move_left_text_with))
 				.check(matches(isDisplayed()))
-				.check(isLeftOf(withId(R.id.brick_drone_move_left_text_second)));
+				.check(isLeftOf(withId(R.id.brick_seconds_label)));
 
 		onView(withId(R.id.brick_drone_move_left_power))
 				.check(matches(isDisplayed()))
@@ -418,13 +418,13 @@ public class ArabicSentenceStructureInBricksNameTest {
 				.check(matches(isDisplayed()))
 				.check(isBelow(withId(R.id.brick_drone_move_right_label)));
 
-		onView(withId(R.id.brick_drone_move_right_text_second))
+		onView(withId(R.id.brick_seconds_label))
 				.check(matches(isDisplayed()))
 				.check(isLeftOf(withId(R.id.brick_drone_move_right_edit_text_second)));
 
 		onView(withId(R.id.brick_drone_move_right_text_with))
 				.check(matches(isDisplayed()))
-				.check(isLeftOf(withId(R.id.brick_drone_move_right_text_second)));
+				.check(isLeftOf(withId(R.id.brick_seconds_label)));
 
 		onView(withId(R.id.brick_drone_move_right_power))
 				.check(matches(isDisplayed()))
@@ -447,13 +447,13 @@ public class ArabicSentenceStructureInBricksNameTest {
 				.check(matches(isDisplayed()))
 				.check(isBelow(withId(R.id.brick_drone_move_backward_label)));
 
-		onView(withId(R.id.brick_drone_move_backward_text_second))
+		onView(withId(R.id.brick_seconds_label))
 				.check(matches(isDisplayed()))
 				.check(isLeftOf(withId(R.id.brick_drone_move_backward_edit_text_second)));
 
 		onView(withId(R.id.brick_drone_move_backward_text_with))
 				.check(matches(isDisplayed()))
-				.check(isLeftOf(withId(R.id.brick_drone_move_backward_text_second)));
+				.check(isLeftOf(withId(R.id.brick_seconds_label)));
 
 		onView(withId(R.id.brick_drone_move_backward_power))
 				.check(matches(isDisplayed()))
@@ -476,13 +476,13 @@ public class ArabicSentenceStructureInBricksNameTest {
 				.check(matches(isDisplayed()))
 				.check(isBelow(withId(R.id.brick_drone_move_forward_label)));
 
-		onView(withId(R.id.brick_drone_move_forward_text_second))
+		onView(withId(R.id.brick_seconds_label))
 				.check(matches(isDisplayed()))
 				.check(isLeftOf(withId(R.id.brick_drone_move_forward_edit_text_second)));
 
 		onView(withId(R.id.brick_drone_move_forward_text_with))
 				.check(matches(isDisplayed()))
-				.check(isLeftOf(withId(R.id.brick_drone_move_forward_text_second)));
+				.check(isLeftOf(withId(R.id.brick_seconds_label)));
 
 		onView(withId(R.id.brick_drone_move_forward_power))
 				.check(matches(isDisplayed()))
@@ -505,13 +505,13 @@ public class ArabicSentenceStructureInBricksNameTest {
 				.check(matches(isDisplayed()))
 				.check(isBelow(withId(R.id.brick_drone_turn_left_label)));
 
-		onView(withId(R.id.brick_drone_turn_left_text_second))
+		onView(withId(R.id.brick_seconds_label))
 				.check(matches(isDisplayed()))
 				.check(isLeftOf(withId(R.id.brick_drone_turn_left_edit_text_second)));
 
 		onView(withId(R.id.brick_drone_turn_left_text_with))
 				.check(matches(isDisplayed()))
-				.check(isLeftOf(withId(R.id.brick_drone_turn_left_text_second)));
+				.check(isLeftOf(withId(R.id.brick_seconds_label)));
 
 		onView(withId(R.id.brick_drone_turn_left_power))
 				.check(matches(isDisplayed()))
@@ -534,13 +534,13 @@ public class ArabicSentenceStructureInBricksNameTest {
 				.check(matches(isDisplayed()))
 				.check(isBelow(withId(R.id.brick_drone_turn_right_label)));
 
-		onView(withId(R.id.brick_drone_turn_right_text_second))
+		onView(withId(R.id.brick_seconds_label))
 				.check(matches(isDisplayed()))
 				.check(isLeftOf(withId(R.id.brick_drone_turn_right_edit_text_second)));
 
 		onView(withId(R.id.brick_drone_turn_right_text_with))
 				.check(matches(isDisplayed()))
-				.check(isLeftOf(withId(R.id.brick_drone_turn_right_text_second)));
+				.check(isLeftOf(withId(R.id.brick_seconds_label)));
 
 		onView(withId(R.id.brick_drone_turn_right_power))
 				.check(matches(isDisplayed()))
@@ -580,7 +580,7 @@ public class ArabicSentenceStructureInBricksNameTest {
 		Sprite spriteTwo = new Sprite(nameSpriteTwo);
 		Script script = new StartScript();
 
-		script.addBrick(new IfLogicBeginBrick());
+		script.addBrick(new IfLogicBeginBrick(10));
 		script.addBrick(new RepeatUntilBrick(5));
 
 		script.addBrick(new LegoEv3MotorMoveBrick(LegoEv3MotorMoveBrick.Motor.MOTOR_B, 5));

@@ -144,7 +144,7 @@ public class FormulaEditorEditTextTest {
 		onToast(withText(R.string.formula_editor_changes_discarded))
 				.check(matches(isDisplayed()));
 		onBrickAtPosition(1)
-				.checkShowsText("0 ");
+				.checkShowsText("10 ");
 	}
 
 	@Category({Cat.CatrobatLanguage.class, Level.Smoke.class})
@@ -172,43 +172,18 @@ public class FormulaEditorEditTextTest {
 
 	@Category({Cat.CatrobatLanguage.class, Level.Smoke.class})
 	@Test
-	public void testDiscardDialogDiscardSaveNo() {
-		onFormulaEditor()
-				.performEnterFormula("99.9");
+	public void testFormulaIsNotValidToast1() {
 		onFormulaEditor()
 				.performClickOn(BACKSPACE);
 		onFormulaEditor()
-				.performClickOn(BACKSPACE);
-		pressBack();
-		onView(withText(R.string.formula_editor_discard_changes_dialog_title))
+				.performClickOn(OK);
+		onToast(withText(R.string.formula_editor_parse_fail))
 				.check(matches(isDisplayed()));
-		onView(withText(no))
-				.perform(click());
-		onToast(withText(R.string.formula_editor_changes_discarded))
-				.check(matches(isDisplayed()));
-		onBrickAtPosition(1)
-				.checkShowsText("0 ");
 	}
 
 	@Category({Cat.CatrobatLanguage.class, Level.Smoke.class})
 	@Test
-	public void testFormulaIsNotValidToast() {
-		onFormulaEditor()
-				.performClickOn(BACKSPACE);
-		onFormulaEditor()
-				.performClickOn(OK);
-		onToast(withText(R.string.formula_editor_parse_fail))
-				.check(matches(isDisplayed()));
-
-		onFormulaEditor()
-				.performClickOn(BACKSPACE);
-		onFormulaEditor()
-				.performEnterFormula("+");
-		onFormulaEditor()
-				.performClickOn(OK);
-		onToast(withText(R.string.formula_editor_parse_fail))
-				.check(matches(isDisplayed()));
-
+	public void testFormulaIsNotValidToast2() {
 		onFormulaEditor()
 				.performClickOn(BACKSPACE);
 		onFormulaEditor()
@@ -218,6 +193,19 @@ public class FormulaEditorEditTextTest {
 				.check(matches(isDisplayed()));
 		onView(withText(yes))
 				.perform(click());
+		onToast(withText(R.string.formula_editor_parse_fail))
+				.check(matches(isDisplayed()));
+	}
+
+	@Category({Cat.CatrobatLanguage.class, Level.Smoke.class})
+	@Test
+	public void testFormulaIsNotValidToast3() {
+		onFormulaEditor()
+				.performClickOn(BACKSPACE);
+		onFormulaEditor()
+				.performEnterFormula("+");
+		onFormulaEditor()
+				.performClickOn(OK);
 		onToast(withText(R.string.formula_editor_parse_fail))
 				.check(matches(isDisplayed()));
 	}

@@ -190,9 +190,6 @@ public class BrickCloneTest {
 
 		brick = new SpeakBrick(String.valueOf(BRICK_FORMULA_VALUE));
 		brickClone(brick, Brick.BrickField.SPEAK);
-
-		brick = new UserBrickParameter(new Formula(0));
-		brickClone(brick, Brick.BrickField.USER_BRICK);
 	}
 
 	@Test

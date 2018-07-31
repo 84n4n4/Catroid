@@ -1515,8 +1515,6 @@
     <string name="brick_drone_emergency">Emergency AR.Drone 2.0</string>
     <string name="brick_drone_turn_right">Turn AR.Drone 2.0 right</string>
     <string name="brick_drone_turn_left">Turn AR.Drone 2.0 left</string>
-    <string name="brick_drone_turn_left_magneto">Turn AR.Drone 2.0 left [angle]</string>
-    <string name="brick_drone_turn_right_magneto">Turn AR.Drone 2.0 right [angle]</string>
     <string name="brick_drone_set_config">Set config AR.Drone 2.0</string>
     <string name="brick_drone_switch_camera">Switch AR.Drone 2.0 camera</string>
     <string name="brick_drone_set_altitude">Altitude limit </string>

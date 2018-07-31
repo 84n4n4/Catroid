@@ -580,7 +580,7 @@ public class ArabicSentenceStructureInBricksNameTest {
 		Sprite spriteTwo = new Sprite(nameSpriteTwo);
 		Script script = new StartScript();
 
-		script.addBrick(new IfLogicBeginBrick());
+		script.addBrick(new IfLogicBeginBrick(10));
 		script.addBrick(new RepeatUntilBrick(5));
 
 		script.addBrick(new LegoEv3MotorMoveBrick(LegoEv3MotorMoveBrick.Motor.MOTOR_B, 5));

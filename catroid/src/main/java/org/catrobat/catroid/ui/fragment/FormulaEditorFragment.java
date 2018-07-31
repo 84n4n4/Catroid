@@ -289,8 +289,6 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 	private void onUserDismiss() {
 		refreshFormulaPreviewString(currentFormula.getTrimmedFormulaString(getActivity()));
 		formulaEditorEditText.endEdit();
-		currentFormula.prepareToRemove();
-
 		getFragmentManager().popBackStack();
 
 		BottomBar.showBottomBar(getActivity());

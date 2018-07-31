@@ -448,8 +448,6 @@ public final class Utils {
 			if (absoluteValue == 0.0 || absoluteValue == 1.0 || absoluteValue == 2.0) {
 				return (int) absoluteValue;
 			} else {
-				// Random Number to get into the "other" keyword for values like 0.99 or 2.001 seconds or degrees
-				// in hopefully all possible languages
 				return TRANSLATION_PLURAL_OTHER_INTEGER;
 			}
 		}

@@ -194,6 +194,7 @@ import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTING
 import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_SHOW_PHIRO_BRICKS;
 import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_SHOW_RASPI_BRICKS;
 import static org.catrobat.catroid.uiespresso.util.UiTestUtils.getResources;
+import static org.catrobat.catroid.uiespresso.util.UiTestUtils.getResourcesString;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.Is.is;
@@ -393,7 +394,7 @@ public class BrickValueParameterTest {
 		checkIfBrickShowsText(GlideToBrick.class, R.string.brick_glide);
 		checkIfBrickShowsText(GlideToBrick.class, R.string.brick_glide_to_x);
 		checkIfBrickShowsText(GlideToBrick.class, R.string.y_label);
-		checkIfBrickShowsText(GlideToBrick.class, R.string.number_1);
+		checkIfBrickShowsText(GlideToBrick.class, "1 ");
 		checkIfBrickShowsText(GlideToBrick.class, "100 ");
 		checkIfBrickShowsText(GlideToBrick.class, "200 ");
 
@@ -406,7 +407,7 @@ public class BrickValueParameterTest {
 
 		//Vibrate for second
 		checkIfBrickShowsText(VibrationBrick.class, R.string.brick_vibration);
-		checkIfBrickShowsText(VibrationBrick.class, R.string.number_1);
+		checkIfBrickShowsText(VibrationBrick.class, "1 ");
 
 		//Set motion type to
 		checkIfBrickShowsText(SetPhysicsObjectTypeBrick.class, R.string.brick_set_physics_object_type);
@@ -479,7 +480,7 @@ public class BrickValueParameterTest {
 
 		//change volume by - edit text "-10.0"
 		checkIfBrickShowsText(ChangeVolumeByNBrick.class, R.string.brick_change_volume_by);
-		checkIfBrickShowsEditTextWithText(ChangeVolumeByNBrick.class, R.id.brick_change_volume_by_edit_text, "-10 ");
+		checkIfBrickShowsEditTextWithText(ChangeVolumeByNBrick.class, R.id.brick_change_volume_by_edit_text, "- 10 ");
 
 		//speak - edit text "hello"
 		checkIfBrickShowsText(SpeakBrick.class, R.string.brick_speak);
@@ -760,7 +761,7 @@ public class BrickValueParameterTest {
 		checkIfBrickShowsText(LegoEv3PlayToneBrick.class, R.string.nxt_tone_hundred_hz);
 		checkIfBrickShowsText(LegoEv3PlayToneBrick.class, R.string.ev3_tone_volume);
 		checkIfBrickShowsText(LegoEv3PlayToneBrick.class, R.string.ev3_tone_percent);
-		checkIfBrickShowsText(LegoEv3PlayToneBrick.class, "1.0 ");
+		checkIfBrickShowsText(LegoEv3PlayToneBrick.class, "1 ");
 		checkIfBrickShowsText(LegoEv3PlayToneBrick.class, "2 ");
 		checkIfBrickShowsText(LegoEv3PlayToneBrick.class, "100 ");
 
@@ -918,42 +919,54 @@ public class BrickValueParameterTest {
 		//Set variable brick (Sensor: front-left)
 		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 0, R.string.brick_set_variable);
 		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 0, R.string.to_label);
-		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 0, R.string.formula_editor_phiro_sensor_front_left);
+		checkIfBrickAtPositionShowsEditTextWithText(SetVariableBrick.class, 0,
+				R.id.brick_set_variable_edit_text,
+				getResourcesString(R.string.formula_editor_phiro_sensor_front_left) + " ");
 		checkIfBrickAtPositionShowsSpinnerWithText(SetVariableBrick.class, 0, R.id
 				.set_variable_spinner, R.string.brick_variable_spinner_create_new_variable);
 
 		//Set variable brick (Sensor: front-right)
 		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 1, R.string.brick_set_variable);
 		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 1, R.string.to_label);
-		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 1, R.string.formula_editor_phiro_sensor_front_right);
+		checkIfBrickAtPositionShowsEditTextWithText(SetVariableBrick.class, 1,
+				R.id.brick_set_variable_edit_text,
+				getResourcesString(R.string.formula_editor_phiro_sensor_front_right) + " ");
 		checkIfBrickAtPositionShowsSpinnerWithText(SetVariableBrick.class, 1, R.id
 				.set_variable_spinner, R.string.brick_variable_spinner_create_new_variable);
 
 		//Set variable brick (Sensor: side-left)
 		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 2, R.string.brick_set_variable);
 		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 2, R.string.to_label);
-		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 2, R.string.formula_editor_phiro_sensor_side_left);
+		checkIfBrickAtPositionShowsEditTextWithText(SetVariableBrick.class, 2,
+				R.id.brick_set_variable_edit_text,
+				getResourcesString(R.string.formula_editor_phiro_sensor_side_left) + " ");
 		checkIfBrickAtPositionShowsSpinnerWithText(SetVariableBrick.class, 2, R.id
 				.set_variable_spinner, R.string.brick_variable_spinner_create_new_variable);
 
 		//Set variable brick (Sensor: side-right)
 		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 3, R.string.brick_set_variable);
 		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 3, R.string.to_label);
-		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 3, R.string.formula_editor_phiro_sensor_side_right);
+		checkIfBrickAtPositionShowsEditTextWithText(SetVariableBrick.class, 3,
+				R.id.brick_set_variable_edit_text,
+				getResourcesString(R.string.formula_editor_phiro_sensor_side_right) + " ");
 		checkIfBrickAtPositionShowsSpinnerWithText(SetVariableBrick.class, 3, R.id
 				.set_variable_spinner, R.string.brick_variable_spinner_create_new_variable);
 
 		//Set variable brick (Sensor: bottom-left)
 		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 4, R.string.brick_set_variable);
 		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 4, R.string.to_label);
-		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 4, R.string.formula_editor_phiro_sensor_bottom_left);
+		checkIfBrickAtPositionShowsEditTextWithText(SetVariableBrick.class, 4,
+				R.id.brick_set_variable_edit_text,
+				getResourcesString(R.string.formula_editor_phiro_sensor_bottom_left) + " ");
 		checkIfBrickAtPositionShowsSpinnerWithText(SetVariableBrick.class, 4, R.id
 				.set_variable_spinner, R.string.brick_variable_spinner_create_new_variable);
 
 		//Set variable brick (Sensor: bottom-right)
 		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 5, R.string.brick_set_variable);
 		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 5, R.string.to_label);
-		checkIfBrickAtPositionShowsText(SetVariableBrick.class, 5, R.string.formula_editor_phiro_sensor_bottom_right);
+		checkIfBrickAtPositionShowsEditTextWithText(SetVariableBrick.class, 5,
+				R.id.brick_set_variable_edit_text,
+				getResourcesString(R.string.formula_editor_phiro_sensor_bottom_right) + " ");
 		checkIfBrickAtPositionShowsSpinnerWithText(SetVariableBrick.class, 5, R.id
 				.set_variable_spinner, R.string.brick_variable_spinner_create_new_variable);
 	}

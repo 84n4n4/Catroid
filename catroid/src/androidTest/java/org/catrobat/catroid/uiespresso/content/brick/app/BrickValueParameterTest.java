@@ -490,12 +490,12 @@ public class BrickValueParameterTest {
 		//speak and wait  - edit text "hello"
 		checkIfBrickShowsText(SpeakAndWaitBrick.class, R.string.brick_speak_and_wait);
 		checkIfBrickShowsEditTextWithText(SpeakAndWaitBrick.class, R.id.brick_speak_and_wait_edit_text,
-				R.string.brick_speak_default_value);
+				"'" + getResourcesString(R.string.brick_speak_default_value) + "' ");
 
 		//ask and store - edit text "whats your name" - spinner "new"
 		checkIfBrickShowsText(AskSpeechBrick.class, R.string.brick_ask_speech_label);
 		checkIfBrickShowsEditTextWithText(AskSpeechBrick.class, R.id.brick_ask_speech_question_edit_text,
-				R.string.brick_ask_speech_default_question);
+				"'" + getResourcesString(R.string.brick_ask_speech_default_question) + "' ");
 		checkIfBrickShowsText(AskSpeechBrick.class, R.string.brick_ask_speech_store);
 		checkIfBrickShowsSpinnerWithEditTextOverlayWithText(AskSpeechBrick.class, R.id.brick_ask_speech_spinner,
 				R.string.new_broadcast_message);
@@ -543,15 +543,15 @@ public class BrickValueParameterTest {
 		checkIfBrickShowsText(SayForBubbleBrick.class, getResources()
 				.getQuantityString(R.plurals.second_plural, Utils.convertDoubleToPluralInteger(BrickValues.DURATION)));
 
-		checkIfBrickShowsText(ThinkBubbleBrick.class, R.string.brick_think_bubble);
-		checkIfBrickShowsText(ThinkBubbleBrick.class,
+		checkIfBrickAtPositionShowsText(ThinkBubbleBrick.class, 1, R.string.brick_think_bubble);
+		checkIfBrickAtPositionShowsText(ThinkBubbleBrick.class, 1,
 				"'" + getResourcesString(R.string.brick_think_bubble_default_value) + "' ");
 
-		checkIfBrickShowsText(ThinkForBubbleBrick.class, R.string.brick_think_bubble);
-		checkIfBrickShowsText(ThinkForBubbleBrick.class,
+		checkIfBrickAtPositionShowsText(ThinkForBubbleBrick.class, 1, R.string.brick_think_bubble);
+		checkIfBrickAtPositionShowsText(ThinkForBubbleBrick.class, 1,
 				"'" + getResourcesString(R.string.brick_think_bubble_default_value) + "' ");
-		checkIfBrickShowsText(ThinkForBubbleBrick.class, R.string.brick_think_say_for_text);
-		checkIfBrickShowsText(SayForBubbleBrick.class, getResources()
+		checkIfBrickAtPositionShowsText(ThinkForBubbleBrick.class, 1, R.string.brick_think_say_for_text);
+		checkIfBrickAtPositionShowsText(ThinkForBubbleBrick.class, 1, getResources()
 				.getQuantityString(R.plurals.second_plural, Utils.convertDoubleToPluralInteger(BrickValues.DURATION)));
 
 		checkIfBrickShowsText(SetTransparencyBrick.class, R.string.brick_set_transparency);
@@ -617,7 +617,7 @@ public class BrickValueParameterTest {
 		checkIfBrickShowsText(PenUpBrick.class, R.string.brick_pen_up);
 
 		checkIfBrickShowsText(SetPenSizeBrick.class, R.string.brick_pen_size);
-		checkIfBrickShowsText(SetPenSizeBrick.class, "3.15 ");
+		checkIfBrickShowsEditTextWithText(SetPenSizeBrick.class, R.id.brick_set_pen_size_edit_text, "3.15 ");
 
 		checkIfBrickShowsText(ClearBackgroundBrick.class, R.string.brick_clear_background);
 	}
@@ -1076,7 +1076,7 @@ public class BrickValueParameterTest {
 
 		//repeat until - edit text "1 st 2" - is true
 		checkIfBrickShowsText(RepeatUntilBrick.class, R.string.brick_repeat_until);
-		checkIfBrickShowsEditTextWithText(RepeatUntilBrick.class, R.id.brick_repeat_until_edit_text, "1 < 2 ");
+		checkIfBrickShowsEditTextWithText(RepeatUntilBrick.class, R.id.brick_repeat_until_edit_text, "1 < 2");
 		checkIfBrickShowsText(RepeatUntilBrick.class, R.string.brick_wait_until_second_part);
 
 		//continue scene  - spinner "new..."
@@ -1127,6 +1127,13 @@ public class BrickValueParameterTest {
 		onData(instanceOf(brickClass)).inAdapterView(BrickPrototypeListMatchers.isBrickPrototypeView())
 				.atPosition(position)
 				.onChildView(withText(stringResourceId))
+				.check(matches(isDisplayed()));
+	}
+
+	private void checkIfBrickAtPositionShowsText(Class brickClass, int position, String text) {
+		onData(instanceOf(brickClass)).inAdapterView(BrickPrototypeListMatchers.isBrickPrototypeView())
+				.atPosition(position)
+				.onChildView(withText(text))
 				.check(matches(isDisplayed()));
 	}
 

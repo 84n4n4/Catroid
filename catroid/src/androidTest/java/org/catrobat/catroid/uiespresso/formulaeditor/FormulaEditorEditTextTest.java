@@ -32,6 +32,7 @@ import org.catrobat.catroid.ui.SpriteActivity;
 import org.catrobat.catroid.uiespresso.content.brick.utils.BrickTestUtils;
 import org.catrobat.catroid.uiespresso.testsuites.Cat;
 import org.catrobat.catroid.uiespresso.testsuites.Level;
+import org.catrobat.catroid.uiespresso.util.actions.CustomActions;
 import org.catrobat.catroid.uiespresso.util.rules.BaseActivityInstrumentationRule;
 import org.junit.Before;
 import org.junit.Rule;
@@ -46,6 +47,7 @@ import static android.support.test.espresso.action.ViewActions.doubleClick;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -132,7 +134,6 @@ public class FormulaEditorEditTextTest {
 	@Category({Cat.CatrobatLanguage.class, Level.Smoke.class})
 	@Test
 	public void testGoBackToDiscardChanges() {
-
 		onFormulaEditor()
 				.performEnterFormula("99.9+");
 		pressBack();
@@ -145,6 +146,7 @@ public class FormulaEditorEditTextTest {
 				.check(matches(isDisplayed()));
 		onBrickAtPosition(1)
 				.checkShowsText("10 ");
+		onView(isRoot()).perform(CustomActions.wait(3000));
 	}
 
 	@Category({Cat.CatrobatLanguage.class, Level.Smoke.class})
@@ -168,6 +170,7 @@ public class FormulaEditorEditTextTest {
 				.check(matches(isDisplayed()));
 		onBrickAtPosition(1)
 				.checkShowsText("99" + decimalMark + "9 ");
+		onView(isRoot()).perform(CustomActions.wait(3000));
 	}
 
 	@Category({Cat.CatrobatLanguage.class, Level.Smoke.class})
@@ -179,6 +182,7 @@ public class FormulaEditorEditTextTest {
 				.performClickOn(OK);
 		onToast(withText(R.string.formula_editor_parse_fail))
 				.check(matches(isDisplayed()));
+		onView(isRoot()).perform(CustomActions.wait(3000));
 	}
 
 	@Category({Cat.CatrobatLanguage.class, Level.Smoke.class})
@@ -195,6 +199,7 @@ public class FormulaEditorEditTextTest {
 				.perform(click());
 		onToast(withText(R.string.formula_editor_parse_fail))
 				.check(matches(isDisplayed()));
+		onView(isRoot()).perform(CustomActions.wait(3000));
 	}
 
 	@Category({Cat.CatrobatLanguage.class, Level.Smoke.class})
@@ -208,6 +213,7 @@ public class FormulaEditorEditTextTest {
 				.performClickOn(OK);
 		onToast(withText(R.string.formula_editor_parse_fail))
 				.check(matches(isDisplayed()));
+		onView(isRoot()).perform(CustomActions.wait(3000));
 	}
 
 	@Category({Cat.CatrobatLanguage.class, Level.Smoke.class})

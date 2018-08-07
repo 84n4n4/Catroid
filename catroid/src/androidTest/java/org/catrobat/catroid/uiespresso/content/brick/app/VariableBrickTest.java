@@ -44,7 +44,6 @@ import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-
 import static org.catrobat.catroid.uiespresso.content.brick.utils.BrickDataInteractionWrapper.onBrickAtPosition;
 
 @RunWith(AndroidJUnit4.class)
@@ -98,7 +97,7 @@ public class VariableBrickTest {
 	public void testCreatingNewVariable() {
 		final String variableName = "testVariable";
 		onBrickAtPosition(setBrickPosition).onVariableSpinner(R.id.set_variable_spinner)
-				.performNewVariableInitial(variableName)
+				.performNewVariable(variableName)
 				.checkShowsText(variableName);
 	}
 
@@ -108,6 +107,10 @@ public class VariableBrickTest {
 	public void testNewVariableCanceling() {
 		onBrickAtPosition(setBrickPosition).onVariableSpinner(R.id.set_variable_spinner)
 				.perform(click());
+
+		onView(withText(R.string.brick_variable_spinner_create_new_variable))
+				.perform(click());
+
 		closeSoftKeyboard();
 		onView(withText(R.string.cancel))
 				.perform(click());
@@ -120,7 +123,7 @@ public class VariableBrickTest {
 	public void testAfterDeleteBrickVariableStillVisible() {
 		final String variableName = "testVariable";
 		onBrickAtPosition(setBrickPosition).onVariableSpinner(R.id.set_variable_spinner)
-				.performNewVariableInitial(variableName);
+				.performNewVariable(variableName);
 
 		onBrickAtPosition(setBrickPosition)
 				.performDeleteBrick();

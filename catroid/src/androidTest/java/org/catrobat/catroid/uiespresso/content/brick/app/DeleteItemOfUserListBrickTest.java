@@ -47,9 +47,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.doesNotExis
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-
 import static junit.framework.Assert.assertEquals;
-
 import static org.catrobat.catroid.uiespresso.content.brick.utils.BrickDataInteractionWrapper.onBrickAtPosition;
 import static org.catrobat.catroid.uiespresso.formulaeditor.utils.FormulaEditorDataListWrapper.onDataList;
 import static org.catrobat.catroid.uiespresso.formulaeditor.utils.FormulaEditorWrapper.onFormulaEditor;
@@ -92,7 +90,7 @@ public class DeleteItemOfUserListBrickTest {
 				.checkShowsNumber(newPosition);
 
 		onBrickAtPosition(brickPosition).onVariableSpinner(R.id.delete_item_of_userlist_spinner)
-				.performNewVariableInitial(userListName)
+				.performNewVariable(userListName)
 				.checkShowsText(userListName);
 	}
 
@@ -104,7 +102,7 @@ public class DeleteItemOfUserListBrickTest {
 		String secondUserListName = "test2";
 
 		onBrickAtPosition(brickPosition).onVariableSpinner(R.id.delete_item_of_userlist_spinner)
-				.performNewVariableInitial(firstUserListName);
+				.performNewVariable(firstUserListName);
 
 		UserList userList = deleteItemOfUserListBrick.getUserList();
 		assertNotNull(userList);

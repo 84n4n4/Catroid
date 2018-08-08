@@ -23,20 +23,22 @@
 package org.catrobat.catroid.content.bricks;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
+import org.catrobat.catroid.common.Nameable;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.actions.ScriptSequenceAction;
+import org.catrobat.catroid.content.bricks.brickspinner.BrickSpinner;
+import org.catrobat.catroid.content.bricks.brickspinner.StringOption;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CloneBrick extends BrickBaseType {
+public class CloneBrick extends BrickBaseType implements BrickSpinner.OnItemSelectedListener<Sprite> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -51,67 +53,56 @@ public class CloneBrick extends BrickBaseType {
 	}
 
 	@Override
-	public View getView(final Context context) {
-		super.getView(context);
-		setupValueSpinner(context);
-		return view;
-	}
-
-	@Override
 	public View getPrototypeView(Context context) {
-		View view = super.getPrototypeView(context);
-		((Spinner) view.findViewById(R.id.brick_clone_spinner)).setAdapter(getSpinnerArrayAdapter(context));
-		return view;
+		super.getPrototypeView(context);
+		return getView(context);
 	}
 
 	@Override
-	public List<ScriptSequenceAction> addActionToSequence(Sprite thisObject, ScriptSequenceAction sequence) {
-		Sprite s = (objectToClone != null) ? objectToClone : thisObject;
-		sequence.addAction(thisObject.getActionFactory().createCloneAction(s));
-		return Collections.emptyList();
-	}
+	public View getView(Context context) {
+		super.getView(context);
 
-	private void setupValueSpinner(final Context context) {
-		final Spinner valueSpinner = view.findViewById(R.id.brick_clone_spinner);
-		final List<Sprite> spriteList = ProjectManager.getInstance().getCurrentlyEditedScene().getSpriteList();
+		List<Nameable> items = new ArrayList<>();
+		items.add(new StringOption(context.getString(R.string.brick_clone_this)));
+		items.addAll(ProjectManager.getInstance().getCurrentlyEditedScene().getSpriteList());
+		items.remove(ProjectManager.getInstance().getCurrentlyEditedScene().getBackgroundSprite());
+		items.remove(ProjectManager.getInstance().getCurrentSprite());
 
-		ArrayAdapter<String> valueAdapter = getSpinnerArrayAdapter(context);
-		valueSpinner.setAdapter(valueAdapter);
-		valueSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+		BrickSpinner<Sprite> spinner = new BrickSpinner<Sprite>(R.id.brick_clone_spinner, view, items) {
+
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				String selectedObject = valueSpinner.getSelectedItem().toString();
-
-				objectToClone = null;
-				for (Sprite sprite : spriteList) {
-					if (sprite.getName().equals(selectedObject)) {
-						objectToClone = sprite;
-						break;
-					}
+			public void setSelection(@Nullable Sprite item) {
+				if (item == null) {
+					setSelection(0);
+				} else {
+					super.setSelection(item);
 				}
 			}
+		};
+		spinner.setOnItemSelectedListener(this);
+		spinner.setSelection(objectToClone);
 
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-			}
-		});
-		valueSpinner.setSelection(objectToClone != null ? valueAdapter.getPosition(objectToClone.getName()) : 0, true);
+		return view;
 	}
 
-	private ArrayAdapter<String> getSpinnerArrayAdapter(Context context) {
-		ArrayAdapter<String> messageAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
-		messageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		messageAdapter.add(context.getString(R.string.brick_clone_this));
+	@Override
+	public void onNewOptionSelected() {
+	}
 
-		final List<Sprite> spriteList = ProjectManager.getInstance().getCurrentlyEditedScene().getSpriteList();
+	@Override
+	public void onStringOptionSelected(String string) {
+		objectToClone = null;
+	}
 
-		for (Sprite sprite : spriteList) {
-			if (sprite.getName().equals(context.getString(R.string.background))) {
-				continue;
-			}
-			messageAdapter.add(sprite.getName());
-		}
+	@Override
+	public void onItemSelected(Sprite item) {
+		objectToClone = item;
+	}
 
-		return messageAdapter;
+	@Override
+	public List<ScriptSequenceAction> addActionToSequence(Sprite sprite, ScriptSequenceAction sequence) {
+		Sprite s = (objectToClone != null) ? objectToClone : sprite;
+		sequence.addAction(sprite.getActionFactory().createCloneAction(s));
+		return Collections.emptyList();
 	}
 }

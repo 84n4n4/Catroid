@@ -44,7 +44,6 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-
 import static org.catrobat.catroid.uiespresso.content.brick.utils.BrickDataInteractionWrapper.onBrickAtPosition;
 
 @RunWith(AndroidJUnit4.class)
@@ -71,7 +70,7 @@ public class PointToBrickTest {
 
 		onBrickAtPosition(brickPosition).onSpinner(R.id.brick_point_to_spinner)
 				.checkShowsText(R.string.new_option)
-				.performSelect(R.string.new_option);
+				.performSelectNameable(R.string.new_option);
 
 		onView(withText(R.string.new_look_dialog_title))
 				.check(matches(isDisplayed()));

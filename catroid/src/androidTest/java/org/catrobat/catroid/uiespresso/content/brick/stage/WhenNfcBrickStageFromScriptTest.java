@@ -62,9 +62,7 @@ import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-
 import static junit.framework.Assert.assertEquals;
-
 import static org.catrobat.catroid.uiespresso.content.brick.utils.BrickDataInteractionWrapper.onBrickAtPosition;
 import static org.catrobat.catroid.uiespresso.content.brick.utils.UiNFCTestUtils.NUM_DETECTED_TAGS;
 import static org.catrobat.catroid.uiespresso.content.brick.utils.UiNFCTestUtils.READ_TAG_ID;
@@ -97,7 +95,7 @@ public class WhenNfcBrickStageFromScriptTest {
 
 	@Category({Cat.CatrobatLanguage.class, Level.Functional.class, Cat.SettingsAndPermissions.class})
 	@Test
-	public void testNfcSensorVariable() throws InterpretationException {
+	public void testNfcSensorVariable() {
 		gotoNfcFragment(nfcBrickPosition);
 		UiNFCTestUtils.fakeNfcTag(UiNFCTestUtils.FIRST_TEST_TAG_ID, ndefMessage1, null, baseActivityTestRule.getActivity());
 
@@ -115,7 +113,7 @@ public class WhenNfcBrickStageFromScriptTest {
 				.checkShowsText(R.string.brick_when_nfc_default_all);
 
 		onNfcBrickAtPosition(nfcBrickPosition).onSpinner(R.id.brick_when_nfc_spinner)
-				.performSelect(TAG_NAME_TEST1);
+				.performSelectString(TAG_NAME_TEST1);
 
 		onView(withId(R.id.button_play))
 				.perform(click());
@@ -129,7 +127,7 @@ public class WhenNfcBrickStageFromScriptTest {
 				.checkShowsText(TAG_NAME_TEST1);
 
 		onNfcBrickAtPosition(nfcBrickPosition).onSpinner(R.id.brick_when_nfc_spinner)
-				.performSelect(TAG_NAME_TEST2);
+				.performSelectString(TAG_NAME_TEST2);
 
 		onView(withId(R.id.button_play))
 				.perform(click());

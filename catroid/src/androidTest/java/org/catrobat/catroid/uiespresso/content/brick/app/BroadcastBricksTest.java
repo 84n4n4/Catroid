@@ -40,6 +40,7 @@ import org.catrobat.catroid.ui.SpriteActivity;
 import org.catrobat.catroid.uiespresso.annotations.Flaky;
 import org.catrobat.catroid.uiespresso.testsuites.Cat;
 import org.catrobat.catroid.uiespresso.testsuites.Level;
+import org.catrobat.catroid.uiespresso.util.actions.CustomActions;
 import org.catrobat.catroid.uiespresso.util.rules.BaseActivityInstrumentationRule;
 import org.junit.Before;
 import org.junit.Rule;
@@ -52,11 +53,12 @@ import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-
 import static org.catrobat.catroid.uiespresso.content.brick.utils.BrickDataInteractionWrapper.onBrickAtPosition;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
@@ -95,7 +97,7 @@ public class BroadcastBricksTest {
 		createNewMessageOnSpinner(R.id.brick_broadcast_spinner, broadcastSendPosition, uselessMessage);
 
 		onBrickAtPosition(broadcastSendPosition).onSpinner(R.id.brick_broadcast_spinner)
-				.performSelect(defaultMessage);
+				.performSelectString(defaultMessage);
 
 		onView(withId(R.id.button_play))
 				.perform(click());
@@ -121,7 +123,7 @@ public class BroadcastBricksTest {
 		createNewMessageOnSpinner(R.id.brick_broadcast_spinner, broadcastReceivePosition, uselessMessage);
 
 		onBrickAtPosition(broadcastReceivePosition).onSpinner(R.id.brick_broadcast_spinner)
-				.performSelect(defaultMessage);
+				.performSelectString(defaultMessage);
 
 		onView(withId(R.id.button_play))
 				.perform(click());
@@ -164,8 +166,8 @@ public class BroadcastBricksTest {
 		onView(withText(R.string.new_option))
 				.perform(click());
 
-		onView(allOf(withText(R.string.new_option), isDisplayed(), instanceOf(EditText.class)))
-				.perform(replaceText(message));
+		onView(allOf(withId(R.id.input_edit_text), isDisplayed(), instanceOf(EditText.class)))
+				.perform(typeText(message));
 		closeSoftKeyboard();
 
 		onView(withId(android.R.id.button1))

@@ -26,7 +26,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -69,6 +68,7 @@ import org.catrobat.catroid.formulaeditor.UserData;
 import org.catrobat.catroid.formulaeditor.UserList;
 import org.catrobat.catroid.formulaeditor.UserVariable;
 import org.catrobat.catroid.ui.BottomBar;
+import org.catrobat.catroid.ui.UiUtils;
 import org.catrobat.catroid.ui.dialogs.FormulaEditorComputeDialog;
 import org.catrobat.catroid.ui.dialogs.FormulaEditorIntroDialog;
 import org.catrobat.catroid.ui.recyclerview.dialog.NewStringDialogFragment;
@@ -160,15 +160,10 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 
 	private static void showFragment(View view, FormulaBrick formulaBrick, Brick.BrickField brickField, boolean showCustomView) {
 
-		Context context = view.getContext();
-		while (context instanceof ContextWrapper) {
-			if (context instanceof Activity) {
-				break;
-			}
-			context = ((ContextWrapper) context).getBaseContext();
+		Activity activity = UiUtils.getActivityFromView(view);
+		if (activity == null) {
+			return;
 		}
-
-		Activity activity = (Activity) context;
 
 		FormulaEditorFragment formulaEditorFragment = (FormulaEditorFragment) activity.getFragmentManager()
 				.findFragmentByTag(FORMULA_EDITOR_FRAGMENT_TAG);
@@ -246,7 +241,10 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 
 	public static void overwriteFormula(View view, Formula newFormula) {
 
-		Activity activity = (Activity) view.getContext();
+		Activity activity = UiUtils.getActivityFromView(view);
+		if (activity == null) {
+			return;
+		}
 
 		FormulaEditorFragment formulaEditorFragment = (FormulaEditorFragment) activity.getFragmentManager()
 				.findFragmentByTag(FORMULA_EDITOR_FRAGMENT_TAG);
@@ -260,7 +258,10 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 
 	public static void changeInputField(View view, Brick.BrickField brickField) {
 
-		Activity activity = (Activity) view.getContext();
+		Activity activity = UiUtils.getActivityFromView(view);
+		if (activity == null) {
+			return;
+		}
 
 		FormulaEditorFragment formulaEditorFragment = (FormulaEditorFragment) activity.getFragmentManager()
 				.findFragmentByTag(FORMULA_EDITOR_FRAGMENT_TAG);

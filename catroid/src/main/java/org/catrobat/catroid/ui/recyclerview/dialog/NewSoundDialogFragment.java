@@ -160,7 +160,7 @@ public class NewSoundDialogFragment extends DialogFragment implements View.OnCli
 			String name = StorageOperations.getSanitizedFileName(srcFile);
 
 			File file = StorageOperations.copyFileToDir(srcFile,
-					new File(dstScene.getDirectory(), SOUND_DIRECTORY_NAME));
+					new File(dstScene.getDirectory(getActivity()), SOUND_DIRECTORY_NAME));
 
 			newItemInterface
 					.addItem(new SoundInfo(uniqueNameProvider.getUniqueName(name, getScope(dstSprite)), file));
@@ -177,7 +177,7 @@ public class NewSoundDialogFragment extends DialogFragment implements View.OnCli
 			String name = getString(R.string.soundrecorder_recorded_filename);
 
 			File file = StorageOperations.copyUriToDir(getActivity().getContentResolver(),
-					uri, new File(dstScene.getDirectory(), SOUND_DIRECTORY_NAME), name);
+					uri, new File(dstScene.getDirectory(getActivity()), SOUND_DIRECTORY_NAME), name);
 
 			newItemInterface
 					.addItem(new SoundInfo(uniqueNameProvider.getUniqueName(name, getScope(dstSprite)), file));

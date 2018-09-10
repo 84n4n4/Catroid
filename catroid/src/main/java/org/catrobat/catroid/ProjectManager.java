@@ -283,7 +283,7 @@ public final class ProjectManager {
 		project.saveLegoNXTSettingsToProject(context);
 		project.saveLegoEV3SettingsToProject(context);
 
-		SaveProjectAsynchronousTask saveTask = new SaveProjectAsynchronousTask();
+		SaveProjectAsynchronousTask saveTask = new SaveProjectAsynchronousTask(context);
 		saveTask.execute();
 	}
 
@@ -386,20 +386,20 @@ public final class ProjectManager {
 	}
 
 	public boolean renameProject(String newProjectName, Context context) {
-		if (XstreamSerializer.getInstance().projectExists(newProjectName)) {
+		if (XstreamSerializer.getInstance().projectExists(context, newProjectName)) {
 			return false;
 		}
 
-		String oldProjectPath = PathBuilder.buildProjectPath(project.getName());
+		String oldProjectPath = PathBuilder.buildProjectPath(context, project.getName());
 		File oldProjectDirectory = new File(oldProjectPath);
 
-		String newProjectPath = PathBuilder.buildProjectPath(newProjectName);
+		String newProjectPath = PathBuilder.buildProjectPath(context, newProjectName);
 		File newProjectDirectory = new File(newProjectPath);
 
 		boolean directoryRenamed;
 
 		if (oldProjectPath.equalsIgnoreCase(newProjectPath)) {
-			String tmpProjectPath = PathBuilder.buildProjectPath(createTemporaryDirectoryName(newProjectName));
+			String tmpProjectPath = PathBuilder.buildProjectPath(context, createTemporaryDirectoryName(context, newProjectName));
 			File tmpProjectDirectory = new File(tmpProjectPath);
 			directoryRenamed = oldProjectDirectory.renameTo(tmpProjectDirectory);
 			if (directoryRenamed) {
@@ -454,11 +454,11 @@ public final class ProjectManager {
 		return getCurrentlyEditedScene().getSpriteList().indexOf(currentSprite);
 	}
 
-	private String createTemporaryDirectoryName(String projectDirectoryName) {
+	private String createTemporaryDirectoryName(Context context, String projectDirectoryName) {
 		String temporaryDirectorySuffix = "_tmp";
 		String temporaryDirectoryName = projectDirectoryName + temporaryDirectorySuffix;
 		int suffixCounter = 0;
-		while (Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(temporaryDirectoryName)) {
+		while (Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(context, temporaryDirectoryName)) {
 			temporaryDirectoryName = projectDirectoryName + temporaryDirectorySuffix + suffixCounter;
 			suffixCounter++;
 		}
@@ -645,10 +645,15 @@ public final class ProjectManager {
 	}
 
 	private class SaveProjectAsynchronousTask extends AsyncTask<Void, Void, Void> {
+		private Context context;
+
+		SaveProjectAsynchronousTask(Context context) {
+			this.context = context;
+		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			XstreamSerializer.getInstance().saveProject(project);
+			XstreamSerializer.getInstance().saveProject(context, project);
 			return null;
 		}
 	}

@@ -23,6 +23,7 @@
 
 package org.catrobat.catroid.io;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -35,6 +36,7 @@ import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.bricks.Brick;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -45,38 +47,39 @@ import static org.catrobat.catroid.common.Constants.BACKPACK_FILE;
 import static org.catrobat.catroid.common.Constants.BACKPACK_IMAGE_DIRECTORY;
 import static org.catrobat.catroid.common.Constants.BACKPACK_SCENE_DIRECTORY;
 import static org.catrobat.catroid.common.Constants.BACKPACK_SOUND_DIRECTORY;
-import static org.catrobat.catroid.common.FlavoredConstants.DEFAULT_ROOT_DIRECTORY;
 
 public final class BackpackSerializer {
 
 	private static final String TAG = BackpackSerializer.class.getSimpleName();
-	private static final BackpackSerializer INSTANCE = new BackpackSerializer();
+	private static BackpackSerializer INSTANCE;
 
 	private Gson backpackGson;
 
-	public static BackpackSerializer getInstance() {
+	public static BackpackSerializer getInstance(Context context) {
+		if (INSTANCE == null) {
+			INSTANCE = new BackpackSerializer(context);
+		}
 		return INSTANCE;
 	}
 
-	private BackpackSerializer() {
+	private BackpackSerializer(Context context) {
 		GsonBuilder gsonBuilder = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting();
 		gsonBuilder.registerTypeAdapter(Script.class, new BackpackScriptSerializerAndDeserializer());
 		gsonBuilder.registerTypeAdapter(Brick.class, new BackpackBrickSerializerAndDeserializer());
 		backpackGson = gsonBuilder.create();
 
-		DEFAULT_ROOT_DIRECTORY.mkdir();
-		BACKPACK_DIRECTORY.mkdir();
-		BACKPACK_SCENE_DIRECTORY.mkdir();
-		BACKPACK_IMAGE_DIRECTORY.mkdir();
-		BACKPACK_SOUND_DIRECTORY.mkdir();
+		new File(context.getFilesDir(), BACKPACK_DIRECTORY).mkdir();
+		new File(context.getFilesDir(), BACKPACK_SCENE_DIRECTORY).mkdir();
+		new File(context.getFilesDir(), BACKPACK_IMAGE_DIRECTORY).mkdir();
+		new File(context.getFilesDir(), BACKPACK_SOUND_DIRECTORY).mkdir();
 	}
 
-	public boolean saveBackpack(Backpack backpack) {
+	public boolean saveBackpack(Context context, Backpack backpack) {
 		FileWriter writer = null;
 		String json = backpackGson.toJson(backpack);
 
 		try {
-			BACKPACK_FILE.createNewFile();
+			new File(context.getFilesDir(), BACKPACK_FILE).createNewFile();
 			writer = new FileWriter(BACKPACK_FILE);
 			writer.write(json);
 			return true;
@@ -94,8 +97,8 @@ public final class BackpackSerializer {
 		}
 	}
 
-	public Backpack loadBackpack() {
-		if (!BACKPACK_FILE.exists()) {
+	public Backpack loadBackpack(Context context) {
+		if (!(new File(context.getFilesDir(), BACKPACK_FILE).exists())) {
 			return new Backpack();
 		}
 
@@ -104,11 +107,11 @@ public final class BackpackSerializer {
 			return backpackGson.fromJson(bufferedReader, Backpack.class);
 		} catch (FileNotFoundException e) {
 			Log.e(TAG, "FileNotFoundException: Could not create buffered Writer with file: "
-					+ BACKPACK_FILE.getAbsolutePath());
+					+ new File(context.getFilesDir(), BACKPACK_FILE).getAbsolutePath());
 			return new Backpack();
 		} catch (JsonSyntaxException | JsonIOException jsonException) {
 			Log.e(TAG, "Cannot load Backpack. Creating new Backpack File.", jsonException);
-			BACKPACK_FILE.delete();
+			new File(context.getFilesDir(), BACKPACK_FILE).delete();
 			return new Backpack();
 		}
 	}

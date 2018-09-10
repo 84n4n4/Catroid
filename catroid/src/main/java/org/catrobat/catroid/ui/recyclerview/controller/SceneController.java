@@ -23,6 +23,7 @@
 
 package org.catrobat.catroid.ui.recyclerview.controller;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.catrobat.catroid.ProjectManager;
@@ -53,11 +54,11 @@ public class SceneController {
 	private UniqueNameProvider uniqueNameProvider = new UniqueNameProvider();
 	private SpriteController spriteController = new SpriteController();
 
-	public boolean rename(Scene sceneToRename, String name) {
+	public boolean rename(Context context, Scene sceneToRename, String name) {
 		String previousName = sceneToRename.getName();
 
-		File newDir = new File(PathBuilder.buildScenePath(sceneToRename.getProject().getName(), name));
-		boolean renamed = sceneToRename.getDirectory().renameTo(newDir);
+		File newDir = new File(PathBuilder.buildScenePath(context, sceneToRename.getProject().getName(), name));
+		boolean renamed = sceneToRename.getDirectory(context).renameTo(newDir);
 
 		if (renamed) {
 			sceneToRename.setName(name);
@@ -80,10 +81,10 @@ public class SceneController {
 		return renamed;
 	}
 
-	public Scene copy(Scene sceneToCopy, Project dstProject) throws IOException {
+	public Scene copy(Context context, Scene sceneToCopy, Project dstProject) throws IOException {
 		String name = uniqueNameProvider.getUniqueName(sceneToCopy.getName(), dstProject.getSceneNames());
 
-		File dir = new File(PathBuilder.buildScenePath(dstProject.getName(), name));
+		File dir = new File(PathBuilder.buildScenePath(context, dstProject.getName(), name));
 
 		if (!createDirectory(dir)) {
 			throw new IOException("Directory for Scene " + name + " could not be created.");
@@ -98,17 +99,17 @@ public class SceneController {
 		scene.setDataContainer(new DataContainer(dstProject));
 
 		for (Sprite sprite : sceneToCopy.getSpriteList()) {
-			scene.getSpriteList().add(spriteController.copy(sprite, sceneToCopy, scene));
+			scene.getSpriteList().add(spriteController.copy(context, sprite, sceneToCopy, scene));
 		}
 
 		return scene;
 	}
 
-	public void delete(Scene sceneToDelete) throws IOException {
-		StorageOperations.deleteDir(sceneToDelete.getDirectory());
+	public void delete(Context context, Scene sceneToDelete) throws IOException {
+		StorageOperations.deleteDir(sceneToDelete.getDirectory(context));
 	}
 
-	public Scene pack(Scene sceneToPack) throws IOException {
+	public Scene pack(Context context, Scene sceneToPack) throws IOException {
 		String name = uniqueNameProvider
 				.getUniqueName(sceneToPack.getName(), BackpackListManager.getInstance().getSceneNames());
 
@@ -124,14 +125,14 @@ public class SceneController {
 		scene.setDataContainer(new DataContainer());
 
 		for (Sprite sprite : sceneToPack.getSpriteList()) {
-			scene.getSpriteList().add(spriteController.copy(sprite, sceneToPack, scene));
+			scene.getSpriteList().add(spriteController.copy(context, sprite, sceneToPack, scene));
 		}
 
 		return scene;
 	}
 
-	public Scene unpack(Scene sceneToUnpack, Project dstProject) throws IOException {
-		return copy(sceneToUnpack, dstProject);
+	public Scene unpack(Context context, Scene sceneToUnpack, Project dstProject) throws IOException {
+		return copy(context, sceneToUnpack, dstProject);
 	}
 
 	private boolean createDirectory(File dir) {

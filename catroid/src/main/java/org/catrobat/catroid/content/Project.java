@@ -310,9 +310,9 @@ public class Project implements Serializable {
 		return null;
 	}
 
-	public boolean manualScreenshotExists(String manualScreenshotName) {
+	public boolean manualScreenshotExists(Context context, String manualScreenshotName) {
 
-		String path = PathBuilder.buildProjectPath(getName()) + "/" + manualScreenshotName;
+		String path = PathBuilder.buildProjectPath(context, getName()) + "/" + manualScreenshotName;
 		File manualScreenShot = new File(path);
 		if (manualScreenShot.exists()) {
 			return false;

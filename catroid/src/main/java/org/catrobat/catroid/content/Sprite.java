@@ -279,7 +279,7 @@ public class Sprite implements Cloneable, Nameable, Serializable {
 		return convertedSprite;
 	}
 
-	public Sprite cloneForCloneBrick() {
+	public Sprite cloneForCloneBrick(Context context) {
 		Sprite clone = new Sprite(name + "-c" + StageActivity.getAndIncrementNumberOfClonedSprites());
 		Scene currentScene = ProjectManager.getInstance().getCurrentlyEditedScene();
 
@@ -300,7 +300,7 @@ public class Sprite implements Cloneable, Nameable, Serializable {
 
 		for (Script script : scriptList) {
 			try {
-				clone.addScript(scriptController.copy(script, currentScene, clone));
+				clone.addScript(scriptController.copy(context, script, currentScene, clone));
 			} catch (CloneNotSupportedException | IOException e) {
 				Log.e(TAG, Log.getStackTraceString(e));
 			}

@@ -54,6 +54,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import org.catrobat.catroid.CatroidApplication;
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.camera.CameraManager;
 import org.catrobat.catroid.common.Constants;
@@ -183,7 +184,7 @@ public class StageListener implements ApplicationListener {
 
 		project = ProjectManager.getInstance().getCurrentProject();
 		scene = ProjectManager.getInstance().getCurrentlyPlayingScene();
-		pathForSceneScreenshot = PathBuilder.buildScenePath(project.getName(), scene.getName()) + "/";
+		pathForSceneScreenshot = PathBuilder.buildScenePath(CatroidApplication.getAppContext(), project.getName(), scene.getName()) + "/";
 
 		virtualWidth = project.getXmlHeader().virtualScreenWidth;
 		virtualHeight = project.getXmlHeader().virtualScreenHeight;
@@ -233,8 +234,8 @@ public class StageListener implements ApplicationListener {
 		axes = new Texture(Gdx.files.internal("stage/red_pixel.bmp"));
 		skipFirstFrameForAutomaticScreenshot = true;
 		if (checkIfAutomaticScreenshotShouldBeTaken) {
-			makeAutomaticScreenshot = project.manualScreenshotExists(SCREENSHOT_MANUAL_FILE_NAME)
-					|| scene.hasScreenshot();
+			makeAutomaticScreenshot = project.manualScreenshotExists(CatroidApplication.getAppContext(), SCREENSHOT_MANUAL_FILE_NAME)
+					|| scene.hasScreenshot(CatroidApplication.getAppContext());
 		}
 		if (drawDebugCollisionPolygons) {
 			collisionPolygonDebugRenderer.setProjectionMatrix(camera.combined);
@@ -245,7 +246,7 @@ public class StageListener implements ApplicationListener {
 	}
 
 	public void cloneSpriteAndAddToStage(Sprite cloneMe) {
-		Sprite copy = cloneMe.cloneForCloneBrick();
+		Sprite copy = cloneMe.cloneForCloneBrick(CatroidApplication.getAppContext());
 		copy.look.createBrightnessContrastHueShader();
 		stage.getRoot().addActorBefore(cloneMe.look, copy.look);
 		sprites.add(copy);
@@ -689,7 +690,7 @@ public class StageListener implements ApplicationListener {
 		initScreenMode();
 
 		if (checkIfAutomaticScreenshotShouldBeTaken) {
-			makeAutomaticScreenshot = project.manualScreenshotExists(SCREENSHOT_MANUAL_FILE_NAME);
+			makeAutomaticScreenshot = project.manualScreenshotExists(CatroidApplication.getAppContext(), SCREENSHOT_MANUAL_FILE_NAME);
 		}
 	}
 

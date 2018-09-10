@@ -117,7 +117,7 @@ public class ReplaceExistingProjectDialogFragment extends DialogFragment {
 		switch (radioGroup.getCheckedRadioButtonId()) {
 			case R.id.rename:
 				String newProgramName = inputLayout.getEditText().getText().toString().trim();
-				if (Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(newProgramName)) {
+				if (Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(getActivity(), newProgramName)) {
 					inputLayout.setError(getString(R.string.name_already_exists));
 					return false;
 				}

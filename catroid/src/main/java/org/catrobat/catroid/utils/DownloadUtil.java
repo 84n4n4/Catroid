@@ -84,7 +84,7 @@ public final class DownloadUtil {
 			return;
 		}
 
-		boolean programNameExists = Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(programName);
+		boolean programNameExists = Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(activity, programName);
 		if (programNameExists) {
 			ReplaceExistingProjectDialogFragment dialog = new ReplaceExistingProjectDialogFragment();
 			dialog.setProgramName(programName);

@@ -99,7 +99,7 @@ public class UtilFileSizeTranslationsTest {
 		ProjectManager.getInstance().setCurrentProject(project);
 		ProjectManager.getInstance().setCurrentlyEditedScene(project.getDefaultScene());
 
-		projectFolder = new File(PathBuilder.buildProjectPath(projectName));
+		projectFolder = new File(PathBuilder.buildProjectPath(InstrumentationRegistry.getTargetContext(), projectName));
 
 		imageFile = ResourceImporter.createImageFileFromResourcesInDirectory(
 				InstrumentationRegistry.getContext().getResources(),

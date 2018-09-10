@@ -310,7 +310,7 @@ public class MainMenuActivity extends BaseCastActivity implements ProjectLoaderT
 	private void prepareStandaloneProject() {
 		try {
 			InputStream inputStream = getAssets().open(BuildConfig.START_PROJECT + ".zip");
-			new ZipArchiver().unzip(inputStream, new File(PathBuilder.buildProjectPath(BuildConfig.PROJECT_NAME)));
+			new ZipArchiver().unzip(inputStream, new File(PathBuilder.buildProjectPath(this, BuildConfig.PROJECT_NAME)));
 			new ProjectLoaderTask(this, this).execute(BuildConfig.PROJECT_NAME);
 		} catch (IOException e) {
 			Log.e("STANDALONE", "Could not unpack Standalone Program: ", e);

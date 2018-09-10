@@ -23,6 +23,8 @@
 
 package org.catrobat.catroid.ui.recyclerview.controller;
 
+import android.content.Context;
+
 import org.catrobat.catroid.common.ProjectData;
 import org.catrobat.catroid.io.StorageOperations;
 import org.catrobat.catroid.utils.PathBuilder;
@@ -32,7 +34,7 @@ import java.io.IOException;
 
 public class ProjectController {
 
-	public void delete(ProjectData projectToDelete) throws IOException {
-		StorageOperations.deleteDir(new File(PathBuilder.buildProjectPath(projectToDelete.projectName)));
+	public void delete(Context context, ProjectData projectToDelete) throws IOException {
+		StorageOperations.deleteDir(new File(PathBuilder.buildProjectPath(context, projectToDelete.projectName)));
 	}
 }

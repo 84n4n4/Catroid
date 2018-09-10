@@ -63,7 +63,7 @@ public class BackpackSoundFragment extends BackpackRecyclerViewFragment<SoundInf
 
 		for (SoundInfo item : selectedItems) {
 			try {
-				dstSprite.getSoundList().add(soundController.unpack(item,
+				dstSprite.getSoundList().add(soundController.unpack(getActivity(), item,
 						ProjectManager.getInstance().getCurrentlyEditedScene(),
 						dstSprite));
 				unpackedItemCnt++;
@@ -103,7 +103,7 @@ public class BackpackSoundFragment extends BackpackRecyclerViewFragment<SoundInf
 				selectedItems.size(),
 				selectedItems.size()));
 
-		BackpackListManager.getInstance().saveBackpack();
+		BackpackListManager.getInstance().saveBackpack(getActivity());
 		finishActionMode();
 		if (adapter.getItems().isEmpty()) {
 			getActivity().finish();

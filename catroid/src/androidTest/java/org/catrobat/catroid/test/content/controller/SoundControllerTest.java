@@ -178,7 +178,7 @@ public class SoundControllerTest {
 	}
 
 	private void deleteProject() throws IOException {
-		File projectDir = new File(buildProjectPath(project.getName()));
+		File projectDir = new File(buildProjectPath(InstrumentationRegistry.getTargetContext(), project.getName()));
 		if (projectDir.exists()) {
 			StorageOperations.deleteDir(projectDir);
 		}

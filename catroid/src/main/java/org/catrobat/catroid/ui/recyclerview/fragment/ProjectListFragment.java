@@ -58,7 +58,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static org.catrobat.catroid.common.FlavoredConstants.DEFAULT_ROOT_DIRECTORY;
 import static org.catrobat.catroid.common.SharedPreferenceKeys.SHOW_DETAILS_PROJECTS_PREFERENCE_KEY;
 
 public class ProjectListFragment extends RecyclerViewFragment<ProjectData> implements
@@ -88,8 +87,8 @@ public class ProjectListFragment extends RecyclerViewFragment<ProjectData> imple
 	private List<ProjectData> getItemList() {
 		List<ProjectData> items = new ArrayList<>();
 
-		for (String projectName : FileMetaDataExtractor.getProjectNames(DEFAULT_ROOT_DIRECTORY)) {
-			File codeFile = new File(PathBuilder.buildPath(PathBuilder.buildProjectPath(projectName), Constants.CODE_XML_FILE_NAME));
+		for (String projectName : FileMetaDataExtractor.getProjectNames(getActivity().getFilesDir())) {
+			File codeFile = new File(PathBuilder.buildPath(PathBuilder.buildProjectPath(getActivity(), projectName), Constants.CODE_XML_FILE_NAME));
 			items.add(new ProjectData(projectName, codeFile.lastModified()));
 		}
 
@@ -158,7 +157,7 @@ public class ProjectListFragment extends RecyclerViewFragment<ProjectData> imple
 
 		for (ProjectData item : selectedItems) {
 			try {
-				projectController.delete(item);
+				projectController.delete(getActivity(), item);
 			} catch (IOException e) {
 				Log.e(TAG, Log.getStackTraceString(e));
 			}

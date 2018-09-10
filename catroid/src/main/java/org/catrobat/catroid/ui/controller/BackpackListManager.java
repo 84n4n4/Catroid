@@ -22,6 +22,7 @@
  */
 package org.catrobat.catroid.ui.controller;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import org.catrobat.catroid.ProjectManager;
@@ -117,42 +118,52 @@ public final class BackpackListManager {
 				&& getBackpackedSounds().isEmpty() && getSprites().isEmpty();
 	}
 
-	public void saveBackpack() {
-		SaveBackpackTask saveTask = new SaveBackpackTask();
+	public void saveBackpack(Context context) {
+		SaveBackpackTask saveTask = new SaveBackpackTask(context);
 		saveTask.execute();
 	}
 
-	public void loadBackpack() {
-		LoadBackpackTask loadTask = new LoadBackpackTask();
+	public void loadBackpack(Context context) {
+		LoadBackpackTask loadTask = new LoadBackpackTask(context);
 		loadTask.execute();
 	}
 
 	private class SaveBackpackTask extends AsyncTask<Void, Void, Void> {
+		private Context context;
+
+		public SaveBackpackTask(Context context) {
+			this.context = context;
+		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			BackpackSerializer.getInstance().saveBackpack(getBackpack());
+			BackpackSerializer.getInstance(context).saveBackpack(context, getBackpack());
 			return null;
 		}
 	}
 
 	private class LoadBackpackTask extends AsyncTask<Void, Void, Void> {
+		private Context context;
+
+		public LoadBackpackTask(Context context) {
+			this.context = context;
+		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			backpack = BackpackSerializer.getInstance().loadBackpack();
+			backpack = BackpackSerializer.getInstance(context).loadBackpack(context);
 
 			for (Scene scene : getScenes()) {
-				setSpriteFileReferences(scene.getSpriteList(), scene.getDirectory());
+				setSpriteFileReferences(scene.getSpriteList(), scene.getDirectory(context));
 			}
 
 			for (Sprite sprite : getSprites()) {
-				setLookFileReferences(sprite.getLookList(), BACKPACK_IMAGE_DIRECTORY);
-				setSoundFileReferences(sprite.getSoundList(), BACKPACK_SOUND_DIRECTORY);
+				setLookFileReferences(sprite.getLookList(), new File(context.getFilesDir(), BACKPACK_IMAGE_DIRECTORY));
+				setSoundFileReferences(sprite.getSoundList(), new File(context.getFilesDir(), BACKPACK_SOUND_DIRECTORY));
 			}
 
-			setLookFileReferences(getBackpackedLooks(), BACKPACK_IMAGE_DIRECTORY);
-			setSoundFileReferences(getBackpackedSounds(), BACKPACK_SOUND_DIRECTORY);
+			setLookFileReferences(getBackpackedLooks(), new File(context.getFilesDir(), BACKPACK_IMAGE_DIRECTORY));
+			setSoundFileReferences(getBackpackedSounds(), new File(context.getFilesDir(), BACKPACK_SOUND_DIRECTORY));
 
 			ProjectManager.getInstance().checkNestingBrickReferences(false, true);
 			return null;

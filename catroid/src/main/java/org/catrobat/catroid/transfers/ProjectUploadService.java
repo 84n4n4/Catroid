@@ -93,7 +93,7 @@ public class ProjectUploadService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		XstreamSerializer.getInstance().saveProject(ProjectManager.getInstance().getCurrentProject());
+		XstreamSerializer.getInstance().saveProject(getApplicationContext(), ProjectManager.getInstance().getCurrentProject());
 
 		receiver = intent.getParcelableExtra("receiver");
 		try {

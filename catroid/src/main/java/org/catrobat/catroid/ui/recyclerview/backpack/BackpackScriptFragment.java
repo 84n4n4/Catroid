@@ -93,7 +93,7 @@ public class BackpackScriptFragment extends BackpackRecyclerViewFragment<String>
 				selectedItems.size(),
 				selectedItems.size()));
 
-		BackpackListManager.getInstance().saveBackpack();
+		BackpackListManager.getInstance().saveBackpack(getActivity());
 		finishActionMode();
 		if (adapter.getItems().isEmpty()) {
 			getActivity().finish();

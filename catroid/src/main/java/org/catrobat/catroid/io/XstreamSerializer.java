@@ -31,6 +31,7 @@ import com.parrot.freeflight.utils.FileUtils;
 import com.thoughtworks.xstream.converters.reflection.FieldDictionary;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 
+import org.catrobat.catroid.CatroidApplication;
 import org.catrobat.catroid.common.DroneVideoLookData;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.common.NfcTagData;
@@ -238,7 +239,6 @@ import static org.catrobat.catroid.common.Constants.SOUND_DIRECTORY_NAME;
 import static org.catrobat.catroid.common.Constants.TEXT_TO_SPEECH;
 import static org.catrobat.catroid.common.Constants.TMP_CODE_XML_FILE_NAME;
 import static org.catrobat.catroid.common.Constants.VIBRATOR;
-import static org.catrobat.catroid.common.FlavoredConstants.DEFAULT_ROOT_DIRECTORY;
 import static org.catrobat.catroid.utils.PathBuilder.buildProjectPath;
 import static org.catrobat.catroid.utils.PathBuilder.buildScenePath;
 
@@ -500,9 +500,9 @@ public final class XstreamSerializer {
 
 	public Project loadProject(String projectName, Context context) throws IOException, LoadingProjectException {
 
-		cleanUpTmpCodeFile(projectName);
+		cleanUpTmpCodeFile(context, projectName);
 
-		File xmlFile = new File(buildProjectPath(projectName), CODE_XML_FILE_NAME);
+		File xmlFile = new File(buildProjectPath(context, projectName), CODE_XML_FILE_NAME);
 
 		if (!Files.toString(xmlFile, Charsets.UTF_8).contains(SCENES_ENABLED_TAG)) {
 			return loadProjectMissingScenes(projectName, context);
@@ -518,7 +518,7 @@ public final class XstreamSerializer {
 				scene.getDataContainer().setProjectUserData(project);
 			}
 
-			setFileReferences(project);
+			setFileReferences(context, project);
 			return project;
 		} catch (Exception e) {
 			throw new LoadingProjectException("An Error occurred while parsing the xml: " + e.getMessage());
@@ -527,10 +527,10 @@ public final class XstreamSerializer {
 		}
 	}
 
-	private static void setFileReferences(Project project) {
+	private static void setFileReferences(Context context, Project project) {
 		for (Scene scene : project.getSceneList()) {
-			File imageDir = new File(scene.getDirectory(), IMAGE_DIRECTORY_NAME);
-			File soundDir = new File(scene.getDirectory(), SOUND_DIRECTORY_NAME);
+			File imageDir = new File(scene.getDirectory(context), IMAGE_DIRECTORY_NAME);
+			File soundDir = new File(scene.getDirectory(context), SOUND_DIRECTORY_NAME);
 
 			for (Sprite sprite : scene.getSpriteList()) {
 				for (Iterator<LookData> iterator = sprite.getLookList().iterator(); iterator.hasNext(); ) {
@@ -561,7 +561,7 @@ public final class XstreamSerializer {
 	private Project loadProjectMissingScenes(String projectName, Context context) throws IOException {
 		loadSaveLock.lock();
 
-		File projectDir = new File(buildProjectPath(projectName));
+		File projectDir = new File(buildProjectPath(context, projectName));
 
 		new File(projectDir, IMAGE_DIRECTORY_NAME).mkdir();
 		new File(projectDir, SOUND_DIRECTORY_NAME).mkdir();
@@ -574,7 +574,7 @@ public final class XstreamSerializer {
 		prepareXstream(Project.class, DataContainer.class);
 		Project project = new Project(supportProject, context);
 
-		File sceneDir = new File(buildScenePath(projectName, project.getDefaultScene().getName()));
+		File sceneDir = new File(buildScenePath(context, projectName, project.getDefaultScene().getName()));
 		StorageOperations.createSceneDirectory(sceneDir);
 
 		File automaticScreenshot = new File(projectDir, StageListener.SCREENSHOT_AUTOMATIC_FILE_NAME);
@@ -595,19 +595,19 @@ public final class XstreamSerializer {
 		StorageOperations.deleteDir(new File(projectDir, IMAGE_DIRECTORY_NAME));
 		StorageOperations.deleteDir(new File(projectDir, SOUND_DIRECTORY_NAME));
 
-		setFileReferences(project);
+		setFileReferences(context, project);
 
 		loadSaveLock.unlock();
 		return project;
 	}
 
-	public boolean saveProject(Project project) {
+	public boolean saveProject(Context context, Project project) {
 		if (project == null) {
 			return false;
 		}
 
 		try {
-			cleanUpTmpCodeFile(project.getName());
+			cleanUpTmpCodeFile(context, project.getName());
 		} catch (LoadingProjectException e) {
 			return false;
 		}
@@ -621,8 +621,8 @@ public final class XstreamSerializer {
 
 		try {
 			currentXml = XML_HEADER.concat(xstream.toXML(project));
-			tmpCodeFile = new File(buildProjectPath(project.getName()), TMP_CODE_XML_FILE_NAME);
-			currentCodeFile = new File(buildProjectPath(project.getName()), CODE_XML_FILE_NAME);
+			tmpCodeFile = new File(buildProjectPath(context, project.getName()), TMP_CODE_XML_FILE_NAME);
+			currentCodeFile = new File(buildProjectPath(context, project.getName()), CODE_XML_FILE_NAME);
 
 			if (currentCodeFile.exists()) {
 				try {
@@ -640,8 +640,8 @@ public final class XstreamSerializer {
 				}
 			}
 
-			StorageOperations.createDir(DEFAULT_ROOT_DIRECTORY);
-			File projectDir = new File(buildProjectPath(project.getName()));
+			StorageOperations.createDir(context.getFilesDir());
+			File projectDir = new File(buildProjectPath(context, project.getName()));
 
 			StorageOperations.createDir(projectDir);
 
@@ -653,7 +653,7 @@ public final class XstreamSerializer {
 			writer.write(currentXml);
 			writer.flush();
 
-			File permissionFile = new File(buildProjectPath(project.getName()), PERMISSIONS_FILE_NAME);
+			File permissionFile = new File(buildProjectPath(context, project.getName()), PERMISSIONS_FILE_NAME);
 			writer = new BufferedWriter(new FileWriter(permissionFile), BUFFER_8K);
 
 			for (String resource : generatePermissionsSetFromResource(project.getRequiredResources())) {
@@ -687,10 +687,9 @@ public final class XstreamSerializer {
 		}
 	}
 
-	private void cleanUpTmpCodeFile(String projectName) throws LoadingProjectException {
+	private void cleanUpTmpCodeFile(Context context, String projectName) throws LoadingProjectException {
 		loadSaveLock.lock();
-
-		File projectDir = new File(buildProjectPath(projectName));
+		File projectDir = new File(buildProjectPath(context, projectName));
 		File tmpXmlFile = new File(projectDir, TMP_CODE_XML_FILE_NAME);
 		File actualXmlFile = new File(projectDir, CODE_XML_FILE_NAME);
 
@@ -709,8 +708,8 @@ public final class XstreamSerializer {
 		loadSaveLock.unlock();
 	}
 
-	public boolean projectExists(String projectName) {
-		List<String> projectNameList = FileMetaDataExtractor.getProjectNames(DEFAULT_ROOT_DIRECTORY);
+	public boolean projectExists(Context context, String projectName) {
+		List<String> projectNameList = FileMetaDataExtractor.getProjectNames(context.getFilesDir());
 		for (String projectNameIterator : projectNameList) {
 			if (projectNameIterator.equals(projectName)) {
 				return true;
@@ -763,13 +762,13 @@ public final class XstreamSerializer {
 		return permissionsSet;
 	}
 
-	public void updateCodeFileOnDownload(String projectName) {
-		File projectCodeFile = new File(buildProjectPath(projectName), CODE_XML_FILE_NAME);
+	public void updateCodeFileOnDownload(Context context, String projectName) {
+		File projectCodeFile = new File(buildProjectPath(context, projectName), CODE_XML_FILE_NAME);
 		xstream.updateCollisionReceiverBrickMessage(projectCodeFile);
 	}
 
-	public static String extractDefaultSceneNameFromXml(String projectName) {
-		File projectDir = new File(buildProjectPath(projectName));
+	public static String extractDefaultSceneNameFromXml(Context context, String projectName) {
+		File projectDir = new File(buildProjectPath(context, projectName));
 		File xmlFile = new File(projectDir, CODE_XML_FILE_NAME);
 
 		StringFinder stringFinder = new StringFinder();

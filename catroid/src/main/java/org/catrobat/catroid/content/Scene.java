@@ -22,6 +22,7 @@
  */
 package org.catrobat.catroid.content;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -161,17 +162,17 @@ public class Scene implements Nameable, Serializable {
 		physicsWorld = world;
 	}
 
-	public File getDirectory() {
+	public File getDirectory(Context context) {
 		if (project == null) {
 			return new File(BACKPACK_SCENE_DIRECTORY, name);
 		} else {
-			return new File(PathBuilder.buildScenePath(project.getName(), name));
+			return new File(PathBuilder.buildScenePath(context, project.getName(), name));
 		}
 	}
 
-	public boolean hasScreenshot() {
-		File automaticScreenshot = new File(getDirectory(), AUTOMATIC_SCREENSHOT_FILE_NAME);
-		File manualScreenshot = new File(getDirectory(), MANUAL_SCREENSHOT_FILE_NAME);
+	public boolean hasScreenshot(Context context) {
+		File automaticScreenshot = new File(getDirectory(context), AUTOMATIC_SCREENSHOT_FILE_NAME);
+		File manualScreenshot = new File(getDirectory(context), MANUAL_SCREENSHOT_FILE_NAME);
 		return automaticScreenshot.exists() || manualScreenshot.exists();
 	}
 

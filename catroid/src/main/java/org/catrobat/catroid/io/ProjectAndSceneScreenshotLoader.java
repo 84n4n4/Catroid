@@ -185,13 +185,13 @@ public class ProjectAndSceneScreenshotLoader {
 					pathOfAutomaticScreenshot = PathBuilder.buildPath(sceneDir.getAbsolutePath(),
 							StageListener.SCREENSHOT_AUTOMATIC_FILE_NAME);
 				} else {
-					String scenePath = PathBuilder.buildScenePath(projectAndSceneScreenshotData.projectName,
+					String scenePath = PathBuilder.buildScenePath(context, projectAndSceneScreenshotData.projectName,
 							projectAndSceneScreenshotData.sceneName);
 					pathOfManualScreenshot = PathBuilder.buildPath(scenePath, StageListener.SCREENSHOT_MANUAL_FILE_NAME);
 					pathOfAutomaticScreenshot = PathBuilder.buildPath(scenePath, StageListener.SCREENSHOT_AUTOMATIC_FILE_NAME);
 				}
 			} else {
-				String projectPath = PathBuilder.buildProjectPath(projectAndSceneScreenshotData.projectName);
+				String projectPath = PathBuilder.buildProjectPath(context, projectAndSceneScreenshotData.projectName);
 				pathOfManualScreenshot = PathBuilder.buildPath(projectPath, StageListener.SCREENSHOT_MANUAL_FILE_NAME);
 				pathOfAutomaticScreenshot = PathBuilder.buildPath(projectPath, StageListener.SCREENSHOT_AUTOMATIC_FILE_NAME);
 			}

@@ -82,13 +82,13 @@ public class ChromeCastProjectCreator extends ProjectCreator {
 	public Project createDefaultProject(String projectName, Context context, boolean landscapeMode) throws
 			IOException,
 			IllegalArgumentException {
-		if (XstreamSerializer.getInstance().projectExists(projectName)) {
+		if (XstreamSerializer.getInstance().projectExists(context, projectName)) {
 			throw new IllegalArgumentException("Project with name '" + projectName + "' already exists!");
 		}
 
 		Project defaultProject = new Project(context, projectName, false, true);
 		defaultProject.setDeviceData(context); // density anywhere here
-		XstreamSerializer.getInstance().saveProject(defaultProject);
+		XstreamSerializer.getInstance().saveProject(context, defaultProject);
 		ProjectManager.getInstance().setProject(defaultProject);
 
 		String birdLookName = context.getString(R.string.default_cast_project_sprites_bird_name);
@@ -111,9 +111,9 @@ public class ChromeCastProjectCreator extends ProjectCreator {
 		File backgroundFile;
 		File cloudFile;
 
-		File projectDir = new File(PathBuilder.buildProjectPath(defaultProject.getName()));
-		File imageDir = new File(defaultProject.getDefaultScene().getDirectory(), Constants.IMAGE_DIRECTORY_NAME);
-		File soundDir = new File(defaultProject.getDefaultScene().getDirectory(), Constants.SOUND_DIRECTORY_NAME);
+		File projectDir = new File(PathBuilder.buildProjectPath(context, defaultProject.getName()));
+		File imageDir = new File(defaultProject.getDefaultScene().getDirectory(context), Constants.IMAGE_DIRECTORY_NAME);
+		File soundDir = new File(defaultProject.getDefaultScene().getDirectory(context), Constants.SOUND_DIRECTORY_NAME);
 
 		backgroundImageScaleFactor = ImageEditing.calculateScaleFactorToScreenSize(
 				R.drawable.default_project_background_landscape, context);
@@ -414,7 +414,7 @@ public class ChromeCastProjectCreator extends ProjectCreator {
 			throw new IOException(TAG, illegalArgumentException);
 		}
 
-		XstreamSerializer.getInstance().saveProject(defaultProject);
+		XstreamSerializer.getInstance().saveProject(context, defaultProject);
 
 		return defaultProject;
 	}

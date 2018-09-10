@@ -23,6 +23,8 @@
 
 package org.catrobat.catroid.ui.recyclerview.controller;
 
+import android.content.Context;
+
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
@@ -43,22 +45,22 @@ public class LookController {
 
 	private UniqueNameProvider uniqueNameProvider = new UniqueNameProvider();
 
-	public LookData copy(LookData lookToCopy, Scene dstScene, Sprite dstSprite) throws IOException {
+	public LookData copy(Context context, LookData lookToCopy, Scene dstScene, Sprite dstSprite) throws IOException {
 		String name = uniqueNameProvider.getUniqueName(lookToCopy.getName(), getScope(dstSprite.getLookList()));
 
-		File dstDir = getImageDir(dstScene);
+		File dstDir = getImageDir(context, dstScene);
 		File file = StorageOperations.copyFileToDir(lookToCopy.getFile(), dstDir);
 
 		return new LookData(name, file);
 	}
 
-	LookData findOrCopy(LookData lookToCopy, Scene dstScene, Sprite dstSprite) throws IOException {
+	LookData findOrCopy(Context context, LookData lookToCopy, Scene dstScene, Sprite dstSprite) throws IOException {
 		for (LookData look : dstSprite.getLookList()) {
 			if (compareByChecksum(look.getFile(), lookToCopy.getFile())) {
 				return look;
 			}
 		}
-		LookData copiedLook = copy(lookToCopy, dstScene, dstSprite);
+		LookData copiedLook = copy(context, lookToCopy, dstScene, dstSprite);
 		dstSprite.getLookList().add(copiedLook);
 		return copiedLook;
 	}
@@ -67,42 +69,42 @@ public class LookController {
 		StorageOperations.deleteFile(lookToDelete.getFile());
 	}
 
-	public LookData pack(LookData lookToPack) throws IOException {
+	public LookData pack(Context context, LookData lookToPack) throws IOException {
 		String name = uniqueNameProvider.getUniqueName(
 				lookToPack.getName(), getScope(BackpackListManager.getInstance().getBackpackedLooks()));
 
-		File file = StorageOperations.copyFileToDir(lookToPack.getFile(), BACKPACK_IMAGE_DIRECTORY);
+		File file = StorageOperations.copyFileToDir(lookToPack.getFile(), new File(context.getFilesDir(), BACKPACK_IMAGE_DIRECTORY));
 
 		return new LookData(name, file);
 	}
 
-	LookData packForSprite(LookData lookToPack, Sprite dstSprite) throws IOException {
+	LookData packForSprite(Context context, LookData lookToPack, Sprite dstSprite) throws IOException {
 		for (LookData look : dstSprite.getLookList()) {
 			if (compareByChecksum(look.getFile(), lookToPack.getFile())) {
 				return look;
 			}
 		}
-		File file = StorageOperations.copyFileToDir(lookToPack.getFile(), BACKPACK_IMAGE_DIRECTORY);
+		File file = StorageOperations.copyFileToDir(lookToPack.getFile(), new File(context.getFilesDir(), BACKPACK_IMAGE_DIRECTORY));
 		LookData look = new LookData(lookToPack.getName(), file);
 		dstSprite.getLookList().add(look);
 
 		return look;
 	}
 
-	public LookData unpack(LookData lookToUnpack, Scene dstScene, Sprite dstSprite) throws IOException {
+	public LookData unpack(Context context, LookData lookToUnpack, Scene dstScene, Sprite dstSprite) throws IOException {
 		String name = uniqueNameProvider.getUniqueName(lookToUnpack.getName(), getScope(dstSprite.getLookList()));
-		File file = StorageOperations.copyFileToDir(lookToUnpack.getFile(), getImageDir(dstScene));
+		File file = StorageOperations.copyFileToDir(lookToUnpack.getFile(), getImageDir(context, dstScene));
 		return new LookData(name, file);
 	}
 
-	LookData unpackForSprite(LookData lookToUnpack, Scene dstScene, Sprite dstSprite) throws IOException {
+	LookData unpackForSprite(Context context, LookData lookToUnpack, Scene dstScene, Sprite dstSprite) throws IOException {
 		for (LookData look : dstSprite.getLookList()) {
 			if (compareByChecksum(look.getFile(), lookToUnpack.getFile())) {
 				return look;
 			}
 		}
 
-		LookData lookData = unpack(lookToUnpack, dstScene, dstSprite);
+		LookData lookData = unpack(context, lookToUnpack, dstScene, dstSprite);
 		dstSprite.getLookList().add(lookData);
 		return lookData;
 	}
@@ -115,8 +117,8 @@ public class LookController {
 		return scope;
 	}
 
-	private File getImageDir(Scene scene) {
-		return new File(scene.getDirectory(), IMAGE_DIRECTORY_NAME);
+	private File getImageDir(Context context, Scene scene) {
+		return new File(scene.getDirectory(context), IMAGE_DIRECTORY_NAME);
 	}
 
 	private boolean compareByChecksum(File file1, File file2) {

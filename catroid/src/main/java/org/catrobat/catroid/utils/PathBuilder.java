@@ -23,9 +23,9 @@
 
 package org.catrobat.catroid.utils;
 
-import java.io.File;
+import android.content.Context;
 
-import static org.catrobat.catroid.common.FlavoredConstants.DEFAULT_ROOT_DIRECTORY;
+import java.io.File;
 
 public final class PathBuilder {
 
@@ -49,13 +49,13 @@ public final class PathBuilder {
 		return returnValue;
 	}
 
-	public static String buildProjectPath(String projectName) {
-		return new File(DEFAULT_ROOT_DIRECTORY,
+	public static String buildProjectPath(Context context, String projectName) {
+		return new File(context.getFilesDir(),
 				FileMetaDataExtractor.encodeSpecialCharsForFileSystem(projectName)).getAbsolutePath();
 	}
 
-	public static String buildScenePath(String projectName, String sceneName) {
-		return buildPath(buildProjectPath(projectName),
+	public static String buildScenePath(Context context, String projectName, String sceneName) {
+		return buildPath(buildProjectPath(context, projectName),
 				FileMetaDataExtractor.encodeSpecialCharsForFileSystem(sceneName));
 	}
 }

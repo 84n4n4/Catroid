@@ -60,8 +60,8 @@ public final class FileMetaDataExtractor {
 		return size;
 	}
 
-	public static long getProgressFromBytes(String projectName, Long progress) {
-		long fileByteSize = getSizeOfFileOrDirectoryInByte(new File(PathBuilder.buildProjectPath(projectName)));
+	public static long getProgressFromBytes(Context context, String projectName, Long progress) {
+		long fileByteSize = getSizeOfFileOrDirectoryInByte(new File(PathBuilder.buildProjectPath(context, projectName)));
 		if (fileByteSize == 0) {
 			return (long) 0;
 		}

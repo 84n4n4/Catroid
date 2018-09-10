@@ -224,7 +224,7 @@ public class NewLookDialogFragment extends DialogFragment implements View.OnClic
 			String name = StorageOperations.getSanitizedFileName(srcFile);
 
 			File file = StorageOperations.copyFileToDir(srcFile,
-					new File(dstScene.getDirectory(), IMAGE_DIRECTORY_NAME));
+					new File(dstScene.getDirectory(getActivity()), IMAGE_DIRECTORY_NAME));
 
 			newItemInterface.addItem(new LookData(uniqueNameProvider.getUniqueName(name, getScope(dstSprite)), file));
 		} catch (IOException e) {
@@ -240,7 +240,7 @@ public class NewLookDialogFragment extends DialogFragment implements View.OnClic
 			String name = getString(R.string.default_look_name);
 
 			File file = StorageOperations.copyUriToDir(getActivity().getContentResolver(),
-					uri, new File(dstScene.getDirectory(), IMAGE_DIRECTORY_NAME), name);
+					uri, new File(dstScene.getDirectory(getActivity()), IMAGE_DIRECTORY_NAME), name);
 
 			newItemInterface.addItem(new LookData(uniqueNameProvider.getUniqueName(name, getScope(dstSprite)), file));
 		} catch (IOException e) {
@@ -257,7 +257,7 @@ public class NewLookDialogFragment extends DialogFragment implements View.OnClic
 	}
 
 	private Uri getDefaultLookFromCameraUri(String defLookName) {
-		File pictureFile = new File(FlavoredConstants.DEFAULT_ROOT_DIRECTORY, defLookName + ".jpg");
+		File pictureFile = new File(getActivity().getFilesDir(), defLookName + ".jpg");
 		return Uri.fromFile(pictureFile);
 	}
 }

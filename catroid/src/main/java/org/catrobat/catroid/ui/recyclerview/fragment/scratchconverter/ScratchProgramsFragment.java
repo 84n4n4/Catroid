@@ -126,7 +126,7 @@ public class ScratchProgramsFragment extends Fragment implements
 			return;
 		}
 
-		if (!XstreamSerializer.getInstance().projectExists(item.getTitle())) {
+		if (!XstreamSerializer.getInstance().projectExists(getActivity(), item.getTitle())) {
 			new AlertDialog.Builder(getActivity())
 					.setTitle(R.string.warning)
 					.setMessage(R.string.error_cannot_open_not_existing_scratch_program)

@@ -150,10 +150,9 @@ public class UtilsTest {
 
 	@Test
 	public void testBuildProjectPath() {
-		assertTrue(Utils.isExternalStorageAvailable());
 		String projectName = "test?Projekt\"1";
-		String expectedPath = FlavoredConstants.DEFAULT_ROOT_DIRECTORY.getAbsolutePath() + "/test%3FProjekt%221";
-		assertEquals(expectedPath, PathBuilder.buildProjectPath(projectName));
+		String expectedPath = InstrumentationRegistry.getTargetContext().getFilesDir().getAbsolutePath() + "/test%3FProjekt%221";
+		assertEquals(expectedPath, PathBuilder.buildProjectPath(InstrumentationRegistry.getTargetContext(), projectName));
 	}
 
 	@Test

@@ -165,7 +165,7 @@ public class UploadProgressDialogFragment extends DialogFragment {
 				if (endOfFileReached) {
 					progressPercent = 100;
 				} else {
-					progressPercent = (int) FileMetaDataExtractor.getProgressFromBytes(projectName, progress);
+					progressPercent = (int) FileMetaDataExtractor.getProgressFromBytes(getActivity(), projectName, progress);
 				}
 
 				StatusBarNotificationManager.getInstance().showOrUpdateNotification(notificationId, progressPercent);
@@ -181,7 +181,7 @@ public class UploadProgressDialogFragment extends DialogFragment {
 
 	private void uploadProject(String uploadName, String projectDescription) {
 		ProjectManager projectManager = ProjectManager.getInstance();
-		String projectPath = PathBuilder.buildProjectPath(projectManager.getCurrentProject().getName());
+		String projectPath = PathBuilder.buildProjectPath(getActivity(), projectManager.getCurrentProject().getName());
 
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		String token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);

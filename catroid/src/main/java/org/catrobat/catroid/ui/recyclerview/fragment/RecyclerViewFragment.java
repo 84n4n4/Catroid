@@ -227,7 +227,7 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements
 		super.onResume();
 		setShowProgressBar(false);
 
-		BackpackListManager.getInstance().loadBackpack();
+		BackpackListManager.getInstance().loadBackpack(getActivity());
 
 		adapter.notifyDataSetChanged();
 		adapter.registerAdapterDataObserver(observer);

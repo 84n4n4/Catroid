@@ -49,7 +49,7 @@ public class UnzipProjectFromAssetsTest {
 
 	@Before
 	public void setUp() {
-		projectDir = new File(PathBuilder.buildProjectPath("testZipProject"));
+		projectDir = new File(PathBuilder.buildProjectPath(InstrumentationRegistry.getTargetContext(), "testZipProject"));
 	}
 
 	@After

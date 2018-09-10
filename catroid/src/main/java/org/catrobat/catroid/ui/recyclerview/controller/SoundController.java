@@ -23,6 +23,8 @@
 
 package org.catrobat.catroid.ui.recyclerview.controller;
 
+import android.content.Context;
+
 import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
@@ -43,22 +45,22 @@ public class SoundController {
 
 	private UniqueNameProvider uniqueNameProvider = new UniqueNameProvider();
 
-	public SoundInfo copy(SoundInfo soundToCopy, Scene dstScene, Sprite dstSprite) throws IOException {
+	public SoundInfo copy(Context context, SoundInfo soundToCopy, Scene dstScene, Sprite dstSprite) throws IOException {
 		String name = uniqueNameProvider.getUniqueName(soundToCopy.getName(), getScope(dstSprite.getSoundList()));
 
-		File dstDir = getSoundDir(dstScene);
+		File dstDir = getSoundDir(context, dstScene);
 		File file = StorageOperations.copyFileToDir(soundToCopy.getFile(), dstDir);
 
 		return new SoundInfo(name, file);
 	}
 
-	SoundInfo findOrCopy(SoundInfo soundToCopy, Scene dstScene, Sprite dstSprite) throws IOException {
+	SoundInfo findOrCopy(Context context, SoundInfo soundToCopy, Scene dstScene, Sprite dstSprite) throws IOException {
 		for (SoundInfo sound : dstSprite.getSoundList()) {
 			if (compareByChecksum(sound.getFile(), soundToCopy.getFile())) {
 				return sound;
 			}
 		}
-		SoundInfo copiedSound = copy(soundToCopy, dstScene, dstSprite);
+		SoundInfo copiedSound = copy(context, soundToCopy, dstScene, dstSprite);
 		dstSprite.getSoundList().add(copiedSound);
 		return copiedSound;
 	}
@@ -67,43 +69,43 @@ public class SoundController {
 		StorageOperations.deleteFile(soundToDelete.getFile());
 	}
 
-	public SoundInfo pack(SoundInfo soundToPack) throws IOException {
+	public SoundInfo pack(Context context, SoundInfo soundToPack) throws IOException {
 		String name = uniqueNameProvider.getUniqueName(soundToPack.getName(),
 				getScope(BackpackListManager.getInstance().getBackpackedSounds()));
 
-		File file = StorageOperations.copyFileToDir(soundToPack.getFile(), BACKPACK_SOUND_DIRECTORY);
+		File file = StorageOperations.copyFileToDir(soundToPack.getFile(), new File(context.getFilesDir(), BACKPACK_SOUND_DIRECTORY));
 
 		return new SoundInfo(name, file);
 	}
 
-	SoundInfo packForSprite(SoundInfo soundToPack, Sprite dstSprite) throws IOException {
+	SoundInfo packForSprite(Context context, SoundInfo soundToPack, Sprite dstSprite) throws IOException {
 		for (SoundInfo sound : dstSprite.getSoundList()) {
 			if (compareByChecksum(sound.getFile(), soundToPack.getFile())) {
 				return sound;
 			}
 		}
 
-		File file = StorageOperations.copyFileToDir(soundToPack.getFile(), BACKPACK_SOUND_DIRECTORY);
+		File file = StorageOperations.copyFileToDir(soundToPack.getFile(), new File(context.getFilesDir(), BACKPACK_SOUND_DIRECTORY));
 		SoundInfo sound = new SoundInfo(soundToPack.getName(), file);
 		dstSprite.getSoundList().add(sound);
 
 		return sound;
 	}
 
-	public SoundInfo unpack(SoundInfo soundToUnpack, Scene dstScene, Sprite dstSprite) throws IOException {
+	public SoundInfo unpack(Context context, SoundInfo soundToUnpack, Scene dstScene, Sprite dstSprite) throws IOException {
 		String name = uniqueNameProvider.getUniqueName(soundToUnpack.getName(), getScope(dstSprite.getSoundList()));
-		File file = StorageOperations.copyFileToDir(soundToUnpack.getFile(), getSoundDir(dstScene));
+		File file = StorageOperations.copyFileToDir(soundToUnpack.getFile(), getSoundDir(context, dstScene));
 		return new SoundInfo(name, file);
 	}
 
-	SoundInfo unpackForSprite(SoundInfo soundToUnpack, Scene dstScene, Sprite dstSprite) throws IOException {
+	SoundInfo unpackForSprite(Context context, SoundInfo soundToUnpack, Scene dstScene, Sprite dstSprite) throws IOException {
 		for (SoundInfo sound : dstSprite.getSoundList()) {
 			if (compareByChecksum(sound.getFile(), soundToUnpack.getFile())) {
 				return sound;
 			}
 		}
 
-		SoundInfo soundInfo = unpack(soundToUnpack, dstScene, dstSprite);
+		SoundInfo soundInfo = unpack(context, soundToUnpack, dstScene, dstSprite);
 		dstSprite.getSoundList().add(soundInfo);
 		return soundInfo;
 	}
@@ -116,8 +118,8 @@ public class SoundController {
 		return scope;
 	}
 
-	private File getSoundDir(Scene scene) {
-		return new File(scene.getDirectory(), SOUND_DIRECTORY_NAME);
+	private File getSoundDir(Context context, Scene scene) {
+		return new File(scene.getDirectory(context), SOUND_DIRECTORY_NAME);
 	}
 
 	private boolean compareByChecksum(File file1, File file2) {

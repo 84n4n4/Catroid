@@ -50,14 +50,14 @@ public class ProjectCopyTask extends AsyncTask<String, Void, Boolean> {
 
 	@Override
 	protected Boolean doInBackground(String... params) {
-		File projectToCopyDirectory = new File(PathBuilder.buildProjectPath(params[0]));
-		File projectDirectory = new File(PathBuilder.buildProjectPath(params[1]));
+		File projectToCopyDirectory = new File(PathBuilder.buildProjectPath(context, params[0]));
+		File projectDirectory = new File(PathBuilder.buildProjectPath(context, params[1]));
 
 		try {
 			StorageOperations.copyDir(projectToCopyDirectory, projectDirectory);
 			Project project = XstreamSerializer.getInstance().loadProject(params[1], context);
 			project.setName(params[1]);
-			XstreamSerializer.getInstance().saveProject(project);
+			XstreamSerializer.getInstance().saveProject(context, project);
 			return true;
 		} catch (IOException | LoadingProjectException loadingException) {
 			Log.e(TAG, "Something went wrong while copying project: " + params[0]

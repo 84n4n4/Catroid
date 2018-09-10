@@ -76,14 +76,14 @@ public class ProjectDetailsFragment extends Fragment implements SetDescriptionDi
 			getActivity().onBackPressed();
 		}
 
-		String sceneName = XstreamSerializer.extractDefaultSceneNameFromXml(projectData.projectName);
+		String sceneName = XstreamSerializer.extractDefaultSceneNameFromXml(getActivity(), projectData.projectName);
 		ProjectAndSceneScreenshotLoader screenshotLoader = new ProjectAndSceneScreenshotLoader(getActivity());
 
 		XmlHeader header = projectData.project.getXmlHeader();
 		ImageView image = view.findViewById(R.id.image);
 		screenshotLoader.loadAndShowScreenshot(projectData.projectName, sceneName, false, image);
 
-		String size = FileMetaDataExtractor.getSizeAsString(new File(PathBuilder.buildProjectPath(projectData.projectName)),
+		String size = FileMetaDataExtractor.getSizeAsString(new File(PathBuilder.buildProjectPath(getActivity(), projectData.projectName)),
 				getActivity());
 
 		int modeText = header.islandscapeMode() ? R.string.landscape : R.string.portrait;
@@ -155,7 +155,7 @@ public class ProjectDetailsFragment extends Fragment implements SetDescriptionDi
 	@Override
 	public void setDescription(String description) {
 		projectData.project.setDescription(description);
-		if (XstreamSerializer.getInstance().saveProject(projectData.project)) {
+		if (XstreamSerializer.getInstance().saveProject(getActivity(), projectData.project)) {
 			this.description.setText(description);
 		} else {
 			ToastUtil.showError(getActivity(), R.string.error_set_description);

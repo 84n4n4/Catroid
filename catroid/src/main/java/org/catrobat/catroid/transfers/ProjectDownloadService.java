@@ -78,18 +78,18 @@ public class ProjectDownloadService extends IntentService {
 		receiver = intent.getParcelableExtra(RECEIVER_TAG);
 		try {
 			ServerCalls.getInstance().downloadProject(url, zipFileString, projectName, receiver, notificationId);
-			new ZipArchiver().unzip(new File(zipFileString), new File(PathBuilder.buildProjectPath(projectName)));
+			new ZipArchiver().unzip(new File(zipFileString), new File(PathBuilder.buildProjectPath(getApplicationContext(), projectName)));
 
 			boolean renameProject = intent.getBooleanExtra(RENAME_AFTER_DOWNLOAD, false);
 			if (renameProject) {
 				Project projectTBRenamed = XstreamSerializer.getInstance().loadProject(projectName, getBaseContext());
 				if (projectTBRenamed != null) {
 					projectTBRenamed.setName(projectName);
-					XstreamSerializer.getInstance().saveProject(projectTBRenamed);
+					XstreamSerializer.getInstance().saveProject(getApplicationContext(), projectTBRenamed);
 				}
 			}
 
-			XstreamSerializer.getInstance().updateCodeFileOnDownload(projectName);
+			XstreamSerializer.getInstance().updateCodeFileOnDownload(getApplicationContext(), projectName);
 		} catch (LoadingProjectException | IOException | WebconnectionException e) {
 			showToast(R.string.error_project_download, true);
 			Log.e(TAG, Log.getStackTraceString(e));

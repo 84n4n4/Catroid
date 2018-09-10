@@ -108,8 +108,8 @@ public class SceneListFragment extends RecyclerViewFragment<Scene> {
 
 		for (Scene item : selectedItems) {
 			try {
-				BackpackListManager.getInstance().getScenes().add(sceneController.pack(item));
-				BackpackListManager.getInstance().saveBackpack();
+				BackpackListManager.getInstance().getScenes().add(sceneController.pack(getActivity(), item));
+				BackpackListManager.getInstance().saveBackpack(getActivity());
 				packedItemCnt++;
 			} catch (IOException e) {
 				Log.e(TAG, Log.getStackTraceString(e));
@@ -145,7 +145,7 @@ public class SceneListFragment extends RecyclerViewFragment<Scene> {
 
 		for (Scene item : selectedItems) {
 			try {
-				adapter.add(sceneController.copy(item, ProjectManager.getInstance().getCurrentProject()));
+				adapter.add(sceneController.copy(getActivity(), item, ProjectManager.getInstance().getCurrentProject()));
 				copiedItemCnt++;
 			} catch (IOException e) {
 				Log.e(TAG, Log.getStackTraceString(e));
@@ -173,7 +173,7 @@ public class SceneListFragment extends RecyclerViewFragment<Scene> {
 
 		for (Scene item : selectedItems) {
 			try {
-				sceneController.delete(item);
+				sceneController.delete(getActivity(), item);
 			} catch (IOException e) {
 				Log.e(TAG, Log.getStackTraceString(e));
 			}
@@ -228,7 +228,7 @@ public class SceneListFragment extends RecyclerViewFragment<Scene> {
 	public void renameItem(String name) {
 		Scene item = adapter.getSelectedItems().get(0);
 		if (!item.getName().equals(name)) {
-			if (sceneController.rename(item, name)) {
+			if (sceneController.rename(getActivity(), item, name)) {
 				ProjectManager.getInstance().saveProject(getActivity());
 			} else {
 				ToastUtil.showError(getActivity(), R.string.error_rename_scene);

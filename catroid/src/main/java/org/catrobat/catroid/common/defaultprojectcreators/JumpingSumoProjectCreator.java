@@ -61,7 +61,7 @@ public class JumpingSumoProjectCreator extends ProjectCreator {
 	public Project createDefaultProject(String projectName, Context context, boolean landscapeMode) throws IOException,
 			IllegalArgumentException {
 
-		if (XstreamSerializer.getInstance().projectExists(projectName)) {
+		if (XstreamSerializer.getInstance().projectExists(context, projectName)) {
 			throw new IllegalArgumentException("Project with name '" + projectName + "' already exists!");
 		}
 
@@ -76,10 +76,10 @@ public class JumpingSumoProjectCreator extends ProjectCreator {
 
 		Script whenSpriteTappedScript = new WhenScript();
 		Project defaultJumpingSumoProject = new Project(context, projectName, true);
-		File sceneDir = defaultJumpingSumoProject.getDefaultScene().getDirectory();
+		File sceneDir = defaultJumpingSumoProject.getDefaultScene().getDirectory(context);
 
 		defaultJumpingSumoProject.setDeviceData(context); // density anywhere here
-		XstreamSerializer.getInstance().saveProject(defaultJumpingSumoProject);
+		XstreamSerializer.getInstance().saveProject(context, defaultJumpingSumoProject);
 		ProjectManager.getInstance().setProject(defaultJumpingSumoProject);
 
 		backgroundImageScaleFactor = ImageEditing.calculateScaleFactorToScreenSize(

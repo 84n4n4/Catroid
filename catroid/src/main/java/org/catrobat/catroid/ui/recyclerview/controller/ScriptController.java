@@ -23,6 +23,7 @@
 
 package org.catrobat.catroid.ui.recyclerview.controller;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.catrobat.catroid.ProjectManager;
@@ -53,7 +54,7 @@ public class ScriptController {
 	private LookController lookController = new LookController();
 	private SoundController soundController = new SoundController();
 
-	public Script copy(Script scriptToCopy, Scene dstScene, Sprite dstSprite) throws IOException,
+	public Script copy(Context context, Script scriptToCopy, Scene dstScene, Sprite dstSprite) throws IOException,
 			CloneNotSupportedException {
 
 		Script script = scriptToCopy.clone();
@@ -61,22 +62,22 @@ public class ScriptController {
 		for (Brick brick : script.getBrickList()) {
 			if (brick instanceof SetLookBrick && ((SetLookBrick) brick).getLook() != null) {
 				((SetLookBrick) brick).setLook(lookController
-						.findOrCopy(((SetLookBrick) brick).getLook(), dstScene, dstSprite));
+						.findOrCopy(context, ((SetLookBrick) brick).getLook(), dstScene, dstSprite));
 			}
 
 			if (brick instanceof WhenBackgroundChangesBrick && ((WhenBackgroundChangesBrick) brick).getLook() != null) {
 				((WhenBackgroundChangesBrick) brick).setLook(lookController
-						.findOrCopy(((WhenBackgroundChangesBrick) brick).getLook(), dstScene, dstSprite));
+						.findOrCopy(context, ((WhenBackgroundChangesBrick) brick).getLook(), dstScene, dstSprite));
 			}
 
 			if (brick instanceof PlaySoundBrick && ((PlaySoundBrick) brick).getSound() != null) {
 				((PlaySoundBrick) brick).setSound(soundController
-						.findOrCopy(((PlaySoundBrick) brick).getSound(), dstScene, dstSprite));
+						.findOrCopy(context, ((PlaySoundBrick) brick).getSound(), dstScene, dstSprite));
 			}
 
 			if (brick instanceof PlaySoundAndWaitBrick && ((PlaySoundAndWaitBrick) brick).getSound() != null) {
 				((PlaySoundAndWaitBrick) brick).setSound(soundController
-						.findOrCopy(((PlaySoundAndWaitBrick) brick).getSound(), dstScene, dstSprite));
+						.findOrCopy(context, ((PlaySoundAndWaitBrick) brick).getSound(), dstScene, dstSprite));
 			}
 
 			if (brick instanceof UserVariableBrick && ((UserVariableBrick) brick).getUserVariable() != null) {
@@ -95,7 +96,7 @@ public class ScriptController {
 		return script;
 	}
 
-	public void pack(String groupName, List<Brick> bricksToPack) throws CloneNotSupportedException {
+	public void pack(Context context, String groupName, List<Brick> bricksToPack) throws CloneNotSupportedException {
 		List<Script> scriptsToPack = new ArrayList<>();
 
 		for (Brick brick : bricksToPack) {
@@ -106,31 +107,31 @@ public class ScriptController {
 		}
 
 		BackpackListManager.getInstance().addScriptToBackPack(groupName, scriptsToPack);
-		BackpackListManager.getInstance().saveBackpack();
+		BackpackListManager.getInstance().saveBackpack(context);
 	}
 
-	void packForSprite(Script scriptToPack, Sprite dstSprite) throws IOException, CloneNotSupportedException {
+	void packForSprite(Context context, Script scriptToPack, Sprite dstSprite) throws IOException, CloneNotSupportedException {
 		Script script = scriptToPack.clone();
 
 		for (Brick brick : script.getBrickList()) {
 			if (brick instanceof SetLookBrick && ((SetLookBrick) brick).getLook() != null) {
 				((SetLookBrick) brick).setLook(lookController
-						.packForSprite(((SetLookBrick) brick).getLook(), dstSprite));
+						.packForSprite(context, ((SetLookBrick) brick).getLook(), dstSprite));
 			}
 
 			if (brick instanceof WhenBackgroundChangesBrick && ((WhenBackgroundChangesBrick) brick).getLook() != null) {
 				((WhenBackgroundChangesBrick) brick).setLook(lookController
-						.packForSprite(((WhenBackgroundChangesBrick) brick).getLook(), dstSprite));
+						.packForSprite(context, ((WhenBackgroundChangesBrick) brick).getLook(), dstSprite));
 			}
 
 			if (brick instanceof PlaySoundBrick && ((PlaySoundBrick) brick).getSound() != null) {
 				((PlaySoundBrick) brick).setSound(soundController
-						.packForSprite(((PlaySoundBrick) brick).getSound(), dstSprite));
+						.packForSprite(context, ((PlaySoundBrick) brick).getSound(), dstSprite));
 			}
 
 			if (brick instanceof PlaySoundAndWaitBrick && ((PlaySoundAndWaitBrick) brick).getSound() != null) {
 				((PlaySoundAndWaitBrick) brick).setSound(soundController
-						.packForSprite(((PlaySoundAndWaitBrick) brick).getSound(), dstSprite));
+						.packForSprite(context, ((PlaySoundAndWaitBrick) brick).getSound(), dstSprite));
 			}
 		}
 
@@ -151,7 +152,7 @@ public class ScriptController {
 		dstSprite.getScriptList().add(script);
 	}
 
-	void unpackForSprite(Script scriptToUnpack, Scene dstScene, Sprite dstSprite) throws IOException,
+	void unpackForSprite(Context context, Script scriptToUnpack, Scene dstScene, Sprite dstSprite) throws IOException,
 			CloneNotSupportedException {
 		Script script = scriptToUnpack.clone();
 
@@ -165,25 +166,25 @@ public class ScriptController {
 			if (brick instanceof SetLookBrick && ((SetLookBrick) brick).getLook() != null) {
 				((SetLookBrick) brick)
 						.setLook(lookController
-								.unpackForSprite(((SetLookBrick) brick).getLook(), dstScene, dstSprite));
+								.unpackForSprite(context, ((SetLookBrick) brick).getLook(), dstScene, dstSprite));
 			}
 
 			if (brick instanceof WhenBackgroundChangesBrick && ((WhenBackgroundChangesBrick) brick).getLook() != null) {
 				((WhenBackgroundChangesBrick) brick)
 						.setLook(lookController
-								.unpackForSprite(((WhenBackgroundChangesBrick) brick).getLook(), dstScene, dstSprite));
+								.unpackForSprite(context, ((WhenBackgroundChangesBrick) brick).getLook(), dstScene, dstSprite));
 			}
 
 			if (brick instanceof PlaySoundBrick && ((PlaySoundBrick) brick).getSound() != null) {
 				((PlaySoundBrick) brick)
 						.setSound(soundController
-								.unpackForSprite(((PlaySoundBrick) brick).getSound(), dstScene, dstSprite));
+								.unpackForSprite(context, ((PlaySoundBrick) brick).getSound(), dstScene, dstSprite));
 			}
 
 			if (brick instanceof PlaySoundAndWaitBrick && ((PlaySoundAndWaitBrick) brick).getSound() != null) {
 				((PlaySoundAndWaitBrick) brick)
 						.setSound(soundController
-								.unpackForSprite(((PlaySoundAndWaitBrick) brick).getSound(), dstScene, dstSprite));
+								.unpackForSprite(context, ((PlaySoundAndWaitBrick) brick).getSound(), dstScene, dstSprite));
 			}
 		}
 

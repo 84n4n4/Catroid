@@ -238,13 +238,8 @@ public class ScriptFragment extends ListFragment implements OnCategorySelectedLi
 		super.onResume();
 		updateActionBarTitle();
 
-		if (!Utils.isExternalStorageAvailable()) {
-			ToastUtil.showError(getActivity(), R.string.error_no_writiable_external_storage_available);
-			return;
-		}
-
 		if (BackpackListManager.getInstance().isBackpackEmpty()) {
-			BackpackListManager.getInstance().loadBackpack();
+			BackpackListManager.getInstance().loadBackpack(getActivity());
 		}
 		BottomBar.showBottomBar(getActivity());
 		BottomBar.showPlayButton(getActivity());
@@ -432,7 +427,7 @@ public class ScriptFragment extends ListFragment implements OnCategorySelectedLi
 	@Override
 	public void packItems(String name) {
 		try {
-			scriptController.pack(name, adapter.getCheckedBricks());
+			scriptController.pack(getActivity(), name, adapter.getCheckedBricks());
 			finishActionMode();
 			ToastUtil.showSuccess(getActivity(), getString(R.string.packed_script_group));
 			switchToBackpack();

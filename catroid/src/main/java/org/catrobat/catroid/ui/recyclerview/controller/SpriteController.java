@@ -23,6 +23,7 @@
 
 package org.catrobat.catroid.ui.recyclerview.controller;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.catrobat.catroid.common.LookData;
@@ -52,16 +53,16 @@ public class SpriteController {
 		return convertedSprite;
 	}
 
-	public Sprite copy(Sprite spriteToCopy, Scene srcScene, Scene dstScene) throws IOException {
+	public Sprite copy(Context context, Sprite spriteToCopy, Scene srcScene, Scene dstScene) throws IOException {
 		String name = uniqueNameProvider.getUniqueName(spriteToCopy.getName(), dstScene.getSpriteNames());
 		Sprite sprite = new SpriteFactory().newInstance(spriteToCopy.getClass().getSimpleName(), name);
 
 		for (LookData look : spriteToCopy.getLookList()) {
-			sprite.getLookList().add(lookController.copy(look, dstScene, sprite));
+			sprite.getLookList().add(lookController.copy(context, look, dstScene, sprite));
 		}
 
 		for (SoundInfo sound : spriteToCopy.getSoundList()) {
-			sprite.getSoundList().add(soundController.copy(sound, dstScene, sprite));
+			sprite.getSoundList().add(soundController.copy(context, sound, dstScene, sprite));
 		}
 
 		for (NfcTagData nfcTag : spriteToCopy.getNfcTagList()) {
@@ -72,7 +73,7 @@ public class SpriteController {
 
 		for (Script script : spriteToCopy.getScriptList()) {
 			try {
-				sprite.addScript(scriptController.copy(script, dstScene, sprite));
+				sprite.addScript(scriptController.copy(context, script, dstScene, sprite));
 			} catch (CloneNotSupportedException e) {
 				Log.e(TAG, Log.getStackTraceString(e));
 			}
@@ -108,18 +109,18 @@ public class SpriteController {
 		srcScene.getDataContainer().removeSpriteUserData(spriteToDelete);
 	}
 
-	public Sprite pack(Sprite spriteToPack) throws IOException {
+	public Sprite pack(Context context, Sprite spriteToPack) throws IOException {
 		String name = uniqueNameProvider
 				.getUniqueName(spriteToPack.getName(), BackpackListManager.getInstance().getSpriteNames());
 
 		Sprite sprite = new Sprite(name);
 
 		for (LookData look : spriteToPack.getLookList()) {
-			lookController.packForSprite(look, sprite);
+			lookController.packForSprite(context, look, sprite);
 		}
 
 		for (SoundInfo sound : spriteToPack.getSoundList()) {
-			soundController.packForSprite(sound, sprite);
+			soundController.packForSprite(context, sound, sprite);
 		}
 
 		for (NfcTagData nfcTag : spriteToPack.getNfcTagList()) {
@@ -128,7 +129,7 @@ public class SpriteController {
 
 		for (Script script : spriteToPack.getScriptList()) {
 			try {
-				scriptController.packForSprite(script, sprite);
+				scriptController.packForSprite(context, script, sprite);
 			} catch (CloneNotSupportedException e) {
 				Log.e(TAG, Log.getStackTraceString(e));
 			}
@@ -137,16 +138,16 @@ public class SpriteController {
 		return sprite;
 	}
 
-	public Sprite unpack(Sprite spriteToUnpack, Scene dstScene) throws IOException {
+	public Sprite unpack(Context context, Sprite spriteToUnpack, Scene dstScene) throws IOException {
 		String name = uniqueNameProvider.getUniqueName(spriteToUnpack.getName(), dstScene.getSpriteNames());
 		Sprite sprite = new Sprite(name);
 
 		for (LookData look : spriteToUnpack.getLookList()) {
-			lookController.unpackForSprite(look, dstScene, sprite);
+			lookController.unpackForSprite(context, look, dstScene, sprite);
 		}
 
 		for (SoundInfo sound : spriteToUnpack.getSoundList()) {
-			soundController.unpackForSprite(sound, dstScene, sprite);
+			soundController.unpackForSprite(context, sound, dstScene, sprite);
 		}
 
 		for (NfcTagData nfcTag : spriteToUnpack.getNfcTagList()) {
@@ -155,7 +156,7 @@ public class SpriteController {
 
 		for (Script script : spriteToUnpack.getScriptList()) {
 			try {
-				scriptController.unpackForSprite(script, dstScene, sprite);
+				scriptController.unpackForSprite(context, script, dstScene, sprite);
 			} catch (CloneNotSupportedException e) {
 				Log.e(TAG, Log.getStackTraceString(e));
 			}

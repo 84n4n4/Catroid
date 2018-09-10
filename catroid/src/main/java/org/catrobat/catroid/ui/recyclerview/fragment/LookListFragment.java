@@ -101,8 +101,8 @@ public class LookListFragment extends RecyclerViewFragment<LookData> {
 		for (LookData item : selectedItems) {
 			try {
 				BackpackListManager.getInstance().getBackpackedLooks().add(
-						lookController.pack(item));
-				BackpackListManager.getInstance().saveBackpack();
+						lookController.pack(getActivity(), item));
+				BackpackListManager.getInstance().saveBackpack(getActivity());
 				packedItemCnt++;
 			} catch (IOException e) {
 				Log.e(TAG, Log.getStackTraceString(e));
@@ -140,7 +140,7 @@ public class LookListFragment extends RecyclerViewFragment<LookData> {
 
 		for (LookData item : selectedItems) {
 			try {
-				adapter.add(lookController.copy(item, currentScene, currentSprite));
+				adapter.add(lookController.copy(getActivity(), item, currentScene, currentSprite));
 				copiedItemCnt++;
 			} catch (IOException e) {
 				Log.e(TAG, Log.getStackTraceString(e));

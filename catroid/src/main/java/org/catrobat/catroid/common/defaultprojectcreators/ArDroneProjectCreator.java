@@ -62,7 +62,7 @@ public class ArDroneProjectCreator extends ProjectCreator {
 	public Project createDefaultProject(String projectName, Context context, boolean landscapeMode)
 			throws IOException, IllegalArgumentException {
 
-		if (XstreamSerializer.getInstance().projectExists(projectName)) {
+		if (XstreamSerializer.getInstance().projectExists(context, projectName)) {
 			throw new IllegalArgumentException("Project with name '" + projectName + "' already exists!");
 		}
 
@@ -80,10 +80,10 @@ public class ArDroneProjectCreator extends ProjectCreator {
 		whenSpriteTappedScript.addBrick(brick);
 
 		Project defaultDroneProject = new Project(context, projectName, landscapeMode);
-		File sceneDir = defaultDroneProject.getDefaultScene().getDirectory();
+		File sceneDir = defaultDroneProject.getDefaultScene().getDirectory(context);
 
 		defaultDroneProject.setDeviceData(context); // density anywhere here
-		XstreamSerializer.getInstance().saveProject(defaultDroneProject);
+		XstreamSerializer.getInstance().saveProject(context, defaultDroneProject);
 		ProjectManager.getInstance().setProject(defaultDroneProject);
 
 		backgroundImageScaleFactor = ImageEditing.calculateScaleFactorToScreenSize(
@@ -222,7 +222,7 @@ public class ArDroneProjectCreator extends ProjectCreator {
 		defaultDroneProject.getDefaultScene().addSprite(createDroneSprite(emergencySpriteName,
 				DroneBrickFactory.DroneBricks.DRONE_GO_EMERGENCY, -280, 0, emergencyFile, 2000));
 
-		XstreamSerializer.getInstance().saveProject(defaultDroneProject);
+		XstreamSerializer.getInstance().saveProject(context, defaultDroneProject);
 		return defaultDroneProject;
 	}
 

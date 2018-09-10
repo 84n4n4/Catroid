@@ -83,7 +83,7 @@ public class PhysicsProjectCreator extends ProjectCreator {
 			throws
 			IOException,
 			IllegalArgumentException {
-		if (XstreamSerializer.getInstance().projectExists(projectName)) {
+		if (XstreamSerializer.getInstance().projectExists(context, projectName)) {
 			throw new IllegalArgumentException("Project with name '" + projectName + "' already exists!");
 		}
 
@@ -91,10 +91,10 @@ public class PhysicsProjectCreator extends ProjectCreator {
 
 		Project defaultPhysicsProject = new Project(context, projectName);
 
-		File sceneDir = new File(PathBuilder.buildScenePath(projectName, defaultPhysicsProject.getDefaultScene().getName()));
+		File sceneDir = new File(PathBuilder.buildScenePath(context, projectName, defaultPhysicsProject.getDefaultScene().getName()));
 
 		defaultPhysicsProject.setDeviceData(context);
-		XstreamSerializer.getInstance().saveProject(defaultPhysicsProject);
+		XstreamSerializer.getInstance().saveProject(context, defaultPhysicsProject);
 		ProjectManager.getInstance().setProject(defaultPhysicsProject);
 
 		backgroundImageScaleVector = ImageEditing.calculateScaleFactorsToScreenSize(
@@ -274,7 +274,7 @@ public class PhysicsProjectCreator extends ProjectCreator {
 			defaultPhysicsProject.getDefaultScene().addSprite(sprite);
 		}
 
-		XstreamSerializer.getInstance().saveProject(defaultPhysicsProject);
+		XstreamSerializer.getInstance().saveProject(context, defaultPhysicsProject);
 
 		return defaultPhysicsProject;
 	}

@@ -63,7 +63,7 @@ public class BackpackLookFragment extends BackpackRecyclerViewFragment<LookData>
 
 		for (LookData item : selectedItems) {
 			try {
-				dstSprite.getLookList().add(lookController.unpack(item,
+				dstSprite.getLookList().add(lookController.unpack(getActivity(), item,
 						ProjectManager.getInstance().getCurrentlyEditedScene(),
 						dstSprite));
 				unpackedItemCnt++;
@@ -103,7 +103,7 @@ public class BackpackLookFragment extends BackpackRecyclerViewFragment<LookData>
 				selectedItems.size(),
 				selectedItems.size()));
 
-		BackpackListManager.getInstance().saveBackpack();
+		BackpackListManager.getInstance().saveBackpack(getActivity());
 		finishActionMode();
 		if (adapter.getItems().isEmpty()) {
 			getActivity().finish();

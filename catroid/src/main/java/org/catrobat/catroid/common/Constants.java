@@ -24,13 +24,11 @@ package org.catrobat.catroid.common;
 
 import android.support.annotation.IntDef;
 
-import java.io.File;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Calendar;
 
 import static org.catrobat.catroid.common.FlavoredConstants.BASE_URL_HTTPS;
-import static org.catrobat.catroid.common.FlavoredConstants.DEFAULT_ROOT_DIRECTORY;
 
 public final class Constants {
 
@@ -72,14 +70,14 @@ public final class Constants {
 	public static final String SOUND_DIRECTORY_NAME = "sounds";
 
 	// Backpack Directories
-	public static final File BACKPACK_DIRECTORY = new File(DEFAULT_ROOT_DIRECTORY, "backpack");
-	public static final File BACKPACK_FILE = new File(BACKPACK_DIRECTORY, "backpack.json");
-	public static final File BACKPACK_SCENE_DIRECTORY = new File(BACKPACK_DIRECTORY, "scenes");
-	public static final File BACKPACK_SOUND_DIRECTORY = new File(BACKPACK_DIRECTORY, "backpack_sound");
-	public static final File BACKPACK_IMAGE_DIRECTORY = new File(BACKPACK_DIRECTORY, "backpack_image");
+	public static final String BACKPACK_DIRECTORY = "backpack";
+	public static final String BACKPACK_FILE = BACKPACK_DIRECTORY + "/backpack.json";
+	public static final String BACKPACK_SCENE_DIRECTORY = BACKPACK_DIRECTORY + "/scenes";
+	public static final String BACKPACK_SOUND_DIRECTORY = BACKPACK_DIRECTORY + "/backpack_sound";
+	public static final String BACKPACK_IMAGE_DIRECTORY = BACKPACK_DIRECTORY + "/backpack_image";
 
 	// Temporary Files and Directories:
-	public static final String TMP_PATH = DEFAULT_ROOT_DIRECTORY.getAbsolutePath() + "/tmp";
+	public static final String TMP_PATH = "tmp";
 	public static final String TEXT_TO_SPEECH_TMP_PATH = TMP_PATH + "/textToSpeech";
 	public static final String TMP_LOOKS_PATH = TMP_PATH + "/looks";
 	public static final String TMP_SOUNDS_PATH = TMP_PATH + "/sounds";

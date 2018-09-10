@@ -76,7 +76,7 @@ public class DefaultProjectCreator extends ProjectCreator {
 	public Project createDefaultProject(String projectName, Context context, boolean landscapeMode)
 			throws IOException, IllegalArgumentException {
 
-		if (XstreamSerializer.getInstance().projectExists(projectName)) {
+		if (XstreamSerializer.getInstance().projectExists(context, projectName)) {
 			throw new IllegalArgumentException("Project with name '" + projectName + "' already exists!");
 		}
 
@@ -95,13 +95,13 @@ public class DefaultProjectCreator extends ProjectCreator {
 
 		Project defaultProject = new Project(context, projectName, landscapeMode);
 		defaultProject.setDeviceData(context);
-		XstreamSerializer.getInstance().saveProject(defaultProject);
+		XstreamSerializer.getInstance().saveProject(context, defaultProject);
 		ProjectManager.getInstance().setProject(defaultProject);
 
 		File backgroundFile;
 		File cloudFile;
 
-		File sceneDir = defaultProject.getDefaultScene().getDirectory();
+		File sceneDir = defaultProject.getDefaultScene().getDirectory(context);
 		File imageDir = new File(sceneDir, IMAGE_DIRECTORY_NAME);
 		File soundDir = new File(sceneDir, SOUND_DIRECTORY_NAME);
 
@@ -265,7 +265,7 @@ public class DefaultProjectCreator extends ProjectCreator {
 			throw new IOException(TAG, illegalArgumentException);
 		}
 
-		XstreamSerializer.getInstance().saveProject(defaultProject);
+		XstreamSerializer.getInstance().saveProject(context, defaultProject);
 
 		return defaultProject;
 	}

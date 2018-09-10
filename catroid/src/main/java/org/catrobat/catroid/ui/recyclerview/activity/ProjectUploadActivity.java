@@ -156,7 +156,7 @@ public class ProjectUploadActivity extends BaseActivity implements
 				(ImageView) findViewById(R.id.project_image_view));
 
 		((TextView) findViewById(R.id.project_size_view)).setText(FileMetaDataExtractor.getSizeAsString(
-				new File(PathBuilder.buildProjectPath(currentProject.getName())), this));
+				new File(PathBuilder.buildProjectPath(this, currentProject.getName())), this));
 
 		nameInputLayout = findViewById(R.id.input_project_name);
 		descriptionInputLayout = findViewById(R.id.input_project_description);

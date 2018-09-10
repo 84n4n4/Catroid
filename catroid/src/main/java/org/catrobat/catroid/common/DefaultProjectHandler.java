@@ -68,8 +68,8 @@ public final class DefaultProjectHandler {
 		String projectName = context.getString(getInstance().defaultProjectCreator.getDefaultProjectNameID());
 		Project defaultProject = null;
 
-		if (XstreamSerializer.getInstance().projectExists(projectName)) {
-			StorageOperations.deleteDir(new File(PathBuilder.buildProjectPath(projectName)));
+		if (XstreamSerializer.getInstance().projectExists(context, projectName)) {
+			StorageOperations.deleteDir(new File(PathBuilder.buildProjectPath(context, projectName)));
 		}
 
 		try {
@@ -93,12 +93,12 @@ public final class DefaultProjectHandler {
 
 	public static Project createAndSaveEmptyProject(String projectName, Context context, boolean landscapeMode,
 			boolean isCastEnabled) {
-		if (XstreamSerializer.getInstance().projectExists(projectName)) {
+		if (XstreamSerializer.getInstance().projectExists(context, projectName)) {
 			throw new IllegalArgumentException("Project with name '" + projectName + "' already exists!");
 		}
 		Project emptyProject = new Project(context, projectName, landscapeMode, isCastEnabled);
 		emptyProject.setDeviceData(context);
-		XstreamSerializer.getInstance().saveProject(emptyProject);
+		XstreamSerializer.getInstance().saveProject(context, emptyProject);
 		ProjectManager.getInstance().setProject(emptyProject);
 
 		return emptyProject;

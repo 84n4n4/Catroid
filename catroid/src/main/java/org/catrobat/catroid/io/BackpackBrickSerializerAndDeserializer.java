@@ -23,6 +23,7 @@
 
 package org.catrobat.catroid.io;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.JsonDeserializationContext;
@@ -33,9 +34,11 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import org.catrobat.catroid.CatroidApplication;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.content.bricks.Brick;
 
+import java.io.File;
 import java.lang.reflect.Type;
 
 public class BackpackBrickSerializerAndDeserializer implements JsonSerializer<Brick>, JsonDeserializer<Brick> {
@@ -66,7 +69,7 @@ public class BackpackBrickSerializerAndDeserializer implements JsonSerializer<Br
 			classToDeserialize = Class.forName(type);
 		} catch (ClassNotFoundException classNotFoundException) {
 			Log.e(TAG, "Could not deserialize backpacked brick element: " + type);
-			Constants.BACKPACK_FILE.delete();
+			new File(CatroidApplication.getAppContext().getFilesDir(), Constants.BACKPACK_FILE).delete();
 			return null;
 		}
 		return context.deserialize(element, classToDeserialize);

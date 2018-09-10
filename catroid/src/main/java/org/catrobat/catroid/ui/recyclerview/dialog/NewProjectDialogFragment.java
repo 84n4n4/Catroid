@@ -104,7 +104,7 @@ public class NewProjectDialogFragment extends DialogFragment {
 			return false;
 		}
 
-		if (Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(name)) {
+		if (Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(getActivity(), name)) {
 			inputLayout.setError(getString(R.string.name_already_exists));
 			return false;
 		} else {

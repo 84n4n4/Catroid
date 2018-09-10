@@ -63,7 +63,7 @@ public class BackpackSceneFragment extends BackpackRecyclerViewFragment<Scene> {
 
 		for (Scene item : selectedItems) {
 			try {
-				dstProject.addScene(sceneController.unpack(item, dstProject));
+				dstProject.addScene(sceneController.unpack(getActivity(), item, dstProject));
 				unpackedItemCnt++;
 			} catch (IOException e) {
 				Log.e(TAG, Log.getStackTraceString(e));
@@ -91,7 +91,7 @@ public class BackpackSceneFragment extends BackpackRecyclerViewFragment<Scene> {
 		setShowProgressBar(true);
 		for (Scene item : selectedItems) {
 			try {
-				sceneController.delete(item);
+				sceneController.delete(getActivity(), item);
 			} catch (IOException e) {
 				Log.e(TAG, Log.getStackTraceString(e));
 			}
@@ -101,7 +101,7 @@ public class BackpackSceneFragment extends BackpackRecyclerViewFragment<Scene> {
 				selectedItems.size(),
 				selectedItems.size()));
 
-		BackpackListManager.getInstance().saveBackpack();
+		BackpackListManager.getInstance().saveBackpack(getActivity());
 		finishActionMode();
 		if (adapter.getItems().isEmpty()) {
 			getActivity().finish();

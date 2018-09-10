@@ -63,7 +63,7 @@ public class BackpackSpriteFragment extends BackpackRecyclerViewFragment<Sprite>
 
 		for (Sprite item : selectedItems) {
 			try {
-				dstScene.getSpriteList().add(spriteController.unpack(item, dstScene));
+				dstScene.getSpriteList().add(spriteController.unpack(getActivity(), item, dstScene));
 				unpackedItemCnt++;
 			} catch (IOException e) {
 				Log.e(TAG, Log.getStackTraceString(e));
@@ -97,7 +97,7 @@ public class BackpackSpriteFragment extends BackpackRecyclerViewFragment<Sprite>
 				selectedItems.size(),
 				selectedItems.size()));
 
-		BackpackListManager.getInstance().saveBackpack();
+		BackpackListManager.getInstance().saveBackpack(getActivity());
 		finishActionMode();
 		if (adapter.getItems().isEmpty()) {
 			getActivity().finish();

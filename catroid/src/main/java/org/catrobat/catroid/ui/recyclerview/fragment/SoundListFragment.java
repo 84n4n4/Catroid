@@ -89,8 +89,8 @@ public class SoundListFragment extends RecyclerViewFragment<SoundInfo> {
 
 		for (SoundInfo item : selectedItems) {
 			try {
-				BackpackListManager.getInstance().getBackpackedSounds().add(soundController.pack(item));
-				BackpackListManager.getInstance().saveBackpack();
+				BackpackListManager.getInstance().getBackpackedSounds().add(soundController.pack(getActivity(), item));
+				BackpackListManager.getInstance().saveBackpack(getActivity());
 				packedItemCnt++;
 			} catch (IOException e) {
 				Log.e(TAG, Log.getStackTraceString(e));
@@ -128,7 +128,7 @@ public class SoundListFragment extends RecyclerViewFragment<SoundInfo> {
 
 		for (SoundInfo item : selectedItems) {
 			try {
-				adapter.add(soundController.copy(item, currentScene, currentSprite));
+				adapter.add(soundController.copy(getActivity(), item, currentScene, currentSprite));
 				copiedItemCnt++;
 			} catch (IOException e) {
 				Log.e(TAG, Log.getStackTraceString(e));

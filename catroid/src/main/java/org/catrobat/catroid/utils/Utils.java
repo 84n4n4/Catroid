@@ -68,8 +68,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static org.catrobat.catroid.common.FlavoredConstants.DEFAULT_ROOT_DIRECTORY;
-
 public final class Utils {
 
 	private static final String TAG = Utils.class.getSimpleName();
@@ -84,11 +82,6 @@ public final class Utils {
 		throw new AssertionError();
 	}
 
-	public static boolean isExternalStorageAvailable() {
-		String externalStorageState = Environment.getExternalStorageState();
-		return externalStorageState.equals(Environment.MEDIA_MOUNTED)
-				&& !externalStorageState.equals(Environment.MEDIA_MOUNTED_READ_ONLY);
-	}
 
 	public static boolean isNetworkAvailable(Context context) {
 		ConnectivityManager connectivityManager = (ConnectivityManager) context
@@ -356,14 +349,14 @@ public final class Utils {
 	public static String getCurrentProjectName(Context context) {
 		if (ProjectManager.getInstance().getCurrentProject() == null) {
 
-			if (FileMetaDataExtractor.getProjectNames(DEFAULT_ROOT_DIRECTORY).size() == 0) {
+			if (FileMetaDataExtractor.getProjectNames(context.getFilesDir()).size() == 0) {
 				ProjectManager.getInstance().initializeDefaultProject(context);
 			}
 
 			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 			String currentProjectName = sharedPreferences.getString(Constants.PREF_PROJECTNAME_KEY, null);
-			if (currentProjectName == null || !XstreamSerializer.getInstance().projectExists(currentProjectName)) {
-				currentProjectName = FileMetaDataExtractor.getProjectNames(DEFAULT_ROOT_DIRECTORY).get(0);
+			if (currentProjectName == null || !XstreamSerializer.getInstance().projectExists(context, currentProjectName)) {
+				currentProjectName = FileMetaDataExtractor.getProjectNames(context.getFilesDir()).get(0);
 			}
 			return currentProjectName;
 		}
@@ -387,7 +380,7 @@ public final class Utils {
 		try {
 			String uniqueProjectName = "project_" + System.currentTimeMillis();
 
-			while (XstreamSerializer.getInstance().projectExists(uniqueProjectName)) {
+			while (XstreamSerializer.getInstance().projectExists(context, uniqueProjectName)) {
 				uniqueProjectName = "project_" + System.currentTimeMillis();
 			}
 
@@ -395,7 +388,7 @@ public final class Utils {
 
 			String defaultProjectXml = XstreamSerializer.getInstance().getXmlAsStringFromProject(defaultProject);
 
-			StorageOperations.deleteDir(new File(PathBuilder.buildProjectPath(defaultProject.getName())));
+			StorageOperations.deleteDir(new File(PathBuilder.buildProjectPath(context, defaultProject.getName())));
 
 			StringFinder stringFinder = new StringFinder();
 
@@ -437,12 +430,12 @@ public final class Utils {
 		}
 	}
 
-	public static boolean checkIfProjectExistsOrIsDownloadingIgnoreCase(String programName) {
+	public static boolean checkIfProjectExistsOrIsDownloadingIgnoreCase(Context context, String programName) {
 		if (DownloadUtil.getInstance().isProgramNameInDownloadQueueIgnoreCase(programName)) {
 			return true;
 		}
 
-		File projectDirectory = new File(PathBuilder.buildProjectPath(programName));
+		File projectDirectory = new File(PathBuilder.buildProjectPath(context, programName));
 		return projectDirectory.exists();
 	}
 

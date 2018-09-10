@@ -198,8 +198,8 @@ public class SpriteListFragment extends RecyclerViewFragment<Sprite> {
 
 		for (Sprite item : selectedItems) {
 			try {
-				BackpackListManager.getInstance().getSprites().add(spriteController.pack(item));
-				BackpackListManager.getInstance().saveBackpack();
+				BackpackListManager.getInstance().getSprites().add(spriteController.pack(getActivity(), item));
+				BackpackListManager.getInstance().saveBackpack(getActivity());
 				packedItemCnt++;
 			} catch (IOException e) {
 				Log.e(TAG, Log.getStackTraceString(e));
@@ -236,7 +236,7 @@ public class SpriteListFragment extends RecyclerViewFragment<Sprite> {
 
 		for (Sprite item : selectedItems) {
 			try {
-				adapter.add(spriteController.copy(item, currentScene, currentScene));
+				adapter.add(spriteController.copy(getActivity(), item, currentScene, currentScene));
 				copiedItemCnt++;
 			} catch (IOException e) {
 				Log.e(TAG, Log.getStackTraceString(e));

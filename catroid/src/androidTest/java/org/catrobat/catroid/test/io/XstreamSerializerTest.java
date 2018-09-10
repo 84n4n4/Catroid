@@ -220,8 +220,8 @@ public class XstreamSerializerTest {
 		project.getDefaultScene().addSprite(thirdSprite);
 		project.getDefaultScene().addSprite(fourthSprite);
 
-		File tmpCodeFile = new File(buildProjectPath(project.getName()), TMP_CODE_XML_FILE_NAME);
-		File currentCodeFile = new File(buildProjectPath(project.getName()), CODE_XML_FILE_NAME);
+		File tmpCodeFile = new File(buildProjectPath(InstrumentationRegistry.getTargetContext(), project.getName()), TMP_CODE_XML_FILE_NAME);
+		File currentCodeFile = new File(buildProjectPath(InstrumentationRegistry.getTargetContext(), project.getName()), CODE_XML_FILE_NAME);
 
 		assertFalse(tmpCodeFile.exists());
 		assertFalse(currentCodeFile.exists());
@@ -270,7 +270,7 @@ public class XstreamSerializerTest {
 		ProjectManager.getInstance().setProject(project);
 		XstreamSerializer.getInstance().saveProject(project);
 
-		File permissionsFile = new File(buildProjectPath(project.getName()), PERMISSIONS_FILE_NAME);
+		File permissionsFile = new File(buildProjectPath(InstrumentationRegistry.getTargetContext(), project.getName()), PERMISSIONS_FILE_NAME);
 		assertTrue(permissionsFile.exists());
 
 		//only for assertions. Add future permission; Vibration and LED not activated

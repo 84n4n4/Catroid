@@ -22,20 +22,24 @@
  */
 package org.catrobat.catroid.stage;
 
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.speech.RecognizerIntent;
-import android.support.v7.app.AlertDialog;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.ContextThemeWrapper;
@@ -57,16 +61,19 @@ import org.catrobat.catroid.cast.CastManager;
 import org.catrobat.catroid.common.CatroidService;
 import org.catrobat.catroid.common.ScreenValues;
 import org.catrobat.catroid.common.ServiceProvider;
-import org.catrobat.catroid.content.Sprite;
+import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.actions.AskAction;
-import org.catrobat.catroid.content.bricks.Brick;
+import org.catrobat.catroid.devices.raspberrypi.RaspberryPiService;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoDeviceController;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoInitializer;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
-import org.catrobat.catroid.formulaeditor.SensorHandler;
 import org.catrobat.catroid.io.StageAudioFocus;
 import org.catrobat.catroid.nfc.NfcHandler;
 import org.catrobat.catroid.ui.MarketingActivity;
+import org.catrobat.catroid.ui.PermissionHandlingActivity;
+import org.catrobat.catroid.ui.RequiresPermissionTask;
+import org.catrobat.catroid.ui.StageLifeCycleController;
+import org.catrobat.catroid.ui.StageResourceHolder;
 import org.catrobat.catroid.ui.dialogs.StageDialog;
 import org.catrobat.catroid.utils.FlashUtil;
 import org.catrobat.catroid.utils.ScreenValueHandler;
@@ -77,32 +84,45 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class StageActivity extends AndroidApplication {
+public class StageActivity extends AndroidApplication implements PermissionHandlingActivity {
+
 	public static final String TAG = StageActivity.class.getSimpleName();
 	public static StageListener stageListener;
 	public static final int STAGE_ACTIVITY_FINISH = 7777;
+	public static final int REQUEST_START_STAGE = 101;
 
 	public static final int ASK_MESSAGE = 0;
 	public static final int REGISTER_INTENT = 1;
 	private static final int PERFORM_INTENT = 2;
 
-	private StageAudioFocus stageAudioFocus;
-	private PendingIntent pendingIntent;
-	private NfcAdapter nfcAdapter;
+	public StageAudioFocus stageAudioFocus;
+	public PendingIntent pendingIntent;
+	public NfcAdapter nfcAdapter;
 	private static NdefMessage nfcTagMessage;
-	private StageDialog stageDialog;
+	public StageDialog stageDialog;
+	public AlertDialog askDialog;
 	private boolean resizePossible;
-	private boolean askDialogUnanswered = false;
 
 	private static int numberOfSpritesCloned;
 
 	public static Handler messageHandler;
-	private JumpingSumoDeviceController controller;
+	private JumpingSumoDeviceController jumpingSumoDeviceController;
 
 	public static SparseArray<IntentListener> intentListeners = new SparseArray<>();
 	public static Random randomGenerator = new Random();
 
 	AndroidApplicationConfiguration configuration = null;
+
+	public StageResourceHolder stageResourceHolder;
+	private final List<RequiresPermissionTask> waitingForResponsePermissionTaskList;
+	private final List<RequiresPermissionTask> currentlyProcessedPermissionTaskList;
+	private final List<RequiresPermissionTask> downStreamPermissionTaskList;
+
+	public StageActivity() {
+		waitingForResponsePermissionTaskList = new ArrayList<>();
+		currentlyProcessedPermissionTaskList = new ArrayList<>();
+		downStreamPermissionTaskList = new ArrayList<>();
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -116,13 +136,16 @@ public class StageActivity extends AndroidApplication {
 		}
 
 		numberOfSpritesCloned = 0;
-		setupAskHandler();
-		controller = JumpingSumoDeviceController.getInstance();
 
 		if (ProjectManager.getInstance().isCurrentProjectLandscapeMode()) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		} else {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		}
+
+		for (Scene scene : ProjectManager.getInstance().getCurrentProject().getSceneList()) {
+			scene.firstStart = true;
+			scene.getDataContainer().resetUserData();
 		}
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -131,10 +154,8 @@ public class StageActivity extends AndroidApplication {
 		stageDialog = new StageDialog(this, stageListener, R.style.StageDialog);
 		calculateScreenSizes();
 
-		// need we this here?
 		configuration = new AndroidApplicationConfiguration();
 		configuration.r = configuration.g = configuration.b = configuration.a = 8;
-
 		if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 			setContentView(R.layout.activity_stage_gamepad);
@@ -145,29 +166,33 @@ public class StageActivity extends AndroidApplication {
 			initialize(stageListener, configuration);
 		}
 
+		//TODO: does this make any difference? probably necessary for cast:
 		if (graphics.getView() instanceof SurfaceView) {
 			SurfaceView glView = (SurfaceView) graphics.getView();
 			glView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
 		}
-
-		pendingIntent = PendingIntent.getActivity(this, 0,
-				new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-
-		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-		Log.d(TAG, "onCreate()");
-
-		if (nfcAdapter == null) {
-			Log.d(TAG, "could not get nfc adapter :(");
-		}
-
-		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).initialise();
-
 		stageAudioFocus = new StageAudioFocus(this);
 
-		CameraManager.getInstance().setStageActivity(this);
-		JumpingSumoInitializer.getInstance().setStageActivity(this);
+		StageLifeCycleController.stageCreate(this);
+	}
 
+	public void run() {
+		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).initialise();
+		setupAskHandler();
+		pendingIntent = PendingIntent.getActivity(this, 0,
+				new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+		jumpingSumoDeviceController = JumpingSumoDeviceController.getInstance();
+		JumpingSumoInitializer.getInstance().setStageActivity(this);
+		if (stageResourceHolder.droneLifeCycleHolder != null) {
+			stageResourceHolder.droneLifeCycleHolder.onCreate();
+		}
+
+		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+		if (CameraManager.getInstance() != null) {
+			CameraManager.getInstance().setStageActivity(this);
+		}
 		SnackbarUtil.showHintSnackbar(this, R.string.hint_stage);
+		stageListener.setPaused(false);
 	}
 
 	private void setupAskHandler() {
@@ -196,7 +221,7 @@ public class StageActivity extends AndroidApplication {
 	}
 
 	private void showDialog(String question, final AskAction askAction) {
-		pause();
+		StageLifeCycleController.stagePause(this);
 
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.Theme_AppCompat_Dialog));
 		final EditText edittext = new EditText(getContext());
@@ -220,21 +245,25 @@ public class StageActivity extends AndroidApplication {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				String questionAnswer = edittext.getText().toString();
 				askAction.setAnswerText(questionAnswer);
-				askDialogUnanswered = false;
-				resume();
 			}
 		});
 
-		AlertDialog dialog = alertBuilder.create();
-		dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-		askDialogUnanswered = true;
-		dialog.show();
+		alertBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				askDialog = null;
+				StageLifeCycleController.stageResume(StageActivity.this);
+			}
+		});
+
+		askDialog = alertBuilder.create();
+		askDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+		askDialog.show();
 	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		Log.d(TAG, "processIntent");
 		NfcHandler.processIntent(intent);
 
 		if (nfcTagMessage != null) {
@@ -249,12 +278,20 @@ public class StageActivity extends AndroidApplication {
 	@Override
 	public void onBackPressed() {
 		if (BuildConfig.FEATURE_APK_GENERATOR_ENABLED) {
-			PreStageActivity.shutdownPersistentResources();
+			ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).disconnectDevices();
+
+			TextToSpeechHolder.getInstance().deleteSpeechFiles();
+			if (FlashUtil.isAvailable()) {
+				FlashUtil.destroy();
+			}
+			if (VibratorUtil.isActive()) {
+				VibratorUtil.destroy();
+			}
 			Intent marketingIntent = new Intent(this, MarketingActivity.class);
 			startActivity(marketingIntent);
 			finish();
 		} else {
-			pause();
+			StageLifeCycleController.stagePause(this);
 			stageDialog.show();
 		}
 	}
@@ -263,122 +300,40 @@ public class StageActivity extends AndroidApplication {
 		stageListener.pause();
 		stageListener.finish();
 
-		PreStageActivity.shutdownResources();
+		TextToSpeechHolder.getInstance().shutDownTextToSpeech();
+
+		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).pause();
+
+		if (FaceDetectionHandler.isFaceDetectionRunning()) {
+			FaceDetectionHandler.stopFaceDetection();
+		}
+
+		if (VibratorUtil.isActive()) {
+			VibratorUtil.pauseVibrator();
+		}
+
+		RaspberryPiService.getInstance().disconnect();
 	}
 
 	@Override
 	public void onPause() {
-		if (nfcAdapter != null) {
-			try {
-				nfcAdapter.disableForegroundDispatch(this);
-			} catch (IllegalStateException illegalStateException) {
-				Log.e(TAG, "Disabling NFC foreground dispatching went wrong!", illegalStateException);
-			}
-		}
-		SensorHandler.stopSensorListeners();
-		stageAudioFocus.releaseAudioFocus();
-		FlashUtil.pauseFlash();
-		FaceDetectionHandler.pauseFaceDetection();
-		CameraManager.getInstance().pausePreview();
-		CameraManager.getInstance().releaseCamera();
-		VibratorUtil.pauseVibrator();
+		StageLifeCycleController.stagePause(this);
 		super.onPause();
-
-		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).pause();
 	}
 
 	@Override
 	public void onResume() {
-		resumeResources();
+		StageLifeCycleController.stageResume(this);
 		super.onResume();
-	}
-
-	public void pause() {
-		if (nfcAdapter != null) {
-			nfcAdapter.disableForegroundDispatch(this);
-		}
-
-		SensorHandler.stopSensorListeners();
-		stageListener.menuPause();
-		FlashUtil.pauseFlash();
-		VibratorUtil.pauseVibrator();
-		FaceDetectionHandler.pauseFaceDetection();
-
-		CameraManager.getInstance().pausePreviewAsync();
-
-		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).pause();
-
-		if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-			CastManager.getInstance().setRemoteLayoutToPauseScreen(getApplicationContext());
-		}
 	}
 
 	public boolean jumpingSumoDisconnect() {
 		boolean success;
-		if (!controller.isConnected()) {
+		if (jumpingSumoDeviceController != null && !jumpingSumoDeviceController.isConnected()) {
 			return true;
 		}
 		success = JumpingSumoInitializer.getInstance().disconnect();
 		return success;
-	}
-
-	public void resume() {
-		if (askDialogUnanswered) {
-			return;
-		}
-		stageListener.menuResume();
-		resumeResources();
-	}
-
-	public void resumeResources() {
-		Brick.ResourcesSet resourcesSet = ProjectManager.getInstance().getCurrentProject().getRequiredResources();
-		List<Sprite> spriteList = ProjectManager.getInstance().getCurrentlyPlayingScene().getSpriteList();
-
-		SensorHandler.startSensorListener(this);
-
-		for (Sprite sprite : spriteList) {
-			if (sprite.getPlaySoundBricks().size() > 0) {
-				stageAudioFocus.requestAudioFocus();
-				break;
-			}
-		}
-
-		if (resourcesSet.contains(Brick.CAMERA_FLASH)) {
-			FlashUtil.resumeFlash();
-		}
-
-		if (resourcesSet.contains(Brick.VIBRATOR)) {
-			VibratorUtil.resumeVibrator();
-		}
-
-		if (resourcesSet.contains(Brick.FACE_DETECTION)) {
-			FaceDetectionHandler.resumeFaceDetection();
-		}
-
-		if (resourcesSet.contains(Brick.BLUETOOTH_LEGO_NXT)
-				|| resourcesSet.contains(Brick.BLUETOOTH_PHIRO)
-				|| resourcesSet.contains(Brick.BLUETOOTH_SENSORS_ARDUINO)) {
-			ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).start();
-		}
-
-		if (resourcesSet.contains(Brick.CAMERA_BACK)
-				|| resourcesSet.contains(Brick.CAMERA_FRONT)
-				|| resourcesSet.contains(Brick.VIDEO)) {
-			CameraManager.getInstance().resumePreviewAsync();
-		}
-
-		if (resourcesSet.contains(Brick.TEXT_TO_SPEECH)) {
-			stageAudioFocus.requestAudioFocus();
-		}
-
-		if (resourcesSet.contains(Brick.NFC_ADAPTER)
-				&& nfcAdapter != null) {
-			nfcAdapter.enableForegroundDispatch(this, pendingIntent, null, null);
-		}
-
-		if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-			CastManager.getInstance().resumeRemoteLayoutFromPauseScreen();
-		}
 	}
 
 	public boolean getResizePossible() {
@@ -443,19 +398,7 @@ public class StageActivity extends AndroidApplication {
 
 	@Override
 	protected void onDestroy() {
-		Log.d(TAG, "onDestroy()");
-		jumpingSumoDisconnect();
-		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).destroy();
-		FlashUtil.destroy();
-		VibratorUtil.destroy();
-		FaceDetectionHandler.stopFaceDetection();
-		CameraManager.getInstance().stopPreviewAsync();
-		CameraManager.getInstance().releaseCamera();
-		CameraManager.getInstance().setToDefaultCamera();
-		ProjectManager.getInstance().setCurrentlyPlayingScene(ProjectManager.getInstance().getCurrentlyEditedScene());
-		if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-			CastManager.getInstance().onStageDestroyed();
-		}
+		StageLifeCycleController.destroyStage(this);
 		super.onDestroy();
 	}
 
@@ -477,34 +420,6 @@ public class StageActivity extends AndroidApplication {
 	//for running Asynchronous Tasks from the stage
 	public void post(Runnable r) {
 		handler.post(r);
-	}
-
-	public void destroy() {
-		stageListener.finish();
-		manageLoadAndFinish();
-
-		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage(R.string.error_flash_camera).setCancelable(false)
-				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
-						onDestroy();
-						exit();
-					}
-				});
-
-		this.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					AlertDialog dialog = builder.create();
-					dialog.show();
-				} catch (Exception e) {
-					Log.e(TAG, "Error while showing dialog. " + e.getMessage());
-				}
-			}
-		});
 	}
 
 	public void jsDestroy() {
@@ -557,17 +472,110 @@ public class StageActivity extends AndroidApplication {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		//Register your intent with "queueIntent"
-		if (intentListeners.indexOfKey(requestCode) < 0) {
-			Log.e(TAG, "Unknown intent result recieved!");
-		} else {
+		if (intentListeners.indexOfKey(requestCode) >= 0) {
 			IntentListener asker = intentListeners.get(requestCode);
 			asker.onIntentResult(resultCode, data);
 			intentListeners.remove(requestCode);
+		} else {
+			stageResourceHolder.onActivityResult(requestCode, resultCode, data);
 		}
 	}
 
 	public interface IntentListener {
 		Intent getTargetIntent();
 		void onIntentResult(int resultCode, Intent data); //don't do heavy processing here
+	}
+
+	@Override
+	public void addToRequiresPermissionTaskList(RequiresPermissionTask task) {
+		waitingForResponsePermissionTaskList.add(task);
+	}
+
+	@Override
+	public void addToDownStreamPermissionTaskList(RequiresPermissionTask task) {
+		RequiresPermissionTask upstreamTask = null;
+		for (RequiresPermissionTask pendingTask : new ArrayList<>(waitingForResponsePermissionTaskList)) {
+			if (pendingTask.getPermissionRequestId() == task.getDownStreamOfPermissionRequestId()) {
+				upstreamTask = task;
+			}
+		}
+		for (RequiresPermissionTask pendingTask : new ArrayList<>(currentlyProcessedPermissionTaskList)) {
+			if (pendingTask.getPermissionRequestId() == task.getDownStreamOfPermissionRequestId()) {
+				upstreamTask = task;
+			}
+		}
+		if (upstreamTask == null) {
+			task.execute(this);
+		} else {
+			downStreamPermissionTaskList.add(task);
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		RequiresPermissionTask task = popAllWithSameIdRequiredPermissionTask(requestCode);
+		currentlyProcessedPermissionTaskList.add(task);
+
+		if (permissions.length == 0) {
+			return;
+		}
+
+		List<String> deniedPermissions = new ArrayList<>();
+		for (int resultIndex = 0; resultIndex < permissions.length; resultIndex++) {
+			if (grantResults[resultIndex] == PackageManager.PERMISSION_DENIED) {
+				deniedPermissions.add(permissions[resultIndex]);
+			}
+		}
+
+		if (task != null) {
+			if (deniedPermissions.isEmpty()) {
+				currentlyProcessedPermissionTaskList.remove(task);
+				task.execute(this);
+				for (RequiresPermissionTask downStreamTask : new ArrayList<>(downStreamPermissionTaskList)) {
+					if (downStreamTask.getDownStreamOfPermissionRequestId() == task.getPermissionRequestId()) {
+						downStreamPermissionTaskList.remove(downStreamTask);
+						downStreamTask.execute(this);
+					}
+				}
+			} else {
+				task.setPermissions(deniedPermissions);
+				showPermissionRationale(task);
+			}
+		}
+	}
+
+	private RequiresPermissionTask popAllWithSameIdRequiredPermissionTask(int requestCode) {
+		RequiresPermissionTask matchedTask = null;
+		for (RequiresPermissionTask task : new ArrayList<>(waitingForResponsePermissionTaskList)) {
+			if (task.getPermissionRequestId() == requestCode) {
+				matchedTask = task;
+				waitingForResponsePermissionTaskList.remove(task);
+			}
+		}
+		return matchedTask;
+	}
+
+	@TargetApi(23)
+	private void showPermissionRationale(final RequiresPermissionTask task) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+				&& shouldShowRequestPermissionRationale(task.getPermissions().get(0))) {
+			showAlertOKCancel(getResources().getString(task.getRationaleString()), new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					addToRequiresPermissionTaskList(task);
+					currentlyProcessedPermissionTaskList.remove(task);
+					requestPermissions(task.getPermissions().toArray(new String[0]), task.getPermissionRequestId());
+				}
+			});
+		}
+	}
+
+	public void showAlertOKCancel(String message, DialogInterface.OnClickListener okListener) {
+		new AlertDialog.Builder(this)
+				.setMessage(message)
+				.setPositiveButton(R.string.ok, okListener)
+				.setNegativeButton(R.string.cancel, null)
+				.create()
+				.show();
 	}
 }

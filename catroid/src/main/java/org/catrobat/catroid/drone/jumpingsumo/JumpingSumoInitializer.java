@@ -53,8 +53,8 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryException;
 
 import org.catrobat.catroid.CatroidApplication;
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.stage.PreStageActivity;
 import org.catrobat.catroid.stage.StageActivity;
+import org.catrobat.catroid.ui.StageResourceHolder;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ import java.util.List;
 
 import static org.catrobat.catroid.CatroidApplication.getAppContext;
 
-public class JumpingSumoInitializer {
+public final class JumpingSumoInitializer {
 
 	private static final List<ARDiscoveryDeviceService> DRONELIST = new ArrayList<>();
 	public JumpingSumoDiscoverer jsDiscoverer;
@@ -74,8 +74,8 @@ public class JumpingSumoInitializer {
 
 	private static final String TAG = JumpingSumoInitializer.class.getSimpleName();
 
-	private PreStageActivity prestageStageActivity;
 	private StageActivity stageActivity = null;
+	private StageResourceHolder stageResourceHolder = null;
 	private ARCONTROLLER_DEVICE_STATE_ENUM deviceState = ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_STOPPED;
 
 	private static final int JUMPING_SUMO_BATTERY_THRESHOLD = 3;
@@ -83,7 +83,7 @@ public class JumpingSumoInitializer {
 	private static int jumpingSumoCount = 0;
 	private boolean messageShown = false;
 
-	public JumpingSumoInitializer() {
+	private JumpingSumoInitializer() {
 	}
 
 	public static JumpingSumoInitializer getInstance() {
@@ -93,13 +93,15 @@ public class JumpingSumoInitializer {
 		return instance;
 	}
 
-	public void setPreStageActivity(PreStageActivity prestageStageActivity) {
-		this.prestageStageActivity = prestageStageActivity;
+	public void setStageResourceHolder(StageResourceHolder stageResourceHolder) {
+		this.stageResourceHolder = stageResourceHolder;
 	}
 
 	public boolean disconnect() {
 		boolean success = false;
-		jsDiscoverer.removeListener(discovererListener);
+		if (jsDiscoverer != null) {
+			jsDiscoverer.removeListener(discovererListener);
+		}
 		if (deviceController != null) {
 			ARCONTROLLER_ERROR_ENUM error = deviceController.stop();
 			if (error == ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK) {
@@ -120,19 +122,19 @@ public class JumpingSumoInitializer {
 		}
 	}
 
-	public void checkJumpingSumoAvailability(PreStageActivity prestageStageActivityNow) {
-		setPreStageActivity(prestageStageActivityNow);
+	public void checkJumpingSumoAvailability(final StageActivity stageActivity) {
+		setStageActivity(stageActivity);
 		Log.d(TAG, "JumpSumo Count: " + jumpingSumoCount);
 
 		Handler handler = new Handler();
 		handler.postDelayed(new Runnable() {
 			public void run() {
 				if (jumpingSumoCount == 0) {
-					showUnCancellableErrorDialog(prestageStageActivity,
-							prestageStageActivity.getString(R.string.error_no_jumpingsumo_connected_title),
-							prestageStageActivity.getString(R.string.error_no_jumpingsumo_connected));
+					showUnCancellableErrorDialog(stageActivity,
+							stageActivity.getString(R.string.error_no_jumpingsumo_connected_title),
+							stageActivity.getString(R.string.error_no_jumpingsumo_connected));
 				} else {
-					prestageStageActivity.resourceInitialized();
+					stageResourceHolder.resourceInitialized();
 				}
 			}
 		}, CONNECTION_TIME);
@@ -158,7 +160,7 @@ public class JumpingSumoInitializer {
 						stageActivity.getString(R.string.error_jumpingsumo_battery));
 				Log.e(TAG, "Jumping Sumo Battery too low");
 			} else {
-				checkJumpingSumoAvailability(prestageStageActivity);
+				checkJumpingSumoAvailability(stageActivity);
 				Log.e(TAG, "Jumping Sumo Battery too low");
 			}
 		}
@@ -248,10 +250,10 @@ public class JumpingSumoInitializer {
 
 	public boolean checkRequirements() {
 
-		if (!CatroidApplication.loadSDKLib()) {
-			showUnCancellableErrorDialog(prestageStageActivity,
-					prestageStageActivity.getString(R.string.error_jumpingsumo_wrong_platform_title),
-					prestageStageActivity.getString(R.string.error_jumpingsumo_wrong_platform));
+		if (!CatroidApplication.loadJumpingSumoSDKLib()) {
+			showUnCancellableErrorDialog(stageActivity,
+					stageActivity.getString(R.string.error_jumpingsumo_wrong_platform_title),
+					stageActivity.getString(R.string.error_jumpingsumo_wrong_platform));
 			return false;
 		}
 
@@ -292,20 +294,22 @@ public class JumpingSumoInitializer {
 		jsDiscoverer.download();
 	}
 
-	public static void showUnCancellableErrorDialog(final PreStageActivity context, String title, String message) {
-		Builder builder = new AlertDialog.Builder(context);
+	//TODO: refactor this whole class
 
-		builder.setTitle(title);
-		builder.setCancelable(false);
-		builder.setMessage(message);
-		builder.setNeutralButton(R.string.close, new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				context.resourceFailed();
-			}
-		});
-		builder.show();
-	}
+//	public static void showUnCancellableErrorDialog(final PreStageActivity context, String title, String message) {
+//		Builder builder = new AlertDialog.Builder(context);
+//
+//		builder.setTitle(title);
+//		builder.setCancelable(false);
+//		builder.setMessage(message);
+//		builder.setNeutralButton(R.string.close, new OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int which) {
+//				context.resourceFailed();
+//			}
+//		});
+//		builder.show();
+//	}
 
 	private final ARDeviceControllerListener deviceControllerListener = new ARDeviceControllerListener() {
 		@Override

@@ -25,7 +25,6 @@ package org.catrobat.catroid.drone.ardrone;
 
 import android.content.DialogInterface;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -41,12 +40,19 @@ import org.catrobat.catroid.R;
 import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.utils.ToastUtil;
 
-public class DroneStageActivity extends StageActivity implements DroneBatteryChangedReceiverDelegate, DroneEmergencyChangeReceiverDelegate {
+public class DroneLifeCycleHolder implements DroneBatteryChangedReceiverDelegate, DroneEmergencyChangeReceiverDelegate {
+
+	public static final String TAG = DroneLifeCycleHolder.class.getSimpleName();
 
 	private DroneConnection droneConnection = null;
 	private DroneBatteryChangedReceiver droneBatteryReceiver;
 	private DroneEmergencyChangeReceiver droneEmergencyReceiver;
 	private boolean droneBatteryMessageShown = false;
+	private StageActivity stageActivity;
+
+	public DroneLifeCycleHolder(StageActivity stageActivity) {
+		this.stageActivity = stageActivity;
+	}
 
 	private enum EmergencyMethod {
 		NOTHING,
@@ -54,12 +60,9 @@ public class DroneStageActivity extends StageActivity implements DroneBatteryCha
 		ALERT
 	}
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
+	public void onCreate() {
 		if (droneConnection == null && DroneServiceWrapper.checkARDroneAvailability()) {
-			droneConnection = new DroneConnection(this);
+			droneConnection = new DroneConnection(stageActivity);
 
 			try {
 				droneConnection.initialise();
@@ -67,16 +70,13 @@ public class DroneStageActivity extends StageActivity implements DroneBatteryCha
 				droneEmergencyReceiver = new DroneEmergencyChangeReceiver(this);
 			} catch (RuntimeException runtimeException) {
 				Log.e(TAG, "Failure during drone service startup", runtimeException);
-				ToastUtil.showError(this, R.string.error_no_drone_connected);
-				this.finish();
+				ToastUtil.showError(stageActivity, R.string.error_no_drone_connected);
+				stageActivity.finish();
 			}
 		}
 	}
 
-	@Override
 	public void onPause() {
-		super.onPause();
-
 		DroneControlService droneControlService = DroneServiceWrapper.getInstance().getDroneService();
 		if (droneControlService != null) {
 			boolean flyingMode = droneControlService.getDroneNavData().flying;
@@ -107,9 +107,7 @@ public class DroneStageActivity extends StageActivity implements DroneBatteryCha
 		unregisterReceivers();
 	}
 
-	@Override
 	public void onResume() {
-		super.onResume();
 		if (droneConnection != null) {
 			droneConnection.start();
 		}
@@ -117,25 +115,22 @@ public class DroneStageActivity extends StageActivity implements DroneBatteryCha
 		registerReceivers();
 	}
 
-	@Override
-	protected void onDestroy() {
-		Log.d(getClass().getSimpleName(), "DroneStageActivity: onDestroy() wurde aufgerufen");
+	public void onDestroy() {
 		if (droneConnection != null) {
 			droneConnection.destroy();
 		}
 
 		droneBatteryMessageShown = false;
-		super.onDestroy();
 	}
 
 	private void registerReceivers() {
-		LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this.getApplicationContext());
+		LocalBroadcastManager manager = LocalBroadcastManager.getInstance(stageActivity);
 		manager.registerReceiver(droneBatteryReceiver, new IntentFilter(DroneControlService.DRONE_BATTERY_CHANGED_ACTION));
 		manager.registerReceiver(droneEmergencyReceiver, new IntentFilter(DroneControlService.DRONE_EMERGENCY_STATE_CHANGED_ACTION));
 	}
 
 	private void unregisterReceivers() {
-		LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this.getApplicationContext());
+		LocalBroadcastManager manager = LocalBroadcastManager.getInstance(stageActivity);
 		manager.unregisterReceiver(droneBatteryReceiver);
 		manager.unregisterReceiver(droneEmergencyReceiver);
 	}
@@ -147,7 +142,7 @@ public class DroneStageActivity extends StageActivity implements DroneBatteryCha
 
 		DroneControlService dcs = DroneServiceWrapper.getInstance().getDroneService();
 		if (dcs != null && (value < DroneInitializer.DRONE_BATTERY_THRESHOLD) && dcs.getDroneNavData().flying && !droneBatteryMessageShown) {
-			ToastUtil.showError(this, getString(R.string.notification_low_battery_with_value, value));
+			ToastUtil.showError(stageActivity, stageActivity.getString(R.string.notification_low_battery_with_value, value));
 			droneBatteryMessageShown = true;
 		}
 	}
@@ -167,52 +162,46 @@ public class DroneStageActivity extends StageActivity implements DroneBatteryCha
 			case NavData.ERROR_STATE_EMERGENCY_VBAT_LOW:
 				messageID = R.string.drone_emergency_battery_low;
 				method = EmergencyMethod.ALERT;
-				Log.d(getClass().getSimpleName(), "message code: " + getResources().getString(R.string.drone_emergency_battery_low));
 				break;
 			case NavData.ERROR_STATE_ALERT_VBAT_LOW:
 				messageID = R.string.drone_alert_battery_low;
 				method = EmergencyMethod.TOAST;
-				Log.d(getClass().getSimpleName(), "message code: " + getResources().getString(R.string.drone_alert_battery_low));
 				break;
 			case NavData.ERROR_STATE_ALERT_CAMERA:
 			case NavData.ERROR_STATE_EMERGENCY_CAMERA:
 				messageID = R.string.drone_emergency_camera;
 				method = EmergencyMethod.TOAST;
-				Log.d(getClass().getSimpleName(), "message code: " + getResources().getString(R.string.drone_emergency_camera));
 				break;
 			case NavData.ERROR_STATE_EMERGENCY_ULTRASOUND:
 				messageID = R.string.drone_emergency_ultrasound;
 				method = EmergencyMethod.ALERT;
-				Log.d(getClass().getSimpleName(), "message code: " + getResources().getString(R.string.drone_emergency_ultrasound));
 				break;
 			case NavData.ERROR_STATE_ALERT_ULTRASOUND:
 				messageID = R.string.drone_alert_ultrasound;
 				method = EmergencyMethod.NOTHING;
-				Log.d(getClass().getSimpleName(), "message code: " + getResources().getString(R.string.drone_alert_ultrasound));
 				break;
 			case NavData.ERROR_STATE_ALERT_VISION:
 				messageID = R.string.drone_alert_vision;
 				method = EmergencyMethod.TOAST;
-				Log.d(getClass().getSimpleName(), "message code: " + getResources().getString(R.string.drone_alert_vision));
 				break;
 			case NavData.ERROR_STATE_EMERGENCY_ANGLE_OUT_OF_RANGE:
 				messageID = R.string.drone_emergency_angle;
 				method = EmergencyMethod.ALERT;
-				Log.d(getClass().getSimpleName(), "message code: " + getResources().getString(R.string.drone_emergency_angle));
 				break;
 			case NavData.ERROR_STATE_EMERGENCY_CUTOUT:
 				messageID = R.string.drone_emergency_cutout;
 				method = EmergencyMethod.ALERT;
-				Log.d(getClass().getSimpleName(), "message code: " + getResources().getString(R.string.drone_emergency_cutout));
 				break;
 			default:
-				Log.d(getClass().getSimpleName(), "message code (number): " + code);
+				Log.d(getClass().getSimpleName(), "unmapped message code (number): " + code);
 				return;
 		}
 
+		Log.d(getClass().getSimpleName(), "message code: " + stageActivity.getResources().getString(messageID));
+
 		switch (method) {
 			case ALERT:
-				new AlertDialog.Builder(this)
+				new AlertDialog.Builder(stageActivity)
 						.setTitle(R.string.drone_emergency_title)
 						.setMessage(messageID)
 						.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -225,7 +214,7 @@ public class DroneStageActivity extends StageActivity implements DroneBatteryCha
 				break;
 
 			case TOAST:
-				ToastUtil.showError(this, messageID);
+				ToastUtil.showError(stageActivity, messageID);
 				break;
 		}
 	}

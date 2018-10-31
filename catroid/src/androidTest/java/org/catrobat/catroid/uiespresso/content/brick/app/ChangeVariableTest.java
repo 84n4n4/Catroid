@@ -85,9 +85,10 @@ public class ChangeVariableTest {
 		onFormulaEditor()
 				.performOpenDataFragment();
 		onDataList()
-				.onVariableAtPosition(0).performDelete();
-		onDataList()
-				.performClose();
+				.onVariableAtPosition(0)
+				.performDelete();
+		//onDataList()
+		//		.performClose();
 
 		onView(allOf(withText(userVariableName), hasSibling(withText("0.0"))))
 				.check(doesNotExist());

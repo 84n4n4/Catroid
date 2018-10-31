@@ -23,7 +23,9 @@
 
 package org.catrobat.catroid.uiespresso.util.matchers;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -45,6 +47,20 @@ public final class BundleMatchers {
 			@Override
 			public void describeTo(Description description) {
 				description.appendText("expected Bundle with key value pair: " + key + " value: " + value);
+			}
+		};
+	}
+
+	public static Matcher<Bundle> bundleContainsMediaURI(final Uri uri) {
+		return new TypeSafeMatcher<Bundle>() {
+			@Override
+			public boolean matchesSafely(final Bundle bundle) {
+				return bundle.containsKey(MediaStore.EXTRA_OUTPUT)
+						&& bundle.getString(MediaStore.EXTRA_OUTPUT).equals(uri);
+			}
+			@Override
+			public void describeTo(Description description) {
+				description.appendText("expected Bundle with URI: " + uri.toString());
 			}
 		};
 	}

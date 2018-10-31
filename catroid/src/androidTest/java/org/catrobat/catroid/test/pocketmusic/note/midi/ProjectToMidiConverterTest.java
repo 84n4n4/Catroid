@@ -28,7 +28,6 @@ import android.support.test.runner.AndroidJUnit4;
 import org.catrobat.catroid.pocketmusic.note.Project;
 import org.catrobat.catroid.pocketmusic.note.midi.MidiException;
 import org.catrobat.catroid.pocketmusic.note.midi.ProjectToMidiConverter;
-import org.catrobat.catroid.test.pocketmusic.note.ProjectTestDataFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,7 +57,7 @@ public class ProjectToMidiConverterTest {
 
 	@Test
 	public void testWriteProjectAsMidi() throws IOException, MidiException {
-		Project project = ProjectTestDataFactory.createProject();
+		Project project = new Project("testWriteProjectAsMidi", Project.DEFAULT_BEAT, Project.DEFAULT_BEATS_PER_MINUTE);
 		ProjectToMidiConverter converter = new ProjectToMidiConverter();
 
 		converter.writeProjectAsMidi(project, file);
@@ -68,7 +67,7 @@ public class ProjectToMidiConverterTest {
 
 	@Test
 	public void testGetMidiFileFromProjectName() throws IOException, MidiException {
-		Project project = ProjectTestDataFactory.createProject();
+		Project project = new Project("testGetMidiFileFromProjectName", Project.DEFAULT_BEAT, Project.DEFAULT_BEATS_PER_MINUTE);
 		ProjectToMidiConverter converter = new ProjectToMidiConverter();
 
 		converter.writeProjectAsMidi(project, file);

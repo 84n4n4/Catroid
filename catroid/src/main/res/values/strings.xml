@@ -1332,6 +1332,9 @@
     <string name="drone_emergency_title">Emergency</string>
     <!--  -->
 
+    <!-- Runtime permission messages -->
+    <string name="runtime_permission_all">This app needs access to the requested permissions to function properly. Requested permissions are necessary for certain bricks, formulas, and sensors. Eg. The Camera brick needs access to the devices camera, the "location" formula element needs access to the devices GPS.</string>
+
     <!-- Error messages -->
     <string name="error_no_writiable_external_storage_available">This app needs writable external storage like a SD
         card in order to run, but none was found.\nYou can fix this by making the external storage writable or inserting
@@ -2026,5 +2029,8 @@
      <string name="PetaByte_short">PB</string>
      <string name="ExaByte_short">EB</string>
     <!--  -->
+
+    <string name="sans_serif_font" translatable="false">sans_serif</string>
+    <string name="serif_font" translatable="false">serif</string>
 
 </resources>

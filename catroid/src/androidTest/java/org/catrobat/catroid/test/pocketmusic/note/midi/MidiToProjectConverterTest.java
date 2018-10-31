@@ -24,11 +24,13 @@ package org.catrobat.catroid.test.pocketmusic.note.midi;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import org.catrobat.catroid.pocketmusic.note.MusicalInstrument;
 import org.catrobat.catroid.pocketmusic.note.Project;
+import org.catrobat.catroid.pocketmusic.note.Track;
 import org.catrobat.catroid.pocketmusic.note.midi.MidiException;
 import org.catrobat.catroid.pocketmusic.note.midi.MidiToProjectConverter;
 import org.catrobat.catroid.pocketmusic.note.midi.ProjectToMidiConverter;
-import org.catrobat.catroid.test.pocketmusic.note.ProjectTestDataFactory;
+import org.catrobat.catroid.test.pocketmusic.note.TrackTestDataFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +49,7 @@ public class MidiToProjectConverterTest {
 
 	@Before
 	public void setUp() {
-		project = ProjectTestDataFactory.createProjectWithSemiComplexTracks();
+		project = createProjectWithSemiComplexTracks();
 		file = new File(ProjectToMidiConverter.MIDI_FOLDER + File.separator + project.getName() + ProjectToMidiConverter.MIDI_FILE_EXTENSION);
 	}
 
@@ -65,5 +67,16 @@ public class MidiToProjectConverterTest {
 		Project actualProject = midiConverter.convertMidiFileToProject(file);
 
 		assertEquals(project, actualProject);
+	}
+
+	public static Project createProjectWithSemiComplexTracks() {
+		Project project = new Project("MidiToProjectConverterTest", Project.DEFAULT_BEAT, Project.DEFAULT_BEATS_PER_MINUTE);;
+		Track track1 = TrackTestDataFactory.createSemiComplexTrack(MusicalInstrument.GUNSHOT);
+		Track track2 = TrackTestDataFactory.createSemiComplexTrack(MusicalInstrument.WHISTLE);
+
+		project.putTrack("someRandomTrackName1", track1);
+		project.putTrack("someRandomTrackName2", track2);
+
+		return project;
 	}
 }

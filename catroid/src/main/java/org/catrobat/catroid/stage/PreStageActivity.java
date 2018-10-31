@@ -56,6 +56,7 @@ import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.devices.raspberrypi.RaspberryPiService;
 import org.catrobat.catroid.drone.ardrone.DroneInitializer;
 import org.catrobat.catroid.drone.ardrone.DroneServiceWrapper;
+import org.catrobat.catroid.drone.ardrone.DroneStageActivity;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoDeviceController;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoInitializer;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoServiceWrapper;
@@ -81,26 +82,19 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 
 	private static final String TAG = PreStageActivity.class.getSimpleName();
 	private static final int REQUEST_CONNECT_DEVICE = 1000;
-	public static final int REQUEST_RESOURCES_INIT = 101;
+	public static final int REQUEST_START_STAGE = 101;
 	public static final int REQUEST_GPS = 1;
 	private int requiredResourceCounter;
 	private Set<Integer> failedResources;
 
-	private static TextToSpeech textToSpeech;
-	private static OnUtteranceCompletedListenerContainer onUtteranceCompletedListenerContainer;
-
 	private DroneInitializer droneInitializer = null;
 	private JumpingSumoInitializer jumpingSumoInitializer = null;
-
-	private Intent returnToActivityIntent = null;
 
 	private Brick.ResourcesSet requiredResourcesSet;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		returnToActivityIntent = new Intent();
-
 		if (isFinishing()) {
 			return;
 		}
@@ -148,37 +142,7 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 		}
 
 		if (requiredResourcesSet.contains(Brick.TEXT_TO_SPEECH)) {
-			textToSpeech = new TextToSpeech(this, new OnInitListener() {
-				@Override
-				public void onInit(int status) {
-					if (status == TextToSpeech.SUCCESS) {
-						onUtteranceCompletedListenerContainer = new OnUtteranceCompletedListenerContainer();
-						textToSpeech.setOnUtteranceCompletedListener(onUtteranceCompletedListenerContainer);
-						resourceInitialized();
-					} else {
-						AlertDialog.Builder builder = new AlertDialog.Builder(PreStageActivity.this);
-						builder.setMessage(R.string.prestage_text_to_speech_engine_not_installed).setCancelable(false)
-								.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog, int id) {
-										Intent installIntent = new Intent();
-										installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-										startActivity(installIntent);
-										resourceFailed(Brick.TEXT_TO_SPEECH);
-									}
-								})
-								.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog, int id) {
-										dialog.cancel();
-										resourceFailed(Brick.TEXT_TO_SPEECH);
-									}
-								});
-						AlertDialog alert = builder.create();
-						alert.show();
-					}
-				}
-			});
+			TextToSpeechHolder.getInstance().initTextToSpeech(this);
 		}
 
 		if (requiredResourcesSet.contains(Brick.BLUETOOTH_LEGO_NXT)) {
@@ -386,6 +350,8 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 		super.onResume();
 		if (requiredResourceCounter == 0 && failedResources.isEmpty()) {
 			Log.d(TAG, "onResume()");
+			Intent returnToActivityIntent = new Intent();
+			setResult(RESULT_CANCELED, returnToActivityIntent);
 			finish();
 		}
 	}
@@ -408,50 +374,8 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 		super.onDestroy();
 	}
 
-	//all resources that should be reinitialized with every stage start
-	public static void shutdownResources() {
-		if (textToSpeech != null) {
-			textToSpeech.stop();
-			textToSpeech.shutdown();
-		}
-
-		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).pause();
-
-		if (FaceDetectionHandler.isFaceDetectionRunning()) {
-			FaceDetectionHandler.stopFaceDetection();
-		}
-
-		if (VibratorUtil.isActive()) {
-			VibratorUtil.pauseVibrator();
-		}
-
-		RaspberryPiService.getInstance().disconnect();
-	}
-
-	//all resources that should not have to be reinitialized every stage start
-	public static void shutdownPersistentResources() {
-
-		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).disconnectDevices();
-
-		deleteSpeechFiles();
-		if (FlashUtil.isAvailable()) {
-			FlashUtil.destroy();
-		}
-		if (VibratorUtil.isActive()) {
-			VibratorUtil.destroy();
-		}
-	}
-
-	private static void deleteSpeechFiles() {
-		File pathToSpeechFiles = new File(Constants.TEXT_TO_SPEECH_TMP_PATH);
-		if (pathToSpeechFiles.isDirectory()) {
-			for (File file : pathToSpeechFiles.listFiles()) {
-				file.delete();
-			}
-		}
-	}
-
 	public void resourceFailed() {
+		Intent returnToActivityIntent = new Intent();
 		setResult(RESULT_CANCELED, returnToActivityIntent);
 		finish();
 	}
@@ -568,16 +492,23 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 			scene.firstStart = true;
 			scene.getDataContainer().resetUserData();
 		}
-		setResult(RESULT_OK, returnToActivityIntent);
-		finish();
+		if (DroneServiceWrapper.checkARDroneAvailability()) {
+			startActivity(new Intent(this, DroneStageActivity.class));
+		} else {
+			startActivity(new Intent(this, StageActivity.class));
+		}
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.i(TAG, "requestcode " + requestCode + " result code" + resultCode);
-
 		switch (requestCode) {
-
+			case StageActivity.STAGE_ACTIVITY_FINISH:
+				SensorHandler.stopSensorListeners();
+				FaceDetectionHandler.stopFaceDetection();
+				Intent returnToActivityIntent = new Intent();
+				setResult(RESULT_OK, returnToActivityIntent);
+				finish();
+				break;
 			case REQUEST_CONNECT_DEVICE:
 				switch (resultCode) {
 					case AppCompatActivity.RESULT_OK:
@@ -599,21 +530,6 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 			default:
 				resourceFailed();
 				break;
-		}
-	}
-
-	public static void textToSpeech(String text, File speechFile, OnUtteranceCompletedListener listener,
-			HashMap<String, String> speakParameter) {
-		if (text == null) {
-			text = "";
-		}
-
-		if (onUtteranceCompletedListenerContainer.addOnUtteranceCompletedListener(speechFile, listener,
-				speakParameter.get(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID))) {
-			int status = textToSpeech.synthesizeToFile(text, speakParameter, speechFile.getAbsolutePath());
-			if (status == TextToSpeech.ERROR) {
-				Log.e(TAG, "File synthesizing failed");
-			}
 		}
 	}
 

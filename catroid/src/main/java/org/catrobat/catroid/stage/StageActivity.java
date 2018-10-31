@@ -60,6 +60,7 @@ import org.catrobat.catroid.common.ServiceProvider;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.actions.AskAction;
 import org.catrobat.catroid.content.bricks.Brick;
+import org.catrobat.catroid.devices.raspberrypi.RaspberryPiService;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoDeviceController;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoInitializer;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
@@ -234,7 +235,6 @@ public class StageActivity extends AndroidApplication {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		Log.d(TAG, "processIntent");
 		NfcHandler.processIntent(intent);
 
 		if (nfcTagMessage != null) {
@@ -249,7 +249,15 @@ public class StageActivity extends AndroidApplication {
 	@Override
 	public void onBackPressed() {
 		if (BuildConfig.FEATURE_APK_GENERATOR_ENABLED) {
-			PreStageActivity.shutdownPersistentResources();
+			ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).disconnectDevices();
+
+			TextToSpeechHolder.getInstance().deleteSpeechFiles();
+			if (FlashUtil.isAvailable()) {
+				FlashUtil.destroy();
+			}
+			if (VibratorUtil.isActive()) {
+				VibratorUtil.destroy();
+			}
 			Intent marketingIntent = new Intent(this, MarketingActivity.class);
 			startActivity(marketingIntent);
 			finish();
@@ -263,7 +271,19 @@ public class StageActivity extends AndroidApplication {
 		stageListener.pause();
 		stageListener.finish();
 
-		PreStageActivity.shutdownResources();
+		TextToSpeechHolder.getInstance().shutDownTextToSpeech();
+
+		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).pause();
+
+		if (FaceDetectionHandler.isFaceDetectionRunning()) {
+			FaceDetectionHandler.stopFaceDetection();
+		}
+
+		if (VibratorUtil.isActive()) {
+			VibratorUtil.pauseVibrator();
+		}
+
+		RaspberryPiService.getInstance().disconnect();
 	}
 
 	@Override

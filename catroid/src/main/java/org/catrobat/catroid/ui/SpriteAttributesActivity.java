@@ -41,10 +41,7 @@ import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.drone.ardrone.DroneServiceWrapper;
-import org.catrobat.catroid.drone.ardrone.DroneStageActivity;
 import org.catrobat.catroid.stage.PreStageActivity;
-import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.recyclerview.RVButton;
 import org.catrobat.catroid.ui.recyclerview.adapter.ButtonAdapter;
 import org.catrobat.catroid.ui.recyclerview.dialog.PlaySceneDialog;
@@ -178,17 +175,6 @@ public class SpriteAttributesActivity extends BaseActivity implements ButtonAdap
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == PreStageActivity.REQUEST_RESOURCES_INIT && resultCode == RESULT_OK) {
-			if (DroneServiceWrapper.checkARDroneAvailability()) {
-				startActivity(new Intent(this, DroneStageActivity.class));
-			} else {
-				startActivity(new Intent(this, StageActivity.class));
-			}
-		}
-	}
-
-	@Override
 	public void onItemClick(@ButtonId int id) {
 		switch (id) {
 			case SCRIPTS:
@@ -236,6 +222,6 @@ public class SpriteAttributesActivity extends BaseActivity implements ButtonAdap
 
 	public void startPreStageActivity() {
 		Intent intent = new Intent(this, PreStageActivity.class);
-		startActivityForResult(intent, PreStageActivity.REQUEST_RESOURCES_INIT);
+		startActivityForResult(intent, PreStageActivity.REQUEST_START_STAGE);
 	}
 }

@@ -311,18 +311,14 @@ public class StageListener implements ApplicationListener {
 			return;
 		}
 		paused = false;
-
-		FaceDetectionHandler.resumeFaceDetection();
-		SoundManager.getInstance().resume();
 	}
 
-	void menuPause() {
+	public void menuPause() {
 		if (finished || reloadProject) {
 			return;
 		}
 
 		paused = true;
-		SoundManager.getInstance().pause();
 	}
 
 	public void transitionToScene(String sceneName) {

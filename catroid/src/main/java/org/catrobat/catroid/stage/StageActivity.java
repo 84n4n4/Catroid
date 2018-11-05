@@ -62,9 +62,7 @@ import org.catrobat.catroid.common.CatroidService;
 import org.catrobat.catroid.common.ScreenValues;
 import org.catrobat.catroid.common.ServiceProvider;
 import org.catrobat.catroid.content.Scene;
-import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.actions.AskAction;
-import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.devices.raspberrypi.RaspberryPiService;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoDeviceController;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoInitializer;
@@ -75,6 +73,7 @@ import org.catrobat.catroid.nfc.NfcHandler;
 import org.catrobat.catroid.ui.MarketingActivity;
 import org.catrobat.catroid.ui.PermissionHandlingActivity;
 import org.catrobat.catroid.ui.RequiresPermissionTask;
+import org.catrobat.catroid.ui.StageLifeCycleResourceController9000;
 import org.catrobat.catroid.ui.StageResourceHolder;
 import org.catrobat.catroid.ui.dialogs.StageDialog;
 import org.catrobat.catroid.utils.FlashUtil;
@@ -97,9 +96,9 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 	public static final int REGISTER_INTENT = 1;
 	private static final int PERFORM_INTENT = 2;
 
-	private StageAudioFocus stageAudioFocus;
-	private PendingIntent pendingIntent;
-	private NfcAdapter nfcAdapter;
+	public StageAudioFocus stageAudioFocus;
+	public PendingIntent pendingIntent;
+	public NfcAdapter nfcAdapter;
 	private static NdefMessage nfcTagMessage;
 	private StageDialog stageDialog;
 	private boolean resizePossible;
@@ -218,7 +217,7 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 	}
 
 	private void showDialog(String question, final AskAction askAction) {
-		pause();
+		StageLifeCycleResourceController9000.stagePause(this);
 
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.Theme_AppCompat_Dialog));
 		final EditText edittext = new EditText(getContext());
@@ -243,7 +242,7 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 				String questionAnswer = edittext.getText().toString();
 				askAction.setAnswerText(questionAnswer);
 				askDialogUnanswered = false;
-				resume();
+				StageLifeCycleResourceController9000.stageResume(StageActivity.this);
 			}
 		});
 
@@ -283,7 +282,7 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 			startActivity(marketingIntent);
 			finish();
 		} else {
-			pause();
+			StageLifeCycleResourceController9000.stagePause(this);
 			stageDialog.show();
 		}
 	}
@@ -309,49 +308,14 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 
 	@Override
 	public void onPause() {
-		if (nfcAdapter != null) {
-			try {
-				nfcAdapter.disableForegroundDispatch(this);
-			} catch (IllegalStateException illegalStateException) {
-				Log.e(TAG, "Disabling NFC foreground dispatching went wrong!", illegalStateException);
-			}
-		}
-		SensorHandler.stopSensorListeners();
-		stageAudioFocus.releaseAudioFocus();
-		FlashUtil.pauseFlash();
-		FaceDetectionHandler.pauseFaceDetection();
-		CameraManager.getInstance().pausePreview();
-		CameraManager.getInstance().releaseCamera();
-		VibratorUtil.pauseVibrator();
+		StageLifeCycleResourceController9000.stagePause(this);
 		super.onPause();
-
-		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).pause();
 	}
 
 	@Override
 	public void onResume() {
-		resumeResources();
+		StageLifeCycleResourceController9000.stageResume(this);
 		super.onResume();
-	}
-
-	public void pause() {
-		if (nfcAdapter != null) {
-			nfcAdapter.disableForegroundDispatch(this);
-		}
-
-		SensorHandler.stopSensorListeners();
-		stageListener.menuPause();
-		FlashUtil.pauseFlash();
-		VibratorUtil.pauseVibrator();
-		FaceDetectionHandler.pauseFaceDetection();
-
-		CameraManager.getInstance().pausePreviewAsync();
-
-		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).pause();
-
-		if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-			CastManager.getInstance().setRemoteLayoutToPauseScreen(getApplicationContext());
-		}
 	}
 
 	public boolean jumpingSumoDisconnect() {
@@ -361,65 +325,6 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 		}
 		success = JumpingSumoInitializer.getInstance().disconnect();
 		return success;
-	}
-
-	public void resume() {
-		if (askDialogUnanswered) {
-			return;
-		}
-		stageListener.menuResume();
-		resumeResources();
-	}
-
-	public void resumeResources() {
-		Brick.ResourcesSet resourcesSet = ProjectManager.getInstance().getCurrentProject().getRequiredResources();
-		List<Sprite> spriteList = ProjectManager.getInstance().getCurrentlyPlayingScene().getSpriteList();
-
-		SensorHandler.startSensorListener(this);
-
-		for (Sprite sprite : spriteList) {
-			if (sprite.getPlaySoundBricks().size() > 0) {
-				stageAudioFocus.requestAudioFocus();
-				break;
-			}
-		}
-
-		if (resourcesSet.contains(Brick.CAMERA_FLASH)) {
-			FlashUtil.resumeFlash();
-		}
-
-		if (resourcesSet.contains(Brick.VIBRATOR)) {
-			VibratorUtil.resumeVibrator();
-		}
-
-		if (resourcesSet.contains(Brick.FACE_DETECTION)) {
-			FaceDetectionHandler.resumeFaceDetection();
-		}
-
-		if (resourcesSet.contains(Brick.BLUETOOTH_LEGO_NXT)
-				|| resourcesSet.contains(Brick.BLUETOOTH_PHIRO)
-				|| resourcesSet.contains(Brick.BLUETOOTH_SENSORS_ARDUINO)) {
-			ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).start();
-		}
-
-		if (resourcesSet.contains(Brick.CAMERA_BACK)
-				|| resourcesSet.contains(Brick.CAMERA_FRONT)
-				|| resourcesSet.contains(Brick.VIDEO)) {
-			CameraManager.getInstance().resumePreviewAsync();
-		}
-
-		if (resourcesSet.contains(Brick.TEXT_TO_SPEECH)) {
-			stageAudioFocus.requestAudioFocus();
-		}
-
-		if (resourcesSet.contains(Brick.NFC_ADAPTER)
-				&& nfcAdapter != null) {
-			nfcAdapter.enableForegroundDispatch(this, pendingIntent, null, null);
-		}
-
-		if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-			CastManager.getInstance().resumeRemoteLayoutFromPauseScreen();
-		}
 	}
 
 	public boolean getResizePossible() {
@@ -484,20 +389,7 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 
 	@Override
 	protected void onDestroy() {
-		Log.d(TAG, "onDestroy()");
-		jumpingSumoDisconnect();
-		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).destroy();
-		FlashUtil.destroy();
-		VibratorUtil.destroy();
-		FaceDetectionHandler.stopFaceDetection();
-		SensorHandler.stopSensorListeners();
-		CameraManager.getInstance().stopPreviewAsync();
-		CameraManager.getInstance().releaseCamera();
-		CameraManager.getInstance().setToDefaultCamera();
-		ProjectManager.getInstance().setCurrentlyPlayingScene(ProjectManager.getInstance().getCurrentlyEditedScene());
-		if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-			CastManager.getInstance().onStageDestroyed();
-		}
+		StageLifeCycleResourceController9000.destroyStage(this);
 		super.onDestroy();
 	}
 
@@ -519,34 +411,6 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 	//for running Asynchronous Tasks from the stage
 	public void post(Runnable r) {
 		handler.post(r);
-	}
-
-	public void destroy() {
-		stageListener.finish();
-		manageLoadAndFinish();
-		stageResourceHolder.onStageDestroy();
-		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage(R.string.error_flash_camera).setCancelable(false)
-				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
-						onDestroy();
-						exit();
-					}
-				});
-
-		this.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					AlertDialog dialog = builder.create();
-					dialog.show();
-				} catch (Exception e) {
-					Log.e(TAG, "Error while showing dialog. " + e.getMessage());
-				}
-			}
-		});
 	}
 
 	public void jsDestroy() {

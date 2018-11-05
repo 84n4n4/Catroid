@@ -50,7 +50,6 @@ import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
 import org.catrobat.catroid.formulaeditor.SensorHandler;
 import org.catrobat.catroid.io.StorageOperations;
-import org.catrobat.catroid.stage.PreStageActivity;
 import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.dialogs.LegoSensorConfigInfoDialog;
 import org.catrobat.catroid.ui.recyclerview.activity.ProjectUploadActivity;
@@ -350,13 +349,13 @@ public class ProjectActivity extends BaseCastActivity {
 		if (currentScene.getName().equals(defaultScene.getName())) {
 			projectManager.setCurrentlyPlayingScene(defaultScene);
 			projectManager.setStartScene(defaultScene);
-			startPreStageActivity();
+			startStageActivity();
 		} else {
 			new PlaySceneDialog.Builder(this)
 					.setPositiveButton(R.string.play, new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							startPreStageActivity();
+							startStageActivity();
 						}
 					})
 					.create()
@@ -364,9 +363,9 @@ public class ProjectActivity extends BaseCastActivity {
 		}
 	}
 
-	void startPreStageActivity() {
-		Intent intent = new Intent(this, PreStageActivity.class);
-		startActivityForResult(intent, PreStageActivity.REQUEST_START_STAGE);
+	void startStageActivity() {
+		Intent intent = new Intent(this, StageActivity.class);
+		startActivityForResult(intent, StageActivity.REQUEST_START_STAGE);
 	}
 
 	private void showLegoSensorConfigInfo() {

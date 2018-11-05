@@ -22,19 +22,23 @@
  */
 package org.catrobat.catroid.stage;
 
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.speech.RecognizerIntent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.SparseArray;
@@ -57,6 +61,7 @@ import org.catrobat.catroid.cast.CastManager;
 import org.catrobat.catroid.common.CatroidService;
 import org.catrobat.catroid.common.ScreenValues;
 import org.catrobat.catroid.common.ServiceProvider;
+import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.actions.AskAction;
 import org.catrobat.catroid.content.bricks.Brick;
@@ -68,6 +73,9 @@ import org.catrobat.catroid.formulaeditor.SensorHandler;
 import org.catrobat.catroid.io.StageAudioFocus;
 import org.catrobat.catroid.nfc.NfcHandler;
 import org.catrobat.catroid.ui.MarketingActivity;
+import org.catrobat.catroid.ui.PermissionHandlingActivity;
+import org.catrobat.catroid.ui.RequiresPermissionTask;
+import org.catrobat.catroid.ui.StageResourceHolder;
 import org.catrobat.catroid.ui.dialogs.StageDialog;
 import org.catrobat.catroid.utils.FlashUtil;
 import org.catrobat.catroid.utils.ScreenValueHandler;
@@ -78,10 +86,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class StageActivity extends AndroidApplication {
+public class StageActivity extends AndroidApplication implements PermissionHandlingActivity {
+
 	public static final String TAG = StageActivity.class.getSimpleName();
 	public static StageListener stageListener;
 	public static final int STAGE_ACTIVITY_FINISH = 7777;
+	public static final int REQUEST_START_STAGE = 101;
 
 	public static final int ASK_MESSAGE = 0;
 	public static final int REGISTER_INTENT = 1;
@@ -98,12 +108,19 @@ public class StageActivity extends AndroidApplication {
 	private static int numberOfSpritesCloned;
 
 	public static Handler messageHandler;
-	private JumpingSumoDeviceController controller;
+	private JumpingSumoDeviceController jumpingSumoDeviceController;
 
 	public static SparseArray<IntentListener> intentListeners = new SparseArray<>();
 	public static Random randomGenerator = new Random();
 
 	AndroidApplicationConfiguration configuration = null;
+
+	public StageResourceHolder stageResourceHolder;
+	private final List<RequiresPermissionTask> permissionTaskList;
+
+	public StageActivity() {
+		permissionTaskList = new ArrayList<>();
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -117,13 +134,16 @@ public class StageActivity extends AndroidApplication {
 		}
 
 		numberOfSpritesCloned = 0;
-		setupAskHandler();
-		controller = JumpingSumoDeviceController.getInstance();
 
 		if (ProjectManager.getInstance().isCurrentProjectLandscapeMode()) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		} else {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		}
+
+		for (Scene scene : ProjectManager.getInstance().getCurrentProject().getSceneList()) {
+			scene.firstStart = true;
+			scene.getDataContainer().resetUserData();
 		}
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -132,10 +152,8 @@ public class StageActivity extends AndroidApplication {
 		stageDialog = new StageDialog(this, stageListener, R.style.StageDialog);
 		calculateScreenSizes();
 
-		// need we this here?
 		configuration = new AndroidApplicationConfiguration();
 		configuration.r = configuration.g = configuration.b = configuration.a = 8;
-
 		if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 			setContentView(R.layout.activity_stage_gamepad);
@@ -154,21 +172,24 @@ public class StageActivity extends AndroidApplication {
 		pendingIntent = PendingIntent.getActivity(this, 0,
 				new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
+		stageResourceHolder = new StageResourceHolder(StageActivity.this);
+		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).initialise();
+		stageAudioFocus = new StageAudioFocus(this);
+
+	}
+
+	public void run() {
+		setupAskHandler();
+		jumpingSumoDeviceController = JumpingSumoDeviceController.getInstance();
 		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 		Log.d(TAG, "onCreate()");
-
+		CameraManager.getInstance().setStageActivity(this);
+		JumpingSumoInitializer.getInstance().setStageActivity(this);
+		SnackbarUtil.showHintSnackbar(this, R.string.hint_stage);
 		if (nfcAdapter == null) {
 			Log.d(TAG, "could not get nfc adapter :(");
 		}
-
-		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).initialise();
-
-		stageAudioFocus = new StageAudioFocus(this);
-
-		CameraManager.getInstance().setStageActivity(this);
-		JumpingSumoInitializer.getInstance().setStageActivity(this);
-
-		SnackbarUtil.showHintSnackbar(this, R.string.hint_stage);
+		stageListener.setPaused(false);
 	}
 
 	private void setupAskHandler() {
@@ -335,7 +356,7 @@ public class StageActivity extends AndroidApplication {
 
 	public boolean jumpingSumoDisconnect() {
 		boolean success;
-		if (!controller.isConnected()) {
+		if (!jumpingSumoDeviceController.isConnected()) {
 			return true;
 		}
 		success = JumpingSumoInitializer.getInstance().disconnect();
@@ -469,6 +490,7 @@ public class StageActivity extends AndroidApplication {
 		FlashUtil.destroy();
 		VibratorUtil.destroy();
 		FaceDetectionHandler.stopFaceDetection();
+		SensorHandler.stopSensorListeners();
 		CameraManager.getInstance().stopPreviewAsync();
 		CameraManager.getInstance().releaseCamera();
 		CameraManager.getInstance().setToDefaultCamera();
@@ -502,7 +524,7 @@ public class StageActivity extends AndroidApplication {
 	public void destroy() {
 		stageListener.finish();
 		manageLoadAndFinish();
-
+		stageResourceHolder.onStageDestroy();
 		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(R.string.error_flash_camera).setCancelable(false)
 				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
@@ -577,17 +599,80 @@ public class StageActivity extends AndroidApplication {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		//Register your intent with "queueIntent"
-		if (intentListeners.indexOfKey(requestCode) < 0) {
-			Log.e(TAG, "Unknown intent result recieved!");
-		} else {
+		if (intentListeners.indexOfKey(requestCode) >= 0) {
 			IntentListener asker = intentListeners.get(requestCode);
 			asker.onIntentResult(resultCode, data);
 			intentListeners.remove(requestCode);
 		}
+		stageResourceHolder.onActivityResult(requestCode, resultCode, data);
 	}
 
 	public interface IntentListener {
 		Intent getTargetIntent();
 		void onIntentResult(int resultCode, Intent data); //don't do heavy processing here
+	}
+
+	@Override
+	public void addToRequiresPermissionTaskList(RequiresPermissionTask task) {
+		permissionTaskList.add(task);
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+		RequiresPermissionTask task = popAllRequiredPermissionTask(requestCode);
+
+		if(permissions.length == 0) {
+			return;
+		}
+
+		List<String> deniedPermissions = new ArrayList<>();
+		for (int resultIndex = 0; resultIndex < permissions.length; resultIndex ++) {
+			if(grantResults[resultIndex] == PackageManager.PERMISSION_DENIED) {
+				deniedPermissions.add(permissions[resultIndex]);
+			}
+		}
+
+		if(task != null) {
+			if (deniedPermissions.isEmpty()) {
+				task.execute(this);
+			} else {
+				task.setPermissions(deniedPermissions);
+				addToRequiresPermissionTaskList(task);
+				showPermissionRationale(task);
+			}
+		}
+	}
+
+	private RequiresPermissionTask popAllRequiredPermissionTask(int requestCode) {
+		RequiresPermissionTask matchedTask = null;
+		for (RequiresPermissionTask task : new ArrayList<>(permissionTaskList)) {
+			if(task.getPermissionRequestId() == requestCode) {
+				matchedTask = task;
+				permissionTaskList.remove(task);
+			}
+		}
+		return matchedTask;
+	}
+
+	@TargetApi(23)
+	private void showPermissionRationale(final RequiresPermissionTask task) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+				&& shouldShowRequestPermissionRationale(task.getPermissions().get(0))) {
+			showAlertOKCancel(getResources().getString(task.getRationaleString()), new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					requestPermissions(task.getPermissions().toArray(new String[0]), task.getPermissionRequestId());
+				}
+			});
+		}
+	}
+
+	public void showAlertOKCancel(String message, DialogInterface.OnClickListener okListener) {
+		new AlertDialog.Builder(this)
+				.setMessage(message)
+				.setPositiveButton(R.string.ok, okListener)
+				.setNegativeButton(R.string.cancel, null)
+				.create()
+				.show();
 	}
 }

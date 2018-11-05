@@ -97,7 +97,7 @@ public class StageListener implements ApplicationListener {
 	public static final String SCREENSHOT_MANUAL_FILE_NAME = "manual_screenshot" + DEFAULT_IMAGE_EXTENSION;
 
 	private Stage stage = null;
-	private boolean paused = false;
+	private boolean paused = true;
 	private boolean finished = false;
 	private boolean reloadProject = false;
 	public boolean firstFrameDrawn = false;
@@ -199,6 +199,10 @@ public class StageListener implements ApplicationListener {
 					|| scene.hasScreenshot();
 		}
 		FaceDetectionHandler.resumeFaceDetection();
+	}
+
+	public void setPaused(boolean paused) {
+		this.paused = paused;
 	}
 
 	private void createNewStage() {

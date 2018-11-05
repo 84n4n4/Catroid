@@ -25,7 +25,7 @@ package org.catrobat.catroid.drone.jumpingsumo;
 import android.os.Bundle;
 
 import org.catrobat.catroid.CatroidApplication;
-import org.catrobat.catroid.stage.PreStageActivity;
+import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.dialogs.TermsOfUseJSDialogFragment;
 import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
 
@@ -49,7 +49,7 @@ public final class JumpingSumoServiceWrapper {
 		return SettingsFragment.isJSSharedPreferenceEnabled(CatroidApplication.getAppContext());
 	}
 
-	public static void showTermsOfUseDialog(PreStageActivity preStageActivity) {
+	public static void showTermsOfUseDialog(StageActivity preStageActivity) {
 		Bundle args = new Bundle();
 		args.putBoolean(TermsOfUseJSDialogFragment.DIALOG_ARGUMENT_TERMS_OF_USE_ACCEPT, true);
 
@@ -57,10 +57,10 @@ public final class JumpingSumoServiceWrapper {
 		termsOfUseDialog.setPrestageStageActivity(preStageActivity);
 		termsOfUseDialog.setArguments(args);
 
-		termsOfUseDialog.show(preStageActivity.getSupportFragmentManager(), TermsOfUseJSDialogFragment.DIALOG_FRAGMENT_TAG);
+		//termsOfUseDialog.show(preStageActivity.getSupportFragmentManager(), TermsOfUseJSDialogFragment.DIALOG_FRAGMENT_TAG);
 	}
 
-	public static void initJumpingSumo(PreStageActivity prestageStageActivity) {
+	public static void initJumpingSumo(StageActivity prestageStageActivity) {
 		if (SettingsFragment.areTermsOfServiceJSAgreedPermanently(prestageStageActivity.getApplicationContext())) {
 			jumpingSumoInitializer = getJumpingSumoInitialiser(prestageStageActivity);
 			jumpingSumoInitializer.initialise();
@@ -70,7 +70,7 @@ public final class JumpingSumoServiceWrapper {
 		}
 	}
 
-	public static JumpingSumoInitializer getJumpingSumoInitialiser(PreStageActivity prestageStageActivity) {
+	public static JumpingSumoInitializer getJumpingSumoInitialiser(StageActivity prestageStageActivity) {
 		if (jumpingSumoInitializer == null) {
 			jumpingSumoInitializer = JumpingSumoInitializer.getInstance();
 			jumpingSumoInitializer.setPreStageActivity(prestageStageActivity);

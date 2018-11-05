@@ -33,6 +33,7 @@ import org.catrobat.catroid.R;
 import org.catrobat.catroid.camera.CameraManager;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.content.bricks.Brick;
+import org.catrobat.catroid.ui.StageResourceHolder;
 
 import java.io.File;
 import java.util.HashMap;
@@ -56,30 +57,30 @@ public final class TextToSpeechHolder {
 		return instance;
 	}
 
-	public void initTextToSpeech(final PreStageActivity preStageActivity) {
-		textToSpeech = new TextToSpeech(preStageActivity, new TextToSpeech.OnInitListener() {
+	public void initTextToSpeech(final StageActivity stageActivity, final StageResourceHolder stageResourceHolder) {
+		textToSpeech = new TextToSpeech(stageActivity, new TextToSpeech.OnInitListener() {
 			@Override
 			public void onInit(int status) {
 				if (status == TextToSpeech.SUCCESS) {
 					onUtteranceCompletedListenerContainer = new OnUtteranceCompletedListenerContainer();
 					textToSpeech.setOnUtteranceCompletedListener(onUtteranceCompletedListenerContainer);
-					preStageActivity.resourceInitialized();
+					stageResourceHolder.resourceInitialized();
 				} else {
-					AlertDialog.Builder builder = new AlertDialog.Builder(preStageActivity);
+					AlertDialog.Builder builder = new AlertDialog.Builder(stageActivity);
 					builder.setMessage(R.string.prestage_text_to_speech_engine_not_installed).setCancelable(false)
 							.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int id) {
 									Intent installIntent = new Intent();
 									installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-									preStageActivity.startActivity(installIntent);
-									preStageActivity.resourceFailed(Brick.TEXT_TO_SPEECH);
+									stageActivity.startActivity(installIntent);
+									stageResourceHolder.resourceFailed(Brick.TEXT_TO_SPEECH);
 								}
 							})
 							.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int id) {
-									preStageActivity.resourceFailed(Brick.TEXT_TO_SPEECH);
+									stageResourceHolder.resourceFailed(Brick.TEXT_TO_SPEECH);
 								}
 							});
 					AlertDialog alert = builder.create();

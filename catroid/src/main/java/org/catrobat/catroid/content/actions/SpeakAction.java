@@ -34,7 +34,6 @@ import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.FormulaElement;
 import org.catrobat.catroid.formulaeditor.InterpretationException;
 import org.catrobat.catroid.io.SoundManager;
-import org.catrobat.catroid.stage.PreStageActivity;
 import org.catrobat.catroid.stage.TextToSpeechHolder;
 import org.catrobat.catroid.utils.Utils;
 

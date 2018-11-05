@@ -49,7 +49,7 @@ import org.catrobat.catroid.cast.CastManager;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.io.ZipArchiver;
-import org.catrobat.catroid.stage.PreStageActivity;
+import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.dialogs.TermsOfUseDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.asynctask.ProjectLoaderTask;
 import org.catrobat.catroid.ui.recyclerview.dialog.AboutDialogFragment;
@@ -285,14 +285,14 @@ public class MainMenuActivity extends BaseCastActivity implements ProjectLoaderT
 	public void onLoadFinished(boolean success, String message) {
 		if (BuildConfig.FEATURE_APK_GENERATOR_ENABLED) {
 			startActivityForResult(
-					new Intent(this, PreStageActivity.class), PreStageActivity.REQUEST_START_STAGE);
+					new Intent(this, StageActivity.class), StageActivity.REQUEST_START_STAGE);
 		}
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (BuildConfig.FEATURE_APK_GENERATOR_ENABLED) {
-			if (requestCode == PreStageActivity.REQUEST_START_STAGE) {
+			if (requestCode == StageActivity.REQUEST_START_STAGE) {
 				finish();
 			}
 		} else {

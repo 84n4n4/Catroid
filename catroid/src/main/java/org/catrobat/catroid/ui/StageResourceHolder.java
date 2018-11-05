@@ -20,17 +20,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.catrobat.catroid.stage;
+
+package org.catrobat.catroid.ui;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
-import android.os.Bundle;
 import android.os.Vibrator;
 import android.provider.Settings;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.TextToSpeech.OnInitListener;
-import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -48,22 +45,19 @@ import org.catrobat.catroid.bluetooth.base.BluetoothDeviceService;
 import org.catrobat.catroid.camera.CameraManager;
 import org.catrobat.catroid.cast.CastManager;
 import org.catrobat.catroid.common.CatroidService;
-import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.ServiceProvider;
 import org.catrobat.catroid.content.Project;
-import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.devices.raspberrypi.RaspberryPiService;
 import org.catrobat.catroid.drone.ardrone.DroneInitializer;
 import org.catrobat.catroid.drone.ardrone.DroneServiceWrapper;
-import org.catrobat.catroid.drone.ardrone.DroneStageActivity;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoDeviceController;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoInitializer;
-import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoServiceWrapper;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
 import org.catrobat.catroid.formulaeditor.SensorHandler;
 import org.catrobat.catroid.sensing.GatherCollisionInformationTask;
-import org.catrobat.catroid.ui.BaseActivity;
+import org.catrobat.catroid.stage.StageActivity;
+import org.catrobat.catroid.stage.TextToSpeechHolder;
 import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
 import org.catrobat.catroid.utils.FlashUtil;
 import org.catrobat.catroid.utils.ToastUtil;
@@ -71,18 +65,17 @@ import org.catrobat.catroid.utils.TouchUtil;
 import org.catrobat.catroid.utils.Utils;
 import org.catrobat.catroid.utils.VibratorUtil;
 
-import java.io.File;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-@SuppressWarnings("deprecation")
-public class PreStageActivity extends BaseActivity implements GatherCollisionInformationTask.OnPolygonLoadedListener {
+import static android.app.Activity.RESULT_CANCELED;
+import static android.content.Context.VIBRATOR_SERVICE;
 
-	private static final String TAG = PreStageActivity.class.getSimpleName();
+public class StageResourceHolder implements GatherCollisionInformationTask.OnPolygonLoadedListener {
+	private static final String TAG = StageResourceHolder.class.getSimpleName();
+
 	private static final int REQUEST_CONNECT_DEVICE = 1000;
-	public static final int REQUEST_START_STAGE = 101;
 	public static final int REQUEST_GPS = 1;
 	private int requiredResourceCounter;
 	private Set<Integer> failedResources;
@@ -92,17 +85,12 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 
 	private Brick.ResourcesSet requiredResourcesSet;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		if (isFinishing()) {
-			return;
-		}
+	private StageActivity stageActivity;
 
-		setContentView(R.layout.activity_prestage);
-
+	public StageResourceHolder(final StageActivity stageActivity) {
+		this.stageActivity = stageActivity;
 		TouchUtil.reset();
-		SensorHandler sensorHandler = SensorHandler.getInstance(getApplicationContext());
+		SensorHandler sensorHandler = SensorHandler.getInstance(stageActivity);
 		failedResources = new HashSet<>();
 		requiredResourcesSet = ProjectManager.getInstance().getCurrentProject().getRequiredResources();
 		requiredResourceCounter = requiredResourcesSet.size();
@@ -137,12 +125,12 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 			} else {
 				Intent checkIntent = new Intent();
 				checkIntent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-				startActivityForResult(checkIntent, REQUEST_GPS);
+				stageActivity.startActivityForResult(checkIntent, REQUEST_GPS);
 			}
 		}
 
 		if (requiredResourcesSet.contains(Brick.TEXT_TO_SPEECH)) {
-			TextToSpeechHolder.getInstance().initTextToSpeech(this);
+			TextToSpeechHolder.getInstance().initTextToSpeech(stageActivity, this);
 		}
 
 		if (requiredResourcesSet.contains(Brick.BLUETOOTH_LEGO_NXT)) {
@@ -164,15 +152,15 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 		if (DroneServiceWrapper.checkARDroneAvailability()) {
 			CatroidApplication.loadNativeLibs();
 			if (CatroidApplication.parrotLibrariesLoaded) {
-				droneInitializer = getDroneInitialiser();
-				droneInitializer.initialise();
+				//droneInitializer = getDroneInitialiser();
+				//droneInitializer.initialise();
 			}
 		}
 
 		if (BuildConfig.FEATURE_PARROT_JUMPING_SUMO_ENABLED && requiredResourcesSet.contains(Brick.JUMPING_SUMO)) {
 			CatroidApplication.loadSDKLib();
 			if (CatroidApplication.parrotJSLibrariesLoaded) {
-				JumpingSumoServiceWrapper.initJumpingSumo(this);
+				//JumpingSumoServiceWrapper.initJumpingSumo(stageActivity);
 			}
 		}
 
@@ -206,9 +194,9 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 		}
 
 		if (requiredResourcesSet.contains(Brick.VIBRATOR)) {
-			Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+			Vibrator vibrator = (Vibrator) stageActivity.getSystemService(VIBRATOR_SERVICE);
 			if (vibrator != null) {
-				VibratorUtil.setContext(this.getBaseContext());
+				VibratorUtil.setContext(stageActivity);
 				VibratorUtil.activateVibratorThread();
 				resourceInitialized();
 			} else {
@@ -218,9 +206,9 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 
 		if (requiredResourcesSet.contains(Brick.NFC_ADAPTER)) {
 			if (requiredResourcesSet.contains(Brick.FACE_DETECTION)) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setMessage(getString(R.string.nfc_facedetection_support)).setCancelable(false)
-						.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+				AlertDialog.Builder builder = new AlertDialog.Builder(stageActivity);
+				builder.setMessage(stageActivity.getString(R.string.nfc_facedetection_support)).setCancelable(false)
+						.setPositiveButton(stageActivity.getString(R.string.ok), new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int id) {
 								nfcInitialize();
@@ -249,14 +237,14 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 				resourceInitialized();
 			} else {
 
-				if (!SettingsFragment.isCastSharedPreferenceEnabled(this)) {
-					ToastUtil.showError(this, getString(R.string.cast_enable_cast_feature));
+				if (!SettingsFragment.isCastSharedPreferenceEnabled(stageActivity)) {
+					ToastUtil.showError(stageActivity, stageActivity.getString(R.string.cast_enable_cast_feature));
 				} else if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-					ToastUtil.showError(this, getString(R.string.cast_error_not_connected_msg));
+					ToastUtil.showError(stageActivity, stageActivity.getString(R.string.cast_error_not_connected_msg));
 				} else {
-					ToastUtil.showError(this, getString(R.string.cast_error_cast_bricks_in_no_cast_project));
+					ToastUtil.showError(stageActivity, stageActivity.getString(R.string.cast_error_cast_bricks_in_no_cast_project));
 				}
-				resourceFailed();
+				endStageActivity();
 			}
 		}
 
@@ -266,25 +254,25 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 		}
 
 		if (requiredResourcesSet.contains(Brick.NETWORK_CONNECTION)) {
-			if (!Utils.isNetworkAvailable(this)) {
-				new AlertDialog.Builder(this)
+			if (!Utils.isNetworkAvailable(stageActivity)) {
+				new AlertDialog.Builder(stageActivity)
 						.setTitle(R.string.error_no_network_title)
 						.setPositiveButton(R.string.preference_title, new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
-								startActivity(new Intent(Settings.ACTION_SETTINGS));
+								stageActivity.startActivity(new Intent(Settings.ACTION_SETTINGS));
 							}
 						})
 						.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
-								resourceFailed();
+								endStageActivity();
 							}
 						})
 						.setOnDismissListener(new DialogInterface.OnDismissListener() {
 							@Override
 							public void onDismiss(DialogInterface dialog) {
-								resourceFailed();
+								endStageActivity();
 							}
 						})
 						.create()
@@ -295,7 +283,7 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 		}
 
 		if (requiredResourceCounter == 0) {
-			startStageActivity();
+			stageActivity.run();
 		}
 
 		if (requiredResourcesSet.contains(Brick.SOCKET_RASPI)) {
@@ -308,141 +296,108 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 	private void connectBTDevice(Class<? extends BluetoothDevice> service) {
 		BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
 
-		if (btService.connectDevice(service, this, REQUEST_CONNECT_DEVICE)
+		if (btService.connectDevice(service, stageActivity, REQUEST_CONNECT_DEVICE)
 				== BluetoothDeviceService.ConnectDeviceResult.ALREADY_CONNECTED) {
 			resourceInitialized();
 		}
 	}
 
 	private void connectRaspberrySocket() {
-		String host = SettingsFragment.getRaspiHost(this.getBaseContext());
-		int port = SettingsFragment.getRaspiPort(this.getBaseContext());
+		String host = SettingsFragment.getRaspiHost(stageActivity);
+		int port = SettingsFragment.getRaspiPort(stageActivity);
 
 		if (RaspberryPiService.getInstance().connect(host, port)) {
 			resourceInitialized();
 		} else {
-			ToastUtil.showError(this, getString(R.string.error_connecting_to, host, port));
-			resourceFailed();
+			ToastUtil.showError(stageActivity, stageActivity.getString(R.string.error_connecting_to, host, port));
+			endStageActivity();
 		}
 	}
 
-	public DroneInitializer getDroneInitialiser() {
-		if (droneInitializer == null) {
-			droneInitializer = new DroneInitializer(this);
-		}
-		return droneInitializer;
-	}
+//	public DroneInitializer getDroneInitialiser() {
+//		if (droneInitializer == null) {
+//			droneInitializer = new DroneInitializer(this);
+//		}
+//		return droneInitializer;
+//	}
+//
+//	public JumpingSumoInitializer getJumpingSumoInitialiser() {
+//		if (jumpingSumoInitializer == null) {
+//			jumpingSumoInitializer = JumpingSumoInitializer.getInstance();
+//			jumpingSumoInitializer.setPreStageActivity(this);
+//		}
+//		return jumpingSumoInitializer;
+//	}
 
-	public JumpingSumoInitializer getJumpingSumoInitialiser() {
-		if (jumpingSumoInitializer == null) {
-			jumpingSumoInitializer = JumpingSumoInitializer.getInstance();
-			jumpingSumoInitializer.setPreStageActivity(this);
-		}
-		return jumpingSumoInitializer;
-	}
-
-	@Override
-	public void onResume() {
-		if (droneInitializer != null) {
-			droneInitializer.onPrestageActivityResume();
-		}
-
-		super.onResume();
-		if (requiredResourceCounter == 0 && failedResources.isEmpty()) {
-			Log.d(TAG, "onResume()");
-			Intent returnToActivityIntent = new Intent();
-			setResult(RESULT_CANCELED, returnToActivityIntent);
-			finish();
-		}
-	}
-
-	@Override
-	protected void onPause() {
-		if (droneInitializer != null) {
-			droneInitializer.onPrestageActivityPause();
-		}
-
-		super.onPause();
-	}
-
-	@Override
-	protected void onDestroy() {
-		if (droneInitializer != null) {
-			droneInitializer.onPrestageActivityDestroy();
-		}
-
-		super.onDestroy();
-	}
-
-	public void resourceFailed() {
+	public void endStageActivity() {
 		Intent returnToActivityIntent = new Intent();
-		setResult(RESULT_CANCELED, returnToActivityIntent);
-		finish();
+		stageActivity.setResult(RESULT_CANCELED, returnToActivityIntent);
+		stageActivity.finish();
 	}
 
 	public void showResourceFailedErrorDialog() {
-		String failedResourcesMessage = getString(R.string.prestage_resource_not_available_text);
+		String failedResourcesMessage = stageActivity.getString(R.string.prestage_resource_not_available_text);
 		Iterator resourceIter = failedResources.iterator();
 		while (resourceIter.hasNext()) {
 			switch ((int) resourceIter.next()) {
 				case Brick.SENSOR_ACCELERATION:
-					failedResourcesMessage = failedResourcesMessage + getString(R.string
+					failedResourcesMessage = failedResourcesMessage + stageActivity.getString(R.string
 							.prestage_no_acceleration_sensor_available);
 					break;
 				case Brick.SENSOR_INCLINATION:
-					failedResourcesMessage = failedResourcesMessage + getString(R.string
+					failedResourcesMessage = failedResourcesMessage + stageActivity.getString(R.string
 							.prestage_no_inclination_sensor_available);
 					break;
 				case Brick.SENSOR_COMPASS:
-					failedResourcesMessage = failedResourcesMessage + getString(R.string
+					failedResourcesMessage = failedResourcesMessage + stageActivity.getString(R.string
 							.prestage_no_compass_sensor_available);
 					break;
 				case Brick.SENSOR_GPS:
-					failedResourcesMessage = failedResourcesMessage + getString(R.string
+					failedResourcesMessage = failedResourcesMessage + stageActivity.getString(R.string
 							.prestage_no_gps_sensor_available);
 					break;
 				case Brick.TEXT_TO_SPEECH:
-					failedResourcesMessage = failedResourcesMessage + getString(R.string
+					failedResourcesMessage = failedResourcesMessage + stageActivity.getString(R.string
 							.prestage_text_to_speech_error);
 					break;
 				case Brick.CAMERA_BACK:
-					failedResourcesMessage = failedResourcesMessage + getString(R.string
+					failedResourcesMessage = failedResourcesMessage + stageActivity.getString(R.string
 							.prestage_no_back_camera_available);
 					break;
 				case Brick.CAMERA_FRONT:
-					failedResourcesMessage = failedResourcesMessage + getString(R.string
+					failedResourcesMessage = failedResourcesMessage + stageActivity.getString(R.string
 							.prestage_no_front_camera_available);
 					break;
 				case Brick.CAMERA_FLASH:
-					failedResourcesMessage = failedResourcesMessage + getString(R.string
+					failedResourcesMessage = failedResourcesMessage + stageActivity.getString(R.string
 							.prestage_no_flash_available);
 					break;
 				case Brick.VIBRATOR:
-					failedResourcesMessage = failedResourcesMessage + getString(R.string
+					failedResourcesMessage = failedResourcesMessage + stageActivity.getString(R.string
 							.prestage_no_vibrator_available);
 					break;
 				case Brick.FACE_DETECTION:
-					failedResourcesMessage = failedResourcesMessage + getString(R.string
+					failedResourcesMessage = failedResourcesMessage + stageActivity.getString(R.string
 							.prestage_no_camera_available);
 					break;
 				case Brick.JUMPING_SUMO:
-					failedResourcesMessage = failedResourcesMessage + getString(R.string
+					failedResourcesMessage = failedResourcesMessage + stageActivity.getString(R.string
 							.prestage_no_jumping_sumo_available);
 					break;
 				default:
-					failedResourcesMessage = failedResourcesMessage + getString(R.string
+					failedResourcesMessage = failedResourcesMessage + stageActivity.getString(R.string
 							.prestage_default_resource_not_available);
 					break;
 			}
 		}
 
-		AlertDialog.Builder failedResourceAlertBuilder = new AlertDialog.Builder(this);
+		AlertDialog.Builder failedResourceAlertBuilder = new AlertDialog.Builder(stageActivity);
 		failedResourceAlertBuilder.setTitle(R.string.prestage_resource_not_available_title);
 		failedResourceAlertBuilder.setMessage(failedResourcesMessage).setCancelable(false)
-				.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+				.setPositiveButton(stageActivity.getString(R.string.ok), new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
-						resourceFailed();
+						endStageActivity();
 					}
 				});
 		AlertDialog alert = failedResourceAlertBuilder.create();
@@ -450,14 +405,14 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 	}
 
 	public void showResourceInUseErrorDialog() {
-		String failedResourcesMessage = getString(R.string.prestage_resource_in_use_text);
-		AlertDialog.Builder failedResourceAlertBuilder = new AlertDialog.Builder(this);
+		String failedResourcesMessage = stageActivity.getString(R.string.prestage_resource_in_use_text);
+		AlertDialog.Builder failedResourceAlertBuilder = new AlertDialog.Builder(stageActivity);
 		failedResourceAlertBuilder.setTitle(R.string.prestage_resource_not_available_title);
 		failedResourceAlertBuilder.setMessage(failedResourcesMessage).setCancelable(false)
-				.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+				.setPositiveButton(stageActivity.getString(R.string.ok), new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
-						resourceFailed();
+						endStageActivity();
 					}
 				});
 		AlertDialog alert = failedResourceAlertBuilder.create();
@@ -480,43 +435,24 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 						&& !verifyJSConnection()) {
 					return;
 				}
-				startStageActivity();
+				stageActivity.run();
 			} else {
 				showResourceFailedErrorDialog();
+				endStageActivity();
 			}
 		}
 	}
 
-	public void startStageActivity() {
-		for (Scene scene : ProjectManager.getInstance().getCurrentProject().getSceneList()) {
-			scene.firstStart = true;
-			scene.getDataContainer().resetUserData();
-		}
-		if (DroneServiceWrapper.checkARDroneAvailability()) {
-			startActivity(new Intent(this, DroneStageActivity.class));
-		} else {
-			startActivity(new Intent(this, StageActivity.class));
-		}
-	}
-
-	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
-			case StageActivity.STAGE_ACTIVITY_FINISH:
-				SensorHandler.stopSensorListeners();
-				FaceDetectionHandler.stopFaceDetection();
-				Intent returnToActivityIntent = new Intent();
-				setResult(RESULT_OK, returnToActivityIntent);
-				finish();
-				break;
 			case REQUEST_CONNECT_DEVICE:
 				switch (resultCode) {
 					case AppCompatActivity.RESULT_OK:
 						resourceInitialized();
 						break;
 
-					case AppCompatActivity.RESULT_CANCELED:
-						resourceFailed();
+					case RESULT_CANCELED:
+						endStageActivity();
 						break;
 				}
 				break;
@@ -528,7 +464,7 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 				}
 				break;
 			default:
-				resourceFailed();
+				endStageActivity();
 				break;
 		}
 	}
@@ -543,13 +479,13 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 	}
 
 	private void nfcInitialize() {
-		NfcAdapter adapter = NfcAdapter.getDefaultAdapter(getApplicationContext());
+		NfcAdapter adapter = NfcAdapter.getDefaultAdapter(stageActivity);
 		if (adapter != null && !adapter.isEnabled()) {
-			ToastUtil.showError(this, R.string.nfc_not_activated);
+			ToastUtil.showError(stageActivity, R.string.nfc_not_activated);
 			Intent intent = new Intent(Settings.ACTION_NFC_SETTINGS);
-			startActivity(intent);
+			stageActivity.startActivity(intent);
 		} else if (adapter == null) {
-			ToastUtil.showError(this, R.string.no_nfc_available);
+			ToastUtil.showError(stageActivity, R.string.no_nfc_available);
 			// TODO: resourceFailed() & startActivityForResult(), if behaviour needed
 		}
 		resourceInitialized();
@@ -576,8 +512,13 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 		return connected;
 	}
 
+	// for GatherCollisionInformationTask.OnPolygonLoadedListener, this is NOT any Activity or Lifecycle event
 	@Override
 	public void onFinished() {
 		resourceInitialized();
+	}
+
+	public void onStageDestroy() {
+		droneInitializer.onStageActivityDestroy();
 	}
 }

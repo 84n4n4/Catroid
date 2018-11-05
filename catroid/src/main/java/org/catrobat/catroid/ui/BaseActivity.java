@@ -123,7 +123,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 		return PreferenceManager.getDefaultSharedPreferences(this).getBoolean(RECOVERED_FROM_CRASH, false);
 	}
 
-	void addToRequiresPermissionTaskList(RequiresPermissionTask task) {
+	public void addToRequiresPermissionTaskList(RequiresPermissionTask task) {
 		permissionTaskList.add(task);
 	}
 

@@ -52,7 +52,8 @@ import com.parrot.freeflight.tasks.CheckDroneNetworkAvailabilityTask;
 
 import org.catrobat.catroid.CatroidApplication;
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.stage.PreStageActivity;
+import org.catrobat.catroid.stage.StageActivity;
+import org.catrobat.catroid.ui.StageResourceHolder;
 import org.catrobat.catroid.ui.dialogs.TermsOfUseDialogFragment;
 import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
 
@@ -72,10 +73,12 @@ public class DroneInitializer implements DroneReadyReceiverDelegate, DroneConnec
 
 	private static final String TAG = DroneInitializer.class.getSimpleName();
 
-	private PreStageActivity prestageStageActivity;
+	private StageActivity prestageStageActivity;
+	private StageResourceHolder stageResourceHolder;
 
-	public DroneInitializer(PreStageActivity prestageStageActivity) {
+	public DroneInitializer(StageActivity prestageStageActivity, StageResourceHolder stageResourceHolder) {
 		this.prestageStageActivity = prestageStageActivity;
+		this.stageResourceHolder = stageResourceHolder;
 	}
 
 	private void showTermsOfUseDialog() {
@@ -83,7 +86,7 @@ public class DroneInitializer implements DroneReadyReceiverDelegate, DroneConnec
 		args.putBoolean(TermsOfUseDialogFragment.DIALOG_ARGUMENT_TERMS_OF_USE_ACCEPT, true);
 		TermsOfUseDialogFragment termsOfUseDialog = new TermsOfUseDialogFragment();
 		termsOfUseDialog.setArguments(args);
-		termsOfUseDialog.show(prestageStageActivity.getSupportFragmentManager(), TermsOfUseDialogFragment.TAG);
+		//termsOfUseDialog.show(prestageStageActivity.getSupportFragmentManager(), TermsOfUseDialogFragment.TAG);
 	}
 
 	public void initialise() {
@@ -115,7 +118,7 @@ public class DroneInitializer implements DroneReadyReceiverDelegate, DroneConnec
 		return true;
 	}
 
-	public static void showUnCancellableErrorDialog(final PreStageActivity context, String title, String message) {
+	public void showUnCancellableErrorDialog(final StageActivity context, String title, String message) {
 		Builder builder = new AlertDialog.Builder(context);
 
 		builder.setTitle(title);
@@ -123,8 +126,7 @@ public class DroneInitializer implements DroneReadyReceiverDelegate, DroneConnec
 		builder.setMessage(message);
 		builder.setNeutralButton(R.string.close, new OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				context.resourceFailed();
+			public void onClick(DialogInterface dialog, int which) {stageResourceHolder.endStageActivity();
 			}
 		});
 		builder.show();
@@ -167,7 +169,7 @@ public class DroneInitializer implements DroneReadyReceiverDelegate, DroneConnec
 			DroneConfigManager.getInstance().setDroneConfig(getDronePreferenceMapping(getAppContext()));
 			droneControlService.flatTrim();
 
-			prestageStageActivity.resourceInitialized();
+			stageResourceHolder.resourceInitialized();
 		}
 	}
 
@@ -198,7 +200,7 @@ public class DroneInitializer implements DroneReadyReceiverDelegate, DroneConnec
 		}
 	}
 
-	public void onPrestageActivityDestroy() {
+	public void onStageActivityDestroy() {
 		if (droneControlService != null) {
 			prestageStageActivity.unbindService(this.droneServiceConnection);
 			droneControlService = null;

@@ -53,7 +53,7 @@ import org.catrobat.catroid.formulaeditor.datacontainer.DataContainer;
 import org.catrobat.catroid.io.StorageOperations;
 import org.catrobat.catroid.pocketmusic.PocketMusicActivity;
 import org.catrobat.catroid.soundrecorder.SoundRecorderActivity;
-import org.catrobat.catroid.stage.PreStageActivity;
+import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
 import org.catrobat.catroid.ui.fragment.ScriptFragment;
 import org.catrobat.catroid.ui.recyclerview.dialog.PlaySceneDialog;
@@ -726,13 +726,13 @@ public class SpriteActivity extends BaseActivity {
 		if (currentScene.getName().equals(defaultScene.getName())) {
 			projectManager.setCurrentlyPlayingScene(defaultScene);
 			projectManager.setStartScene(defaultScene);
-			startPreStageActivity();
+			startStageActivity();
 		} else {
 			new PlaySceneDialog.Builder(this)
 					.setPositiveButton(R.string.play, new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							startPreStageActivity();
+							startStageActivity();
 						}
 					})
 					.create()
@@ -740,8 +740,8 @@ public class SpriteActivity extends BaseActivity {
 		}
 	}
 
-	void startPreStageActivity() {
-		Intent intent = new Intent(this, PreStageActivity.class);
-		startActivityForResult(intent, PreStageActivity.REQUEST_START_STAGE);
+	void startStageActivity() {
+		Intent intent = new Intent(this, StageActivity.class);
+		startActivityForResult(intent, StageActivity.REQUEST_START_STAGE);
 	}
 }

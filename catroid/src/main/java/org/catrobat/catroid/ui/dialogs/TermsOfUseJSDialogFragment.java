@@ -39,19 +39,19 @@ import android.widget.TextView;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoInitializer;
-import org.catrobat.catroid.stage.PreStageActivity;
+import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
 
 public class TermsOfUseJSDialogFragment extends DialogFragment {
 	private static final String TAG = TermsOfUseJSDialogFragment.class.getSimpleName();
-	private static PreStageActivity prestageStageActivity;
+	private static StageActivity prestageStageActivity;
 
 	public static final String DIALOG_FRAGMENT_TAG = "dialog_terms_of_use";
 	public static final String DIALOG_ARGUMENT_TERMS_OF_USE_ACCEPT = "dialog_terms_of_use_accept";
 
 	CheckBox checkboxTermsOfUseAcceptedPermanently = null;
 
-	public static void setPrestageStageActivity(PreStageActivity preState) {
+	public static void setPrestageStageActivity(StageActivity preState) {
 		prestageStageActivity = preState;
 	}
 
@@ -75,49 +75,49 @@ public class TermsOfUseJSDialogFragment extends DialogFragment {
 		AlertDialog.Builder termsOfUseDialogBuilder = new AlertDialog.Builder(getActivity()).setView(view).setTitle(
 				R.string.dialog_terms_of_use_title);
 
-		termsOfUseDialogBuilder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int id) {
-				if (getActivity() instanceof PreStageActivity) {
-					if (checkboxTermsOfUseAcceptedPermanently != null
-							&& checkboxTermsOfUseAcceptedPermanently.isChecked()) {
-						SettingsFragment.setTermsOfServiceJSAgreedPermanently(getActivity(), true);
-					}
-					JumpingSumoInitializer jsDiscoverer = ((PreStageActivity) getActivity()).getJumpingSumoInitialiser();
-					if (jsDiscoverer != null && jsDiscoverer.checkRequirements()) {
-						jsDiscoverer.initialise();
-						jsDiscoverer.checkJumpingSumoAvailability(prestageStageActivity);
-					}
-				}
-				dialog.dismiss();
-			}
-		});
-
-		termsOfUseDialogBuilder.setOnKeyListener(new OnKeyListener() {
-			@Override
-			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-				Log.d(TAG, "prevent canceling the dialog with back button");
-				return true;
-			}
-		});
-
-		if (isOnPreStageActivity) {
-			checkboxTermsOfUseAcceptedPermanently = (CheckBox) view
-					.findViewById(R.id.dialog_terms_of_use_check_box_agree_permanently);
-			checkboxTermsOfUseAcceptedPermanently.setVisibility(CheckBox.VISIBLE);
-			checkboxTermsOfUseAcceptedPermanently.setText(R.string.dialog_terms_of_use_parrot_reminder_do_not_remind_again);
-			termsOfUseDialogBuilder.setCancelable(false);
-			termsOfUseTextView.setText(R.string.dialog_terms_of_use_jumpingsumo_reminder_text);
-			termsOfUseUrlStringText = getString(R.string.dialog_terms_of_use_link_text_parrot_reminder);
-		} else {
-			termsOfUseTextView.setText(R.string.dialog_terms_of_use_info);
-			termsOfUseUrlStringText = getString(R.string.dialog_terms_of_use_link_text);
-		}
-
-		String termsOfUseUrl = getString(R.string.terms_of_use_link_template, Constants.CATROBAT_TERMS_OF_USE_URL,
-				termsOfUseUrlStringText);
-
-		termsOfUseUrlTextView.setText(Html.fromHtml(termsOfUseUrl));
+//		termsOfUseDialogBuilder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int id) {
+//				if (getActivity() instanceof PreStageActivity) {
+//					if (checkboxTermsOfUseAcceptedPermanently != null
+//							&& checkboxTermsOfUseAcceptedPermanently.isChecked()) {
+//						SettingsFragment.setTermsOfServiceJSAgreedPermanently(getActivity(), true);
+//					}
+//					JumpingSumoInitializer jsDiscoverer = ((PreStageActivity) getActivity()).getJumpingSumoInitialiser();
+//					if (jsDiscoverer != null && jsDiscoverer.checkRequirements()) {
+//						jsDiscoverer.initialise();
+//						jsDiscoverer.checkJumpingSumoAvailability(prestageStageActivity);
+//					}
+//				}
+//				dialog.dismiss();
+//			}
+//		});
+//
+//		termsOfUseDialogBuilder.setOnKeyListener(new OnKeyListener() {
+//			@Override
+//			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+//				Log.d(TAG, "prevent canceling the dialog with back button");
+//				return true;
+//			}
+//		});
+//
+//		if (isOnPreStageActivity) {
+//			checkboxTermsOfUseAcceptedPermanently = (CheckBox) view
+//					.findViewById(R.id.dialog_terms_of_use_check_box_agree_permanently);
+//			checkboxTermsOfUseAcceptedPermanently.setVisibility(CheckBox.VISIBLE);
+//			checkboxTermsOfUseAcceptedPermanently.setText(R.string.dialog_terms_of_use_parrot_reminder_do_not_remind_again);
+//			termsOfUseDialogBuilder.setCancelable(false);
+//			termsOfUseTextView.setText(R.string.dialog_terms_of_use_jumpingsumo_reminder_text);
+//			termsOfUseUrlStringText = getString(R.string.dialog_terms_of_use_link_text_parrot_reminder);
+//		} else {
+//			termsOfUseTextView.setText(R.string.dialog_terms_of_use_info);
+//			termsOfUseUrlStringText = getString(R.string.dialog_terms_of_use_link_text);
+//		}
+//
+//		String termsOfUseUrl = getString(R.string.terms_of_use_link_template, Constants.CATROBAT_TERMS_OF_USE_URL,
+//				termsOfUseUrlStringText);
+//
+//		termsOfUseUrlTextView.setText(Html.fromHtml(termsOfUseUrl));
 
 		AlertDialog termsOfUseDialog = termsOfUseDialogBuilder.create();
 		if (!isOnPreStageActivity) {

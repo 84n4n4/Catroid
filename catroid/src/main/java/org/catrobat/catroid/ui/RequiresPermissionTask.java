@@ -23,10 +23,14 @@
 
 package org.catrobat.catroid.ui;
 
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
+
+import org.catrobat.catroid.stage.StageActivity;
 
 import java.util.List;
 
@@ -35,6 +39,7 @@ public abstract class RequiresPermissionTask {
 	private final int permissionRequestId;
 	private final @StringRes int rationaleString;
 	private List<String> permissions;
+	public static final String TAG = RequiresPermissionTask.class.getSimpleName();
 
 	abstract public void task();
 
@@ -60,16 +65,20 @@ public abstract class RequiresPermissionTask {
 		this.permissions = permissions;
 	}
 
-	public void execute(BaseActivity activity) {
+	public void execute(Activity activity) {
 		if (checkPermission(activity)) {
 			task();
 		} else {
-			activity.addToRequiresPermissionTaskList(this);
+			if(activity instanceof PermissionHandlingActivity) {
+				((PermissionHandlingActivity) activity).addToRequiresPermissionTaskList(this);
+			} else {
+				Log.d(TAG, "This has to be called from a PermissionHandlingActivity to have your task be executed on premissionResult");
+			}
 			ActivityCompat.requestPermissions(activity, permissions.toArray(new String[0]), permissionRequestId);
 		}
 	}
 
-	private boolean checkPermission(BaseActivity activity) {
+	private boolean checkPermission(Activity activity) {
 		for (String permission : permissions) {
 			boolean granted = ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED;
 			if (!granted) {

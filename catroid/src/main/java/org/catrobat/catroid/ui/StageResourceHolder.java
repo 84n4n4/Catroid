@@ -47,13 +47,13 @@ import org.catrobat.catroid.cast.CastManager;
 import org.catrobat.catroid.common.CatroidService;
 import org.catrobat.catroid.common.ServiceProvider;
 import org.catrobat.catroid.content.Project;
-import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.devices.raspberrypi.RaspberryPiService;
 import org.catrobat.catroid.drone.ardrone.DroneInitializer;
 import org.catrobat.catroid.drone.ardrone.DroneServiceWrapper;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoDeviceController;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoInitializer;
+import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoServiceWrapper;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
 import org.catrobat.catroid.formulaeditor.SensorHandler;
 import org.catrobat.catroid.sensing.GatherCollisionInformationTask;
@@ -66,11 +66,25 @@ import org.catrobat.catroid.utils.TouchUtil;
 import org.catrobat.catroid.utils.Utils;
 import org.catrobat.catroid.utils.VibratorUtil;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.ACCESS_WIFI_STATE;
+import static android.Manifest.permission.BLUETOOTH;
+import static android.Manifest.permission.BLUETOOTH_ADMIN;
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.CHANGE_WIFI_MULTICAST_STATE;
+import static android.Manifest.permission.CHANGE_WIFI_STATE;
+import static android.Manifest.permission.NFC;
+import static android.Manifest.permission.VIBRATE;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.VIBRATOR_SERVICE;
 
@@ -79,6 +93,9 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 
 	private static final int REQUEST_CONNECT_DEVICE = 1000;
 	public static final int REQUEST_GPS = 1;
+
+	private static final int REQUEST_PERMISSIONS_STAGE_RESOURCE = 601;
+
 	private int requiredResourceCounter;
 	private Set<Integer> failedResources;
 
@@ -92,11 +109,63 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 	public StageResourceHolder(final StageActivity stageActivity) {
 		this.stageActivity = stageActivity;
 		TouchUtil.reset();
-		SensorHandler sensorHandler = SensorHandler.getInstance(stageActivity);
 		failedResources = new HashSet<>();
 		requiredResourcesSet = ProjectManager.getInstance().getCurrentProject().getRequiredResources();
 		requiredResourceCounter = requiredResourcesSet.size();
+		requestRuntimePermissions();
+	}
 
+	private void requestRuntimePermissions() {
+		List<String> requiredPermissions = getRequiredPermissionsList();
+		if (requiredPermissions.isEmpty()) {
+			initResources();
+		} else {
+			new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE, requiredPermissions, R.string.runtime_permission_all) {
+				public void task() {
+					initResources();
+				}
+			}.execute(stageActivity);
+		}
+	}
+
+	public static List<String> getRequiredPermissionsList() {
+		Map<Integer, List<String>> brickResourcesToPermissions = new HashMap<>();
+		brickResourcesToPermissions.put(Brick.SENSOR_GPS, Arrays.asList(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION));
+		List<String> bluetoothPermissions = Arrays.asList(BLUETOOTH_ADMIN, BLUETOOTH);
+		brickResourcesToPermissions.put(Brick.BLUETOOTH_LEGO_NXT, bluetoothPermissions);
+		brickResourcesToPermissions.put(Brick.BLUETOOTH_LEGO_EV3, bluetoothPermissions);
+		brickResourcesToPermissions.put(Brick.BLUETOOTH_PHIRO, bluetoothPermissions);
+		brickResourcesToPermissions.put(Brick.BLUETOOTH_SENSORS_ARDUINO, bluetoothPermissions);
+		List<String> wifiPermissions = Arrays.asList(CHANGE_WIFI_MULTICAST_STATE, CHANGE_WIFI_STATE, ACCESS_WIFI_STATE);
+		brickResourcesToPermissions.put(Brick.ARDRONE_SUPPORT, wifiPermissions);
+		brickResourcesToPermissions.put(Brick.JUMPING_SUMO, wifiPermissions);
+		brickResourcesToPermissions.put(Brick.CAST_REQUIRED, wifiPermissions);
+		brickResourcesToPermissions.put(Brick.CAMERA_BACK, Arrays.asList(CAMERA));
+		brickResourcesToPermissions.put(Brick.CAMERA_FRONT, Arrays.asList(CAMERA));
+		brickResourcesToPermissions.put(Brick.VIDEO, Arrays.asList(CAMERA));
+		brickResourcesToPermissions.put(Brick.CAMERA_FLASH, Arrays.asList(CAMERA));
+		brickResourcesToPermissions.put(Brick.VIBRATOR, Arrays.asList(VIBRATE));
+		brickResourcesToPermissions.put(Brick.NFC_ADAPTER, Arrays.asList(NFC));
+		brickResourcesToPermissions.put(Brick.FACE_DETECTION, Arrays.asList(CAMERA));
+
+		Set<String> requiredPermissions = new HashSet<>();
+		for (int brickResource : ProjectManager.getInstance().getCurrentProject().getRequiredResources()) {
+			if (brickResourcesToPermissions.containsKey(brickResource)) {
+				requiredPermissions.addAll(brickResourcesToPermissions.get(brickResource));
+			}
+		}
+
+		//HACKIDY HACK, all programs currently require GPS and CAMERA because fuck you,
+		//so we'll have to ask for it, even if its not in any brick resource. yay.
+
+		requiredPermissions.addAll(Arrays.asList(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, CAMERA));
+		//END HACKIDY HACK
+
+		return new ArrayList<>(requiredPermissions);
+	}
+
+	private void initResources() {
+		SensorHandler sensorHandler = SensorHandler.getInstance(stageActivity);
 		if (requiredResourcesSet.contains(Brick.SENSOR_ACCELERATION)) {
 			if (sensorHandler.accelerationAvailable()) {
 				resourceInitialized();
@@ -151,18 +220,21 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 			connectBTDevice(BluetoothDevice.ARDUINO);
 		}
 
-		if (DroneServiceWrapper.checkARDroneAvailability()) {
-			CatroidApplication.loadNativeLibs();
-			if (CatroidApplication.parrotLibrariesLoaded) {
-				//droneInitializer = getDroneInitialiser();
-				//droneInitializer.initialise();
+		if (requiredResourcesSet.contains(Brick.ARDRONE_SUPPORT)) {
+			if (DroneServiceWrapper.checkARDroneAvailability()) {
+				CatroidApplication.loadNativeLibs();
+				if (CatroidApplication.parrotLibrariesLoaded) {
+					droneInitializer = getDroneInitialiser(stageActivity);
+					droneInitializer.initialise();
+				}
 			}
 		}
 
 		if (BuildConfig.FEATURE_PARROT_JUMPING_SUMO_ENABLED && requiredResourcesSet.contains(Brick.JUMPING_SUMO)) {
-			CatroidApplication.loadSDKLib();
+			CatroidApplication.loadJumpingSumoSDKLib();
 			if (CatroidApplication.parrotJSLibrariesLoaded) {
-				//JumpingSumoServiceWrapper.initJumpingSumo(stageActivity);
+				jumpingSumoInitializer = getJumpingSumoInitialiser(stageActivity);
+				JumpingSumoServiceWrapper.initJumpingSumo(stageActivity);
 			}
 		}
 
@@ -234,7 +306,6 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 		}
 
 		if (requiredResourcesSet.contains(Brick.CAST_REQUIRED)) {
-
 			if (CastManager.getInstance().isConnected()) {
 				resourceInitialized();
 			} else {
@@ -284,14 +355,14 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 			}
 		}
 
-		if (requiredResourceCounter == 0) {
-			stageActivity.run();
-		}
-
 		if (requiredResourcesSet.contains(Brick.SOCKET_RASPI)) {
 			Project currentProject = ProjectManager.getInstance().getCurrentProject();
 			RaspberryPiService.getInstance().enableRaspberryInterruptPinsForProject(currentProject);
 			connectRaspberrySocket();
+		}
+
+		if (requiredResourceCounter == 0) {
+			stageActivity.run();
 		}
 	}
 
@@ -316,20 +387,21 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 		}
 	}
 
-//	public DroneInitializer getDroneInitialiser() {
-//		if (droneInitializer == null) {
-//			droneInitializer = new DroneInitializer(this);
-//		}
-//		return droneInitializer;
-//	}
-//
-//	public JumpingSumoInitializer getJumpingSumoInitialiser() {
-//		if (jumpingSumoInitializer == null) {
-//			jumpingSumoInitializer = JumpingSumoInitializer.getInstance();
-//			jumpingSumoInitializer.setPreStageActivity(this);
-//		}
-//		return jumpingSumoInitializer;
-//	}
+	public DroneInitializer getDroneInitialiser(StageActivity stageActivity) {
+		if (droneInitializer == null) {
+			droneInitializer = new DroneInitializer(stageActivity, this);
+		}
+		return droneInitializer;
+	}
+
+	public JumpingSumoInitializer getJumpingSumoInitialiser(StageActivity stageActivity) {
+		if (jumpingSumoInitializer == null) {
+			jumpingSumoInitializer = JumpingSumoInitializer.getInstance();
+			jumpingSumoInitializer.setStageActivity(stageActivity);
+			jumpingSumoInitializer.setStageResourceHolder(this);
+		}
+		return jumpingSumoInitializer;
+	}
 
 	public void endStageActivity() {
 		Intent returnToActivityIntent = new Intent();
@@ -514,13 +586,15 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 		return connected;
 	}
 
+	public void onStageDestroy() {
+		if(droneInitializer != null) {
+			droneInitializer.onStageActivityDestroy();
+		}
+	}
+
 	// for GatherCollisionInformationTask.OnPolygonLoadedListener, this is NOT any Activity or Lifecycle event
 	@Override
 	public void onFinished() {
 		resourceInitialized();
-	}
-
-	public void onStageDestroy() {
-		droneInitializer.onStageActivityDestroy();
 	}
 }

@@ -70,10 +70,10 @@ public final class JumpingSumoServiceWrapper {
 		}
 	}
 
-	public static JumpingSumoInitializer getJumpingSumoInitialiser(StageActivity prestageStageActivity) {
+	public static JumpingSumoInitializer getJumpingSumoInitialiser(StageActivity stageStageActivity) {
 		if (jumpingSumoInitializer == null) {
 			jumpingSumoInitializer = JumpingSumoInitializer.getInstance();
-			jumpingSumoInitializer.setPreStageActivity(prestageStageActivity);
+			jumpingSumoInitializer.setStageActivity(stageStageActivity);
 		}
 		return jumpingSumoInitializer;
 	}

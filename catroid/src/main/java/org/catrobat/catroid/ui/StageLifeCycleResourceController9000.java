@@ -25,7 +25,10 @@ package org.catrobat.catroid.ui;
 
 import android.util.Log;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+
 import org.catrobat.catroid.ProjectManager;
+import org.catrobat.catroid.R;
 import org.catrobat.catroid.camera.CameraManager;
 import org.catrobat.catroid.cast.CastManager;
 import org.catrobat.catroid.common.CatroidService;
@@ -41,33 +44,48 @@ import org.catrobat.catroid.utils.VibratorUtil;
 
 import java.util.List;
 
+import static org.catrobat.catroid.ui.StageResourceHolder.getRequiredPermissionsList;
+
 public final class StageLifeCycleResourceController9000 {
 	public static final String TAG = StageLifeCycleResourceController9000.class.getSimpleName();
+	private static final int REQUEST_PERMISSIONS_STAGE_RESOURCE_RESUME = 602;
 
-	public static void stagePause(StageActivity stageActivity) {
-		if (stageActivity.nfcAdapter != null) {
-			try {
-				stageActivity.nfcAdapter.disableForegroundDispatch(stageActivity);
-			} catch (IllegalStateException illegalStateException) {
-				Log.e(TAG, "Disabling NFC foreground dispatching went wrong!", illegalStateException);
+	public static void stagePause(final StageActivity stageActivity) {
+		new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE_RESUME, getRequiredPermissionsList(), R.string.runtime_permission_all) {
+			public void task() {
+				if (stageActivity.nfcAdapter != null) {
+					try {
+						stageActivity.nfcAdapter.disableForegroundDispatch(stageActivity);
+					} catch (IllegalStateException illegalStateException) {
+						Log.e(TAG, "Disabling NFC foreground dispatching went wrong!", illegalStateException);
+					}
+				}
+				SensorHandler.stopSensorListeners();
+				SoundManager.getInstance().pause();
+				stageActivity.stageListener.menuPause();
+				stageActivity.stageAudioFocus.releaseAudioFocus();
+				FlashUtil.pauseFlash();
+				FaceDetectionHandler.pauseFaceDetection();
+				CameraManager.getInstance().pausePreview();
+				CameraManager.getInstance().releaseCamera();
+				ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).pause();
+				VibratorUtil.pauseVibrator();
+				if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
+					CastManager.getInstance().setRemoteLayoutToPauseScreen(stageActivity);
+				}
 			}
-		}
-		SensorHandler.stopSensorListeners();
-		SoundManager.getInstance().pause();
-		stageActivity.stageListener.menuPause();
-		stageActivity.stageAudioFocus.releaseAudioFocus();
-		FlashUtil.pauseFlash();
-		FaceDetectionHandler.pauseFaceDetection();
-		CameraManager.getInstance().pausePreview();
-		CameraManager.getInstance().releaseCamera();
-		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).pause();
-		VibratorUtil.pauseVibrator();
-		if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-			CastManager.getInstance().setRemoteLayoutToPauseScreen(stageActivity);
-		}
+		};
 	}
 
-	public static void stageResume(StageActivity stageActivity) {
+	public static void stageResume(final StageActivity stageActivity) {
+		new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE_RESUME, getRequiredPermissionsList(), R.string.runtime_permission_all) {
+			public void task() {
+				stageResumeForReal(stageActivity);
+			}
+		}.execute(stageActivity);
+	}
+
+	private static void stageResumeForReal(StageActivity stageActivity) {
 		Brick.ResourcesSet resourcesSet = ProjectManager.getInstance().getCurrentProject().getRequiredResources();
 		List<Sprite> spriteList = ProjectManager.getInstance().getCurrentlyPlayingScene().getSpriteList();
 
@@ -119,9 +137,11 @@ public final class StageLifeCycleResourceController9000 {
 
 		FaceDetectionHandler.resumeFaceDetection();
 		SoundManager.getInstance().resume();
+		stageActivity.stageListener.menuResume();
 	}
 
 	public static void destroyStage(StageActivity stageActivity) {
+		stageActivity.stageResourceHolder.onStageDestroy();
 		stageActivity.jumpingSumoDisconnect();
 		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).destroy();
 		FlashUtil.destroy();
@@ -137,6 +157,5 @@ public final class StageLifeCycleResourceController9000 {
 		}
 		stageActivity.stageListener.finish();
 		stageActivity.manageLoadAndFinish();
-		stageActivity.stageResourceHolder.onStageDestroy();
 	}
 }

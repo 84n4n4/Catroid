@@ -164,7 +164,7 @@ public class BullshitPreStageActivity extends BaseActivity implements GatherColl
 //		}
 //
 //		if (BuildConfig.FEATURE_PARROT_JUMPING_SUMO_ENABLED && requiredResourcesSet.contains(Brick.JUMPING_SUMO)) {
-//			CatroidApplication.loadSDKLib();
+//			CatroidApplication.loadJumpingSumoSDKLib();
 //			if (CatroidApplication.parrotJSLibrariesLoaded) {
 //				JumpingSumoServiceWrapper.initJumpingSumo(this);
 //			}

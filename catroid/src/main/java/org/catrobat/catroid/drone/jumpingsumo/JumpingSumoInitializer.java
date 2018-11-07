@@ -83,7 +83,7 @@ public class JumpingSumoInitializer {
 	private static int jumpingSumoCount = 0;
 	private boolean messageShown = false;
 
-	public JumpingSumoInitializer() {
+	private JumpingSumoInitializer() {
 	}
 
 	public static JumpingSumoInitializer getInstance() {
@@ -91,10 +91,6 @@ public class JumpingSumoInitializer {
 			instance = new JumpingSumoInitializer();
 		}
 		return instance;
-	}
-
-	public void setPreStageActivity(StageActivity prestageStageActivity) {
-		this.stageActivity = prestageStageActivity;
 	}
 
 	public void setStageResourceHolder(StageResourceHolder stageResourceHolder) {
@@ -125,7 +121,7 @@ public class JumpingSumoInitializer {
 	}
 
 	public void checkJumpingSumoAvailability(final StageActivity stageActivity) {
-		setPreStageActivity(stageActivity);
+		setStageActivity(stageActivity);
 		Log.d(TAG, "JumpSumo Count: " + jumpingSumoCount);
 
 		Handler handler = new Handler();
@@ -252,7 +248,7 @@ public class JumpingSumoInitializer {
 
 	public boolean checkRequirements() {
 
-		if (!CatroidApplication.loadSDKLib()) {
+		if (!CatroidApplication.loadJumpingSumoSDKLib()) {
 			showUnCancellableErrorDialog(stageActivity,
 					stageActivity.getString(R.string.error_jumpingsumo_wrong_platform_title),
 					stageActivity.getString(R.string.error_jumpingsumo_wrong_platform));

@@ -306,7 +306,7 @@ public class StageListener implements ApplicationListener {
 		stage.addListener(inputListener);
 	}
 
-	void menuResume() {
+	public void menuResume() {
 		if (reloadProject) {
 			return;
 		}

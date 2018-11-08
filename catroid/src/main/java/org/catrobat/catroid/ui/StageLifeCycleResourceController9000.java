@@ -25,8 +25,6 @@ package org.catrobat.catroid.ui;
 
 import android.util.Log;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
-
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.camera.CameraManager;
@@ -44,14 +42,34 @@ import org.catrobat.catroid.utils.VibratorUtil;
 
 import java.util.List;
 
+import static org.catrobat.catroid.ui.RequiresPermissionTask.checkPermission;
 import static org.catrobat.catroid.ui.StageResourceHolder.getRequiredPermissionsList;
 
 public final class StageLifeCycleResourceController9000 {
 	public static final String TAG = StageLifeCycleResourceController9000.class.getSimpleName();
+
+	private static final int REQUEST_PERMISSIONS_STAGE_RESOURCE_CREATE = 601;
 	private static final int REQUEST_PERMISSIONS_STAGE_RESOURCE_RESUME = 602;
+	private static final int REQUEST_PERMISSIONS_STAGE_RESOURCE_PAUSE = 603;
+
+	public static void stageCreate(final StageActivity stageActivity) {
+		stageActivity.stageResourceHolder = new StageResourceHolder(stageActivity);
+
+		List<String> requiredPermissions = getRequiredPermissionsList();
+			if (requiredPermissions.isEmpty()) {
+				stageActivity.stageResourceHolder.initResources();
+			} else {
+				new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE_CREATE, requiredPermissions, R.string.runtime_permission_all) {
+					public void task() {
+						stageActivity.stageResourceHolder.initResources();
+					}
+				}.execute(stageActivity);
+			}
+	}
 
 	public static void stagePause(final StageActivity stageActivity) {
-		new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE_RESUME, getRequiredPermissionsList(), R.string.runtime_permission_all) {
+		new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE_PAUSE, REQUEST_PERMISSIONS_STAGE_RESOURCE_CREATE,
+				getRequiredPermissionsList(), R.string.runtime_permission_all) {
 			public void task() {
 				if (stageActivity.nfcAdapter != null) {
 					try {
@@ -74,88 +92,87 @@ public final class StageLifeCycleResourceController9000 {
 					CastManager.getInstance().setRemoteLayoutToPauseScreen(stageActivity);
 				}
 			}
-		};
+		}.executeDownStream(stageActivity);
 	}
 
 	public static void stageResume(final StageActivity stageActivity) {
-		new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE_RESUME, getRequiredPermissionsList(), R.string.runtime_permission_all) {
+		new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE_RESUME, REQUEST_PERMISSIONS_STAGE_RESOURCE_CREATE,
+				getRequiredPermissionsList(), R.string.runtime_permission_all) {
 			public void task() {
-				stageResumeForReal(stageActivity);
+				Brick.ResourcesSet resourcesSet = ProjectManager.getInstance().getCurrentProject().getRequiredResources();
+				List<Sprite> spriteList = ProjectManager.getInstance().getCurrentlyPlayingScene().getSpriteList();
+
+				SensorHandler.startSensorListener(stageActivity);
+
+				for (Sprite sprite : spriteList) {
+					if (sprite.getPlaySoundBricks().size() > 0) {
+						stageActivity.stageAudioFocus.requestAudioFocus();
+						break;
+					}
+				}
+
+				if (resourcesSet.contains(Brick.CAMERA_FLASH)) {
+					FlashUtil.resumeFlash();
+				}
+
+				if (resourcesSet.contains(Brick.VIBRATOR)) {
+					VibratorUtil.resumeVibrator();
+				}
+
+				if (resourcesSet.contains(Brick.FACE_DETECTION)) {
+					FaceDetectionHandler.resumeFaceDetection();
+				}
+
+				if (resourcesSet.contains(Brick.BLUETOOTH_LEGO_NXT)
+						|| resourcesSet.contains(Brick.BLUETOOTH_PHIRO)
+						|| resourcesSet.contains(Brick.BLUETOOTH_SENSORS_ARDUINO)) {
+					ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).start();
+				}
+
+				if (resourcesSet.contains(Brick.CAMERA_BACK)
+						|| resourcesSet.contains(Brick.CAMERA_FRONT)
+						|| resourcesSet.contains(Brick.VIDEO)) {
+					CameraManager.getInstance().resumePreviewAsync();
+				}
+
+				if (resourcesSet.contains(Brick.TEXT_TO_SPEECH)) {
+					stageActivity.stageAudioFocus.requestAudioFocus();
+				}
+
+				if (resourcesSet.contains(Brick.NFC_ADAPTER)
+						&& stageActivity.nfcAdapter != null) {
+					stageActivity.nfcAdapter.enableForegroundDispatch(stageActivity, stageActivity.pendingIntent, null, null);
+				}
+
+				if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
+					CastManager.getInstance().resumeRemoteLayoutFromPauseScreen();
+				}
+
+				FaceDetectionHandler.resumeFaceDetection();
+				SoundManager.getInstance().resume();
+				stageActivity.stageListener.menuResume();
 			}
-		}.execute(stageActivity);
-	}
-
-	private static void stageResumeForReal(StageActivity stageActivity) {
-		Brick.ResourcesSet resourcesSet = ProjectManager.getInstance().getCurrentProject().getRequiredResources();
-		List<Sprite> spriteList = ProjectManager.getInstance().getCurrentlyPlayingScene().getSpriteList();
-
-		SensorHandler.startSensorListener(stageActivity);
-
-		for (Sprite sprite : spriteList) {
-			if (sprite.getPlaySoundBricks().size() > 0) {
-				stageActivity.stageAudioFocus.requestAudioFocus();
-				break;
-			}
-		}
-
-		if (resourcesSet.contains(Brick.CAMERA_FLASH)) {
-			FlashUtil.resumeFlash();
-		}
-
-		if (resourcesSet.contains(Brick.VIBRATOR)) {
-			VibratorUtil.resumeVibrator();
-		}
-
-		if (resourcesSet.contains(Brick.FACE_DETECTION)) {
-			FaceDetectionHandler.resumeFaceDetection();
-		}
-
-		if (resourcesSet.contains(Brick.BLUETOOTH_LEGO_NXT)
-				|| resourcesSet.contains(Brick.BLUETOOTH_PHIRO)
-				|| resourcesSet.contains(Brick.BLUETOOTH_SENSORS_ARDUINO)) {
-			ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).start();
-		}
-
-		if (resourcesSet.contains(Brick.CAMERA_BACK)
-				|| resourcesSet.contains(Brick.CAMERA_FRONT)
-				|| resourcesSet.contains(Brick.VIDEO)) {
-			CameraManager.getInstance().resumePreviewAsync();
-		}
-
-		if (resourcesSet.contains(Brick.TEXT_TO_SPEECH)) {
-			stageActivity.stageAudioFocus.requestAudioFocus();
-		}
-
-		if (resourcesSet.contains(Brick.NFC_ADAPTER)
-				&& stageActivity.nfcAdapter != null) {
-			stageActivity.nfcAdapter.enableForegroundDispatch(stageActivity, stageActivity.pendingIntent, null, null);
-		}
-
-		if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-			CastManager.getInstance().resumeRemoteLayoutFromPauseScreen();
-		}
-
-		FaceDetectionHandler.resumeFaceDetection();
-		SoundManager.getInstance().resume();
-		stageActivity.stageListener.menuResume();
+		}.executeDownStream(stageActivity);
 	}
 
 	public static void destroyStage(StageActivity stageActivity) {
-		stageActivity.stageResourceHolder.onStageDestroy();
-		stageActivity.jumpingSumoDisconnect();
-		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).destroy();
-		FlashUtil.destroy();
-		VibratorUtil.destroy();
-		FaceDetectionHandler.stopFaceDetection();
-		SensorHandler.stopSensorListeners();
-		CameraManager.getInstance().stopPreviewAsync();
-		CameraManager.getInstance().releaseCamera();
-		CameraManager.getInstance().setToDefaultCamera();
-		ProjectManager.getInstance().setCurrentlyPlayingScene(ProjectManager.getInstance().getCurrentlyEditedScene());
-		if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-			CastManager.getInstance().onStageDestroyed();
+		if (checkPermission(stageActivity, getRequiredPermissionsList())) {
+			stageActivity.stageResourceHolder.onStageDestroy();
+			stageActivity.jumpingSumoDisconnect();
+			ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).destroy();
+			FlashUtil.destroy();
+			VibratorUtil.destroy();
+			FaceDetectionHandler.stopFaceDetection();
+			SensorHandler.stopSensorListeners();
+			CameraManager.getInstance().stopPreviewAsync();
+			CameraManager.getInstance().releaseCamera();
+			CameraManager.getInstance().setToDefaultCamera();
+			ProjectManager.getInstance().setCurrentlyPlayingScene(ProjectManager.getInstance().getCurrentlyEditedScene());
+			if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
+				CastManager.getInstance().onStageDestroyed();
+			}
+			stageActivity.stageListener.finish();
+			stageActivity.manageLoadAndFinish();
 		}
-		stageActivity.stageListener.finish();
-		stageActivity.manageLoadAndFinish();
 	}
 }

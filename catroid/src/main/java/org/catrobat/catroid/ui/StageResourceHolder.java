@@ -94,7 +94,6 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 	private static final int REQUEST_CONNECT_DEVICE = 1000;
 	public static final int REQUEST_GPS = 1;
 
-	private static final int REQUEST_PERMISSIONS_STAGE_RESOURCE = 601;
 
 	private int requiredResourceCounter;
 	private Set<Integer> failedResources;
@@ -109,23 +108,6 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 	public StageResourceHolder(final StageActivity stageActivity) {
 		this.stageActivity = stageActivity;
 		TouchUtil.reset();
-		failedResources = new HashSet<>();
-		requiredResourcesSet = ProjectManager.getInstance().getCurrentProject().getRequiredResources();
-		requiredResourceCounter = requiredResourcesSet.size();
-		requestRuntimePermissions();
-	}
-
-	private void requestRuntimePermissions() {
-		List<String> requiredPermissions = getRequiredPermissionsList();
-		if (requiredPermissions.isEmpty()) {
-			initResources();
-		} else {
-			new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE, requiredPermissions, R.string.runtime_permission_all) {
-				public void task() {
-					initResources();
-				}
-			}.execute(stageActivity);
-		}
 	}
 
 	public static List<String> getRequiredPermissionsList() {
@@ -164,7 +146,11 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 		return new ArrayList<>(requiredPermissions);
 	}
 
-	private void initResources() {
+	public void initResources() {
+		failedResources = new HashSet<>();
+		requiredResourcesSet = ProjectManager.getInstance().getCurrentProject().getRequiredResources();
+		requiredResourceCounter = requiredResourcesSet.size();
+
 		SensorHandler sensorHandler = SensorHandler.getInstance(stageActivity);
 		if (requiredResourcesSet.contains(Brick.SENSOR_ACCELERATION)) {
 			if (sensorHandler.accelerationAvailable()) {

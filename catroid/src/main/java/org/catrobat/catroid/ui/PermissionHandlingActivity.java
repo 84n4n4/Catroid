@@ -25,4 +25,5 @@ package org.catrobat.catroid.ui;
 
 public interface PermissionHandlingActivity {
 	void addToRequiresPermissionTaskList(RequiresPermissionTask task);
+	void addToDownStreamPermissionTaskList(RequiresPermissionTask task);
 }

@@ -39,7 +39,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.ContextThemeWrapper;
@@ -67,7 +67,6 @@ import org.catrobat.catroid.devices.raspberrypi.RaspberryPiService;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoDeviceController;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoInitializer;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
-import org.catrobat.catroid.formulaeditor.SensorHandler;
 import org.catrobat.catroid.io.StageAudioFocus;
 import org.catrobat.catroid.nfc.NfcHandler;
 import org.catrobat.catroid.ui.MarketingActivity;
@@ -115,10 +114,14 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 	AndroidApplicationConfiguration configuration = null;
 
 	public StageResourceHolder stageResourceHolder;
-	private final List<RequiresPermissionTask> permissionTaskList;
+	private final List<RequiresPermissionTask> waitingForResponsePermissionTaskList;
+	private final List<RequiresPermissionTask> currentlyProcessedPermissionTaskList;
+	private final List<RequiresPermissionTask> downStreamPermissionTaskList;
 
 	public StageActivity() {
-		permissionTaskList = new ArrayList<>();
+		waitingForResponsePermissionTaskList = new ArrayList<>();
+		currentlyProcessedPermissionTaskList = new ArrayList<>();
+		downStreamPermissionTaskList = new ArrayList<>();
 	}
 
 	@Override
@@ -154,7 +157,7 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 		configuration = new AndroidApplicationConfiguration();
 		configuration.r = configuration.g = configuration.b = configuration.a = 8;
 		if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+			//TODO: check: setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 			setContentView(R.layout.activity_stage_gamepad);
 			CastManager.getInstance().initializeGamepadActivity(this);
 			CastManager.getInstance()
@@ -163,31 +166,25 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 			initialize(stageListener, configuration);
 		}
 
-		if (graphics.getView() instanceof SurfaceView) {
+		//TODO: does this make any differnce? : if (graphics.getView() instanceof SurfaceView) {
 			SurfaceView glView = (SurfaceView) graphics.getView();
 			glView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
-		}
-
-		pendingIntent = PendingIntent.getActivity(this, 0,
-				new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-
-		stageResourceHolder = new StageResourceHolder(StageActivity.this);
-		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).initialise();
+		//}
 		stageAudioFocus = new StageAudioFocus(this);
 
+		StageLifeCycleResourceController9000.stageCreate(this);
 	}
 
 	public void run() {
+		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).initialise();
 		setupAskHandler();
+		pendingIntent = PendingIntent.getActivity(this, 0,
+				new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 		jumpingSumoDeviceController = JumpingSumoDeviceController.getInstance();
 		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-		Log.d(TAG, "onCreate()");
 		CameraManager.getInstance().setStageActivity(this);
 		JumpingSumoInitializer.getInstance().setStageActivity(this);
 		SnackbarUtil.showHintSnackbar(this, R.string.hint_stage);
-		if (nfcAdapter == null) {
-			Log.d(TAG, "could not get nfc adapter :(");
-		}
 		stageListener.setPaused(false);
 	}
 
@@ -478,12 +475,31 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 
 	@Override
 	public void addToRequiresPermissionTaskList(RequiresPermissionTask task) {
-		permissionTaskList.add(task);
+		waitingForResponsePermissionTaskList.add(task);
+	}
+
+	@Override
+	public void addToDownStreamPermissionTaskList(RequiresPermissionTask task) {
+		RequiresPermissionTask upstreamTask = null;
+		for (RequiresPermissionTask pendingTask : new ArrayList<>(waitingForResponsePermissionTaskList)) {
+			if(pendingTask.getPermissionRequestId() == task.getDownStreamOfPermissionRequestId()) {
+				upstreamTask = task;
+			}
+		}
+		for (RequiresPermissionTask pendingTask : new ArrayList<>(currentlyProcessedPermissionTaskList)) {
+			if(pendingTask.getPermissionRequestId() == task.getDownStreamOfPermissionRequestId()) {
+				upstreamTask = task;
+			}
+		}
+		if (upstreamTask != null) {
+			downStreamPermissionTaskList.add(task);
+		}
 	}
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-		RequiresPermissionTask task = popAllRequiredPermissionTask(requestCode);
+		RequiresPermissionTask task = popAllWithSameIdRequiredPermissionTask(requestCode);
+		currentlyProcessedPermissionTaskList.add(task);
 
 		if(permissions.length == 0) {
 			return;
@@ -498,21 +514,27 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 
 		if(task != null) {
 			if (deniedPermissions.isEmpty()) {
+				currentlyProcessedPermissionTaskList.remove(task);
 				task.execute(this);
+				for (RequiresPermissionTask downStreamTask : new ArrayList<>(downStreamPermissionTaskList)) {
+					if (downStreamTask.getDownStreamOfPermissionRequestId() == task.getPermissionRequestId()) {
+						downStreamPermissionTaskList.remove(downStreamTask);
+						downStreamTask.execute(this);
+					}
+				}
 			} else {
 				task.setPermissions(deniedPermissions);
-				addToRequiresPermissionTaskList(task);
 				showPermissionRationale(task);
 			}
 		}
 	}
 
-	private RequiresPermissionTask popAllRequiredPermissionTask(int requestCode) {
+	private RequiresPermissionTask popAllWithSameIdRequiredPermissionTask(int requestCode) {
 		RequiresPermissionTask matchedTask = null;
-		for (RequiresPermissionTask task : new ArrayList<>(permissionTaskList)) {
+		for (RequiresPermissionTask task : new ArrayList<>(waitingForResponsePermissionTaskList)) {
 			if(task.getPermissionRequestId() == requestCode) {
 				matchedTask = task;
-				permissionTaskList.remove(task);
+				waitingForResponsePermissionTaskList.remove(task);
 			}
 		}
 		return matchedTask;
@@ -525,6 +547,8 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 			showAlertOKCancel(getResources().getString(task.getRationaleString()), new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
+					addToRequiresPermissionTaskList(task);
+					currentlyProcessedPermissionTaskList.remove(task);
 					requestPermissions(task.getPermissions().toArray(new String[0]), task.getPermissionRequestId());
 				}
 			});

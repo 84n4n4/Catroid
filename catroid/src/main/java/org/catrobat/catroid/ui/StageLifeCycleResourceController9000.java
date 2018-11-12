@@ -82,10 +82,12 @@ public final class StageLifeCycleResourceController9000 {
 				SoundManager.getInstance().pause();
 				stageActivity.stageListener.menuPause();
 				stageActivity.stageAudioFocus.releaseAudioFocus();
-				FlashUtil.pauseFlash();
-				FaceDetectionHandler.pauseFaceDetection();
-				CameraManager.getInstance().pausePreview();
-				CameraManager.getInstance().releaseCamera();
+				if (CameraManager.getInstance() != null) {
+					FlashUtil.pauseFlash();
+					FaceDetectionHandler.pauseFaceDetection();
+					CameraManager.getInstance().pausePreview();
+					CameraManager.getInstance().releaseCamera();
+				}
 				ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).pause();
 				VibratorUtil.pauseVibrator();
 				if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
@@ -148,7 +150,10 @@ public final class StageLifeCycleResourceController9000 {
 					CastManager.getInstance().resumeRemoteLayoutFromPauseScreen();
 				}
 
-				FaceDetectionHandler.resumeFaceDetection();
+				if (CameraManager.getInstance() != null) {
+					FaceDetectionHandler.resumeFaceDetection();
+				}
+
 				SoundManager.getInstance().resume();
 				stageActivity.stageListener.menuResume();
 			}
@@ -160,19 +165,21 @@ public final class StageLifeCycleResourceController9000 {
 			stageActivity.stageResourceHolder.onStageDestroy();
 			stageActivity.jumpingSumoDisconnect();
 			ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).destroy();
-			FlashUtil.destroy();
 			VibratorUtil.destroy();
-			FaceDetectionHandler.stopFaceDetection();
 			SensorHandler.stopSensorListeners();
-			CameraManager.getInstance().stopPreviewAsync();
-			CameraManager.getInstance().releaseCamera();
-			CameraManager.getInstance().setToDefaultCamera();
-			ProjectManager.getInstance().setCurrentlyPlayingScene(ProjectManager.getInstance().getCurrentlyEditedScene());
+			if (CameraManager.getInstance() != null) {
+				FlashUtil.destroy();
+				FaceDetectionHandler.stopFaceDetection();
+				CameraManager.getInstance().stopPreviewAsync();
+				CameraManager.getInstance().releaseCamera();
+				CameraManager.getInstance().setToDefaultCamera();
+			}
 			if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
 				CastManager.getInstance().onStageDestroyed();
 			}
 			stageActivity.stageListener.finish();
 			stageActivity.manageLoadAndFinish();
 		}
+		ProjectManager.getInstance().setCurrentlyPlayingScene(ProjectManager.getInstance().getCurrentlyEditedScene());
 	}
 }

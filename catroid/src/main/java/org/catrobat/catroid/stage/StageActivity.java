@@ -28,6 +28,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Camera;
 import android.graphics.PixelFormat;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
@@ -182,7 +183,9 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 				new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 		jumpingSumoDeviceController = JumpingSumoDeviceController.getInstance();
 		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-		CameraManager.getInstance().setStageActivity(this);
+		if (CameraManager.getInstance() != null) {
+			CameraManager.getInstance().setStageActivity(this);
+		}
 		JumpingSumoInitializer.getInstance().setStageActivity(this);
 		SnackbarUtil.showHintSnackbar(this, R.string.hint_stage);
 		stageListener.setPaused(false);

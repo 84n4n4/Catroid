@@ -419,7 +419,9 @@ public class StageListener implements ApplicationListener {
 			saveScreenshot(thumbnail, SCREENSHOT_AUTOMATIC_FILE_NAME);
 		}
 		PhysicsShapeBuilder.getInstance().reset();
-		CameraManager.getInstance().setToDefaultCamera();
+		if (CameraManager.getInstance() != null) {
+			CameraManager.getInstance().setToDefaultCamera();
+		}
 		if (penActor != null) {
 			penActor.dispose();
 		}
@@ -428,7 +430,7 @@ public class StageListener implements ApplicationListener {
 
 	@Override
 	public void render() {
-		if (CameraManager.getInstance().getState() == CameraManager.CameraState.previewRunning) {
+		if (CameraManager.getInstance() != null && CameraManager.getInstance().getState() == CameraManager.CameraState.previewRunning) {
 			Gdx.gl20.glClearColor(0f, 0f, 0f, 0f);
 		} else {
 			Gdx.gl20.glClearColor(1f, 1f, 1f, 0f);

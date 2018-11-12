@@ -43,6 +43,7 @@ import org.catrobat.catroid.CatroidApplication;
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.bluetooth.base.BluetoothDevice;
 import org.catrobat.catroid.bluetooth.base.BluetoothDeviceService;
+import org.catrobat.catroid.camera.CameraManager;
 import org.catrobat.catroid.cast.CastManager;
 import org.catrobat.catroid.common.CatroidService;
 import org.catrobat.catroid.common.ServiceProvider;
@@ -126,12 +127,6 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 			}
 		}
 		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-
-		Log.d(TAG, "*** LINEAR_ACCELERATION SENSOR: " + linearAccelerationSensor);
-		Log.d(TAG, "*** ACCELEROMETER SENSOR: " + accelerometerSensor);
-		Log.d(TAG, "*** ROTATION_VECTOR SENSOR: " + rotationVectorSensor);
-		Log.d(TAG, "*** MAGNETIC_FIELD SENSOR: " + magneticFieldSensor);
-		Log.d(TAG, "*** LOCATION_MANAGER: " + locationManager);
 	}
 
 	public boolean compassAvailable() {
@@ -184,14 +179,18 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 		}
 		instance.sensorManager.unregisterListener((SensorEventListener) instance);
 		instance.sensorManager.unregisterListener((SensorCustomEventListener) instance);
-		instance.locationManager.removeUpdates(instance);
-		instance.locationManager.removeGpsStatusListener(instance);
+
 
 		SensorHandler.registerListener(instance);
 
 		instance.sensorManager.registerListener(instance, Sensors.LOUDNESS);
-		FaceDetectionHandler.registerOnFaceDetectedListener(instance);
-		FaceDetectionHandler.registerOnFaceDetectionStatusListener(instance);
+		if (CameraManager.getInstance() != null) {
+			FaceDetectionHandler.registerOnFaceDetectedListener(instance);
+			FaceDetectionHandler.registerOnFaceDetectionStatusListener(instance);
+		}
+
+		instance.locationManager.removeUpdates(instance);
+		instance.locationManager.removeGpsStatusListener(instance);
 		instance.locationManager.addGpsStatusListener(instance);
 		if (gpsSensorAvailable()) {
 			instance.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, instance);

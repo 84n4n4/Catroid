@@ -140,7 +140,7 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 		//HACKIDY HACK, all programs currently require GPS and CAMERA because fuck you,
 		//so we'll have to ask for it, even if its not in any brick resource. yay.
 
-		requiredPermissions.addAll(Arrays.asList(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, CAMERA));
+		requiredPermissions.addAll(Arrays.asList(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION));
 		//END HACKIDY HACK
 
 		return new ArrayList<>(requiredPermissions);
@@ -225,6 +225,7 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 		}
 
 		if (requiredResourcesSet.contains(Brick.CAMERA_BACK)) {
+			CameraManager.makeInstance();
 			if (CameraManager.getInstance().hasBackCamera()) {
 				resourceInitialized();
 			} else {
@@ -233,6 +234,7 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 		}
 
 		if (requiredResourcesSet.contains(Brick.CAMERA_FRONT)) {
+			CameraManager.makeInstance();
 			if (CameraManager.getInstance().hasFrontCamera()) {
 				resourceInitialized();
 			} else {
@@ -241,6 +243,7 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 		}
 
 		if (requiredResourcesSet.contains(Brick.VIDEO)) {
+			CameraManager.makeInstance();
 			if (CameraManager.getInstance().hasFrontCamera()
 					|| CameraManager.getInstance().hasBackCamera()) {
 				resourceInitialized();
@@ -250,6 +253,7 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 		}
 
 		if (requiredResourcesSet.contains(Brick.CAMERA_FLASH)) {
+			CameraManager.makeInstance();
 			flashInitialize();
 		}
 
@@ -281,8 +285,10 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 			}
 		}
 
-		FaceDetectionHandler.resetFaceDedection();
 		if (requiredResourcesSet.contains(Brick.FACE_DETECTION)) {
+			CameraManager.makeInstance();
+			FaceDetectionHandler.resetFaceDedection();
+
 			boolean success = FaceDetectionHandler.startFaceDetection();
 			if (success) {
 				resourceInitialized();

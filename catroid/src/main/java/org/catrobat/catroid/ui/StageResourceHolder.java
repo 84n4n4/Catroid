@@ -23,8 +23,10 @@
 
 package org.catrobat.catroid.ui;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.nfc.NfcAdapter;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -137,12 +139,6 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 			}
 		}
 
-		//HACKIDY HACK, all programs currently require GPS and CAMERA because fuck you,
-		//so we'll have to ask for it, even if its not in any brick resource. yay.
-
-		requiredPermissions.addAll(Arrays.asList(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION));
-		//END HACKIDY HACK
-
 		return new ArrayList<>(requiredPermissions);
 	}
 
@@ -177,6 +173,7 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 		}
 
 		if (requiredResourcesSet.contains(Brick.SENSOR_GPS)) {
+			sensorHandler.locationManager = (LocationManager) stageActivity.getSystemService(Context.LOCATION_SERVICE);
 			if (SensorHandler.gpsAvailable()) {
 				resourceInitialized();
 			} else {

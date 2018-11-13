@@ -450,9 +450,11 @@ public class CategoryListFragment extends Fragment implements CategoryListRVAdap
 	}
 
 	private List<CategoryListItem> getFaceDetectionSensorItems() {
-		return CameraManager.getInstance().hasBackCamera() || !CameraManager.getInstance().hasFrontCamera()
-				? addHeader(toCategoryListItems(SENSORS_FACE_DETECTION), getString(R.string.formula_editor_device_face_detection))
-				: Collections.<CategoryListItem>emptyList();
+//		return CameraManager.getInstance().hasBackCamera() || !CameraManager.getInstance().hasFrontCamera()
+//				? addHeader(toCategoryListItems(SENSORS_FACE_DETECTION), getString(R.string.formula_editor_device_face_detection))
+//				: Collections.<CategoryListItem>emptyList();
+
+		return addHeader(toCategoryListItems(SENSORS_FACE_DETECTION), getString(R.string.formula_editor_device_face_detection));
 	}
 
 	private List<CategoryListItem> getDateTimeSensorItems() {

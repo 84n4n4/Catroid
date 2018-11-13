@@ -68,7 +68,6 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 	private Sensor accelerometerSensor = null;
 	private Sensor magneticFieldSensor = null;
 	private Sensor rotationVectorSensor = null;
-	private LocationManager locationManager = null;
 	private float[] rotationMatrix = new float[16];
 	private float[] rotationVector = new float[3];
 	private float[] accelerationXYZ = new float[3];
@@ -84,18 +83,19 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 	private float faceSize = 0f;
 	private float facePositionX = 0f;
 	private float facePositionY = 0f;
-	private double latitude = 0d;
-	private double longitude = 0d;
-	private float locationAccuracy = 0f;
-	private double altitude = 0d;
 
 	private boolean compassAvailable = true;
 	private boolean accelerationAvailable = true;
 	private boolean inclinationAvailable = true;
 
+	public LocationManager locationManager = null;
 	private boolean isGpsConnected = false;
 	private Location lastLocationGps;
 	private long lastLocationGpsMillis;
+	private double latitude = 0d;
+	private double longitude = 0d;
+	private float locationAccuracy = 0f;
+	private double altitude = 0d;
 
 	private SensorHandler(Context context) {
 		sensorManager = new SensorManager(
@@ -126,7 +126,7 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 				accelerationAvailable = false;
 			}
 		}
-		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		// locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 	}
 
 	public boolean compassAvailable() {
@@ -180,7 +180,6 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 		instance.sensorManager.unregisterListener((SensorEventListener) instance);
 		instance.sensorManager.unregisterListener((SensorCustomEventListener) instance);
 
-
 		SensorHandler.registerListener(instance);
 
 		instance.sensorManager.registerListener(instance, Sensors.LOUDNESS);
@@ -189,14 +188,16 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 			FaceDetectionHandler.registerOnFaceDetectionStatusListener(instance);
 		}
 
-		instance.locationManager.removeUpdates(instance);
-		instance.locationManager.removeGpsStatusListener(instance);
-		instance.locationManager.addGpsStatusListener(instance);
-		if (gpsSensorAvailable()) {
-			instance.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, instance);
-		}
-		if (networkGpsAvailable()) {
-			instance.locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, instance);
+		if (instance.locationManager != null) {
+			instance.locationManager.removeUpdates(instance);
+			instance.locationManager.removeGpsStatusListener(instance);
+			instance.locationManager.addGpsStatusListener(instance);
+			if (gpsSensorAvailable()) {
+				instance.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, instance);
+			}
+			if (networkGpsAvailable()) {
+				instance.locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, instance);
+			}
 		}
 	}
 
@@ -239,8 +240,11 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 		}
 		instance.sensorManager.unregisterListener((SensorEventListener) instance);
 		instance.sensorManager.unregisterListener((SensorCustomEventListener) instance);
-		instance.locationManager.removeUpdates(instance);
-		instance.locationManager.removeGpsStatusListener(instance);
+
+		if (instance.locationManager != null) {
+			instance.locationManager.removeUpdates(instance);
+			instance.locationManager.removeGpsStatusListener(instance);
+		}
 
 		FaceDetectionHandler.unregisterOnFaceDetectedListener(instance);
 		FaceDetectionHandler.unregisterOnFaceDetectionStatusListener(instance);

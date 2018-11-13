@@ -494,7 +494,9 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 				upstreamTask = task;
 			}
 		}
-		if (upstreamTask != null) {
+		if (upstreamTask == null) {
+			task.execute(this);
+		} else {
 			downStreamPermissionTaskList.add(task);
 		}
 	}

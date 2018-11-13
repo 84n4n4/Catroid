@@ -53,6 +53,8 @@ public final class StageLifeCycleResourceController9000 {
 	private static final int REQUEST_PERMISSIONS_STAGE_RESOURCE_PAUSE = 603;
 
 	public static void stageCreate(final StageActivity stageActivity) {
+		Log.d(TAG, "stageCreate");
+
 		stageActivity.stageResourceHolder = new StageResourceHolder(stageActivity);
 
 		List<String> requiredPermissions = getRequiredPermissionsList();
@@ -68,9 +70,13 @@ public final class StageLifeCycleResourceController9000 {
 	}
 
 	public static void stagePause(final StageActivity stageActivity) {
+		Log.d(TAG, "stagePause");
+
 		new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE_PAUSE, REQUEST_PERMISSIONS_STAGE_RESOURCE_CREATE,
 				getRequiredPermissionsList(), R.string.runtime_permission_all) {
 			public void task() {
+				Log.d(TAG, "stagePauseTask");
+
 				if (stageActivity.nfcAdapter != null) {
 					try {
 						stageActivity.nfcAdapter.disableForegroundDispatch(stageActivity);
@@ -98,9 +104,13 @@ public final class StageLifeCycleResourceController9000 {
 	}
 
 	public static void stageResume(final StageActivity stageActivity) {
+		Log.d(TAG, "stageResume");
+
 		new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE_RESUME, REQUEST_PERMISSIONS_STAGE_RESOURCE_CREATE,
 				getRequiredPermissionsList(), R.string.runtime_permission_all) {
 			public void task() {
+				Log.d(TAG, "stageResumeTask");
+
 				Brick.ResourcesSet resourcesSet = ProjectManager.getInstance().getCurrentProject().getRequiredResources();
 				List<Sprite> spriteList = ProjectManager.getInstance().getCurrentlyPlayingScene().getSpriteList();
 
@@ -161,6 +171,8 @@ public final class StageLifeCycleResourceController9000 {
 	}
 
 	public static void destroyStage(StageActivity stageActivity) {
+		Log.d(TAG, "stageDestroy");
+
 		if (checkPermission(stageActivity, getRequiredPermissionsList())) {
 			stageActivity.stageResourceHolder.onStageDestroy();
 			stageActivity.jumpingSumoDisconnect();

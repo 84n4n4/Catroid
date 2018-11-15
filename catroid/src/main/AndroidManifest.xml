@@ -176,13 +176,6 @@
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" />
 
         <activity
-            android:name=".drone.ardrone.DroneStageActivity"
-            android:configChanges="orientation"
-            android:label="@string/stage"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" />
-
-        <activity
             android:name=".ui.ProjectListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing" />

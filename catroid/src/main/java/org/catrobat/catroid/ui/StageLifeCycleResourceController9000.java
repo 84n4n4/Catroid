@@ -63,6 +63,8 @@ public final class StageLifeCycleResourceController9000 {
 			} else {
 				new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE_CREATE, requiredPermissions, R.string.runtime_permission_all) {
 					public void task() {
+						Log.d(TAG, "stageCreateTask");
+
 						stageActivity.stageResourceHolder.initResources();
 					}
 				}.execute(stageActivity);
@@ -99,12 +101,18 @@ public final class StageLifeCycleResourceController9000 {
 				if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
 					CastManager.getInstance().setRemoteLayoutToPauseScreen(stageActivity);
 				}
+				if (stageActivity.stageResourceHolder.theClassFormallyKnownAsDroneStageActivity != null) {
+					stageActivity.stageResourceHolder.theClassFormallyKnownAsDroneStageActivity.onPause();
+				}
 			}
 		}.executeDownStream(stageActivity);
 	}
 
 	public static void stageResume(final StageActivity stageActivity) {
 		Log.d(TAG, "stageResume");
+		if (stageActivity.stageDialog.isShowing() || stageActivity.askDialog != null) {
+			return;
+		}
 
 		new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE_RESUME, REQUEST_PERMISSIONS_STAGE_RESOURCE_CREATE,
 				getRequiredPermissionsList(), R.string.runtime_permission_all) {
@@ -166,6 +174,9 @@ public final class StageLifeCycleResourceController9000 {
 
 				SoundManager.getInstance().resume();
 				stageActivity.stageListener.menuResume();
+				if (stageActivity.stageResourceHolder.theClassFormallyKnownAsDroneStageActivity != null) {
+					stageActivity.stageResourceHolder.theClassFormallyKnownAsDroneStageActivity.onResume();
+				}
 			}
 		}.executeDownStream(stageActivity);
 	}
@@ -191,6 +202,9 @@ public final class StageLifeCycleResourceController9000 {
 			}
 			stageActivity.stageListener.finish();
 			stageActivity.manageLoadAndFinish();
+			if (stageActivity.stageResourceHolder.theClassFormallyKnownAsDroneStageActivity != null) {
+				stageActivity.stageResourceHolder.theClassFormallyKnownAsDroneStageActivity.onDestroy();
+			}
 		}
 		ProjectManager.getInstance().setCurrentlyPlayingScene(ProjectManager.getInstance().getCurrentlyEditedScene());
 	}

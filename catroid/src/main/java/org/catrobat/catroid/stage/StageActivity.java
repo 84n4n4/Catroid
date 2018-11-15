@@ -100,9 +100,9 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 	public PendingIntent pendingIntent;
 	public NfcAdapter nfcAdapter;
 	private static NdefMessage nfcTagMessage;
-	private StageDialog stageDialog;
+	public StageDialog stageDialog;
+	public AlertDialog askDialog;
 	private boolean resizePossible;
-	private boolean askDialogUnanswered = false;
 
 	private static int numberOfSpritesCloned;
 
@@ -158,7 +158,7 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 		configuration = new AndroidApplicationConfiguration();
 		configuration.r = configuration.g = configuration.b = configuration.a = 8;
 		if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-			//TODO: check: setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 			setContentView(R.layout.activity_stage_gamepad);
 			CastManager.getInstance().initializeGamepadActivity(this);
 			CastManager.getInstance()
@@ -167,7 +167,7 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 			initialize(stageListener, configuration);
 		}
 
-		//TODO: does this make any differnce? : if (graphics.getView() instanceof SurfaceView) {
+		//TODO: does this make any difference? probably necessary for cast: if (graphics.getView() instanceof SurfaceView) {
 			SurfaceView glView = (SurfaceView) graphics.getView();
 			glView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
 		//}
@@ -182,11 +182,15 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 		pendingIntent = PendingIntent.getActivity(this, 0,
 				new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 		jumpingSumoDeviceController = JumpingSumoDeviceController.getInstance();
+		JumpingSumoInitializer.getInstance().setStageActivity(this);
+		if (stageResourceHolder.theClassFormallyKnownAsDroneStageActivity != null) {
+			stageResourceHolder.theClassFormallyKnownAsDroneStageActivity.onCreate();
+		}
+
 		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 		if (CameraManager.getInstance() != null) {
 			CameraManager.getInstance().setStageActivity(this);
 		}
-		JumpingSumoInitializer.getInstance().setStageActivity(this);
 		SnackbarUtil.showHintSnackbar(this, R.string.hint_stage);
 		stageListener.setPaused(false);
 	}
@@ -241,15 +245,21 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 			public void onClick(DialogInterface dialog, int whichButton) {
 				String questionAnswer = edittext.getText().toString();
 				askAction.setAnswerText(questionAnswer);
-				askDialogUnanswered = false;
+			}
+		});
+
+		alertBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				askDialog = null;
 				StageLifeCycleResourceController9000.stageResume(StageActivity.this);
 			}
 		});
 
-		AlertDialog dialog = alertBuilder.create();
-		dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-		askDialogUnanswered = true;
-		dialog.show();
+		askDialog = alertBuilder.create();
+		askDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+		askDialog.show();
+
 	}
 
 	@Override

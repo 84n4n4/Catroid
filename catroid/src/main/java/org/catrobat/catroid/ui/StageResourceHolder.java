@@ -53,7 +53,7 @@ import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.devices.raspberrypi.RaspberryPiService;
 import org.catrobat.catroid.drone.ardrone.DroneInitializer;
 import org.catrobat.catroid.drone.ardrone.DroneServiceWrapper;
-import org.catrobat.catroid.drone.ardrone.TheClassFormallyKnownAsDroneStageActivity;
+import org.catrobat.catroid.drone.ardrone.DroneLifeCycleHolder;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoDeviceController;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoInitializer;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoServiceWrapper;
@@ -104,7 +104,7 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 	private DroneInitializer droneInitializer = null;
 	private JumpingSumoInitializer jumpingSumoInitializer = null;
 
-	public TheClassFormallyKnownAsDroneStageActivity theClassFormallyKnownAsDroneStageActivity;
+	public DroneLifeCycleHolder droneLifeCycleHolder;
 
 	private Brick.ResourcesSet requiredResourcesSet;
 
@@ -212,7 +212,7 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 				if (CatroidApplication.parrotLibrariesLoaded) {
 					droneInitializer = getDroneInitialiser(stageActivity);
 					droneInitializer.initialise();
-					theClassFormallyKnownAsDroneStageActivity = new TheClassFormallyKnownAsDroneStageActivity(stageActivity);
+					droneLifeCycleHolder = new DroneLifeCycleHolder(stageActivity);
 				}
 			}
 		}

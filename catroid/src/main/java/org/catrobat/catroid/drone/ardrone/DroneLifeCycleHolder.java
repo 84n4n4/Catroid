@@ -25,12 +25,10 @@ package org.catrobat.catroid.drone.ardrone;
 
 import android.content.DialogInterface;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.parrot.freeflight.drone.NavData;
 import com.parrot.freeflight.receivers.DroneBatteryChangedReceiver;
 import com.parrot.freeflight.receivers.DroneBatteryChangedReceiverDelegate;
@@ -42,9 +40,9 @@ import org.catrobat.catroid.R;
 import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.utils.ToastUtil;
 
-public class TheClassFormallyKnownAsDroneStageActivity implements DroneBatteryChangedReceiverDelegate, DroneEmergencyChangeReceiverDelegate {
+public class DroneLifeCycleHolder implements DroneBatteryChangedReceiverDelegate, DroneEmergencyChangeReceiverDelegate {
 
-	public static final String TAG = TheClassFormallyKnownAsDroneStageActivity.class.getSimpleName();
+	public static final String TAG = DroneLifeCycleHolder.class.getSimpleName();
 
 	private DroneConnection droneConnection = null;
 	private DroneBatteryChangedReceiver droneBatteryReceiver;
@@ -52,7 +50,7 @@ public class TheClassFormallyKnownAsDroneStageActivity implements DroneBatteryCh
 	private boolean droneBatteryMessageShown = false;
 	private StageActivity stageActivity;
 
-	public TheClassFormallyKnownAsDroneStageActivity(StageActivity stageActivity) {
+	public DroneLifeCycleHolder(StageActivity stageActivity) {
 		this.stageActivity = stageActivity;
 	}
 

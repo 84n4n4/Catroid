@@ -45,16 +45,14 @@ import java.util.List;
 import static org.catrobat.catroid.ui.RequiresPermissionTask.checkPermission;
 import static org.catrobat.catroid.ui.StageResourceHolder.getRequiredPermissionsList;
 
-public final class StageLifeCycleResourceController9000 {
-	public static final String TAG = StageLifeCycleResourceController9000.class.getSimpleName();
+public final class StageLifeCycleController {
+	public static final String TAG = StageLifeCycleController.class.getSimpleName();
 
 	private static final int REQUEST_PERMISSIONS_STAGE_RESOURCE_CREATE = 601;
 	private static final int REQUEST_PERMISSIONS_STAGE_RESOURCE_RESUME = 602;
 	private static final int REQUEST_PERMISSIONS_STAGE_RESOURCE_PAUSE = 603;
 
 	public static void stageCreate(final StageActivity stageActivity) {
-		Log.d(TAG, "stageCreate");
-
 		stageActivity.stageResourceHolder = new StageResourceHolder(stageActivity);
 
 		List<String> requiredPermissions = getRequiredPermissionsList();
@@ -63,8 +61,6 @@ public final class StageLifeCycleResourceController9000 {
 			} else {
 				new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE_CREATE, requiredPermissions, R.string.runtime_permission_all) {
 					public void task() {
-						Log.d(TAG, "stageCreateTask");
-
 						stageActivity.stageResourceHolder.initResources();
 					}
 				}.execute(stageActivity);
@@ -72,13 +68,9 @@ public final class StageLifeCycleResourceController9000 {
 	}
 
 	public static void stagePause(final StageActivity stageActivity) {
-		Log.d(TAG, "stagePause");
-
 		new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE_PAUSE, REQUEST_PERMISSIONS_STAGE_RESOURCE_CREATE,
 				getRequiredPermissionsList(), R.string.runtime_permission_all) {
 			public void task() {
-				Log.d(TAG, "stagePauseTask");
-
 				if (stageActivity.nfcAdapter != null) {
 					try {
 						stageActivity.nfcAdapter.disableForegroundDispatch(stageActivity);
@@ -101,15 +93,14 @@ public final class StageLifeCycleResourceController9000 {
 				if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
 					CastManager.getInstance().setRemoteLayoutToPauseScreen(stageActivity);
 				}
-				if (stageActivity.stageResourceHolder.theClassFormallyKnownAsDroneStageActivity != null) {
-					stageActivity.stageResourceHolder.theClassFormallyKnownAsDroneStageActivity.onPause();
+				if (stageActivity.stageResourceHolder.droneLifeCycleHolder != null) {
+					stageActivity.stageResourceHolder.droneLifeCycleHolder.onPause();
 				}
 			}
 		}.executeDownStream(stageActivity);
 	}
 
 	public static void stageResume(final StageActivity stageActivity) {
-		Log.d(TAG, "stageResume");
 		if (stageActivity.stageDialog.isShowing() || stageActivity.askDialog != null) {
 			return;
 		}
@@ -117,8 +108,6 @@ public final class StageLifeCycleResourceController9000 {
 		new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE_RESUME, REQUEST_PERMISSIONS_STAGE_RESOURCE_CREATE,
 				getRequiredPermissionsList(), R.string.runtime_permission_all) {
 			public void task() {
-				Log.d(TAG, "stageResumeTask");
-
 				Brick.ResourcesSet resourcesSet = ProjectManager.getInstance().getCurrentProject().getRequiredResources();
 				List<Sprite> spriteList = ProjectManager.getInstance().getCurrentlyPlayingScene().getSpriteList();
 
@@ -174,16 +163,14 @@ public final class StageLifeCycleResourceController9000 {
 
 				SoundManager.getInstance().resume();
 				stageActivity.stageListener.menuResume();
-				if (stageActivity.stageResourceHolder.theClassFormallyKnownAsDroneStageActivity != null) {
-					stageActivity.stageResourceHolder.theClassFormallyKnownAsDroneStageActivity.onResume();
+				if (stageActivity.stageResourceHolder.droneLifeCycleHolder != null) {
+					stageActivity.stageResourceHolder.droneLifeCycleHolder.onResume();
 				}
 			}
 		}.executeDownStream(stageActivity);
 	}
 
 	public static void destroyStage(StageActivity stageActivity) {
-		Log.d(TAG, "stageDestroy");
-
 		if (checkPermission(stageActivity, getRequiredPermissionsList())) {
 			stageActivity.stageResourceHolder.onStageDestroy();
 			stageActivity.jumpingSumoDisconnect();
@@ -202,8 +189,8 @@ public final class StageLifeCycleResourceController9000 {
 			}
 			stageActivity.stageListener.finish();
 			stageActivity.manageLoadAndFinish();
-			if (stageActivity.stageResourceHolder.theClassFormallyKnownAsDroneStageActivity != null) {
-				stageActivity.stageResourceHolder.theClassFormallyKnownAsDroneStageActivity.onDestroy();
+			if (stageActivity.stageResourceHolder.droneLifeCycleHolder != null) {
+				stageActivity.stageResourceHolder.droneLifeCycleHolder.onDestroy();
 			}
 		}
 		ProjectManager.getInstance().setCurrentlyPlayingScene(ProjectManager.getInstance().getCurrentlyEditedScene());

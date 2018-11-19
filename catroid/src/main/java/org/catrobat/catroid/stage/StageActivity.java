@@ -28,7 +28,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Camera;
 import android.graphics.PixelFormat;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
@@ -73,7 +72,7 @@ import org.catrobat.catroid.nfc.NfcHandler;
 import org.catrobat.catroid.ui.MarketingActivity;
 import org.catrobat.catroid.ui.PermissionHandlingActivity;
 import org.catrobat.catroid.ui.RequiresPermissionTask;
-import org.catrobat.catroid.ui.StageLifeCycleResourceController9000;
+import org.catrobat.catroid.ui.StageLifeCycleController;
 import org.catrobat.catroid.ui.StageResourceHolder;
 import org.catrobat.catroid.ui.dialogs.StageDialog;
 import org.catrobat.catroid.utils.FlashUtil;
@@ -167,13 +166,14 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 			initialize(stageListener, configuration);
 		}
 
-		//TODO: does this make any difference? probably necessary for cast: if (graphics.getView() instanceof SurfaceView) {
+		//TODO: does this make any difference? probably necessary for cast:
+		if (graphics.getView() instanceof SurfaceView) {
 			SurfaceView glView = (SurfaceView) graphics.getView();
 			glView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
-		//}
+		}
 		stageAudioFocus = new StageAudioFocus(this);
 
-		StageLifeCycleResourceController9000.stageCreate(this);
+		StageLifeCycleController.stageCreate(this);
 	}
 
 	public void run() {
@@ -183,8 +183,8 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 				new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 		jumpingSumoDeviceController = JumpingSumoDeviceController.getInstance();
 		JumpingSumoInitializer.getInstance().setStageActivity(this);
-		if (stageResourceHolder.theClassFormallyKnownAsDroneStageActivity != null) {
-			stageResourceHolder.theClassFormallyKnownAsDroneStageActivity.onCreate();
+		if (stageResourceHolder.droneLifeCycleHolder != null) {
+			stageResourceHolder.droneLifeCycleHolder.onCreate();
 		}
 
 		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -221,7 +221,7 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 	}
 
 	private void showDialog(String question, final AskAction askAction) {
-		StageLifeCycleResourceController9000.stagePause(this);
+		StageLifeCycleController.stagePause(this);
 
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.Theme_AppCompat_Dialog));
 		final EditText edittext = new EditText(getContext());
@@ -252,7 +252,7 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 			@Override
 			public void onDismiss(DialogInterface dialog) {
 				askDialog = null;
-				StageLifeCycleResourceController9000.stageResume(StageActivity.this);
+				StageLifeCycleController.stageResume(StageActivity.this);
 			}
 		});
 
@@ -292,7 +292,7 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 			startActivity(marketingIntent);
 			finish();
 		} else {
-			StageLifeCycleResourceController9000.stagePause(this);
+			StageLifeCycleController.stagePause(this);
 			stageDialog.show();
 		}
 	}
@@ -318,13 +318,13 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 
 	@Override
 	public void onPause() {
-		StageLifeCycleResourceController9000.stagePause(this);
+		StageLifeCycleController.stagePause(this);
 		super.onPause();
 	}
 
 	@Override
 	public void onResume() {
-		StageLifeCycleResourceController9000.stageResume(this);
+		StageLifeCycleController.stageResume(this);
 		super.onResume();
 	}
 
@@ -399,7 +399,7 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 
 	@Override
 	protected void onDestroy() {
-		StageLifeCycleResourceController9000.destroyStage(this);
+		StageLifeCycleController.destroyStage(this);
 		super.onDestroy();
 	}
 

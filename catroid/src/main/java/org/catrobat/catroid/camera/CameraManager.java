@@ -37,7 +37,6 @@ import org.catrobat.catroid.facedetection.FaceDetectionHandler;
 import org.catrobat.catroid.stage.CameraSurface;
 import org.catrobat.catroid.stage.DeviceCameraControl;
 import org.catrobat.catroid.stage.StageActivity;
-import org.catrobat.catroid.ui.StageLifeCycleResourceController9000;
 import org.catrobat.catroid.utils.FlashUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -94,9 +93,6 @@ public final class CameraManager implements DeviceCameraControl, Camera.PreviewC
 	private CameraState state = CameraState.notUsed;
 
 	public static CameraManager getInstance() {
-//		if (instance == null) {
-//			instance = new CameraManager();
-//		}
 		return instance;
 	}
 
@@ -543,7 +539,7 @@ public final class CameraManager implements DeviceCameraControl, Camera.PreviewC
 
 	public void destroyStage() {
 		if (this.stageActivity != null) {
-			StageLifeCycleResourceController9000.destroyStage(stageActivity);
+			stageActivity.finish();
 		}
 	}
 

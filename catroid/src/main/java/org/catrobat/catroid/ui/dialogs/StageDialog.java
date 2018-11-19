@@ -38,7 +38,7 @@ import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.stage.StageListener;
-import org.catrobat.catroid.ui.StageLifeCycleResourceController9000;
+import org.catrobat.catroid.ui.StageLifeCycleController;
 import org.catrobat.catroid.utils.ToastUtil;
 
 public class StageDialog extends Dialog implements View.OnClickListener {
@@ -124,7 +124,7 @@ public class StageDialog extends Dialog implements View.OnClickListener {
 		}
 
 		dismiss();
-		StageLifeCycleResourceController9000.stageResume(stageActivity);
+		StageLifeCycleController.stageResume(stageActivity);
 	}
 
 	public void onRestartPressed() {
@@ -164,7 +164,7 @@ public class StageDialog extends Dialog implements View.OnClickListener {
 				Log.e(TAG, "Thread activated too early!", e);
 			}
 		}
-		StageLifeCycleResourceController9000.stageResume(stageActivity);
+		StageLifeCycleController.stageResume(stageActivity);
 	}
 
 	private void toggleAxes() {

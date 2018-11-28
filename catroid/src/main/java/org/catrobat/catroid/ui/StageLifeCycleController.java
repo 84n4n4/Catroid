@@ -43,8 +43,8 @@ import org.catrobat.catroid.utils.VibratorUtil;
 
 import java.util.List;
 
-import static org.catrobat.catroid.ui.runtimepermissions.RequiresPermissionTask.checkPermission;
 import static org.catrobat.catroid.ui.StageResourceHolder.getProjectsRuntimePermissionList;
+import static org.catrobat.catroid.ui.runtimepermissions.RequiresPermissionTask.checkPermission;
 
 public final class StageLifeCycleController {
 	public static final String TAG = StageLifeCycleController.class.getSimpleName();

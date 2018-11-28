@@ -72,36 +72,33 @@ public final class StageLifeCycleController {
 	}
 
 	public static void stagePause(final StageActivity stageActivity) {
-		new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE_PAUSE, REQUEST_PERMISSIONS_STAGE_RESOURCE_CREATE,
-				getProjectsRuntimePermissionList(), R.string.runtime_permission_all) {
-			public void task() {
-				if (stageActivity.nfcAdapter != null) {
-					try {
-						stageActivity.nfcAdapter.disableForegroundDispatch(stageActivity);
-					} catch (IllegalStateException illegalStateException) {
-						Log.e(TAG, "Disabling NFC foreground dispatching went wrong!", illegalStateException);
-					}
-				}
-				SensorHandler.stopSensorListeners();
-				SoundManager.getInstance().pause();
-				stageActivity.stageListener.menuPause();
-				stageActivity.stageAudioFocus.releaseAudioFocus();
-				if (CameraManager.getInstance() != null) {
-					FlashUtil.pauseFlash();
-					FaceDetectionHandler.pauseFaceDetection();
-					CameraManager.getInstance().pausePreview();
-					CameraManager.getInstance().releaseCamera();
-				}
-				ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).pause();
-				VibratorUtil.pauseVibrator();
-				if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-					CastManager.getInstance().setRemoteLayoutToPauseScreen(stageActivity);
-				}
-				if (stageActivity.stageResourceHolder.droneLifeCycleHolder != null) {
-					stageActivity.stageResourceHolder.droneLifeCycleHolder.onPause();
+		if (checkPermission(stageActivity, getProjectsRuntimePermissionList())) {
+			if (stageActivity.nfcAdapter != null) {
+				try {
+					stageActivity.nfcAdapter.disableForegroundDispatch(stageActivity);
+				} catch (IllegalStateException illegalStateException) {
+					Log.e(TAG, "Disabling NFC foreground dispatching went wrong!", illegalStateException);
 				}
 			}
-		}.executeDownStream(stageActivity);
+			SensorHandler.stopSensorListeners();
+			SoundManager.getInstance().pause();
+			stageActivity.stageListener.menuPause();
+			stageActivity.stageAudioFocus.releaseAudioFocus();
+			if (CameraManager.getInstance() != null) {
+				FlashUtil.pauseFlash();
+				FaceDetectionHandler.pauseFaceDetection();
+				CameraManager.getInstance().pausePreview();
+				CameraManager.getInstance().releaseCamera();
+			}
+			ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).pause();
+			VibratorUtil.pauseVibrator();
+			if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
+				CastManager.getInstance().setRemoteLayoutToPauseScreen(stageActivity);
+			}
+			if (stageActivity.stageResourceHolder.droneLifeCycleHolder != null) {
+				stageActivity.stageResourceHolder.droneLifeCycleHolder.onPause();
+			}
+		}
 	}
 
 	public static void stageResume(final StageActivity stageActivity) {
@@ -109,69 +106,66 @@ public final class StageLifeCycleController {
 			return;
 		}
 
-		new RequiresPermissionTask(REQUEST_PERMISSIONS_STAGE_RESOURCE_RESUME, REQUEST_PERMISSIONS_STAGE_RESOURCE_CREATE,
-				getProjectsRuntimePermissionList(), R.string.runtime_permission_all) {
-			public void task() {
-				Brick.ResourcesSet resourcesSet = ProjectManager.getInstance().getCurrentProject().getRequiredResources();
-				List<Sprite> spriteList = ProjectManager.getInstance().getCurrentlyPlayingScene().getSpriteList();
+		if (checkPermission(stageActivity, getProjectsRuntimePermissionList())) {
+			Brick.ResourcesSet resourcesSet = ProjectManager.getInstance().getCurrentProject().getRequiredResources();
+			List<Sprite> spriteList = ProjectManager.getInstance().getCurrentlyPlayingScene().getSpriteList();
 
-				SensorHandler.startSensorListener(stageActivity);
+			SensorHandler.startSensorListener(stageActivity);
 
-				for (Sprite sprite : spriteList) {
-					if (sprite.getPlaySoundBricks().size() > 0) {
-						stageActivity.stageAudioFocus.requestAudioFocus();
-						break;
-					}
-				}
-
-				if (resourcesSet.contains(Brick.CAMERA_FLASH)) {
-					FlashUtil.resumeFlash();
-				}
-
-				if (resourcesSet.contains(Brick.VIBRATOR)) {
-					VibratorUtil.resumeVibrator();
-				}
-
-				if (resourcesSet.contains(Brick.FACE_DETECTION)) {
-					FaceDetectionHandler.resumeFaceDetection();
-				}
-
-				if (resourcesSet.contains(Brick.BLUETOOTH_LEGO_NXT)
-						|| resourcesSet.contains(Brick.BLUETOOTH_PHIRO)
-						|| resourcesSet.contains(Brick.BLUETOOTH_SENSORS_ARDUINO)) {
-					ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).start();
-				}
-
-				if (resourcesSet.contains(Brick.CAMERA_BACK)
-						|| resourcesSet.contains(Brick.CAMERA_FRONT)
-						|| resourcesSet.contains(Brick.VIDEO)) {
-					CameraManager.getInstance().resumePreviewAsync();
-				}
-
-				if (resourcesSet.contains(Brick.TEXT_TO_SPEECH)) {
+			for (Sprite sprite : spriteList) {
+				if (sprite.getPlaySoundBricks().size() > 0) {
 					stageActivity.stageAudioFocus.requestAudioFocus();
-				}
-
-				if (resourcesSet.contains(Brick.NFC_ADAPTER)
-						&& stageActivity.nfcAdapter != null) {
-					stageActivity.nfcAdapter.enableForegroundDispatch(stageActivity, stageActivity.pendingIntent, null, null);
-				}
-
-				if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-					CastManager.getInstance().resumeRemoteLayoutFromPauseScreen();
-				}
-
-				if (CameraManager.getInstance() != null) {
-					FaceDetectionHandler.resumeFaceDetection();
-				}
-
-				SoundManager.getInstance().resume();
-				stageActivity.stageListener.menuResume();
-				if (stageActivity.stageResourceHolder.droneLifeCycleHolder != null) {
-					stageActivity.stageResourceHolder.droneLifeCycleHolder.onResume();
+					break;
 				}
 			}
-		}.executeDownStream(stageActivity);
+
+			if (resourcesSet.contains(Brick.CAMERA_FLASH)) {
+				FlashUtil.resumeFlash();
+			}
+
+			if (resourcesSet.contains(Brick.VIBRATOR)) {
+				VibratorUtil.resumeVibrator();
+			}
+
+			if (resourcesSet.contains(Brick.FACE_DETECTION)) {
+				FaceDetectionHandler.resumeFaceDetection();
+			}
+
+			if (resourcesSet.contains(Brick.BLUETOOTH_LEGO_NXT)
+					|| resourcesSet.contains(Brick.BLUETOOTH_PHIRO)
+					|| resourcesSet.contains(Brick.BLUETOOTH_SENSORS_ARDUINO)) {
+				ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).start();
+			}
+
+			if (resourcesSet.contains(Brick.CAMERA_BACK)
+					|| resourcesSet.contains(Brick.CAMERA_FRONT)
+					|| resourcesSet.contains(Brick.VIDEO)) {
+				CameraManager.getInstance().resumePreviewAsync();
+			}
+
+			if (resourcesSet.contains(Brick.TEXT_TO_SPEECH)) {
+				stageActivity.stageAudioFocus.requestAudioFocus();
+			}
+
+			if (resourcesSet.contains(Brick.NFC_ADAPTER)
+					&& stageActivity.nfcAdapter != null) {
+				stageActivity.nfcAdapter.enableForegroundDispatch(stageActivity, stageActivity.pendingIntent, null, null);
+			}
+
+			if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
+				CastManager.getInstance().resumeRemoteLayoutFromPauseScreen();
+			}
+
+			if (CameraManager.getInstance() != null) {
+				FaceDetectionHandler.resumeFaceDetection();
+			}
+
+			SoundManager.getInstance().resume();
+			stageActivity.stageListener.menuResume();
+			if (stageActivity.stageResourceHolder.droneLifeCycleHolder != null) {
+				stageActivity.stageResourceHolder.droneLifeCycleHolder.onResume();
+			}
+		}
 	}
 
 	public static void destroyStage(StageActivity stageActivity) {

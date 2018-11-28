@@ -35,7 +35,6 @@ import java.util.List;
 public abstract class RequiresPermissionTask {
 
 	private final int permissionRequestId;
-	private final int downStreamOfPermissionRequestId;
 	private final @StringRes int rationaleString;
 	private List<String> permissions;
 	public static final String TAG = RequiresPermissionTask.class.getSimpleName();
@@ -46,23 +45,10 @@ public abstract class RequiresPermissionTask {
 		this.permissionRequestId = permissionRequestId;
 		this.permissions = permissions;
 		this.rationaleString = rationaleString;
-		downStreamOfPermissionRequestId = -1;
-	}
-
-	protected RequiresPermissionTask(int permissionRequestId, int downStreamOfPermissionRequestId,
-									List<String> permissions, @StringRes int rationaleString) {
-		this.permissionRequestId = permissionRequestId;
-		this.permissions = permissions;
-		this.rationaleString = rationaleString;
-		this.downStreamOfPermissionRequestId = downStreamOfPermissionRequestId;
 	}
 
 	public int getPermissionRequestId() {
 		return permissionRequestId;
-	}
-
-	public int getDownStreamOfPermissionRequestId() {
-		return downStreamOfPermissionRequestId;
 	}
 
 	public int getRationaleString() {
@@ -87,16 +73,6 @@ public abstract class RequiresPermissionTask {
 				Log.d(TAG, "This has to be called from a PermissionHandlingActivity to have your task be executed on premissionResult");
 			}
 			ActivityCompat.requestPermissions(activity, permissions.toArray(new String[0]), permissionRequestId);
-		}
-	}
-
-	public void executeDownStream(Activity activity) {
-		if (checkPermission(activity, permissions)) {
-			task();
-		} else {
-			if (activity instanceof PermissionHandlingActivity) {
-				((PermissionHandlingActivity) activity).addToDownStreamPermissionTaskList(this);
-			}
 		}
 	}
 

@@ -115,13 +115,9 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 
 	public StageResourceHolder stageResourceHolder;
 	private final List<RequiresPermissionTask> waitingForResponsePermissionTaskList;
-	private final List<RequiresPermissionTask> currentlyProcessedPermissionTaskList;
-	private final List<RequiresPermissionTask> downStreamPermissionTaskList;
 
 	public StageActivity() {
 		waitingForResponsePermissionTaskList = new ArrayList<>();
-		currentlyProcessedPermissionTaskList = new ArrayList<>();
-		downStreamPermissionTaskList = new ArrayList<>();
 	}
 
 	@Override
@@ -492,29 +488,8 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 	}
 
 	@Override
-	public void addToDownStreamPermissionTaskList(RequiresPermissionTask task) {
-		RequiresPermissionTask upstreamTask = null;
-		for (RequiresPermissionTask pendingTask : new ArrayList<>(waitingForResponsePermissionTaskList)) {
-			if (pendingTask.getPermissionRequestId() == task.getDownStreamOfPermissionRequestId()) {
-				upstreamTask = task;
-			}
-		}
-		for (RequiresPermissionTask pendingTask : new ArrayList<>(currentlyProcessedPermissionTaskList)) {
-			if (pendingTask.getPermissionRequestId() == task.getDownStreamOfPermissionRequestId()) {
-				upstreamTask = task;
-			}
-		}
-		if (upstreamTask == null) {
-			task.execute(this);
-		} else {
-			downStreamPermissionTaskList.add(task);
-		}
-	}
-
-	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		RequiresPermissionTask task = popAllWithSameIdRequiredPermissionTask(requestCode);
-		currentlyProcessedPermissionTaskList.add(task);
 
 		if (permissions.length == 0) {
 			return;
@@ -529,14 +504,7 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 
 		if (task != null) {
 			if (deniedPermissions.isEmpty()) {
-				currentlyProcessedPermissionTaskList.remove(task);
 				task.execute(this);
-				for (RequiresPermissionTask downStreamTask : new ArrayList<>(downStreamPermissionTaskList)) {
-					if (downStreamTask.getDownStreamOfPermissionRequestId() == task.getPermissionRequestId()) {
-						downStreamPermissionTaskList.remove(downStreamTask);
-						downStreamTask.execute(this);
-					}
-				}
 			} else {
 				task.setPermissions(deniedPermissions);
 				showPermissionRationale(task);
@@ -563,7 +531,6 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					addToRequiresPermissionTaskList(task);
-					currentlyProcessedPermissionTaskList.remove(task);
 					requestPermissions(task.getPermissions().toArray(new String[0]), task.getPermissionRequestId());
 				}
 			});
@@ -571,7 +538,7 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 	}
 
 	public void showAlertOKCancel(String message, DialogInterface.OnClickListener okListener) {
-		new AlertDialog.Builder(this)
+		new android.app.AlertDialog.Builder(this)
 				.setMessage(message)
 				.setPositiveButton(R.string.ok, okListener)
 				.setNegativeButton(R.string.cancel, null)

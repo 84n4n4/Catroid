@@ -38,7 +38,7 @@ import android.widget.Chronometer;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.ui.BaseActivity;
-import org.catrobat.catroid.ui.RequiresPermissionTask;
+import org.catrobat.catroid.ui.runtimepermissions.RequiresPermissionTask;
 import org.catrobat.catroid.utils.PathBuilder;
 import org.catrobat.catroid.utils.ToastUtil;
 import org.catrobat.catroid.utils.Utils;

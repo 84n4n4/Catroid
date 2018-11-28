@@ -55,7 +55,7 @@ public class PocketMusicProjectTest {
 	@Test
 	public void testGetName() {
 		String name = "testGetName";
-		Project project =  new Project("testGetName", Project.DEFAULT_BEAT, Project.DEFAULT_BEATS_PER_MINUTE);
+		Project project = new Project("testGetName", Project.DEFAULT_BEAT, Project.DEFAULT_BEATS_PER_MINUTE);
 
 		assertEquals(name, project.getName());
 	}

@@ -22,18 +22,15 @@
  */
 package org.catrobat.catroid.stage;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -70,11 +67,12 @@ import org.catrobat.catroid.facedetection.FaceDetectionHandler;
 import org.catrobat.catroid.io.StageAudioFocus;
 import org.catrobat.catroid.nfc.NfcHandler;
 import org.catrobat.catroid.ui.MarketingActivity;
-import org.catrobat.catroid.ui.PermissionHandlingActivity;
-import org.catrobat.catroid.ui.RequiresPermissionTask;
 import org.catrobat.catroid.ui.StageLifeCycleController;
 import org.catrobat.catroid.ui.StageResourceHolder;
 import org.catrobat.catroid.ui.dialogs.StageDialog;
+import org.catrobat.catroid.ui.runtimepermissions.PermissionHandlingActivity;
+import org.catrobat.catroid.ui.runtimepermissions.PermissionRequestActivityExtension;
+import org.catrobat.catroid.ui.runtimepermissions.RequiresPermissionTask;
 import org.catrobat.catroid.utils.FlashUtil;
 import org.catrobat.catroid.utils.ScreenValueHandler;
 import org.catrobat.catroid.utils.SnackbarUtil;
@@ -114,11 +112,7 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 	AndroidApplicationConfiguration configuration = null;
 
 	public StageResourceHolder stageResourceHolder;
-	private final List<RequiresPermissionTask> waitingForResponsePermissionTaskList;
-
-	public StageActivity() {
-		waitingForResponsePermissionTaskList = new ArrayList<>();
-	}
+	private PermissionRequestActivityExtension permissionRequestActivityExtension = new PermissionRequestActivityExtension();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -484,65 +478,11 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 
 	@Override
 	public void addToRequiresPermissionTaskList(RequiresPermissionTask task) {
-		waitingForResponsePermissionTaskList.add(task);
+		permissionRequestActivityExtension.addToRequiresPermissionTaskList(task);
 	}
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-		RequiresPermissionTask task = popAllWithSameIdRequiredPermissionTask(requestCode);
-
-		if (permissions.length == 0) {
-			return;
-		}
-
-		List<String> deniedPermissions = new ArrayList<>();
-		for (int resultIndex = 0; resultIndex < permissions.length; resultIndex++) {
-			if (grantResults[resultIndex] == PackageManager.PERMISSION_DENIED) {
-				deniedPermissions.add(permissions[resultIndex]);
-			}
-		}
-
-		if (task != null) {
-			if (deniedPermissions.isEmpty()) {
-				task.execute(this);
-			} else {
-				task.setPermissions(deniedPermissions);
-				showPermissionRationale(task);
-			}
-		}
-	}
-
-	private RequiresPermissionTask popAllWithSameIdRequiredPermissionTask(int requestCode) {
-		RequiresPermissionTask matchedTask = null;
-		for (RequiresPermissionTask task : new ArrayList<>(waitingForResponsePermissionTaskList)) {
-			if (task.getPermissionRequestId() == requestCode) {
-				matchedTask = task;
-				waitingForResponsePermissionTaskList.remove(task);
-			}
-		}
-		return matchedTask;
-	}
-
-	@TargetApi(23)
-	private void showPermissionRationale(final RequiresPermissionTask task) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-				&& shouldShowRequestPermissionRationale(task.getPermissions().get(0))) {
-			showAlertOKCancel(getResources().getString(task.getRationaleString()), new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					addToRequiresPermissionTaskList(task);
-					requestPermissions(task.getPermissions().toArray(new String[0]), task.getPermissionRequestId());
-				}
-			});
-		}
-	}
-
-	public void showAlertOKCancel(String message, DialogInterface.OnClickListener okListener) {
-		new android.app.AlertDialog.Builder(this)
-				.setMessage(message)
-				.setPositiveButton(R.string.ok, okListener)
-				.setNegativeButton(R.string.cancel, null)
-				.create()
-				.show();
+		permissionRequestActivityExtension.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
 	}
 }

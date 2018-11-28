@@ -36,6 +36,7 @@ import org.catrobat.catroid.ui.WebViewActivity.INTENT_PARAMETER_URL
 import android.provider.MediaStore
 import org.catrobat.catroid.common.Constants.FILE_PROVIDER_AUTHORITY
 import android.support.v4.content.FileProvider
+import org.catrobat.catroid.ui.runtimepermissions.RequiresPermissionTask
 import java.io.File
 import java.util.*
 

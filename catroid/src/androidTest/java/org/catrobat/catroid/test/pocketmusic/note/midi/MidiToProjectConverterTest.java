@@ -49,7 +49,7 @@ public class MidiToProjectConverterTest {
 
 	@Rule
 	public GrantPermissionRule runtimePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE);
-	
+
 	private Project project;
 	private File file;
 
@@ -76,7 +76,7 @@ public class MidiToProjectConverterTest {
 	}
 
 	public static Project createProjectWithSemiComplexTracks() {
-		Project project = new Project("MidiToProjectConverterTest", Project.DEFAULT_BEAT, Project.DEFAULT_BEATS_PER_MINUTE);;
+		Project project = new Project("MidiToProjectConverterTest", Project.DEFAULT_BEAT, Project.DEFAULT_BEATS_PER_MINUTE);
 		Track track1 = TrackTestDataFactory.createSemiComplexTrack(MusicalInstrument.GUNSHOT);
 		Track track2 = TrackTestDataFactory.createSemiComplexTrack(MusicalInstrument.WHISTLE);
 

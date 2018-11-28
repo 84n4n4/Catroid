@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.catrobat.catroid.ui;
+package org.catrobat.catroid.ui.runtimepermissions;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;

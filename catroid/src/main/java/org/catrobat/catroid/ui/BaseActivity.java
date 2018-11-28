@@ -22,12 +22,8 @@
  */
 package org.catrobat.catroid.ui;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -38,23 +34,18 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import org.catrobat.catroid.CatroidApplication;
-import org.catrobat.catroid.R;
 import org.catrobat.catroid.cast.CastManager;
+import org.catrobat.catroid.ui.runtimepermissions.PermissionHandlingActivity;
+import org.catrobat.catroid.ui.runtimepermissions.PermissionRequestActivityExtension;
+import org.catrobat.catroid.ui.runtimepermissions.RequiresPermissionTask;
 import org.catrobat.catroid.ui.settingsfragments.AccessibilityProfile;
 import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
 import org.catrobat.catroid.utils.CrashReporter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class BaseActivity extends AppCompatActivity implements PermissionHandlingActivity {
 
 	public static final String RECOVERED_FROM_CRASH = "RECOVERED_FROM_CRASH";
-	private final List<RequiresPermissionTask> waitingForResponsePermissionTaskList;
-
-	public BaseActivity() {
-		waitingForResponsePermissionTaskList = new ArrayList<>();
-	}
+	private PermissionRequestActivityExtension permissionRequestActivityExtension = new PermissionRequestActivityExtension();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -124,65 +115,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Permissi
 
 	@Override
 	public void addToRequiresPermissionTaskList(RequiresPermissionTask task) {
-		waitingForResponsePermissionTaskList.add(task);
+		permissionRequestActivityExtension.addToRequiresPermissionTaskList(task);
 	}
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-		RequiresPermissionTask task = popAllWithSameIdRequiredPermissionTask(requestCode);
-
-		if (permissions.length == 0) {
-			return;
-		}
-
-		List<String> deniedPermissions = new ArrayList<>();
-		for (int resultIndex = 0; resultIndex < permissions.length; resultIndex++) {
-			if (grantResults[resultIndex] == PackageManager.PERMISSION_DENIED) {
-				deniedPermissions.add(permissions[resultIndex]);
-			}
-		}
-
-		if (task != null) {
-			if (deniedPermissions.isEmpty()) {
-				task.execute(this);
-			} else {
-				task.setPermissions(deniedPermissions);
-				showPermissionRationale(task);
-			}
-		}
-	}
-
-	private RequiresPermissionTask popAllWithSameIdRequiredPermissionTask(int requestCode) {
-		RequiresPermissionTask matchedTask = null;
-		for (RequiresPermissionTask task : new ArrayList<>(waitingForResponsePermissionTaskList)) {
-			if (task.getPermissionRequestId() == requestCode) {
-				matchedTask = task;
-				waitingForResponsePermissionTaskList.remove(task);
-			}
-		}
-		return matchedTask;
-	}
-
-	@TargetApi(23)
-	private void showPermissionRationale(final RequiresPermissionTask task) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-				&& shouldShowRequestPermissionRationale(task.getPermissions().get(0))) {
-			showAlertOKCancel(getResources().getString(task.getRationaleString()), new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					addToRequiresPermissionTaskList(task);
-					requestPermissions(task.getPermissions().toArray(new String[0]), task.getPermissionRequestId());
-				}
-			});
-		}
-	}
-
-	public void showAlertOKCancel(String message, DialogInterface.OnClickListener okListener) {
-		new android.app.AlertDialog.Builder(this)
-				.setMessage(message)
-				.setPositiveButton(R.string.ok, okListener)
-				.setNegativeButton(R.string.cancel, null)
-				.create()
-				.show();
+		permissionRequestActivityExtension.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
 	}
 }

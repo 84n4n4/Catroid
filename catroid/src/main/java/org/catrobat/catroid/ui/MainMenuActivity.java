@@ -55,6 +55,7 @@ import org.catrobat.catroid.ui.recyclerview.asynctask.ProjectLoaderTask;
 import org.catrobat.catroid.ui.recyclerview.dialog.AboutDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.dialog.PrivacyPolicyDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.fragment.MainMenuFragment;
+import org.catrobat.catroid.ui.runtimepermissions.RequiresPermissionTask;
 import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
 import org.catrobat.catroid.utils.ImportProjectsFromExternalStorage;
 import org.catrobat.catroid.utils.PathBuilder;

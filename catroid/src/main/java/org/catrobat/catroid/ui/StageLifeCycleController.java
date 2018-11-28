@@ -37,20 +37,19 @@ import org.catrobat.catroid.facedetection.FaceDetectionHandler;
 import org.catrobat.catroid.formulaeditor.SensorHandler;
 import org.catrobat.catroid.io.SoundManager;
 import org.catrobat.catroid.stage.StageActivity;
+import org.catrobat.catroid.ui.runtimepermissions.RequiresPermissionTask;
 import org.catrobat.catroid.utils.FlashUtil;
 import org.catrobat.catroid.utils.VibratorUtil;
 
 import java.util.List;
 
-import static org.catrobat.catroid.ui.RequiresPermissionTask.checkPermission;
+import static org.catrobat.catroid.ui.runtimepermissions.RequiresPermissionTask.checkPermission;
 import static org.catrobat.catroid.ui.StageResourceHolder.getProjectsRuntimePermissionList;
 
 public final class StageLifeCycleController {
 	public static final String TAG = StageLifeCycleController.class.getSimpleName();
 
 	private static final int REQUEST_PERMISSIONS_STAGE_RESOURCE_CREATE = 601;
-	private static final int REQUEST_PERMISSIONS_STAGE_RESOURCE_RESUME = 602;
-	private static final int REQUEST_PERMISSIONS_STAGE_RESOURCE_PAUSE = 603;
 
 	private StageLifeCycleController() {
 		throw new AssertionError("no.");

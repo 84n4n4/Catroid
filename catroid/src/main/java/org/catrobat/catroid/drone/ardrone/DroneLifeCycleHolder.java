@@ -40,6 +40,8 @@ import org.catrobat.catroid.R;
 import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.utils.ToastUtil;
 
+import static org.catrobat.catroid.drone.ardrone.DroneConnection.DRONE_BATTERY_THRESHOLD;
+
 public class DroneLifeCycleHolder implements DroneBatteryChangedReceiverDelegate, DroneEmergencyChangeReceiverDelegate {
 
 	public static final String TAG = DroneLifeCycleHolder.class.getSimpleName();
@@ -61,7 +63,7 @@ public class DroneLifeCycleHolder implements DroneBatteryChangedReceiverDelegate
 	}
 
 	public void onCreate() {
-		if (droneConnection == null && DroneServiceWrapper.checkARDroneAvailability()) {
+		if (droneConnection == null) {
 			droneConnection = new DroneConnection(stageActivity);
 
 			try {
@@ -77,7 +79,7 @@ public class DroneLifeCycleHolder implements DroneBatteryChangedReceiverDelegate
 	}
 
 	public void onPause() {
-		DroneControlService droneControlService = DroneServiceWrapper.getInstance().getDroneService();
+		DroneControlService droneControlService = DroneServiceWrapper.getDroneService();
 		if (droneControlService != null) {
 			boolean flyingMode = droneControlService.getDroneNavData().flying;
 			if (flyingMode) {
@@ -140,8 +142,8 @@ public class DroneLifeCycleHolder implements DroneBatteryChangedReceiverDelegate
 
 		Log.d(TAG, "Battery Status = " + Integer.toString(value));
 
-		DroneControlService dcs = DroneServiceWrapper.getInstance().getDroneService();
-		if (dcs != null && (value < DroneInitializer.DRONE_BATTERY_THRESHOLD) && dcs.getDroneNavData().flying && !droneBatteryMessageShown) {
+		DroneControlService dcs = DroneServiceWrapper.getDroneService();
+		if (dcs != null && (value < DRONE_BATTERY_THRESHOLD) && dcs.getDroneNavData().flying && !droneBatteryMessageShown) {
 			ToastUtil.showError(stageActivity, stageActivity.getString(R.string.notification_low_battery_with_value, value));
 			droneBatteryMessageShown = true;
 		}

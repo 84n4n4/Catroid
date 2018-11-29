@@ -43,9 +43,10 @@ import org.catrobat.catroid.stage.StageResourceInterface;
 public class DroneConnection implements StageResourceInterface, DroneReadyReceiverDelegate,
 		DroneConnectionChangeReceiverDelegate {
 
-	private Context context = null;
-
+	public static final int DRONE_BATTERY_THRESHOLD = 10;
 	private static final String TAG = DroneConnection.class.getSimpleName();
+
+	private Context context;
 
 	protected DroneControlService droneControlService = null;
 	private BroadcastReceiver droneReadyReceiver = null;
@@ -74,7 +75,7 @@ public class DroneConnection implements StageResourceInterface, DroneReadyReceiv
 		if (droneControlService != null) {
 			Log.d(TAG, "droneControlService .. onResume");
 			droneControlService.resume();
-			DroneServiceWrapper.getInstance().setDroneService(droneControlService);
+			DroneServiceWrapper.setDroneService(droneControlService);
 		}
 		LocalBroadcastManager manager = LocalBroadcastManager.getInstance(context);
 		manager.registerReceiver(droneReadyReceiver, new IntentFilter(DroneControlService.DRONE_STATE_READY_ACTION));
@@ -86,7 +87,7 @@ public class DroneConnection implements StageResourceInterface, DroneReadyReceiv
 	public void pause() {
 		if (droneControlService != null) {
 			droneControlService.pause();
-			DroneServiceWrapper.getInstance().setDroneService(null);
+			DroneServiceWrapper.setDroneService(null);
 		}
 		LocalBroadcastManager manager = LocalBroadcastManager.getInstance(context);
 		manager.unregisterReceiver(droneReadyReceiver);
@@ -101,7 +102,7 @@ public class DroneConnection implements StageResourceInterface, DroneReadyReceiv
 	private void onDroneServiceConnected(IBinder service) {
 		Log.d(TAG, "onDroneServiceConnected");
 		droneControlService = ((DroneControlService.LocalBinder) service).getService();
-		DroneServiceWrapper.getInstance().setDroneService(droneControlService);
+		DroneServiceWrapper.setDroneService(droneControlService);
 		droneControlService.resume();
 		droneControlService.requestDroneStatus();
 		droneControlService.requestConfigUpdate();

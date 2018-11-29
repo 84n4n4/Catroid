@@ -27,13 +27,18 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.nfc.NfcAdapter;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
+import android.widget.CheckBox;
+import android.widget.TextView;
 
 import com.parrot.arsdk.arcontroller.ARCONTROLLER_DEVICE_STATE_ENUM;
 import com.parrot.arsdk.arcontroller.ARControllerException;
@@ -54,7 +59,6 @@ import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.devices.raspberrypi.RaspberryPiService;
 import org.catrobat.catroid.drone.ardrone.DroneInitializer;
 import org.catrobat.catroid.drone.ardrone.DroneLifeCycleHolder;
-import org.catrobat.catroid.drone.ardrone.DroneServiceWrapper;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoDeviceController;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoInitializer;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoServiceWrapper;
@@ -94,23 +98,26 @@ import static android.Manifest.permission.VIBRATE;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.VIBRATOR_SERVICE;
 
+import static org.catrobat.catroid.common.Constants.CATROBAT_TERMS_OF_USE_URL;
+import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_PARROT_AR_DRONE_CATROBAT_TERMS_OF_SERVICE_ACCEPTED_PERMANENTLY;
+
 public class StageResourceHolder implements GatherCollisionInformationTask.OnPolygonLoadedListener {
 	private static final String TAG = StageResourceHolder.class.getSimpleName();
 
 	private static final int REQUEST_CONNECT_DEVICE = 1000;
 	private static final int REQUEST_GPS = 1;
 
+	private Brick.ResourcesSet requiredResourcesSet;
 	private int requiredResourceCounter;
 	private Set<Integer> failedResources;
 
-	private DroneInitializer droneInitializer = null;
-	private JumpingSumoInitializer jumpingSumoInitializer = null;
+	public DroneInitializer droneInitializer;
+	private JumpingSumoInitializer jumpingSumoInitializer;
 
 	public DroneLifeCycleHolder droneLifeCycleHolder;
 
-	private Brick.ResourcesSet requiredResourcesSet;
-
 	private StageActivity stageActivity;
+
 
 	StageResourceHolder(final StageActivity stageActivity) {
 		this.stageActivity = stageActivity;
@@ -220,12 +227,48 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 			connectBTDevice(BluetoothDevice.ARDUINO);
 		}
 
-		if (requiredResourcesSet.contains(Brick.ARDRONE_SUPPORT) && DroneServiceWrapper.checkARDroneAvailability()) {
-			CatroidApplication.loadNativeLibs();
-			if (CatroidApplication.parrotLibrariesLoaded) {
-				droneInitializer = getDroneInitialiser(stageActivity);
-				droneInitializer.initialise();
-				droneLifeCycleHolder = new DroneLifeCycleHolder(stageActivity);
+		if (requiredResourcesSet.contains(Brick.ARDRONE_SUPPORT) && BuildConfig.FEATURE_PARROT_AR_DRONE_ENABLED) {
+			boolean agreedToDroneTermsOfUsePermanently = PreferenceManager.getDefaultSharedPreferences(stageActivity)
+					.getBoolean(SETTINGS_PARROT_AR_DRONE_CATROBAT_TERMS_OF_SERVICE_ACCEPTED_PERMANENTLY, false);
+
+			if (agreedToDroneTermsOfUsePermanently) {
+				onDroneTermsOfUseAgreed();
+			} else {
+				final AlertDialog alertDialog = new AlertDialog.Builder(stageActivity)
+						.setTitle(R.string.dialog_terms_of_use_title)
+						.setView(R.layout.dialog_terms_of_use)
+						.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								CheckBox checkBox = ((AlertDialog) dialog)
+										.findViewById(R.id.dialog_terms_of_use_check_box_agree_permanently);
+								PreferenceManager.getDefaultSharedPreferences(stageActivity)
+										.edit()
+										.putBoolean(SETTINGS_PARROT_AR_DRONE_CATROBAT_TERMS_OF_SERVICE_ACCEPTED_PERMANENTLY, checkBox.isChecked());
+								onDroneTermsOfUseAgreed();
+							}
+						})
+						.setCancelable(false)
+						.create();
+
+				alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+					@Override
+					public void onShow(DialogInterface dialog) {
+						TextView textView = alertDialog.findViewById(R.id.dialog_terms_of_use_text_view_info);
+						textView.setText(R.string.dialog_terms_of_use_parrot_reminder_text);
+
+						CheckBox checkBox = alertDialog
+								.findViewById(R.id.dialog_terms_of_use_check_box_agree_permanently);
+						checkBox.setText(R.string.dialog_terms_of_use_parrot_reminder_do_not_remind_again);
+
+						String url = alertDialog.getContext()
+								.getString(R.string.dialog_terms_of_use_link_text_parrot_reminder);
+						url = alertDialog.getContext()
+								.getString(R.string.terms_of_use_link_template, CATROBAT_TERMS_OF_USE_URL, url);
+						TextView urlView = alertDialog.findViewById(R.id.dialog_terms_of_use_text_view_url);
+						urlView.setText(Html.fromHtml(url));
+					}
+				});
 			}
 		}
 
@@ -371,6 +414,35 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 		}
 	}
 
+	private void onDroneTermsOfUseAgreed() {
+		if (CatroidApplication.OS_ARCH.startsWith("arm") && CatroidApplication.loadNativeLibs()) {
+			droneInitializer = new DroneInitializer(stageActivity, this);
+			droneInitializer.startDroneNetworkAvailabilityTask();
+		} else {
+			new AlertDialog.Builder(stageActivity)
+					.setTitle(R.string.error_drone_wrong_platform_title)
+					.setMessage(R.string.error_drone_wrong_platform)
+					.setCancelable(false)
+					.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							resourceFailed(Brick.ARDRONE_SUPPORT);
+						}
+					});
+		}
+	}
+
+	public void onDroneInitialized() {
+		droneInitializer = null;
+		resourceInitialized();
+		droneLifeCycleHolder = new DroneLifeCycleHolder(stageActivity);
+	}
+
+	public void onDroneInitFailed() {
+		droneInitializer = null;
+		resourceFailed(Brick.ARDRONE_SUPPORT);
+	}
+
 	private void connectBTDevice(Class<? extends BluetoothDevice> service) {
 		BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
 
@@ -392,13 +464,6 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 		}
 	}
 
-	private DroneInitializer getDroneInitialiser(StageActivity stageActivity) {
-		if (droneInitializer == null) {
-			droneInitializer = new DroneInitializer(stageActivity, this);
-		}
-		return droneInitializer;
-	}
-
 	private JumpingSumoInitializer getJumpingSumoInitialiser(StageActivity stageActivity) {
 		if (jumpingSumoInitializer == null) {
 			jumpingSumoInitializer = JumpingSumoInitializer.getInstance();
@@ -408,7 +473,8 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 		return jumpingSumoInitializer;
 	}
 
-	public void endStageActivity() {
+	public void
+	endStageActivity() {
 		Intent returnToActivityIntent = new Intent();
 		stageActivity.setResult(RESULT_CANCELED, returnToActivityIntent);
 		stageActivity.finish();
@@ -589,12 +655,6 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 			connected = true;
 		}
 		return connected;
-	}
-
-	public void onStageDestroy() {
-		if (droneInitializer != null) {
-			droneInitializer.onStageActivityDestroy();
-		}
 	}
 
 	// for GatherCollisionInformationTask.OnPolygonLoadedListener, this is NOT any Activity or Lifecycle event

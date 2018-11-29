@@ -97,6 +97,9 @@ public final class StageLifeCycleController {
 				if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
 					CastManager.getInstance().setRemoteLayoutToPauseScreen(stageActivity);
 				}
+				if (stageActivity.stageResourceHolder.droneInitializer != null) {
+					stageActivity.stageResourceHolder.droneInitializer.onPause();
+				}
 				if (stageActivity.stageResourceHolder.droneLifeCycleHolder != null) {
 					stageActivity.stageResourceHolder.droneLifeCycleHolder.onPause();
 				}
@@ -167,6 +170,9 @@ public final class StageLifeCycleController {
 
 				SoundManager.getInstance().resume();
 				stageActivity.stageListener.menuResume();
+				if (stageActivity.stageResourceHolder.droneInitializer != null) {
+					stageActivity.stageResourceHolder.droneInitializer.onResume();
+				}
 				if (stageActivity.stageResourceHolder.droneLifeCycleHolder != null) {
 					stageActivity.stageResourceHolder.droneLifeCycleHolder.onResume();
 				}
@@ -176,7 +182,6 @@ public final class StageLifeCycleController {
 
 	public static void destroyStage(StageActivity stageActivity) {
 		if (checkPermission(stageActivity, getProjectsRuntimePermissionList())) {
-			stageActivity.stageResourceHolder.onStageDestroy();
 			stageActivity.jumpingSumoDisconnect();
 			ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).destroy();
 			VibratorUtil.destroy();
@@ -193,6 +198,9 @@ public final class StageLifeCycleController {
 			}
 			stageActivity.stageListener.finish();
 			stageActivity.manageLoadAndFinish();
+			if (stageActivity.stageResourceHolder.droneInitializer != null) {
+				stageActivity.stageResourceHolder.droneInitializer.onDestroy();
+			}
 			if (stageActivity.stageResourceHolder.droneLifeCycleHolder != null) {
 				stageActivity.stageResourceHolder.droneLifeCycleHolder.onDestroy();
 			}

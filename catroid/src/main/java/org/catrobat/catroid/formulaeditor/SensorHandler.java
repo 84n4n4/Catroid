@@ -269,7 +269,7 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 		if (instance.sensorManager == null) {
 			return 0d;
 		}
-		DroneControlService dcs = DroneServiceWrapper.getInstance().getDroneService();
+		DroneControlService dcs = DroneServiceWrapper.getDroneService();
 		Double sensorValue;
 		float[] rotationMatrixOut = new float[16];
 		int rotate;

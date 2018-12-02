@@ -173,8 +173,8 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 				new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 		jumpingSumoDeviceController = JumpingSumoDeviceController.getInstance();
 		JumpingSumoInitializer.getInstance().setStageActivity(this);
-		if (stageResourceHolder.droneLifeCycleHolder != null) {
-			stageResourceHolder.droneLifeCycleHolder.onCreate();
+		if (stageResourceHolder.droneController != null) {
+			stageResourceHolder.droneController.onCreate();
 		}
 
 		nfcAdapter = NfcAdapter.getDefaultAdapter(this);

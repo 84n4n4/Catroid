@@ -22,7 +22,6 @@
  */
 package org.catrobat.catroid.drone.ardrone;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -50,18 +49,20 @@ import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.StageResourceHolder;
 
 import static org.catrobat.catroid.CatroidApplication.getAppContext;
-import static org.catrobat.catroid.drone.ardrone.DroneConnection.DRONE_BATTERY_THRESHOLD;
 import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.getDronePreferenceMapping;
 
-public class DroneInitializer implements DroneReadyReceiverDelegate,
-		DroneConnectionChangeReceiverDelegate,
+public class DroneInitializer implements DroneConnectionChangeReceiverDelegate,
+		DroneReadyReceiverDelegate,
 		DroneAvailabilityDelegate {
 
-	private BroadcastReceiver droneReadyReceiver = null;
-	private BroadcastReceiver droneStateReceiver = null;
-	private DroneConnectionChangedReceiver droneConnectionChangeReceiver;
+	private static final int DRONE_BATTERY_THRESHOLD = 10;
+
+	private DroneConnectionChangedReceiver droneConnectionChangedReceiver;
+	private BroadcastReceiver droneReadyReceiver;
+	private BroadcastReceiver droneAvailabilityReceiver;
 
 	private CheckDroneNetworkAvailabilityTask checkDroneConnectionTask;
+
 	private DroneControlService droneControlService;
 
 	private StageActivity stageActivity;
@@ -108,11 +109,20 @@ public class DroneInitializer implements DroneReadyReceiverDelegate,
 	}
 
 	@Override
+	public void onDroneConnected() {
+		droneControlService.requestConfigUpdate();
+	}
+
+	@Override
+	public void onDroneDisconnected() {
+	}
+
+	@Override
 	public void onDroneAvailabilityChanged(boolean isDroneOnNetwork) {
 		if (isDroneOnNetwork) {
-			Intent intent = new Intent(stageActivity, DroneControlService.class);
-			stageActivity.startService(intent);
-			stageActivity.bindService(intent, droneServiceConnection, Context.BIND_AUTO_CREATE);
+			Intent serviceIntent = new Intent(stageActivity, DroneControlService.class);
+			stageActivity.startService(serviceIntent);
+			stageActivity.bindService(serviceIntent, droneServiceConnection, Context.BIND_AUTO_CREATE);
 		} else {
 			new AlertDialog.Builder(stageActivity)
 					.setTitle(R.string.error_no_drone_connected_title)
@@ -157,25 +167,15 @@ public class DroneInitializer implements DroneReadyReceiverDelegate,
 		stageResourceHolder.onDroneInitialized();
 	}
 
-	@Override
-	public void onDroneConnected() {
-		droneControlService.requestConfigUpdate();
-	}
-
-	@Override
-	public void onDroneDisconnected() {
-	}
-
 	public void onResume() {
+		droneConnectionChangedReceiver = new DroneConnectionChangedReceiver(this);
+		droneAvailabilityReceiver = new DroneAvailabilityReceiver(this);
 		droneReadyReceiver = new DroneReadyReceiver(this);
-		droneStateReceiver = new DroneAvailabilityReceiver(this);
-		droneConnectionChangeReceiver = new DroneConnectionChangedReceiver(this);
 
 		LocalBroadcastManager manager = LocalBroadcastManager.getInstance(stageActivity);
-
+		manager.registerReceiver(droneConnectionChangedReceiver, new IntentFilter(DroneControlService.DRONE_CONNECTION_CHANGED_ACTION));
+		manager.registerReceiver(droneAvailabilityReceiver, new IntentFilter(DroneStateManager.ACTION_DRONE_STATE_CHANGED));
 		manager.registerReceiver(droneReadyReceiver, new IntentFilter(DroneControlService.DRONE_STATE_READY_ACTION));
-		manager.registerReceiver(droneConnectionChangeReceiver, new IntentFilter(DroneControlService.DRONE_CONNECTION_CHANGED_ACTION));
-		manager.registerReceiver(droneStateReceiver, new IntentFilter(DroneStateManager.ACTION_DRONE_STATE_CHANGED));
 	}
 
 	public void onPause() {
@@ -184,10 +184,9 @@ public class DroneInitializer implements DroneReadyReceiverDelegate,
 		}
 
 		LocalBroadcastManager manager = LocalBroadcastManager.getInstance(stageActivity);
-
+		manager.unregisterReceiver(droneConnectionChangedReceiver);
+		manager.unregisterReceiver(droneAvailabilityReceiver);
 		manager.unregisterReceiver(droneReadyReceiver);
-		manager.unregisterReceiver(droneConnectionChangeReceiver);
-		manager.unregisterReceiver(droneStateReceiver);
 
 		if (isCheckDroneNetworkAvailabilityTaskRunning()) {
 			checkDroneConnectionTask.cancelAnyFtpOperation();

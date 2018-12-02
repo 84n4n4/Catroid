@@ -97,8 +97,8 @@ public final class StageLifeCycleController {
 			if (stageActivity.stageResourceHolder.droneInitializer != null) {
 				stageActivity.stageResourceHolder.droneInitializer.onPause();
 			}
-			if (stageActivity.stageResourceHolder.droneLifeCycleHolder != null) {
-				stageActivity.stageResourceHolder.droneLifeCycleHolder.onPause();
+			if (stageActivity.stageResourceHolder.droneController != null) {
+				stageActivity.stageResourceHolder.droneController.onPause();
 			}
 		}
 	}
@@ -167,8 +167,8 @@ public final class StageLifeCycleController {
 			if (stageActivity.stageResourceHolder.droneInitializer != null) {
 				stageActivity.stageResourceHolder.droneInitializer.onResume();
 			}
-			if (stageActivity.stageResourceHolder.droneLifeCycleHolder != null) {
-				stageActivity.stageResourceHolder.droneLifeCycleHolder.onResume();
+			if (stageActivity.stageResourceHolder.droneController != null) {
+				stageActivity.stageResourceHolder.droneController.onResume();
 			}
 		}
 	}
@@ -194,8 +194,8 @@ public final class StageLifeCycleController {
 			if (stageActivity.stageResourceHolder.droneInitializer != null) {
 				stageActivity.stageResourceHolder.droneInitializer.onDestroy();
 			}
-			if (stageActivity.stageResourceHolder.droneLifeCycleHolder != null) {
-				stageActivity.stageResourceHolder.droneLifeCycleHolder.onDestroy();
+			if (stageActivity.stageResourceHolder.droneController != null) {
+				stageActivity.stageResourceHolder.droneController.onDestroy();
 			}
 		}
 		ProjectManager.getInstance().setCurrentlyPlayingScene(ProjectManager.getInstance().getCurrentlyEditedScene());

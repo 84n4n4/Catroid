@@ -27,7 +27,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.nfc.NfcAdapter;
 import android.os.Vibrator;
@@ -58,7 +57,7 @@ import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.devices.raspberrypi.RaspberryPiService;
 import org.catrobat.catroid.drone.ardrone.DroneInitializer;
-import org.catrobat.catroid.drone.ardrone.DroneLifeCycleHolder;
+import org.catrobat.catroid.drone.ardrone.DroneController;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoDeviceController;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoInitializer;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoServiceWrapper;
@@ -114,7 +113,7 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 	public DroneInitializer droneInitializer;
 	private JumpingSumoInitializer jumpingSumoInitializer;
 
-	public DroneLifeCycleHolder droneLifeCycleHolder;
+	public DroneController droneController;
 
 	private StageActivity stageActivity;
 
@@ -435,7 +434,7 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 	public void onDroneInitialized() {
 		droneInitializer = null;
 		resourceInitialized();
-		droneLifeCycleHolder = new DroneLifeCycleHolder(stageActivity);
+		droneController = new DroneController(stageActivity);
 	}
 
 	public void onDroneInitFailed() {

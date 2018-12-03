@@ -53,6 +53,7 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryException;
 
 import org.catrobat.catroid.CatroidApplication;
 import org.catrobat.catroid.R;
+import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.StageResourceHolder;
 
@@ -133,6 +134,7 @@ public final class JumpingSumoInitializer {
 					showUnCancellableErrorDialog(stageActivity,
 							stageActivity.getString(R.string.error_no_jumpingsumo_connected_title),
 							stageActivity.getString(R.string.error_no_jumpingsumo_connected));
+					stageActivity.stageResourceHolder.resourceFailed(Brick.JUMPING_SUMO);
 				} else {
 					stageResourceHolder.resourceInitialized();
 				}
@@ -293,23 +295,6 @@ public final class JumpingSumoInitializer {
 		jsDiscoverer.notifyPic();
 		jsDiscoverer.download();
 	}
-
-	//TODO: refactor this whole class
-
-//	public static void showUnCancellableErrorDialog(final PreStageActivity context, String title, String message) {
-//		Builder builder = new AlertDialog.Builder(context);
-//
-//		builder.setTitle(title);
-//		builder.setCancelable(false);
-//		builder.setMessage(message);
-//		builder.setNeutralButton(R.string.close, new OnClickListener() {
-//			@Override
-//			public void onClick(DialogInterface dialog, int which) {
-//				context.resourceFailed();
-//			}
-//		});
-//		builder.show();
-//	}
 
 	private final ARDeviceControllerListener deviceControllerListener = new ARDeviceControllerListener() {
 		@Override

@@ -64,7 +64,9 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAct
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtras;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+
 import static junit.framework.Assert.assertTrue;
+
 import static org.catrobat.catroid.uiespresso.ui.fragment.rvutils.RecyclerViewInteractionWrapper.onRecyclerView;
 import static org.catrobat.catroid.uiespresso.util.matchers.BundleMatchers.bundleHasMatchingString;
 import static org.hamcrest.core.AllOf.allOf;
@@ -163,7 +165,6 @@ public class CameraPermissionSpriteActivityTest {
 		ProjectManager.getInstance().setCurrentSprite(testSprite);
 		ProjectManager.getInstance().setCurrentlyEditedScene(project.getDefaultScene());
 	}
-
 
 	public static Matcher<Intent> containsPermissionRequest(final List<String> expectedPermissions) {
 		return new TypeSafeMatcher<Intent>() {

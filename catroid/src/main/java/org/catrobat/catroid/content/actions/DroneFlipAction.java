@@ -22,15 +22,11 @@
  */
 package org.catrobat.catroid.content.actions;
 
-import android.util.Log;
-
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 
 import org.catrobat.catroid.drone.ardrone.DroneServiceWrapper;
 
 public class DroneFlipAction extends TemporalAction {
-
-	private static final String TAG = DroneFlipAction.class.getSimpleName();
 
 	public DroneFlipAction() {
 	}
@@ -46,11 +42,5 @@ public class DroneFlipAction extends TemporalAction {
 
 	@Override
 	protected void update(float percent) {
-		Log.d(TAG, "update!");
-	}
-
-	@Override
-	public boolean act(float delta) {
-		return super.act(delta);
 	}
 }

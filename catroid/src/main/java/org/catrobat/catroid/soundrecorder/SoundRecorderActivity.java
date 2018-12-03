@@ -41,7 +41,6 @@ import org.catrobat.catroid.ui.BaseActivity;
 import org.catrobat.catroid.ui.runtimepermissions.RequiresPermissionTask;
 import org.catrobat.catroid.utils.PathBuilder;
 import org.catrobat.catroid.utils.ToastUtil;
-import org.catrobat.catroid.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,11 +66,6 @@ public class SoundRecorderActivity extends BaseActivity implements OnClickListen
 		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 		getSupportActionBar().setTitle(R.string.soundrecorder_name);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-		if (!Utils.isExternalStorageAvailable()) {
-			ToastUtil.showError(this, R.string.error_no_writiable_external_storage_available);
-			finish();
-		}
 
 		recordButton = findViewById(R.id.soundrecorder_record_button);
 		timeRecorderChronometer = findViewById(R.id.soundrecorder_chronometer_time_recorded);

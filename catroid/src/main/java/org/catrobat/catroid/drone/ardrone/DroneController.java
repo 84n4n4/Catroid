@@ -177,7 +177,8 @@ public class DroneController implements DroneConnectionChangeReceiverDelegate,
 
 	@Override
 	public void onDroneEmergencyChanged(int code) {
-		@EmergencyMethod int method;
+		@EmergencyMethod
+		int method;
 
 		if (code == NavData.ERROR_STATE_NONE || code == NavData.ERROR_STATE_START_NOT_RECEIVED) {
 			return;

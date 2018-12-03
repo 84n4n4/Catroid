@@ -46,25 +46,10 @@ public final class JumpingSumoServiceWrapper {
 		return SettingsFragment.isJSSharedPreferenceEnabled(CatroidApplication.getAppContext());
 	}
 
-	//TODO: refactor this whole class
-	public static void showTermsOfUseDialog(StageActivity preStageActivity) {
-//		Bundle args = new Bundle();
-//		args.putBoolean(TermsOfUseJSDialogFragment.DIALOG_ARGUMENT_TERMS_OF_USE_ACCEPT, true);
-//
-//		TermsOfUseJSDialogFragment termsOfUseDialog = new TermsOfUseJSDialogFragment();
-//		termsOfUseDialog.setPrestageStageActivity(preStageActivity);
-//		termsOfUseDialog.setArguments(args);
-		//termsOfUseDialog.show(preStageActivity.getSupportFragmentManager(), TermsOfUseJSDialogFragment.DIALOG_FRAGMENT_TAG);
-	}
-
 	public static void initJumpingSumo(StageActivity prestageStageActivity) {
-		if (SettingsFragment.areTermsOfServiceJSAgreedPermanently(prestageStageActivity.getApplicationContext())) {
-			jumpingSumoInitializer = getJumpingSumoInitialiser(prestageStageActivity);
-			jumpingSumoInitializer.initialise();
-			jumpingSumoInitializer.checkJumpingSumoAvailability(prestageStageActivity);
-		} else {
-			showTermsOfUseDialog(prestageStageActivity);
-		}
+		jumpingSumoInitializer = getJumpingSumoInitialiser(prestageStageActivity);
+		jumpingSumoInitializer.initialise();
+		jumpingSumoInitializer.checkJumpingSumoAvailability(prestageStageActivity);
 	}
 
 	public static JumpingSumoInitializer getJumpingSumoInitialiser(StageActivity stageStageActivity) {

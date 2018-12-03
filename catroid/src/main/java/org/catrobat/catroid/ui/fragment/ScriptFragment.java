@@ -66,7 +66,6 @@ import org.catrobat.catroid.ui.recyclerview.dialog.TextInputDialog;
 import org.catrobat.catroid.ui.recyclerview.dialog.textwatcher.UniqueStringTextWatcher;
 import org.catrobat.catroid.utils.SnackbarUtil;
 import org.catrobat.catroid.utils.ToastUtil;
-import org.catrobat.catroid.utils.Utils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -237,11 +236,6 @@ public class ScriptFragment extends ListFragment implements OnCategorySelectedLi
 	public void onResume() {
 		super.onResume();
 		updateActionBarTitle();
-
-		if (!Utils.isExternalStorageAvailable()) {
-			ToastUtil.showError(getActivity(), R.string.error_no_writiable_external_storage_available);
-			return;
-		}
 
 		if (BackpackListManager.getInstance().isBackpackEmpty()) {
 			BackpackListManager.getInstance().loadBackpack();

@@ -72,7 +72,7 @@ public class CameraResourceTest {
 	public void setUp() throws Exception {
 	}
 
-	@Category({Cat.AppUi.class, Level.Functional.class})
+	@Category({Cat.AppUi.class, Level.Functional.class, Cat.Quarantine.class})
 	@Test
 	public void cameraResourceNotUsedTest() {
 		Script script = BrickTestUtils.createProjectAndGetStartScript("cameraResourceNotUsed");
@@ -86,7 +86,7 @@ public class CameraResourceTest {
 		assertEquals(CameraManager.CameraState.notUsed, CameraManager.getInstance().getState());
 	}
 
-	@Category({Cat.AppUi.class, Level.Functional.class})
+	@Category({Cat.AppUi.class, Level.Functional.class, Cat.Quarantine.class})
 	@Test
 	public void cameraOnTest() {
 		Script script = BrickTestUtils.createProjectAndGetStartScript("cameraOnTest");
@@ -102,7 +102,7 @@ public class CameraResourceTest {
 		assertTrue(CameraManager.getInstance().isCurrentCameraFacingFront());
 	}
 
-	@Category({Cat.AppUi.class, Level.Functional.class})
+	@Category({Cat.AppUi.class, Level.Functional.class, Cat.Quarantine.class})
 	@Test
 	public void cameraStagePausedTest() {
 		Script script = BrickTestUtils.createProjectAndGetStartScript("cameraStagePausedTest");
@@ -119,7 +119,7 @@ public class CameraResourceTest {
 				|| CameraManager.getInstance().getState() == CameraManager.CameraState.notUsed);
 	}
 
-	@Category({Cat.AppUi.class, Level.Functional.class})
+	@Category({Cat.AppUi.class, Level.Functional.class, Cat.Quarantine.class})
 	@Test
 	public void cameraOffTest() {
 		Script script = BrickTestUtils.createProjectAndGetStartScript("cameraOffTest");
@@ -134,7 +134,7 @@ public class CameraResourceTest {
 		assertEquals(CameraManager.CameraState.notUsed, CameraManager.getInstance().getState());
 	}
 
-	@Category({Cat.AppUi.class, Level.Functional.class})
+	@Category({Cat.AppUi.class, Level.Functional.class, Cat.Quarantine.class})
 	@Flaky
 	@Test
 	public void cameraFacingFrontTest() {
@@ -153,7 +153,7 @@ public class CameraResourceTest {
 		assertTrue(CameraManager.getInstance().isCurrentCameraFacingFront());
 	}
 
-	@Category({Cat.AppUi.class, Level.Functional.class})
+	@Category({Cat.AppUi.class, Level.Functional.class, Cat.Quarantine.class})
 	@Flaky
 	@Test
 	public void cameraFacingBackTest() {

@@ -105,7 +105,7 @@ public class MainMenuActivity extends BaseCastActivity implements ProjectLoaderT
 		if (hasUserAgreedToPrivacyPolicy) {
 			loadContent();
 		} else {
-			setContentView(R.layout.privacy_policy_view);
+			setContentView(R.layout.privacy_policy_view); 
 		}
 	}
 

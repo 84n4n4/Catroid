@@ -3,18 +3,28 @@ import java.util.regex.Pattern
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.1'
+        //classpath 'com.android.tools.build:gradle:1.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.4'
         classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
     }
 }
 
 repositories {
     mavenCentral()
+    jcenter()
+    maven {
+        url 'https://maven.google.com/'
+        name 'Google'
+    }
 }
 
-apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 //apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
@@ -187,7 +197,7 @@ android {
     }
     lintOptions {
         // define ignores like a specific res-folder in our lint.xml file
-        lintConfig file('config/lint.xml')
+        lintConfig file('config/lint345.xml')
 
         // all general ignores should be added in this place
         // CommitPrefEdits should be reviewed, if using apply instead of commit is working with our tests
@@ -205,7 +215,7 @@ android {
         textReport true
         xmlReport true
         htmlReport false
-        xmlOutput file("build/reports/lint.xml")
+        xmlOutput file("build/reports/lint345.xml")
     }
 }
 

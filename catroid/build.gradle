@@ -30,8 +30,22 @@ buildscript {
         classpath 'io.fabric.tools:gradle:1.21.5'
         classpath 'com.google.gms:google-services:3.0.0'
     }
-}
 
+}
+plugins {
+    id "org.sonarqube" version "2.6"
+}
+sonarqube {
+    androidVariant 'catroidDebug'
+    properties {
+        property "sonar.projectKey", "catroid_2019_03_15"
+        property "sonar.host.url", "http://localhost:9000"
+        property "sonar.login=", "8cf1201a1b5b83db49b4cb5b4d164e3b8ea67913"
+
+        property "sonar.sources", "src/main/java"
+        property "sonar.tests", "src/test/java, src/androidTest/java"
+    }
+}
 repositories {
     maven { url "https://jitpack.io" }
     maven { url 'https://maven.fabric.io/public' }
@@ -462,10 +476,10 @@ static def getGitCommitInfo() {
 
     return "branch $branch @$hash"
 }
-
-project.gradle.taskGraph.whenReady {
-    connectedCatroidDebugAndroidTest.ignoreFailures = true
-}
+//
+//project.gradle.taskGraph.whenReady {
+//    connectedCatroidDebugAndroidTest.ignoreFailures = true
+//}
 
 task copyAndroidNatives() {
     file("src/main/jniLibs/armeabi-v7a/").mkdirs()
@@ -484,3 +498,5 @@ task copyAndroidNatives() {
     }
 }
 apply plugin: 'com.google.gms.google-services'
+
+

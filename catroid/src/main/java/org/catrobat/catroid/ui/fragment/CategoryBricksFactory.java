@@ -40,6 +40,7 @@ import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.WhenConditionScript;
 import org.catrobat.catroid.content.WhenGamepadButtonScript;
+import org.catrobat.catroid.content.actions.WaitTillIdleAction;
 import org.catrobat.catroid.content.bricks.AddItemToUserListBrick;
 import org.catrobat.catroid.content.bricks.ArduinoSendDigitalValueBrick;
 import org.catrobat.catroid.content.bricks.ArduinoSendPWMValueBrick;
@@ -170,6 +171,7 @@ import org.catrobat.catroid.content.bricks.TurnLeftBrick;
 import org.catrobat.catroid.content.bricks.TurnRightBrick;
 import org.catrobat.catroid.content.bricks.VibrationBrick;
 import org.catrobat.catroid.content.bricks.WaitBrick;
+import org.catrobat.catroid.content.bricks.WaitTillIdleBrick;
 import org.catrobat.catroid.content.bricks.WaitUntilBrick;
 import org.catrobat.catroid.content.bricks.WhenBackgroundChangesBrick;
 import org.catrobat.catroid.content.bricks.WhenBrick;
@@ -633,12 +635,18 @@ public class CategoryBricksFactory {
 		AssertEqualsBrick assertEqualsBrick = new AssertEqualsBrick();
 		assertionsBrickList.add(assertEqualsBrick);
 
+		WaitTillIdleBrick waitTillIdleBrick = new WaitTillIdleBrick();
+		assertionsBrickList.add(waitTillIdleBrick);
+
 		for (Scene scene : ProjectManager.getInstance().getCurrentProject().getSceneList()) {
 			for (Sprite sprite : scene.getSpriteList()) {
 				for (Script script : sprite.getScriptList()) {
 					for (Brick brick : script.getBrickList()) {
 						if (brick instanceof AssertEqualsBrick) {
 							assertionsBrickList.remove(assertEqualsBrick);
+						}
+						if (brick instanceof WaitTillIdleBrick) {
+							assertionsBrickList.remove(waitTillIdleBrick);
 						}
 					}
 				}

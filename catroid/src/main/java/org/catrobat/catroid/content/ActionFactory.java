@@ -156,6 +156,7 @@ import org.catrobat.catroid.content.actions.TurnRightAction;
 import org.catrobat.catroid.content.actions.VibrateAction;
 import org.catrobat.catroid.content.actions.WaitAction;
 import org.catrobat.catroid.content.actions.WaitForBubbleBrickAction;
+import org.catrobat.catroid.content.actions.WaitTillIdleAction;
 import org.catrobat.catroid.content.actions.WaitUntilAction;
 import org.catrobat.catroid.content.actions.conditional.GlideToAction;
 import org.catrobat.catroid.content.actions.conditional.IfOnEdgeBounceAction;
@@ -173,6 +174,7 @@ import org.catrobat.catroid.content.bricks.PhiroMotorMoveForwardBrick;
 import org.catrobat.catroid.content.bricks.PhiroMotorStopBrick;
 import org.catrobat.catroid.content.bricks.PhiroPlayToneBrick;
 import org.catrobat.catroid.content.bricks.PhiroRGBLightBrick;
+import org.catrobat.catroid.content.bricks.WaitUntilBrick;
 import org.catrobat.catroid.content.eventids.BroadcastEventId;
 import org.catrobat.catroid.content.eventids.EventId;
 import org.catrobat.catroid.formulaeditor.Formula;
@@ -1218,5 +1220,9 @@ public class ActionFactory extends Actions {
 		action.setSetupVariable(setupVariable);
 
 		return action;
+	}
+
+	public Action createWaitTillIdleAction() {
+		return action(WaitTillIdleAction.class);
 	}
 }

@@ -26,10 +26,6 @@ public class LoadingProjectException extends ProjectException {
 
 	private static final long serialVersionUID = 1L;
 
-	public LoadingProjectException() {
-		super();
-	}
-
 	public LoadingProjectException(String message) {
 		super(message);
 	}

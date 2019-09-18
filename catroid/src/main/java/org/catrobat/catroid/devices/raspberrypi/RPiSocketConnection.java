@@ -231,14 +231,6 @@ public class RPiSocketConnection {
 		}
 	}
 
-	public String getVersion() throws NoConnectionException {
-		if (!isConnected) {
-			throw new NoConnectionException("No active connection!");
-		}
-
-		return rpiVersion;
-	}
-
 	public class NoGpioException extends Exception {
 
 		private static final long serialVersionUID = 1L;

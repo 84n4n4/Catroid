@@ -614,18 +614,6 @@ public class BrickLayout extends ViewGroup {
 			this.width = width;
 		}
 
-		public void setNewLine(boolean newLine) {
-			this.newLine = newLine;
-		}
-
-		public boolean getNewLine() {
-			return newLine;
-		}
-
-		public InputType getInputType() {
-			return inputType;
-		}
-
 		private void readStyleParameters(Context context, AttributeSet attributeSet) {
 			TypedArray styledAttributes = context.obtainStyledAttributes(attributeSet,
 					R.styleable.BrickLayout_Layout);

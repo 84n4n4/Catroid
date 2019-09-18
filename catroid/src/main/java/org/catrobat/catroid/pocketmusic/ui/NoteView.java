@@ -94,8 +94,4 @@ public class NoteView extends ImageView implements View.OnClickListener {
 		}
 		invalidate();
 	}
-
-	public boolean isToggled() {
-		return toggled;
-	}
 }

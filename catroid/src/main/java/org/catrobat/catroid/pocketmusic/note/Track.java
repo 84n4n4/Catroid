@@ -142,14 +142,6 @@ public class Track implements Serializable {
 		return lastTick;
 	}
 
-	public long getTotalTimeInMilliseconds() {
-		return NoteLength.tickToMilliseconds(lastTick);
-	}
-
-	public boolean empty() {
-		return (0 == size());
-	}
-
 	@Override
 	public int hashCode() {
 		int primeWithGoodCollisionPrevention = 31;

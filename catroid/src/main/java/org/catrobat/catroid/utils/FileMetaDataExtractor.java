@@ -110,20 +110,4 @@ public final class FileMetaDataExtractor {
 		}
 		return projectName;
 	}
-
-	public static String decodeSpecialCharsForFileSystem(String projectName) {
-		projectName = projectName.replace("%2E", ".");
-
-		projectName = projectName.replace("%2A", "*");
-		projectName = projectName.replace("%7C", "|");
-		projectName = projectName.replace("%5C", "\\");
-		projectName = projectName.replace("%3F", "?");
-		projectName = projectName.replace("%3E", ">");
-		projectName = projectName.replace("%3C", "<");
-		projectName = projectName.replace("%3A", ":");
-		projectName = projectName.replace("%2F", "/");
-		projectName = projectName.replace("%22", "\"");
-		projectName = projectName.replace("%25", "%");
-		return projectName;
-	}
 }

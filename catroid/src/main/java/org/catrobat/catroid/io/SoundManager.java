@@ -146,9 +146,4 @@ public class SoundManager {
 			}
 		}
 	}
-
-	@VisibleForTesting
-	public List<MediaPlayer> getMediaPlayers() {
-		return mediaPlayers;
-	}
 }

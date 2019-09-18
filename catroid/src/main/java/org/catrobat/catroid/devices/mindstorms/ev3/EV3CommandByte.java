@@ -128,13 +128,5 @@ public class EV3CommandByte {
 		public byte getByte() {
 			return (byte) commandByteValue;
 		}
-
-		public static boolean isMember(byte memberToTest) {
-			return LOOKUP.get(memberToTest & 0xFF) != null;
-		}
-
-		public static EV3CommandOpCode getOpCodeByValue(byte value) {
-			return LOOKUP.get(value & 0xFF);
-		}
 	}
 }

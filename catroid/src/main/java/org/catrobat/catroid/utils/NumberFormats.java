@@ -28,7 +28,6 @@ public final class NumberFormats {
 	private NumberFormats() {
 		throw new AssertionError();
 	}
-	public static final String TAG = NumberFormats.class.getSimpleName();
 
 	public static String stringWithoutTrailingZero(String value) {
 		if (value.contains(".") && value.matches("[0-9.-]+")) {

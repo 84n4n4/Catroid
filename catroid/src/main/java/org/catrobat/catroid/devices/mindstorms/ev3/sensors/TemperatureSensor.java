@@ -30,7 +30,6 @@ import java.nio.ByteOrder;
 
 public class TemperatureSensor extends EV3Sensor {
 
-	public static final String TAG = TemperatureSensor.class.getSimpleName();
 	private static final int DEFAULT_VALUE = 0;
 	private static final int SENSOR_VALUE_READ_LENGTH = 4;
 

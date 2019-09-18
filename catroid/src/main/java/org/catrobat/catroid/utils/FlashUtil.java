@@ -49,10 +49,6 @@ public final class FlashUtil {
 		return currentFlashValue;
 	}
 
-	public static boolean isPaused() {
-		return paused;
-	}
-
 	public static void pauseFlash() {
 		if (!paused && isAvailable()) {
 			paused = true;

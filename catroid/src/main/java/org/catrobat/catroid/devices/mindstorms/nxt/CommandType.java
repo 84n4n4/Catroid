@@ -35,13 +35,4 @@ public enum CommandType {
 	public byte getByte() {
 		return (byte) commandTypeValue;
 	}
-
-	public static boolean isMember(byte memberToTest) {
-		for (CommandType commandType : CommandType.values()) {
-			if (commandType.getByte() == memberToTest) {
-				return true;
-			}
-		}
-		return false;
-	}
 }

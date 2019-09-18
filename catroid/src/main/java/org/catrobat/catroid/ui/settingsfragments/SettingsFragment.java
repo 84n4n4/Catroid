@@ -107,7 +107,6 @@ public class SettingsFragment extends PreferenceFragment {
 	public static final String RASPI_VERSION_SPINNER = "setting_raspi_version_preference";
 
 	public static final String SETTINGS_CRASH_REPORTS = "setting_enable_crash_reports";
-	public static final String TAG = SettingsFragment.class.getSimpleName();
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -478,10 +477,5 @@ public class SettingsFragment extends PreferenceFragment {
 		SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
 		editor.putString(LANGUAGE_TAG_KEY, value);
 		editor.commit();
-	}
-
-	public static void removeLanguageSharedPreference(Context mContext) {
-		SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
-		editor.remove(LANGUAGE_TAG_KEY).commit();
 	}
 }

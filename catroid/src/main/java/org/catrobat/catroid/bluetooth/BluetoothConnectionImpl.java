@@ -146,19 +146,11 @@ public class BluetoothConnectionImpl implements BluetoothConnection {
 		}
 	}
 
-	public BluetoothDevice getBluetoothDevice() {
-		return bluetoothDevice;
-	}
-
 	public InputStream getInputStream() throws IOException {
 		return bluetoothSocket.getInputStream();
 	}
 
 	public OutputStream getOutputStream() throws IOException {
 		return bluetoothSocket.getOutputStream();
-	}
-
-	public State getState() {
-		return state;
 	}
 }

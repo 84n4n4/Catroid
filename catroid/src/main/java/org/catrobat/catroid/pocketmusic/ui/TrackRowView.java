@@ -134,14 +134,6 @@ public class TrackRowView extends TableRow {
 		return gridRow.gridRowForTact(tactPosition);
 	}
 
-	public List<NoteView> getNoteViews() {
-		return noteViews;
-	}
-
-	public int getTactCount() {
-		return QUARTER_COUNT;
-	}
-
 	public void setBlackRow(boolean blackRow) {
 		isBlackRow = blackRow;
 	}

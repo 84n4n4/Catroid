@@ -59,10 +59,6 @@ public abstract class BaseMessage extends Message {
 		public static Type valueOf(int typeID) {
 			return types.get(typeID);
 		}
-
-		public int getTypeID() {
-			return typeID;
-		}
 	}
 
 	@Nullable

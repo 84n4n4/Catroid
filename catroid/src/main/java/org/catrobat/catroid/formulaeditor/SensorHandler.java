@@ -179,11 +179,6 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 		return instance;
 	}
 
-	@VisibleForTesting
-	public void setAccelerationUnavailable() {
-		accelerationAvailable = false;
-	}
-
 	@SuppressWarnings({"MissingPermission"})
 	public static void startSensorListener(Context context) {
 		if (instance == null) {
@@ -575,15 +570,6 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 				return String.valueOf(NfcHandler.getLastNfcTagId());
 		}
 		return 0d;
-	}
-
-	public static void clearFaceDetectionValues() {
-		if (instance != null) {
-			instance.faceDetected = 0f;
-			instance.faceSize = 0f;
-			instance.facePositionX = 0f;
-			instance.facePositionY = 0f;
-		}
 	}
 
 	@Override

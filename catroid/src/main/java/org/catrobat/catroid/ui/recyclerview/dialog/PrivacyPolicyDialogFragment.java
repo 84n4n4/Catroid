@@ -48,14 +48,6 @@ public class PrivacyPolicyDialogFragment extends DialogFragment {
 	public PrivacyPolicyDialogFragment() {
 	}
 
-	public PrivacyPolicyDialogFragment newInstance(boolean forceAccept) {
-		PrivacyPolicyDialogFragment fragment = new PrivacyPolicyDialogFragment();
-		Bundle bundle = new Bundle();
-		bundle.putBoolean(BUNDLE_FORCE_ACCEPT, forceAccept);
-		fragment.setArguments(bundle);
-		return fragment;
-	}
-
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle bundle) {

@@ -92,49 +92,6 @@ public final class Utils {
 		return exception != null && exception.getStatusCode() == WebconnectionException.ERROR_NETWORK;
 	}
 
-	public static String generateRemixUrlsStringForMergedProgram(XmlHeader headerOfFirstProgram, XmlHeader headerOfSecondProgram) {
-		String escapedFirstProgramName = headerOfFirstProgram.getProjectName();
-		escapedFirstProgramName = escapedFirstProgramName.replace(Constants.REMIX_URL_PREFIX_INDICATOR,
-				Constants.REMIX_URL_PREFIX_REPLACE_INDICATOR);
-		escapedFirstProgramName = escapedFirstProgramName.replace(Constants.REMIX_URL_SUFIX_INDICATOR,
-				Constants.REMIX_URL_SUFIX_REPLACE_INDICATOR);
-		escapedFirstProgramName = escapedFirstProgramName.replace(Constants.REMIX_URL_SEPARATOR,
-				Constants.REMIX_URL_REPLACE_SEPARATOR);
-
-		String escapedSecondProgramName = headerOfSecondProgram.getProjectName();
-		escapedSecondProgramName = escapedSecondProgramName.replace(Constants.REMIX_URL_PREFIX_INDICATOR,
-				Constants.REMIX_URL_PREFIX_REPLACE_INDICATOR);
-		escapedSecondProgramName = escapedSecondProgramName.replace(Constants.REMIX_URL_SUFIX_INDICATOR,
-				Constants.REMIX_URL_SUFIX_REPLACE_INDICATOR);
-		escapedSecondProgramName = escapedSecondProgramName.replace(Constants.REMIX_URL_SEPARATOR,
-				Constants.REMIX_URL_REPLACE_SEPARATOR);
-
-		StringBuilder remixUrlString = new StringBuilder(escapedFirstProgramName);
-
-		if (!headerOfFirstProgram.getRemixParentsUrlString().equals("")) {
-			remixUrlString
-					.append(' ')
-					.append(Constants.REMIX_URL_PREFIX_INDICATOR)
-					.append(headerOfFirstProgram.getRemixParentsUrlString())
-					.append(Constants.REMIX_URL_SUFIX_INDICATOR);
-		}
-
-		remixUrlString
-				.append(Constants.REMIX_URL_SEPARATOR)
-				.append(' ')
-				.append(escapedSecondProgramName);
-
-		if (!headerOfSecondProgram.getRemixParentsUrlString().equals("")) {
-			remixUrlString
-					.append(' ')
-					.append(Constants.REMIX_URL_PREFIX_INDICATOR)
-					.append(headerOfSecondProgram.getRemixParentsUrlString())
-					.append(Constants.REMIX_URL_SUFIX_INDICATOR);
-		}
-
-		return remixUrlString.toString();
-	}
-
 	// based on: http://stackoverflow.com/a/27295688
 	public static List<String> extractRemixUrlsFromString(String text) {
 		RemixUrlParsingState state = RemixUrlParsingState.STARTING;
@@ -266,11 +223,6 @@ public final class Utils {
 		messageDigest.update(string.getBytes());
 
 		return toHex(messageDigest.digest()).toLowerCase(Locale.US);
-	}
-
-	public static double round(double value, int precision) {
-		final int scale = (int) Math.pow(10, precision);
-		return (double) Math.round(value * scale) / scale;
 	}
 
 	private static String toHex(byte[] messageDigest) {

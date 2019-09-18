@@ -46,10 +46,6 @@ public class NotifyEventWaiterAction extends Action {
 		this.event = event;
 	}
 
-	public EventWrapper getEvent() {
-		return event;
-	}
-
 	public void setSprite(Sprite sprite) {
 		this.sprite = sprite;
 	}

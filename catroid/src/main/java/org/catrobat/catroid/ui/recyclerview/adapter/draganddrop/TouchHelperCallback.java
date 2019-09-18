@@ -30,8 +30,6 @@ import org.catrobat.catroid.R;
 
 public class TouchHelperCallback extends ItemTouchHelper.Callback {
 
-	public static final String TAG = TouchHelperCallback.class.getSimpleName();
-
 	private TouchHelperAdapterInterface adapterInterface;
 
 	public TouchHelperCallback(TouchHelperAdapterInterface adapterInterface) {

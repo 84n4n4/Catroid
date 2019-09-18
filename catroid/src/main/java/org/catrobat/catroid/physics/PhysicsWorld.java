@@ -49,7 +49,6 @@ public class PhysicsWorld {
 	private static final String TAG = PhysicsWorld.class.getSimpleName();
 
 	// CATEGORY
-	public static final short CATEGORY_NO_COLLISION = 0x0000;
 	public static final short CATEGORY_BOUNDARYBOX = 0x0002;
 	public static final short CATEGORY_PHYSICSOBJECT = 0x0004;
 

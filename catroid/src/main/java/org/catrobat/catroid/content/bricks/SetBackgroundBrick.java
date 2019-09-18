@@ -53,14 +53,6 @@ public class SetBackgroundBrick extends BrickBaseType implements BrickSpinner.On
 
 	protected LookData look;
 
-	public LookData getLook() {
-		return look;
-	}
-
-	public void setLook(LookData look) {
-		this.look = look;
-	}
-
 	public SetBackgroundBrick() {
 	}
 

@@ -73,10 +73,6 @@ public final class WebSocketClient<T extends MessageListener & StringCallback>
 		this.convertCallback = null;
 	}
 
-	public boolean isConnected() {
-		return state == State.CONNECTED || state == State.CONNECTED_AUTHENTICATED;
-	}
-
 	@Override
 	public boolean isClosed() {
 		return state == State.NOT_CONNECTED;
@@ -85,10 +81,6 @@ public final class WebSocketClient<T extends MessageListener & StringCallback>
 	@Override
 	public boolean isAuthenticated() {
 		return state == State.CONNECTED_AUTHENTICATED;
-	}
-
-	public void setAsyncHttpClient(final AsyncHttpClient asyncHttpClient) {
-		this.asyncHttpClient = asyncHttpClient;
 	}
 
 	public void setConvertCallback(final ConvertCallback callback) {

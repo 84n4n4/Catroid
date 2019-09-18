@@ -196,10 +196,6 @@ public class PhysicsLook extends Look {
 		physicsObjectStateHandler.update(true);
 	}
 
-	public boolean isHangedUp() {
-		return physicsObjectStateHandler.isHangedUp();
-	}
-
 	public void setNonColliding(boolean nonColliding) {
 		physicsObjectStateHandler.setNonColliding(nonColliding);
 	}
@@ -367,10 +363,6 @@ public class PhysicsLook extends Look {
 		public void deactivateGlideTo() {
 			glideToIsActive = false;
 			updatePhysicsObjectState(true);
-		}
-
-		public boolean isHangedUp() {
-			return hangedUp;
 		}
 
 		public void setNonColliding(boolean nonColliding) {

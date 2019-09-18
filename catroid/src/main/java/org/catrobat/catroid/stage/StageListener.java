@@ -148,13 +148,6 @@ public class StageListener implements ApplicationListener {
 
 	private Texture axes;
 
-	private boolean makeTestPixels = false;
-	private byte[] testPixels;
-	private int testX = 0;
-	private int testY = 0;
-	private int testWidth = 0;
-	private int testHeight = 0;
-
 	private StageDialog stageDialog;
 
 	public int maximizeViewPortX = 0;
@@ -571,11 +564,6 @@ public class StageListener implements ApplicationListener {
 		if (PhysicsDebugSettings.Render.RENDER_COLLISION_FRAMES && !finished) {
 			physicsWorld.render(camera.combined);
 		}
-
-		if (makeTestPixels) {
-			testPixels = ScreenUtils.getFrameBufferPixels(testX, testY, testWidth, testHeight, false);
-			makeTestPixels = false;
-		}
 	}
 
 	private void printPhysicsLabelOnScreen() {
@@ -691,20 +679,6 @@ public class StageListener implements ApplicationListener {
 			return false;
 		}
 		return true;
-	}
-
-	public byte[] getPixels(int x, int y, int width, int height) {
-		testX = x;
-		testY = y;
-		testWidth = width;
-		testHeight = height;
-		makeTestPixels = true;
-		while (makeTestPixels) {
-			Thread.yield();
-		}
-		byte[] copyOfTestPixels = new byte[testPixels.length];
-		System.arraycopy(testPixels, 0, copyOfTestPixels, 0, testPixels.length);
-		return copyOfTestPixels;
 	}
 
 	public void toggleScreenMode() {

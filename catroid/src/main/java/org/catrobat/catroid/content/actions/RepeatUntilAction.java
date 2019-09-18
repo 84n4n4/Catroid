@@ -30,7 +30,6 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class RepeatUntilAction extends com.badlogic.gdx.scenes.scene2d.actions.RepeatAction {
 
-	private int executedCount = 0;
 	private Sprite sprite;
 	private boolean isCurrentLoopInitialized = false;
 	private static final float LOOP_DELAY = 0.02f;
@@ -82,7 +81,6 @@ public class RepeatUntilAction extends com.badlogic.gdx.scenes.scene2d.actions.R
 
 		if (action.act(delta) && currentTime >= LOOP_DELAY) {
 
-			executedCount++;
 			if (isConditionTrue()) {
 				return true;
 			}
@@ -100,7 +98,6 @@ public class RepeatUntilAction extends com.badlogic.gdx.scenes.scene2d.actions.R
 	@Override
 	public void restart() {
 		isCurrentLoopInitialized = false;
-		executedCount = 0;
 		super.restart();
 	}
 
@@ -110,9 +107,5 @@ public class RepeatUntilAction extends com.badlogic.gdx.scenes.scene2d.actions.R
 
 	public void setSprite(Sprite sprite) {
 		this.sprite = sprite;
-	}
-
-	public int getExecutedCount() {
-		return executedCount;
 	}
 }

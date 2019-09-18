@@ -34,11 +34,6 @@ public interface LegoEV3 extends Mindstorms, BluetoothDevice {
 
 	void playTone(int frequency, int duration, int volumeInPercent);
 
-	EV3Motor getMotorA();
-	EV3Motor getMotorB();
-	EV3Motor getMotorC();
-	EV3Motor getMotorD();
-
 	void stopAllMovements();
 
 	void moveMotorStepsSpeed(byte outputField, int chainLayer, int speed, int step1Tacho, int step2Tacho,
@@ -49,9 +44,4 @@ public interface LegoEV3 extends Mindstorms, BluetoothDevice {
 	void setLed(int ledStatus);
 
 	float getSensorValue(Sensors sensor);
-
-	LegoSensor getSensor1();
-	LegoSensor getSensor2();
-	LegoSensor getSensor3();
-	LegoSensor getSensor4();
 }

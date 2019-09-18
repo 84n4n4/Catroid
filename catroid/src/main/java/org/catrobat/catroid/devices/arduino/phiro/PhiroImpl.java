@@ -243,18 +243,6 @@ public class PhiroImpl implements Phiro {
 		}
 	}
 
-	public void reportFirmwareVersion() {
-		if (firmata == null) {
-			return;
-		}
-
-		try {
-			firmata.send(new ReportFirmwareVersionMessage());
-		} catch (SerialException e) {
-			Log.d(TAG, "Firmata Serial error, cannot send message.");
-		}
-	}
-
 	@Override
 	public int getSensorValue(Sensors sensor) {
 		switch (sensor) {

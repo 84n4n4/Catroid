@@ -67,12 +67,6 @@ public class AsyncRPiTaskRunner {
 		return connection;
 	}
 
-	public void disconnect() {
-		if (connected) {
-			new AsyncDisconnectTask().execute();
-		}
-	}
-
 	private class AsyncConnectTask extends AsyncTask<String, Void, Integer> {
 		protected Integer doInBackground(String... args) {
 
@@ -111,25 +105,6 @@ public class AsyncRPiTaskRunner {
 					break;
 				default:
 					connected = true;
-			}
-		}
-	}
-
-	private class AsyncDisconnectTask extends AsyncTask<String, Void, Integer> {
-		protected Integer doInBackground(String... args) {
-
-			try {
-				connection.disconnect();
-			} catch (Exception e) {
-				Log.e(TAG, "Exception during disconnect " + e);
-				return 1;
-			}
-			return 0;
-		}
-
-		protected void onPostExecute(Integer error) {
-			if (error == 1) {
-				Log.e(TAG, "RPi: Some error during disconnect.");
 			}
 		}
 	}

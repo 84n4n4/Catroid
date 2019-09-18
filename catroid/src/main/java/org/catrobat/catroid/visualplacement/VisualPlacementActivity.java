@@ -77,8 +77,6 @@ import static org.catrobat.catroid.ui.SpriteActivity.EXTRA_Y_TRANSFORM;
 public class VisualPlacementActivity extends BaseCastActivity implements View.OnTouchListener,
 		DialogInterface.OnClickListener, CoordinateInterface {
 
-	public static final String TAG = VisualPlacementActivity.class.getSimpleName();
-
 	public static final String X_COORDINATE_BUNDLE_ARGUMENT = "xCoordinate";
 	public static final String Y_COORDINATE_BUNDLE_ARGUMENT = "yCoordinate";
 

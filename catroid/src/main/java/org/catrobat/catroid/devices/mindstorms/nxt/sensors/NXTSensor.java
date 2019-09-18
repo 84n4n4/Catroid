@@ -111,14 +111,6 @@ public abstract class NXTSensor implements LegoSensor {
 		return getSensorReadings().scaled;
 	}
 
-	protected int getRawValue() throws MindstormsException {
-		return getSensorReadings().raw;
-	}
-
-	protected int getNormalizedValue() throws MindstormsException {
-		return getSensorReadings().normalized;
-	}
-
 	public SensorReadings getSensorReadings() throws MindstormsException {
 		if (!hasInit) {
 			initialize();

@@ -39,12 +39,4 @@ public class ScratchSearchResult {
 	public List<ScratchProgramData> getProgramDataList() {
 		return programDataList;
 	}
-
-	public String getQuery() {
-		return query;
-	}
-
-	public int getPageNumber() {
-		return pageNumber;
-	}
 }

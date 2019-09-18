@@ -43,10 +43,6 @@ public class RecordButton extends ImageButton {
 		super(context, attrs, defStyle);
 	}
 
-	public RecordState getState() {
-		return state;
-	}
-
 	public void setState(RecordState state) {
 		this.state = state;
 	}

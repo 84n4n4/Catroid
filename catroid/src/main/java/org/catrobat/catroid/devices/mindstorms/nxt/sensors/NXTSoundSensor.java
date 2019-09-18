@@ -27,7 +27,6 @@ import org.catrobat.catroid.devices.mindstorms.MindstormsException;
 
 public class NXTSoundSensor extends NXTSensor {
 
-	public static final String TAG = NXTLightSensor.class.getSimpleName();
 	private static final int DEFAULT_VALUE = 0;
 
 	public NXTSoundSensor(int port, MindstormsConnection connection) {

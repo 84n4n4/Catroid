@@ -164,14 +164,4 @@ public final class FaceDetectionHandler {
 		}
 		return 0;
 	}
-
-	@VisibleForTesting
-	public static void setFaceDetector(FaceDetector detector) {
-		faceDetector = detector;
-	}
-
-	@VisibleForTesting
-	public static FaceDetector getFaceDetector() {
-		return faceDetector;
-	}
 }

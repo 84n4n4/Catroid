@@ -31,10 +31,6 @@ public class StringFinder {
 	private boolean matcherRun;
 	private String result;
 
-	public static String encodeSpecialChars(String string) {
-		return Pattern.quote(string);
-	}
-
 	public boolean findBetween(String string, String start, String end) {
 		Pattern pattern = Pattern.compile(start + "(.*?)" + end, Pattern.DOTALL);
 		Matcher matcher = pattern.matcher(string);

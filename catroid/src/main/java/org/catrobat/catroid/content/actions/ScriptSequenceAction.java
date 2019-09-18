@@ -38,31 +38,6 @@ public class ScriptSequenceAction extends SequenceAction {
 		this.script = script;
 	}
 
-	public ScriptSequenceAction(Action action1, @NonNull Script script) {
-		super(action1);
-		this.script = script;
-	}
-
-	public ScriptSequenceAction(Action action1, Action action2, @NonNull Script script) {
-		super(action1, action2);
-		this.script = script;
-	}
-
-	public ScriptSequenceAction(Action action1, Action action2, Action action3, @NonNull Script script) {
-		super(action1, action2, action3);
-		this.script = script;
-	}
-
-	public ScriptSequenceAction(Action action1, Action action2, Action action3, Action action4, @NonNull Script script) {
-		super(action1, action2, action3, action4);
-		this.script = script;
-	}
-
-	public ScriptSequenceAction(Action action1, Action action2, Action action3, Action action4, Action action5, @NonNull Script script) {
-		super(action1, action2, action3, action4, action5);
-		this.script = script;
-	}
-
 	public Script getScript() {
 		return script;
 	}

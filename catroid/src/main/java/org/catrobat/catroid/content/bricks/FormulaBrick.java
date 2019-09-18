@@ -119,11 +119,6 @@ public abstract class FormulaBrick extends BrickBaseType implements View.OnClick
 		return new ArrayList<>(formulaMap.values());
 	}
 
-	@VisibleForTesting
-	public ConcurrentFormulaHashMap getFormulaMap() {
-		return formulaMap;
-	}
-
 	public TextView getTextView(BrickField brickField) {
 		return view.findViewById(brickFieldToTextViewIdMap.get(brickField));
 	}

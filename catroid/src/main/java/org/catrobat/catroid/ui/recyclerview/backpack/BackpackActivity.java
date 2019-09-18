@@ -35,8 +35,6 @@ import org.catrobat.catroid.ui.BaseActivity;
 
 public class BackpackActivity extends BaseActivity {
 
-	public static final String TAG = BackpackActivity.class.getSimpleName();
-
 	public static final String EXTRA_FRAGMENT_POSITION = "fragmentPosition";
 	public static final int FRAGMENT_SCENES = 0;
 	public static final int FRAGMENT_SPRITES = 1;

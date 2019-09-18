@@ -28,18 +28,9 @@ import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
 
 public final class JumpingSumoServiceWrapper {
 
-	private static JumpingSumoServiceWrapper instance = null;
 	private static JumpingSumoInitializer jumpingSumoInitializer = null;
 
 	private JumpingSumoServiceWrapper() {
-	}
-
-	public static JumpingSumoServiceWrapper getInstance() {
-		if (instance == null) {
-			instance = new JumpingSumoServiceWrapper();
-		}
-
-		return instance;
 	}
 
 	public static boolean isJumpingSumoSharedPreferenceEnabled() {

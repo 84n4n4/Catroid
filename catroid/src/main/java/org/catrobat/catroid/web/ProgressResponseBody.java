@@ -54,7 +54,7 @@ public class ProgressResponseBody extends ResponseBody {
 	private BufferedSource bufferedSource;
 
 	public ProgressResponseBody(ResponseBody responseBody, ResultReceiver receiver, int notificationId,
-			String programName, String requestUrl) throws IOException {
+			String programName, String requestUrl) {
 		this.responseBody = responseBody;
 		this.receiver = receiver;
 		this.notificationId = notificationId;

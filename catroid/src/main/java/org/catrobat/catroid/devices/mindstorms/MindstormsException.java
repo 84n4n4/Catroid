@@ -35,8 +35,4 @@ public class MindstormsException extends Exception {
 
 		this.innerException = innerException;
 	}
-
-	public Exception getInnerException() {
-		return innerException;
-	}
 }

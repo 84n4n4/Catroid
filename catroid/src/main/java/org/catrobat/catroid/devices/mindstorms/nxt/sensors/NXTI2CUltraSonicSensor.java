@@ -59,71 +59,10 @@ public class NXTI2CUltraSonicSensor extends NXTI2CSensor {
 		}
 	}
 
-	private enum UltrasonicCommand {
-		Off(0x00), SingleShot(0x01), Continuous(0x02), EventCapture(0x03), RequestWarmReset(0x04);
-
-		private int command;
-
-		UltrasonicCommand(int command) {
-			this.command = command;
-		}
-
-		public byte getByte() {
-			return (byte) command;
-		}
-	}
-
 	public NXTI2CUltraSonicSensor(MindstormsConnection connection) {
 		super(ULTRASONIC_ADDRESS, NXTSensorType.LOW_SPEED_9V, connection);
 		distanceUnit = DistanceUnit.CENTIMETER;
 		lastValidValue = DEFAULT_VALUE;
-	}
-
-	public NXTI2CUltraSonicSensor(DistanceUnit distanceUnit, MindstormsConnection connection) {
-		super(ULTRASONIC_ADDRESS, NXTSensorType.LOW_SPEED_9V, connection);
-		this.distanceUnit = distanceUnit;
-		lastValidValue = DEFAULT_VALUE;
-	}
-
-	public void singleShot(boolean reply) throws MindstormsException {
-		setMode(UltrasonicCommand.SingleShot, reply);
-	}
-
-	public void turnOffSonar() throws MindstormsException {
-		setMode(UltrasonicCommand.Off, false);
-	}
-
-	public void continuous() throws MindstormsException {
-		setMode(UltrasonicCommand.Continuous, false);
-	}
-
-	public boolean isSensorOff() throws MindstormsException {
-		if (getMode() == UltrasonicCommand.Off) {
-			return true;
-		}
-		return false;
-	}
-
-	public void reset() throws MindstormsException {
-		setMode(UltrasonicCommand.RequestWarmReset, false);
-	}
-
-	public byte getContinuousInterval() throws MindstormsException {
-		return readRegister(SensorRegister.Interval.getByte(), 1)[0];
-	}
-
-	public void setContinuousInterval(byte interval) throws MindstormsException {
-		writeRegister(SensorRegister.Interval.getByte(), interval, false);
-		super.wait(60);
-	}
-
-	private UltrasonicCommand getMode() throws MindstormsException {
-		return UltrasonicCommand.Continuous.values()[readRegister(SensorRegister.Command.getByte(), 1)[0]];
-	}
-
-	private void setMode(UltrasonicCommand command, boolean reply) throws MindstormsException {
-		writeRegister(SensorRegister.Command.getByte(), command.getByte(), reply);
-		super.wait(60);
 	}
 
 	@Override

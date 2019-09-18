@@ -65,7 +65,6 @@ public class CategoryListFragment extends Fragment implements CategoryListRVAdap
 	public static final String SENSOR_TAG = "sensorFragment";
 	public static final String ACTION_BAR_TITLE_BUNDLE_ARGUMENT = "actionBarTitle";
 	public static final String FRAGMENT_TAG_BUNDLE_ARGUMENT = "fragmentTag";
-	public static final String TAG = CategoryListFragment.class.getSimpleName();
 	private static final int BACKGROUND_SPRITE_INDEX = 0;
 
 	private static final List<Integer> OBJECT_GENERAL_PROPERTIES = Arrays.asList(

@@ -39,11 +39,4 @@ public class RVButton {
 		this.drawable = drawable;
 		this.title = name;
 	}
-
-	public RVButton(int id, Drawable drawable, String name, @Nullable String subtitle) {
-		this.id = id;
-		this.drawable = drawable;
-		this.title = name;
-		this.subtitle = subtitle;
-	}
 }

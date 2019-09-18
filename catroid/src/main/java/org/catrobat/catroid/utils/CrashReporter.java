@@ -111,14 +111,4 @@ public final class CrashReporter {
 	private static Throwable deserializeException(String exception) {
 		return new Gson().fromJson(exception, Throwable.class);
 	}
-
-	@VisibleForTesting
-	public static void setCrashReporterInterface(CrashReporterInterface crashReporterInterface) {
-		reporter = crashReporterInterface;
-	}
-
-	@VisibleForTesting
-	public static void setIsCrashReportEnabled(boolean isEnabled) {
-		isCrashReportEnabled = isEnabled;
-	}
 }

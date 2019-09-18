@@ -47,9 +47,5 @@ public abstract class Message {
 		public static CategoryType valueOf(int categoryID) {
 			return categoryTypes.get(categoryID);
 		}
-
-		public int getCategoryID() {
-			return categoryID;
-		}
 	}
 }

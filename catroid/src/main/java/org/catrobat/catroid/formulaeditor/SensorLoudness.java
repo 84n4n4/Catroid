@@ -106,14 +106,4 @@ public class SensorLoudness {
 			}
 		}
 	}
-
-	@VisibleForTesting
-	public void setSoundRecorder(SoundRecorder soundRecorder) {
-		recorder = soundRecorder;
-	}
-
-	@VisibleForTesting
-	public SoundRecorder getSoundRecorder() {
-		return recorder;
-	}
 }

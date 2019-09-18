@@ -59,33 +59,6 @@ public class ProjectToMidiConverter {
 		nextChannel = 0;
 	}
 
-	public void writeProjectAsMidi(Project project) throws IOException, MidiException {
-		MidiFile midiFile = convertProject(project);
-
-		checkMidiFolder();
-
-		midiFile.writeToFile(getMidiFileFromProjectName(project.getName()));
-	}
-
-	private static void checkMidiFolder() throws IOException {
-		if (!MIDI_FOLDER.exists()) {
-			boolean success = MIDI_FOLDER.mkdir();
-
-			if (!success) {
-				throw new IOException("Could not create folder: " + MIDI_FOLDER);
-			}
-		}
-	}
-
-	public static File getMidiFileFromProjectName(String name) throws IOException {
-		checkMidiFolder();
-		return new File(MIDI_FOLDER + File.separator + name + MIDI_FILE_EXTENSION);
-	}
-
-	public static String removeMidiExtensionFromString(String input) {
-		return input.split(MIDI_FILE_EXTENSION)[0];
-	}
-
 	public void writeProjectAsMidi(Project project, File file) throws IOException, MidiException {
 		MidiFile midi = convertProject(project);
 		midi.writeToFile(file);
@@ -144,7 +117,7 @@ public class ProjectToMidiConverter {
 		return tempoTrack;
 	}
 
-	private MidiTrack createNoteTrack(String trackName, Track track, int channel) throws MidiException {
+	private MidiTrack createNoteTrack(String trackName, Track track, int channel) {
 		MidiTrack noteTrack = new MidiTrack();
 
 		TrackName trackNameEvent = new TrackName(0, channel, trackName);

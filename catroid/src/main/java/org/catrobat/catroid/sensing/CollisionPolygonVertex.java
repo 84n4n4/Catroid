@@ -78,10 +78,6 @@ public class CollisionPolygonVertex {
 		return new PointF(startX, startY);
 	}
 
-	public PointF getEndPoint() {
-		return new PointF(endX, endY);
-	}
-
 	public boolean isConnected(CollisionPolygonVertex other) {
 		boolean connected = other.startX == this.endX
 				&& other.startY == this.endY;

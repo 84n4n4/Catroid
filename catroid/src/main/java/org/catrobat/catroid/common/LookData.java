@@ -162,11 +162,6 @@ public class LookData implements Cloneable, Nameable, Serializable {
 		return textureRegion;
 	}
 
-	@VisibleForTesting
-	public void setTextureRegion(TextureRegion textureRegion) {
-		this.textureRegion = textureRegion;
-	}
-
 	public Pixmap getPixmap() {
 		if (pixmap == null) {
 			try {
@@ -182,11 +177,6 @@ public class LookData implements Cloneable, Nameable, Serializable {
 			}
 		}
 		return pixmap;
-	}
-
-	@VisibleForTesting
-	public void setPixmap(Pixmap pixmap) {
-		this.pixmap = pixmap;
 	}
 
 	public Bitmap getThumbnailBitmap() {

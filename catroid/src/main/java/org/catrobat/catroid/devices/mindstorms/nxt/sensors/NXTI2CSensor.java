@@ -51,22 +51,10 @@ public abstract class NXTI2CSensor extends NXTSensor {
 		pendingCommunicationErrorWaitTime = 30;
 	}
 
-	public byte getI2CAddress() {
-		return address;
-	}
-
 	@Override
 	protected void initialize() throws MindstormsException {
 		super.initialize();
 		readRegister(0x00, 0x01);
-	}
-
-	protected void writeRegister(byte register, byte data, boolean reply) throws MindstormsException {
-		if (!hasInit) {
-			initialize();
-		}
-		byte[] command = {address, register, data};
-		write(command, (byte) 0, reply);
 	}
 
 	protected byte[] readRegister(int register, int rxLength) throws MindstormsException {

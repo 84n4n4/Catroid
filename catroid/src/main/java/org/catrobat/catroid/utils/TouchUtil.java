@@ -99,11 +99,6 @@ public final class TouchUtil {
 		return touches.get(index - 1).y;
 	}
 
-	public static void setDummyTouchForTest(float x, float y) {
-		touches.add(new PointF(x, y));
-		isTouching.add(false);
-	}
-
 	private static void fireTouchEvent() {
 		EventWrapper event = new EventWrapper(new EventId(EventId.TAP_BACKGROUND), EventWrapper.NO_WAIT);
 		ProjectManager.getInstance().getCurrentProject().fireToAllSprites(event);

@@ -88,22 +88,6 @@ public class ConnectBluetoothDeviceActivity extends AppCompatActivity {
 		return btConnectionFactory;
 	}
 
-	// hooks for testing
-	public static void setDeviceFactory(BluetoothDeviceFactory deviceFactory) {
-		btDeviceFactory = deviceFactory;
-	}
-
-	public static void setConnectionFactory(BluetoothConnectionFactory connectionFactory) {
-		btConnectionFactory = connectionFactory;
-	}
-
-	public void addPairedDevice(String pairedDevice) {
-		if (pairedDevicesArrayAdapter != null) {
-			pairedDevicesArrayAdapter.add(pairedDevice);
-		}
-	}
-	// end hooks for testing
-
 	private OnItemClickListener deviceClickListener = new OnItemClickListener() {
 
 		private String getSelectedBluetoothAddress(View view) {

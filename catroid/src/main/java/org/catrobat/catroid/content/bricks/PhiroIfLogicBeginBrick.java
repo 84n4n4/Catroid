@@ -52,16 +52,6 @@ public class PhiroIfLogicBeginBrick extends BrickBaseType implements CompositeBr
 	private List<Brick> ifBranchBricks = new ArrayList<>();
 	private List<Brick> elseBranchBricks = new ArrayList<>();
 
-	@VisibleForTesting
-	public ElseBrick getElseBrick() {
-		return elseBrick;
-	}
-
-	@VisibleForTesting
-	public EndBrick getEndBrick() {
-		return endBrick;
-	}
-
 	@Override
 	public boolean hasSecondaryList() {
 		return true;

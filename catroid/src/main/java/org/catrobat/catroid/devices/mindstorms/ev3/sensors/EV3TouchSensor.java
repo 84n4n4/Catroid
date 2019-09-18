@@ -27,7 +27,6 @@ import org.catrobat.catroid.devices.mindstorms.MindstormsConnection;
 
 public class EV3TouchSensor extends EV3Sensor {
 
-	public static final String TAG = EV3TouchSensor.class.getSimpleName();
 	private static final int DEFAULT_VALUE = 0;
 
 	public EV3TouchSensor(int port, MindstormsConnection connection) {

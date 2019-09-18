@@ -219,16 +219,6 @@ public final class JumpingSumoInitializer {
 	};
 
 	public final JumpingSumoDiscoverer.ListenerPicture pictureListener = new JumpingSumoDiscoverer.ListenerPicture() {
-		@Override
-		public void onPictureCount(int pictureCount) {
-		}
-
-		@Override
-		public void onMatchingMediasFound(int matchingMedias) {
-		}
-		@Override
-		public void onDownloadProgressed(String mediaName, int progress) {
-		}
 
 		@Override
 		public void onDownloadComplete(String mediaName) {

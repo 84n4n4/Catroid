@@ -40,7 +40,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SDCardModule extends AppCompatActivity{
+public class SDCardModule {
 
 	private static final String TAG = "SDCardModule";
 	int pictureCount = -1;
@@ -101,10 +101,8 @@ public class SDCardModule extends AppCompatActivity{
 		}
 
 		if (result == ARDATATRANSFER_ERROR_ENUM.ARDATATRANSFER_OK) {
-			// direct to external directory
 			String externalDirectory = Environment.getExternalStorageDirectory().toString().concat(MOBILE_MEDIA_FOLDER);
 
-			// if the directory doesn't exist, create it
 			File file = new File(externalDirectory);
 			if (!(file.exists() && file.isDirectory())) {
 				boolean success = file.mkdir();
@@ -123,13 +121,11 @@ public class SDCardModule extends AppCompatActivity{
 		}
 
 		if (result != ARDATATRANSFER_ERROR_ENUM.ARDATATRANSFER_OK) {
-			// clean up here because an error happened
 			dataTransferManager.dispose();
 			dataTransferManager = null;
 		}
 	}
 
-	//region Listener functions
 	public void addListener(Listener listener) {
 		listeners.add(listener);
 	}
@@ -232,7 +228,6 @@ public class SDCardModule extends AppCompatActivity{
 					Log.e(TAG, "Exception", e);
 				}
 
-				// exit if the async task is cancelled
 				if (isCancelled) {
 					break;
 				}
@@ -245,7 +240,6 @@ public class SDCardModule extends AppCompatActivity{
 		}
 	}
 
-	//region notify listener block
 	private void notifyMatchingMediasFound(int matchingMedias) {
 		List<Listener> listenersCpy = new ArrayList<>(listeners);
 		for (Listener listener : listenersCpy) {
@@ -266,7 +260,6 @@ public class SDCardModule extends AppCompatActivity{
 			listener.onDownloadComplete(mediaName);
 		}
 	}
-	//endregion notify listener block
 
 	private final ARDataTransferMediasDownloaderProgressListener progressListener = new
 			ARDataTransferMediasDownloaderProgressListener() {
@@ -286,8 +279,6 @@ public class SDCardModule extends AppCompatActivity{
 		public void didMediaComplete(Object arg, ARDataTransferMedia media, ARDATATRANSFER_ERROR_ENUM error) {
 			notifyDownloadComplete(media.getName());
 
-			// when all download are finished, stop the download runnable
-			// in order to get out of the downloadMedias function
 			currentDownloadIndex++;
 			if (currentDownloadIndex > mediastoDownload) {
 				ARDataTransferMediasDownloader mediasDownloader = null;

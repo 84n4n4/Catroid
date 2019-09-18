@@ -27,7 +27,6 @@ import org.catrobat.catroid.devices.mindstorms.MindstormsConnection;
 
 public class HiTechnicColorSensor extends EV3Sensor {
 
-	public static final String TAG = HiTechnicColorSensor.class.getSimpleName();
 	private static final int DEFAULT_VALUE = 0;
 	private static final int SENSOR_VALUE_READ_LENGTH = 1;
 

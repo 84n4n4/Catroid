@@ -42,7 +42,5 @@ public interface Phiro extends BluetoothDevice {
 	void setLeftRGBLightColor(int red, int green, int blue);
 	void setRightRGBLightColor(int red, int green, int blue);
 
-	void reportFirmwareVersion();
-
 	int getSensorValue(Sensors sensor);
 }

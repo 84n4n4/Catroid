@@ -30,8 +30,6 @@ public final class NXTError {
 	private NXTError() {
 	}
 
-	public static final String TAG = NXTError.class.getSimpleName();
-
 	public static void checkForError(MindstormsReply reply, int expectedLength) throws NXTException {
 		if (reply.hasError()) {
 			throw new NXTException(ErrorCode.getTypeByValue(reply.getStatusByte()),
@@ -64,10 +62,6 @@ public final class NXTError {
 		}
 		ErrorCode(int errorCodeValue) {
 			this.errorCodeValue = errorCodeValue;
-		}
-
-		public byte getByte() {
-			return (byte) errorCodeValue;
 		}
 
 		public static ErrorCode getTypeByValue(byte value) {

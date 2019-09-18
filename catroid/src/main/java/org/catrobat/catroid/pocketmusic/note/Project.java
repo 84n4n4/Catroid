@@ -48,22 +48,6 @@ public class Project implements Serializable {
 		this.tracks = new HashMap<>();
 	}
 
-	public Project(Project project) {
-		name = project.getName();
-		beatsPerMinute = project.getBeatsPerMinute();
-		beat = project.getBeat();
-		tracks = new HashMap<>();
-
-		for (String name : project.tracks.keySet()) {
-			tracks.put(name, new Track(project.tracks.get(name)));
-		}
-	}
-
-	public Project(Project project, String name) {
-		this(project);
-		this.name = name;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -90,20 +74,6 @@ public class Project implements Serializable {
 
 	public Track getTrack(String trackName) {
 		return tracks.get(trackName);
-	}
-
-	public long getTotalTimeInMilliseconds() {
-		long totalTime = 0;
-
-		for (Track track : tracks.values()) {
-			long trackTime = track.getTotalTimeInMilliseconds();
-
-			if (trackTime > totalTime) {
-				totalTime = trackTime;
-			}
-		}
-
-		return totalTime;
 	}
 
 	public int size() {
@@ -141,11 +111,7 @@ public class Project implements Serializable {
 			return false;
 		}
 
-		if (tracks.equals(project.tracks)) {
-			return true;
-		}
-
-		return false;
+		return tracks.equals(project.tracks);
 	}
 
 	public File getFile() {

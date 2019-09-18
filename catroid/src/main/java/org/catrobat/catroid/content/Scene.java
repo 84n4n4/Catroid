@@ -113,10 +113,6 @@ public class Scene implements Nameable, Serializable {
 		spriteList.add(sprite);
 	}
 
-	public synchronized boolean removeSprite(Sprite sprite) {
-		return spriteList.remove(sprite);
-	}
-
 	public PhysicsWorld getPhysicsWorld() {
 		if (physicsWorld == null) {
 			resetPhysicsWorld();

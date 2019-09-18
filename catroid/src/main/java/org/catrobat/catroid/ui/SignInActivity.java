@@ -116,8 +116,4 @@ public class SignInActivity extends BaseActivity implements SignInCompleteListen
 		setResult(RESULT_OK, intent);
 		finish();
 	}
-
-	@Override
-	public void onLoginCancel() {
-	}
 }

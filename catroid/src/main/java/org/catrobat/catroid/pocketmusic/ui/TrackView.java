@@ -82,10 +82,6 @@ public class TrackView extends TableLayout {
 		}
 	}
 
-	public List<TrackRowView> getTrackRowViews() {
-		return trackRowViews;
-	}
-
 	public void updateDataForTactPosition(int tactPosition) {
 		this.tactPosition = tactPosition;
 		for (int i = 0; i < ROW_COUNT; i++) {

@@ -120,10 +120,6 @@ public class TactScrollRecyclerView extends RecyclerView {
 		getAdapter().notifyDataSetChanged();
 	}
 
-	public int getTactCount() {
-		return tactCount;
-	}
-
 	public int getNotesPerScreen() {
 		return TACTS_PER_SCREEN * trackGrid.getBeat().getTopNumber();
 	}

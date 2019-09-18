@@ -26,10 +26,6 @@ public class OutdatedVersionProjectException extends ProjectException {
 
 	private static final long serialVersionUID = 1L;
 
-	public OutdatedVersionProjectException() {
-		super();
-	}
-
 	public OutdatedVersionProjectException(String message) {
 		super(message);
 	}

@@ -39,10 +39,6 @@ public abstract class MindstormsReply {
 		return data.length;
 	}
 
-	public byte[] getData() {
-		return data.clone();
-	}
-
 	public byte[] getData(int offset, int length) {
 		byte[] a = null;
 		if (offset <= data.length - length) {
@@ -63,15 +59,5 @@ public abstract class MindstormsReply {
 		int value = ((data[offset] & 0xFF) | (data[offset + 1] & 0xFF) << 8);
 
 		return (short) value;
-	}
-
-	public int getInt(int offset) {
-		int value = ((data[offset] & 0xFF)
-				| (data[offset + 1] & 0xFF) << 8
-				| (data[offset + 2] & 0xFF) << 16
-				| (data[offset + 3] & 0xFF) << 24
-		);
-
-		return value;
 	}
 }

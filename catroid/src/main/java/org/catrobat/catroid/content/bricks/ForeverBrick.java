@@ -44,11 +44,6 @@ public class ForeverBrick extends BrickBaseType implements CompositeBrick {
 	public ForeverBrick() {
 	}
 
-	@VisibleForTesting
-	public EndBrick getEndBrick() {
-		return endBrick;
-	}
-
 	@Override
 	public boolean hasSecondaryList() {
 		return false;

@@ -74,10 +74,6 @@ public class LegoNXTSetting implements Setting {
 			this.sensor = sensor;
 		}
 
-		public int getNumber() {
-			return number;
-		}
-
 		public void setNumber(int number) {
 			this.number = number;
 		}

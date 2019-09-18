@@ -38,10 +38,8 @@ public final class BrickValues {
 	public static final int CHANGE_Y_BY = 10;
 	public static final double MOVE_STEPS = 10;
 	public static final double TURN_DEGREES = 15;
-	public static final double POINT_IN_DIRECTION = 90;
 	public static final int GLIDE_SECONDS = 1000;
 	public static final int GO_BACK = 1;
-	public static final int DURATION = 1;
 
 	//constants Physics
 	public static final PhysicsObject.Type PHYSIC_TYPE = Type.DYNAMIC;
@@ -70,7 +68,6 @@ public final class BrickValues {
 
 	//constants Pen
 	public static final double PEN_SIZE = 3.15;
-	public static final PenColor PEN_COLOR = new PenColor(0, 0, 1, 1);
 
 	//constants Sounds
 	public static final double SET_VOLUME_TO = 60;
@@ -80,13 +77,11 @@ public final class BrickValues {
 	public static final int WAIT = 1000;
 	public static final int REPEAT = 10;
 	public static final String IF_CONDITION = "1 < 2";
-	public static final String NOTE = "add comment here…";
 	public static final int STOP_THIS_SCRIPT = 0;
 	public static final int STOP_ALL_SCRIPTS = 1;
 	public static final int STOP_OTHER_SCRIPTS = 2;
 
 	//Constants Lego
-	public static final String LEGO_MOTOR = "A";
 	public static final int LEGO_ANGLE = 180;
 	public static final int LEGO_SPEED = 100;
 	public static final double LEGO_DURATION = 1.0;
@@ -96,7 +91,6 @@ public final class BrickValues {
 	//Constants Drone
 	public static final int DRONE_MOVE_BRICK_DEFAULT_TIME_MILLISECONDS = 1000;
 	public static final int DRONE_MOVE_BRICK_DEFAULT_POWER_PERCENT = 20;
-	public static final String STRING_VALUE = "default";
 
 	public static final int DRONE_ALTITUDE_MIN = 3;
 	public static final int DRONE_ALTITUDE_INDOOR = 5;
@@ -143,7 +137,6 @@ public final class BrickValues {
 	public static final int PHIRO_VALUE_RED = 0;
 	public static final int PHIRO_VALUE_GREEN = 255;
 	public static final int PHIRO_VALUE_BLUE = 255;
-	public static final String PHIRO_IF_SENSOR_DEFAULT_VALUE = "Front Left Sensor";
 
 	//Constants Arduino
 	public static final int ARDUINO_PWM_INITIAL_PIN_VALUE = 255;

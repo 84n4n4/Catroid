@@ -62,10 +62,6 @@ public class Job {
 		public boolean isInProgress() {
 			return this == SCHEDULED || this == READY || this == RUNNING;
 		}
-
-		public int getStateID() {
-			return state;
-		}
 	}
 
 	public enum DownloadState {
@@ -101,7 +97,6 @@ public class Job {
 	private String title;
 	private WebImage image;
 	private short progress;
-	private short downloadProgress;
 	private DownloadState downloadState;
 	private String downloadURL;
 
@@ -159,20 +154,8 @@ public class Job {
 		this.title = title;
 	}
 
-	public short getProgress() {
-		return progress;
-	}
-
 	public void setProgress(short progress) {
 		this.progress = progress;
-	}
-
-	public short getDownloadProgress() {
-		return downloadProgress;
-	}
-
-	public void setDownloadProgress(short downloadProgress) {
-		this.downloadProgress = downloadProgress;
 	}
 
 	public WebImage getImage() {

@@ -83,11 +83,6 @@ public class ProjectUntilLanguageVersion0999 implements Serializable {
 		return settings;
 	}
 
-	public File getDirectory() {
-		return new File(DEFAULT_ROOT_DIRECTORY,
-				FileMetaDataExtractor.encodeSpecialCharsForFileSystem(header.getProjectName()));
-	}
-
 	public List<UserVariable> getUserVariables() {
 		return programVariableList;
 	}

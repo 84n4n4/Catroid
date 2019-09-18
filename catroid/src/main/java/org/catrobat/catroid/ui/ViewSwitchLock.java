@@ -68,7 +68,7 @@ public class ViewSwitchLock implements Lock {
 	}
 
 	@Override
-	public void lockInterruptibly() throws InterruptedException {
+	public void lockInterruptibly() {
 		throw new UnsupportedOperationException("Unsupported Method");
 	}
 
@@ -78,7 +78,7 @@ public class ViewSwitchLock implements Lock {
 	}
 
 	@Override
-	public boolean tryLock(long arg0, TimeUnit arg1) throws InterruptedException {
+	public boolean tryLock(long arg0, TimeUnit arg1) {
 		throw new UnsupportedOperationException("Unsupported Method");
 	}
 }

@@ -70,10 +70,6 @@ public class UserList implements Serializable, UserData {
 		this.list.add(listItem);
 	}
 
-	public void setList(List<Object> list) {
-		this.list = list;
-	}
-
 	@Override
 	public void reset() {
 		list.clear();

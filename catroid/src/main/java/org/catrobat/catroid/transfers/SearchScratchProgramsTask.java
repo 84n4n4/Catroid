@@ -38,7 +38,6 @@ import java.io.InterruptedIOException;
 public class SearchScratchProgramsTask extends AsyncTask<String, Void, ScratchSearchResult> {
 
 	public interface SearchScratchProgramsTaskDelegate {
-		void onPreExecute();
 		void onPostExecute(ScratchSearchResult result);
 	}
 
@@ -55,14 +54,6 @@ public class SearchScratchProgramsTask extends AsyncTask<String, Void, ScratchSe
 	public SearchScratchProgramsTask setFetcher(ScratchDataFetcher fetcher) {
 		this.fetcher = fetcher;
 		return this;
-	}
-
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		if (delegate != null) {
-			delegate.onPreExecute();
-		}
 	}
 
 	@Override

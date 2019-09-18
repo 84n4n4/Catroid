@@ -61,8 +61,6 @@ public class ScratchConverterActivity extends BaseActivity implements
 		JobViewListener,
 		Client.DownloadCallback {
 
-	public static final String TAG = ScratchConverterActivity.class.getSimpleName();
-
 	@Retention(RetentionPolicy.SOURCE)
 	@IntDef({FRAGMENT_SEARCH, FRAGMENT_PROJECTS})
 	@interface FragmentPosition {}
@@ -70,10 +68,6 @@ public class ScratchConverterActivity extends BaseActivity implements
 	public static final int FRAGMENT_PROJECTS = 1;
 
 	private static Client client;
-
-	public static void setClient(final Client converterClient) {
-		client = converterClient;
-	}
 
 	private List<Job> runningJobs = new ArrayList<>();
 	private List<Job> finishedJobs = new ArrayList<>();
@@ -229,10 +223,6 @@ public class ScratchConverterActivity extends BaseActivity implements
 	}
 
 	@Override
-	public void onError(String errorMessage) {
-	}
-
-	@Override
 	public void onJobScheduled(Job job) {
 		if (!listContainsJob(runningJobs, job)) {
 			runningJobs.add(0, job);
@@ -253,14 +243,6 @@ public class ScratchConverterActivity extends BaseActivity implements
 		}
 		updateBottomBar();
 		jobListListener.onJobListChanged();
-	}
-
-	@Override
-	public void onJobProgress(Job job, short progress) {
-	}
-
-	@Override
-	public void onJobOutput(Job job, @NonNull String[] lines) {
 	}
 
 	@Override

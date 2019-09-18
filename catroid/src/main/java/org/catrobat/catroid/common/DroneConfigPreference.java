@@ -60,6 +60,4 @@ public abstract class DroneConfigPreference {
 			}
 		}
 	}
-
-	public static final String TAG = DroneConfigPreference.class.getSimpleName();
 }

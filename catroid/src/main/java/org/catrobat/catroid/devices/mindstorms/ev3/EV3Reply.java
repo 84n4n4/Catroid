@@ -35,10 +35,7 @@ public class EV3Reply extends MindstormsReply {
 
 	@Override
 	public boolean hasError() {
-		if (getStatusByte() == NO_ERROR) {
-			return false;
-		}
-		return true;
+		return getStatusByte() != NO_ERROR;
 	}
 
 	@Override
@@ -64,21 +61,5 @@ public class EV3Reply extends MindstormsReply {
 		if (data.length < MIN_REPLY_MESSAGE_LENGTH) {
 			throw new MindstormsException("Invalid EV3 Reply");
 		}
-	}
-
-	public String toHexString(EV3Reply reply) {
-		byte[] rawBytes = reply.getData();
-		String commandHexString = "0x";
-
-		if (rawBytes.length == 0) {
-			return "null";
-		}
-
-		for (int i = 0; i < rawBytes.length; i++) {
-			commandHexString += Integer.toHexString(rawBytes[i] & 0xFF);
-			commandHexString += "_";
-		}
-
-		return commandHexString;
 	}
 }

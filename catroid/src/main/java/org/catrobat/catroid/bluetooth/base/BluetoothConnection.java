@@ -44,6 +44,4 @@ public interface BluetoothConnection {
 	InputStream getInputStream() throws IOException;
 
 	OutputStream getOutputStream() throws IOException;
-
-	State getState();
 }

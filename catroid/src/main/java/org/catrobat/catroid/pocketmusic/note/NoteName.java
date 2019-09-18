@@ -59,56 +59,8 @@ public enum NoteName {
 		return DEFAULT_NOTE_NAME;
 	}
 
-	public static int calculateDistanceCountingNoneSignedNotesOnly(NoteName referenceNoteName, NoteName noteName) {
-		int distance = 0;
-		boolean isDownGoing = (noteName.midi - referenceNoteName.midi) > 0;
-
-		NoteName smallNoteName = isDownGoing ? referenceNoteName : noteName;
-		NoteName largeNoteName = isDownGoing ? noteName : referenceNoteName;
-
-		if (smallNoteName.isSigned()) {
-			distance = 1;
-		} else if (largeNoteName.isSigned()) {
-			distance = -1;
-		}
-
-		while (smallNoteName.getMidi() != largeNoteName.getMidi()) {
-			if (!smallNoteName.isSigned()) {
-				distance++;
-			}
-
-			smallNoteName = smallNoteName.next();
-		}
-
-		return (isDownGoing ? distance * (-1) : distance);
-	}
-
-	public static int calculateDistanceToMiddleLineCountingSignedNotesOnly(MusicalKey key, NoteName noteName) {
-		return calculateDistanceCountingNoneSignedNotesOnly(key.getNoteNameOnMiddleLine(), noteName);
-	}
-
 	public int getMidi() {
 		return midi;
-	}
-
-	public NoteName next() {
-		int index = this.ordinal() + 1;
-
-		if (index >= values().length) {
-			index--;
-		}
-
-		return values()[index];
-	}
-
-	public NoteName previous() {
-		int index = this.ordinal() - 1;
-
-		if (index < 0) {
-			index++;
-		}
-
-		return values()[index];
 	}
 
 	public boolean isSigned() {

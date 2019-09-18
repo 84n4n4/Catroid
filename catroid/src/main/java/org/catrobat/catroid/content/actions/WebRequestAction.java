@@ -133,9 +133,4 @@ public class WebRequestAction extends Action implements WebConnection.WebRequest
 		webConnection = null;
 		requestStatus = NOT_SENT;
 	}
-
-	@VisibleForTesting
-	public @RequestStatus int getRequestStatus() {
-		return requestStatus;
-	}
 }

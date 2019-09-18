@@ -46,8 +46,6 @@ import java.util.List;
 
 public class DataListAdapter extends RecyclerView.Adapter<CheckableVH> implements RVAdapter.SelectionListener {
 
-	public boolean allowMultiSelection = true;
-
 	@Retention(RetentionPolicy.SOURCE)
 	@IntDef({VAR_GLOBAL, VAR_LOCAL, LIST_GLOBAL, LIST_LOCAL})
 	@interface DataType {}
@@ -288,20 +286,6 @@ public class DataListAdapter extends RecyclerView.Adapter<CheckableVH> implement
 		return items;
 	}
 
-	public List<UserVariable> getVariables() {
-		List<UserVariable> items = new ArrayList<>();
-		items.addAll(globalVarAdapter.getItems());
-		items.addAll(localVarAdapter.getItems());
-		return items;
-	}
-
-	public List<UserList> getLists() {
-		List<UserList> items = new ArrayList<>();
-		items.addAll(globalListAdapter.getItems());
-		items.addAll(localListAdapter.getItems());
-		return items;
-	}
-
 	public List<UserData> getSelectedItems() {
 		List<UserData> selectedItems = new ArrayList<>();
 		selectedItems.addAll(globalVarAdapter.getSelectedItems());
@@ -309,18 +293,6 @@ public class DataListAdapter extends RecyclerView.Adapter<CheckableVH> implement
 		selectedItems.addAll(globalListAdapter.getSelectedItems());
 		selectedItems.addAll(localListAdapter.getSelectedItems());
 		return selectedItems;
-	}
-
-	public void setSelection(UserData item, boolean selection) {
-		if (item instanceof UserVariable) {
-			if (!globalVarAdapter.setSelection((UserVariable) item, selection)) {
-				localVarAdapter.setSelection((UserVariable) item, selection);
-			}
-		} else {
-			if (!globalListAdapter.setSelection((UserList) item, selection)) {
-				localListAdapter.setSelection((UserList) item, selection);
-			}
-		}
 	}
 
 	@Override

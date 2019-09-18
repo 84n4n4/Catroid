@@ -132,17 +132,6 @@ public class LegoNXTImpl implements LegoNXT, LegoSensorService.OnSensorChangedLi
 		}
 	}
 
-	@Override
-	public int getKeepAliveTime() {
-		try {
-			return tryGetKeepAliveTime();
-		} catch (NXTException e) {
-			return -1;
-		} catch (MindstormsException e) {
-			return -1;
-		}
-	}
-
 	private int tryGetKeepAliveTime() throws MindstormsException {
 		Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.KEEP_ALIVE, true);
 
@@ -159,33 +148,6 @@ public class LegoNXTImpl implements LegoNXT, LegoSensorService.OnSensorChangedLi
 
 		int aliveTime = java.nio.ByteBuffer.wrap(aliveTimeToInt).order(java.nio.ByteOrder.LITTLE_ENDIAN).getInt();
 		return aliveTime;
-	}
-
-	@Override
-	public int getBatteryLevel() {
-		try {
-			return tryGetBatteryLevel();
-		} catch (NXTException e) {
-			return -1;
-		} catch (MindstormsException e) {
-			return -1;
-		}
-	}
-
-	private int tryGetBatteryLevel() throws MindstormsException {
-		Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.GET_BATTERY_LEVEL, true);
-
-		NXTReply reply = new NXTReply(mindstormsConnection.sendAndReceive(command));
-		NXTError.checkForError(reply, 5);
-
-		byte[] batByte = mindstormsConnection.sendAndReceive(command);
-		byte[] batValues = new byte[2];
-		batValues[0] = batByte[3];
-		batValues[1] = batByte[4];
-
-		int millivolt = java.nio.ByteBuffer.wrap(batValues).order(java.nio.ByteOrder.LITTLE_ENDIAN).getShort();
-
-		return millivolt;
 	}
 
 	@Override
@@ -225,26 +187,6 @@ public class LegoNXTImpl implements LegoNXT, LegoSensorService.OnSensorChangedLi
 		}
 
 		return -1;
-	}
-
-	@Override
-	public LegoSensor getSensor1() {
-		return sensor1;
-	}
-
-	@Override
-	public LegoSensor getSensor2() {
-		return sensor2;
-	}
-
-	@Override
-	public LegoSensor getSensor3() {
-		return sensor3;
-	}
-
-	@Override
-	public LegoSensor getSensor4() {
-		return sensor4;
 	}
 
 	@Override

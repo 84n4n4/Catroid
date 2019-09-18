@@ -753,9 +753,4 @@ public final class XstreamSerializer {
 		}
 		return null;
 	}
-
-	@VisibleForTesting
-	public BackwardCompatibleCatrobatLanguageXStream getXstream() {
-		return xstream;
-	}
 }

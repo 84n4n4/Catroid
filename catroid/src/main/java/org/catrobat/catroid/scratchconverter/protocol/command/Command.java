@@ -87,8 +87,4 @@ public abstract class Command {
 		payloadMap.put("args", args);
 		return new JSONObject(payloadMap);
 	}
-
-	public Type getType() {
-		return type;
-	}
 }

@@ -36,7 +36,6 @@ import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.common.ScreenValues;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
 import org.catrobat.catroid.stage.CameraSurface;
-import org.catrobat.catroid.stage.DeviceCameraControl;
 import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.utils.FlashUtil;
 
@@ -45,7 +44,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class CameraManager implements DeviceCameraControl, Camera.PreviewCallback {
+public final class CameraManager implements Camera.PreviewCallback {
 
 	public class CameraInformation {
 
@@ -166,10 +165,6 @@ public final class CameraManager implements DeviceCameraControl, Camera.PreviewC
 
 	public boolean isCurrentCameraFacingBack() {
 		return currentCameraInformation == backCameraInformation;
-	}
-
-	public boolean isCurrentCameraFacingFront() {
-		return currentCameraInformation == frontCameraInformation;
 	}
 
 	public boolean isCameraActive() {
@@ -374,7 +369,6 @@ public final class CameraManager implements DeviceCameraControl, Camera.PreviewC
 		}
 	}
 
-	@Override
 	public void prepareCamera() {
 		state = CameraState.previewRunning;
 
@@ -394,7 +388,6 @@ public final class CameraManager implements DeviceCameraControl, Camera.PreviewC
 		startCamera();
 	}
 
-	@Override
 	public void stopPreview() {
 		state = CameraState.notUsed;
 		if (cameraSurface != null) {
@@ -420,7 +413,6 @@ public final class CameraManager implements DeviceCameraControl, Camera.PreviewC
 		}
 	}
 
-	@Override
 	public void pausePreview() {
 		if (state == CameraState.previewRunning) {
 			wasRunning = true;
@@ -430,7 +422,6 @@ public final class CameraManager implements DeviceCameraControl, Camera.PreviewC
 		state = CameraState.previewPaused;
 	}
 
-	@Override
 	public void resumePreview() {
 		prepareCamera();
 		wasRunning = false;
@@ -456,7 +447,6 @@ public final class CameraManager implements DeviceCameraControl, Camera.PreviewC
 		stageActivity.post(r);
 	}
 
-	@Override
 	public void prepareCameraAsync() {
 		Runnable r = new Runnable() {
 			public void run() {
@@ -466,7 +456,6 @@ public final class CameraManager implements DeviceCameraControl, Camera.PreviewC
 		stageActivity.post(r);
 	}
 
-	@Override
 	public void stopPreviewAsync() {
 		Runnable r = new Runnable() {
 			public void run() {
@@ -476,23 +465,6 @@ public final class CameraManager implements DeviceCameraControl, Camera.PreviewC
 		stageActivity.post(r);
 	}
 
-	@Override
-	public void pausePreviewAsync() {
-		if (state == CameraState.previewPaused
-				|| state == CameraState.stopped
-				|| state == CameraState.notUsed) {
-			return;
-		}
-
-		Runnable r = new Runnable() {
-			public void run() {
-				pausePreview();
-			}
-		};
-		stageActivity.post(r);
-	}
-
-	@Override
 	public void resumePreviewAsync() {
 		if (state != CameraState.previewPaused || !wasRunning) {
 			return;
@@ -506,12 +478,8 @@ public final class CameraManager implements DeviceCameraControl, Camera.PreviewC
 		stageActivity.post(r);
 	}
 
-	@Override
 	public boolean isReady() {
-		if (currentCamera != null) {
-			return true;
-		}
-		return false;
+		return currentCamera != null;
 	}
 
 	public void updatePreview(CameraState newState) {
@@ -527,7 +495,7 @@ public final class CameraManager implements DeviceCameraControl, Camera.PreviewC
 		}
 	}
 
-	public void changeCameraAsync() {
+	private void changeCameraAsync() {
 		Runnable r = new Runnable() {
 			public void run() {
 				changeCamera();
@@ -536,7 +504,7 @@ public final class CameraManager implements DeviceCameraControl, Camera.PreviewC
 		stageActivity.post(r);
 	}
 
-	public void changeCamera() {
+	private void changeCamera() {
 		stopPreview();
 		prepareCamera();
 	}

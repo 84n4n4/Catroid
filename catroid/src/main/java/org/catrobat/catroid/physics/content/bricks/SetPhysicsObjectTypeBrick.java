@@ -99,9 +99,4 @@ public class SetPhysicsObjectTypeBrick extends BrickBaseType {
 	public void addActionToSequence(Sprite sprite, ScriptSequenceAction sequence) {
 		sequence.addAction(sprite.getActionFactory().createSetPhysicsObjectTypeAction(sprite, type));
 	}
-
-	@VisibleForTesting
-	public PhysicsObject.Type getType() {
-		return type;
-	}
 }

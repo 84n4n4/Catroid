@@ -98,10 +98,6 @@ public class BrickListView extends ListView {
 		return !brickPositionsToHighlight.isEmpty();
 	}
 
-	public List<Integer> getBrickPositionsToHighlight() {
-		return brickPositionsToHighlight;
-	}
-
 	public void highlightMovingItem() {
 		ObjectAnimator animator = ObjectAnimator.ofInt(hoveringDrawable, "alpha", 255, 0);
 		animator.setDuration(ANIMATION_DURATION);

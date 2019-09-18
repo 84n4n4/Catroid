@@ -76,10 +76,6 @@ public class MultiSelectionManager {
 		}
 	}
 
-	public boolean isSelectionActive() {
-		return !selectedPositions.isEmpty();
-	}
-
 	public void clearSelection() {
 		selectedPositions.clear();
 	}

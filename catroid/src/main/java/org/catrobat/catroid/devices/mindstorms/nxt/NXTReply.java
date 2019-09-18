@@ -41,14 +41,9 @@ public class NXTReply extends MindstormsReply {
 	public static final String INVALID_FIRST_BYTE_EXCEPTION_MESSAGE =
 			"Invalid NXT Reply! First Byte must be REPLY_COMMAND.";
 
-	public static final String TAG = NXTReply.class.getSimpleName();
-
 	@Override
 	public boolean hasError() {
-		if (getStatusByte() == NO_ERROR) {
-			return false;
-		}
-		return true;
+		return getStatusByte() != NO_ERROR;
 	}
 
 	@Override

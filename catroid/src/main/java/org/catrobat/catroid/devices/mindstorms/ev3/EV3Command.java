@@ -36,15 +36,6 @@ public class EV3Command implements MindstormsCommand {
 
 	private ByteArrayOutputStream commandData = new ByteArrayOutputStream();
 
-	public EV3Command(short commandCounter, EV3CommandType commandType, EV3CommandOpCode commandByte) {
-
-		commandData.write((byte) (commandCounter & 0x00FF));
-		commandData.write((byte) ((commandCounter & 0xFF00) >> 8));
-
-		commandData.write(commandType.getByte());
-		commandData.write(commandByte.getByte());
-	}
-
 	public EV3Command(short commandCounter, EV3CommandType commandType, int globalVars, int localVars, EV3CommandOpCode commandByte) {
 
 		commandData.write((byte) (commandCounter & 0x00FF));
@@ -62,17 +53,6 @@ public class EV3Command implements MindstormsCommand {
 
 	public void append(byte data) {
 		commandData.write(data);
-	}
-
-	public void append(byte[] data) {
-		commandData.write(data, 0, data.length);
-	}
-
-	public void append(int data) {
-		append((byte) (0xFF & data));
-		append((byte) (0xFF & (data >> 8)));
-		append((byte) (0xFF & (data >> 16)));
-		append((byte) (0xFF & (data >> 24)));
 	}
 
 	public void append(EV3CommandByteCode commandCode) {
@@ -142,21 +122,5 @@ public class EV3Command implements MindstormsCommand {
 
 	public byte[] getRawCommand() {
 		return commandData.toByteArray();
-	}
-
-	public String toHexString(EV3Command command) {
-		byte[] rawBytes = command.getRawCommand();
-		String commandHexString = "0x";
-
-		if (rawBytes.length == 0) {
-			return "0";
-		}
-
-		for (int i = 0; i < rawBytes.length; i++) {
-			commandHexString += Integer.toHexString(rawBytes[i] & 0xFF);
-			commandHexString += "_";
-		}
-
-		return commandHexString;
 	}
 }

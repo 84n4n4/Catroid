@@ -272,10 +272,6 @@ public class Look extends Image {
 		imageChanged = true;
 	}
 
-	public boolean haveAllThreadsFinished() {
-		return scheduler.haveAllThreadsFinished();
-	}
-
 	public String getImagePath() {
 		String path;
 		if (this.lookData == null) {
@@ -534,11 +530,6 @@ public class Look extends Image {
 		return catroidAngle;
 	}
 
-	public float convertCatroidAngleToStageAngle(float catroidAngle) {
-		catroidAngle = breakDownCatroidAngle(catroidAngle);
-		return -catroidAngle + DEGREE_UI_OFFSET;
-	}
-
 	public float convertStageAngleToCatroidAngle(float stageAngle) {
 		float catroidAngle = -stageAngle + DEGREE_UI_OFFSET;
 		return breakDownCatroidAngle(catroidAngle);
@@ -651,15 +642,5 @@ public class Look extends Image {
 				((EventThread) action).notifyWaiter();
 			}
 		}
-	}
-
-	@VisibleForTesting
-	public float getAlpha() {
-		return alpha;
-	}
-
-	@VisibleForTesting
-	public float getBrightness() {
-		return brightness;
 	}
 }

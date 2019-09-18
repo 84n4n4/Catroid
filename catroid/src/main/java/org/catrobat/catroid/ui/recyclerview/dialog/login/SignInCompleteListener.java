@@ -27,5 +27,4 @@ import android.os.Bundle;
 
 public interface SignInCompleteListener {
 	void onLoginSuccessful(Bundle bundle);
-	void onLoginCancel();
 }

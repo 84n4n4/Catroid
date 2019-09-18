@@ -51,11 +51,6 @@ public class RepeatUntilBrick extends FormulaBrick implements CompositeBrick {
 		setFormulaWithBrickField(BrickField.REPEAT_UNTIL_CONDITION, condition);
 	}
 
-	@VisibleForTesting
-	public EndBrick getEndBrick() {
-		return endBrick;
-	}
-
 	@Override
 	public boolean hasSecondaryList() {
 		return false;

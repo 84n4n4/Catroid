@@ -62,15 +62,6 @@ public class CollisionInformation {
 		collisionPolygonCalculationThread.start();
 	}
 
-	public boolean isCalculationCancelled() {
-		return isCalculationThreadCancelled;
-	}
-
-	public void cancelCalculation() {
-		isCalculationThreadCancelled = true;
-		Log.i(TAG, "Collision Polygon Calculation of " + lookData.getName() + " cancelled!");
-	}
-
 	public int getNumberOfVertices() {
 		int size = 0;
 		for (Polygon polygon : collisionPolygons) {
@@ -451,12 +442,5 @@ public class CollisionInformation {
 		Polygon[] polygons = new Polygon[1];
 		polygons[0] = polygon;
 		return polygons;
-	}
-
-	public void printDebugCollisionPolygons() {
-		int polygonNr = 0;
-		for (Polygon p : collisionPolygons) {
-			Log.i(TAG, "Collision Polygon " + ++polygonNr + " :\n" + Arrays.toString(p.getTransformedVertices()));
-		}
 	}
 }

@@ -59,12 +59,6 @@ public final class ServiceProvider {
 		return null;
 	}
 
-	public static synchronized <T extends CatroidService> void unregisterService(Class<T> serviceType) {
-		if (services.remove(serviceType) == null) {
-			Log.w(TAG, "Unregister Service: Service '" + serviceType.getSimpleName() + "' is not registered!");
-		}
-	}
-
 	private static CatroidService createCommonService(Class<? extends CatroidService> serviceType) {
 
 		CatroidService service = null;

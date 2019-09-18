@@ -155,10 +155,6 @@ public class Project implements Serializable {
 		sceneList.add(scene);
 	}
 
-	public void removeScene(Scene scene) {
-		sceneList.remove(scene);
-	}
-
 	public Scene getDefaultScene() {
 		return sceneList.get(0);
 	}
@@ -183,15 +179,6 @@ public class Project implements Serializable {
 		return userVariables.add(userVariable);
 	}
 
-	public boolean removeUserVariable(String name) {
-		for (UserVariable variable : userVariables) {
-			if (variable.getName().equals(name)) {
-				return userVariables.remove(variable);
-			}
-		}
-		return false;
-	}
-
 	public List<UserList> getUserLists() {
 		if (userLists == null) {
 			userLists = new ArrayList<>();
@@ -210,15 +197,6 @@ public class Project implements Serializable {
 
 	public boolean addUserList(UserList userList) {
 		return userLists.add(userList);
-	}
-
-	public boolean removeUserList(String name) {
-		for (UserList list : userLists) {
-			if (list.getName().equals(name)) {
-				return userLists.remove(list);
-			}
-		}
-		return false;
 	}
 
 	public void resetUserData() {
@@ -246,10 +224,6 @@ public class Project implements Serializable {
 
 	public String getName() {
 		return xmlHeader.getProjectName();
-	}
-
-	public void setName(String name) {
-		xmlHeader.setProjectName(name);
 	}
 
 	public String getDescription() {

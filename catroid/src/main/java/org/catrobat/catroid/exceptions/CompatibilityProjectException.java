@@ -26,10 +26,6 @@ public class CompatibilityProjectException extends ProjectException {
 
 	private static final long serialVersionUID = 1L;
 
-	public CompatibilityProjectException() {
-		super();
-	}
-
 	public CompatibilityProjectException(String message) {
 		super(message);
 	}

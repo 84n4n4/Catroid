@@ -110,10 +110,6 @@ public class ScratchProgramData implements Serializable, Parcelable {
 		return image;
 	}
 
-	public void setImage(WebImage image) {
-		this.image = image;
-	}
-
 	public String getInstructions() {
 		return instructions;
 	}
@@ -180,14 +176,6 @@ public class ScratchProgramData implements Serializable, Parcelable {
 
 	public void setSharedDate(Date sharedDate) {
 		this.sharedDate = sharedDate;
-	}
-
-	public List<String> getTags() {
-		return tags;
-	}
-
-	public void addTag(String tagName) {
-		tags.add(tagName);
 	}
 
 	public ScratchVisibilityState getVisibilityState() {

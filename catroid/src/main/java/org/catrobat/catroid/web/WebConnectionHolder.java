@@ -78,14 +78,4 @@ public class WebConnectionHolder {
 	public synchronized void removeConnection(WebConnection connection) {
 		connections.remove(connection);
 	}
-
-	@VisibleForTesting
-	public List<WebConnection> getConnections() {
-		return connections;
-	}
-
-	@VisibleForTesting
-	public void setConnections(List<WebConnection> connections) {
-		this.connections = connections;
-	}
 }

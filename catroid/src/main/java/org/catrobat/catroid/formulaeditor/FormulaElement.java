@@ -168,33 +168,6 @@ public class FormulaElement implements Serializable {
 		return root;
 	}
 
-	public void updateVariableReferences(String oldName, String newName) {
-		if (leftChild != null) {
-			leftChild.updateVariableReferences(oldName, newName);
-		}
-		if (rightChild != null) {
-			rightChild.updateVariableReferences(oldName, newName);
-		}
-		if (type == ElementType.USER_VARIABLE && value.equals(oldName)) {
-			value = newName;
-		}
-	}
-
-	public void getVariableAndListNames(List<String> variables, List<String> lists) {
-		if (leftChild != null) {
-			leftChild.getVariableAndListNames(variables, lists);
-		}
-		if (rightChild != null) {
-			rightChild.getVariableAndListNames(variables, lists);
-		}
-		if (type == ElementType.USER_VARIABLE && !variables.contains(value)) {
-			variables.add(value);
-		}
-		if (type == ElementType.USER_LIST && !lists.contains(value)) {
-			lists.add(value);
-		}
-	}
-
 	public boolean containsSpriteInCollision(String name) {
 		boolean contained = false;
 		if (leftChild != null) {

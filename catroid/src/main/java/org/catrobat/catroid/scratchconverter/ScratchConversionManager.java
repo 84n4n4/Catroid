@@ -216,18 +216,8 @@ public class ScratchConversionManager implements ConversionManager {
 	}
 
 	@Override
-	public boolean removeBaseInfoViewListener(BaseInfoViewListener baseInfoViewListener) {
-		return baseInfoViewListeners.remove(baseInfoViewListener);
-	}
-
-	@Override
 	public void addGlobalJobViewListener(JobViewListener jobViewListener) {
 		globalJobViewListeners.add(jobViewListener);
-	}
-
-	@Override
-	public boolean removeGlobalJobViewListener(JobViewListener jobViewListener) {
-		return globalJobViewListeners.remove(jobViewListener);
 	}
 
 	@Override

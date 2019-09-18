@@ -71,8 +71,6 @@ public class ScratchProgramDetailsActivity extends BaseActivity implements
 		JobViewListener, Client.DownloadCallback,
 		RVAdapter.OnItemClickListener<ScratchProgramData> {
 
-	public static final String TAG = ScratchProgramDetailsActivity.class.getSimpleName();
-
 	private static ScratchDataFetcher dataFetcher = new ServerCalls();
 	private static ConversionManager conversionManager;
 
@@ -333,14 +331,6 @@ public class ScratchProgramDetailsActivity extends BaseActivity implements
 
 	@Override
 	public void onJobStarted(final Job job) {
-	}
-
-	@Override
-	public void onJobProgress(final Job job, final short progress) {
-	}
-
-	@Override
-	public void onJobOutput(final Job job, @NonNull final String[] lines) {
 	}
 
 	@Override

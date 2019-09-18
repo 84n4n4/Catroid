@@ -166,14 +166,6 @@ public final class StorageOperations {
 		return dstFile;
 	}
 
-	public static File copyStreamToFile(InputStream inputStream, File dstFile) throws IOException {
-		if (!dstFile.exists() && !dstFile.createNewFile()) {
-			throw new IOException("Cannot create file: " + dstFile.getAbsolutePath() + ".");
-		}
-
-		return transferData(inputStream, dstFile);
-	}
-
 	public static File copyStreamToDir(InputStream inputStream, File dstDir, String fileName) throws
 			IOException, InvalidPathException {
 		if (!dstDir.exists()) {

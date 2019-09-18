@@ -134,12 +134,6 @@ public final class ImageEditing {
 		return scaledImageDimensions;
 	}
 
-	public static Bitmap rotateBitmap(Bitmap bitmap, int rotationDegree) {
-		Matrix rotateMatrix = new Matrix();
-		rotateMatrix.postRotate(rotationDegree);
-		return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), rotateMatrix, true);
-	}
-
 	public static void scaleImageFile(File file, double scaleFactor) throws FileNotFoundException {
 		String path = file.getAbsolutePath();
 		int[] originalBackgroundImageDimensions = getImageDimensions(path);

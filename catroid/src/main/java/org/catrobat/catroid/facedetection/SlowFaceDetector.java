@@ -106,9 +106,4 @@ public class SlowFaceDetector extends org.catrobat.catroid.facedetection.FaceDet
 		relativeFaceSize = relativeFaceSize > 100 ? 100 : relativeFaceSize;
 		onFaceDetected(relativePoint, relativeFaceSize);
 	}
-
-	@VisibleForTesting
-	public void callOnFaceFound(PointF centerPoint, float eyeDistance, int detectionWidth, int detectionHeight) {
-		onFaceFound(centerPoint, eyeDistance, detectionWidth, detectionHeight);
-	}
 }

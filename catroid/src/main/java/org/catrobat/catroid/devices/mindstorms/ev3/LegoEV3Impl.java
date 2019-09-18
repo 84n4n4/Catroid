@@ -127,26 +127,6 @@ public class LegoEV3Impl implements LegoEV3, LegoSensorService.OnSensorChangedLi
 	}
 
 	@Override
-	public EV3Motor getMotorA() {
-		return motorA;
-	}
-
-	@Override
-	public EV3Motor getMotorB() {
-		return motorB;
-	}
-
-	@Override
-	public EV3Motor getMotorC() {
-		return motorC;
-	}
-
-	@Override
-	public EV3Motor getMotorD() {
-		return motorD;
-	}
-
-	@Override
 	public void onSensorChanged() {
 		assignSensorsToPorts();
 	}
@@ -158,15 +138,11 @@ public class LegoEV3Impl implements LegoEV3, LegoSensorService.OnSensorChangedLi
 
 	@Override
 	public boolean isAlive() {
-		try {
-			sendKeepAlive();
-			return true;
-		} catch (MindstormsException e) {
-			return false;
-		}
+		sendKeepAlive();
+		return true;
 	}
 
-	private void sendKeepAlive() throws MindstormsException {
+	private void sendKeepAlive() {
 
 		EV3Command command = new EV3Command(mindstormsConnection.getCommandCounter(), EV3CommandType.DIRECT_COMMAND_NO_REPLY,
 				0, 0, EV3CommandOpCode.OP_KEEP_ALIVE);
@@ -276,26 +252,6 @@ public class LegoEV3Impl implements LegoEV3, LegoSensorService.OnSensorChangedLi
 		}
 
 		return -1;
-	}
-
-	@Override
-	public LegoSensor getSensor1() {
-		return sensor1;
-	}
-
-	@Override
-	public LegoSensor getSensor2() {
-		return sensor2;
-	}
-
-	@Override
-	public LegoSensor getSensor3() {
-		return sensor3;
-	}
-
-	@Override
-	public LegoSensor getSensor4() {
-		return sensor4;
 	}
 
 	@Override

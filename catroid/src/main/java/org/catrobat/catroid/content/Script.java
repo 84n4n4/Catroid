@@ -101,19 +101,11 @@ public abstract class Script implements Serializable, Cloneable {
 		return brickList.add(brick);
 	}
 
-	public void addBrick(int position, Brick brick) {
-		brickList.add(position, brick);
-	}
-
 	public void addToFlatList(List<Brick> bricks) {
 		bricks.add(getScriptBrick());
 		for (Brick brick : brickList) {
 			brick.addToFlatList(bricks);
 		}
-	}
-
-	public Brick getBrick(int index) {
-		return brickList.get(index);
 	}
 
 	public boolean removeBrick(Brick brick) {

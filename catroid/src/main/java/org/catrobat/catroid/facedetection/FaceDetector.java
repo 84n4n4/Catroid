@@ -96,14 +96,4 @@ public abstract class FaceDetector {
 	Point getRelationForFacePosition() {
 		return new Point(-ScreenValues.SCREEN_WIDTH, -ScreenValues.SCREEN_HEIGHT);
 	}
-
-	@VisibleForTesting
-	public void callOnFaceDetected(boolean faceDetected) {
-		onFaceDetected(faceDetected);
-	}
-
-	@VisibleForTesting
-	public void callOnFaceDetected(Point position, int size) {
-		onFaceDetected(position, size);
-	}
 }

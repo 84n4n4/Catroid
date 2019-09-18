@@ -59,11 +59,6 @@ public final class DeviceVariableAccessor {
 		deviceVariablesFile = new File(projectDirectory, DEVICE_VARIABLE_JSON_FILENAME);
 	}
 
-	@VisibleForTesting
-	public void setDeviceVariablesFile(File deviceVariablesFile) {
-		this.deviceVariablesFile = deviceVariablesFile;
-	}
-
 	public boolean readUserVariableValue(UserVariable variable) {
 		synchronized (LOCK) {
 			if (!deviceVariablesFile.exists()) {

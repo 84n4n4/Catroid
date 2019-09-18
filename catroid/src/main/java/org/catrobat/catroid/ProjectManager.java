@@ -252,36 +252,6 @@ public final class ProjectManager {
 		}
 	}
 
-	public List<UserVariable> getGlobalVariableConflicts(Project project1, Project project2) {
-		List<UserVariable> project1GlobalVars = project1.getUserVariables();
-		List<UserVariable> project2GlobalVars = project2.getUserVariables();
-		List<UserVariable> conflicts = new ArrayList<>();
-		for (UserVariable project1GlobalVar : project1GlobalVars) {
-			for (UserVariable project2GlobalVar : project2GlobalVars) {
-				if (project1GlobalVar.getName().equals(project2GlobalVar.getName()) && !project1GlobalVar.getValue()
-						.equals(project2GlobalVar.getValue())) {
-					conflicts.add(project1GlobalVar);
-				}
-			}
-		}
-		return conflicts;
-	}
-
-	public List<UserList> getGlobalListConflicts(Project project1, Project project2) {
-		List<UserList> project1GlobalLists = project1.getUserLists();
-		List<UserList> project2GlobalLists = project2.getUserLists();
-		List<UserList> conflicts = new ArrayList<>();
-		for (UserList project1GlobalList : project1GlobalLists) {
-			for (UserList project2GlobalList : project2GlobalLists) {
-				if (project1GlobalList.getName().equals(project2GlobalList.getName()) && !project1GlobalList.getList()
-						.equals(project2GlobalList.getList())) {
-					conflicts.add(project1GlobalList);
-				}
-			}
-		}
-		return conflicts;
-	}
-
 	@VisibleForTesting
 	public static void updateCollisionFormulasTo993(Project project) {
 		for (Scene scene : project.getSceneList()) {

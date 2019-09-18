@@ -169,11 +169,6 @@ public final class CastManager {
 		setCallback();
 	}
 
-	public void addCallback() {
-		callback = new MyMediaRouterCallback();
-		mediaRouter.addCallback(mediaRouteSelector, callback, MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY);
-	}
-
 	public synchronized void setCallback() {
 		setCallback(MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY);
 	}

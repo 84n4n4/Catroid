@@ -109,18 +109,6 @@ public class ArduinoImpl implements Arduino {
 		}
 	}
 
-	public void reportFirmwareVersion() {
-		if (firmata == null) {
-			return;
-		}
-
-		try {
-			firmata.send(new ReportFirmwareVersionMessage());
-		} catch (SerialException e) {
-			Log.d(TAG, "Firmata Serial error, cannot send message.");
-		}
-	}
-
 	@Override
 	public UUID getBluetoothDeviceUUID() {
 		return ARDUINO_UUID;

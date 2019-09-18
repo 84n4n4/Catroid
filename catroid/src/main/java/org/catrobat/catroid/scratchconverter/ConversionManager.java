@@ -40,9 +40,7 @@ public interface ConversionManager extends ConnectAuthCallback, ConvertCallback,
 	void shutdown();
 	void convertProgram(long jobID, String title, WebImage image, boolean force);
 	void addBaseInfoViewListener(BaseInfoViewListener baseInfoViewListener);
-	boolean removeBaseInfoViewListener(BaseInfoViewListener baseInfoViewListener);
 	void addGlobalJobViewListener(JobViewListener jobViewListener);
-	boolean removeGlobalJobViewListener(JobViewListener jobViewListener);
 	void addJobViewListener(long jobID, JobViewListener jobViewListener);
 	boolean removeJobViewListener(long jobID, JobViewListener jobViewListener);
 	void addGlobalDownloadCallback(DownloadCallback callback);

@@ -58,11 +58,6 @@ public class RepeatBrick extends FormulaBrick implements CompositeBrick {
 		setFormulaWithBrickField(Brick.BrickField.TIMES_TO_REPEAT, condition);
 	}
 
-	@VisibleForTesting
-	public EndBrick getEndBrick() {
-		return endBrick;
-	}
-
 	@Override
 	public boolean hasSecondaryList() {
 		return false;

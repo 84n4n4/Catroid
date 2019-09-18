@@ -57,16 +57,6 @@ public class IfLogicBeginBrick extends FormulaBrick implements CompositeBrick {
 		setFormulaWithBrickField(BrickField.IF_CONDITION, formula);
 	}
 
-	@VisibleForTesting
-	public ElseBrick getElseBrick() {
-		return elseBrick;
-	}
-
-	@VisibleForTesting
-	public EndBrick getEndBrick() {
-		return endBrick;
-	}
-
 	@Override
 	public boolean hasSecondaryList() {
 		return true;

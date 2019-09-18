@@ -48,12 +48,4 @@ public class GoToRandomPositionAction extends TemporalAction {
 	public void setSprite(Sprite sprite) {
 		this.sprite = sprite;
 	}
-
-	public float getRandomXPosition() {
-		return this.randomXPosition;
-	}
-
-	public float getRandomYPosition() {
-		return this.randomYPosition;
-	}
 }

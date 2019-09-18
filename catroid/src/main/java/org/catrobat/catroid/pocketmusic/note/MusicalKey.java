@@ -30,9 +30,5 @@ public enum MusicalKey {
 	MusicalKey(NoteName noteNameOnMiddleLine) {
 		this.noteNameOnMiddleLine = noteNameOnMiddleLine;
 	}
-
-	public NoteName getNoteNameOnMiddleLine() {
-		return noteNameOnMiddleLine;
-	}
 }
 

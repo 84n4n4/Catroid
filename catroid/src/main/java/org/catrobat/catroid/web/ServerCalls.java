@@ -186,7 +186,7 @@ public final class ServerCalls implements ScratchDataFetcher {
 		}
 	}
 
-	public ScratchSearchResult fetchDefaultScratchPrograms() throws WebconnectionException, InterruptedIOException {
+	public ScratchSearchResult fetchDefaultScratchPrograms() throws WebconnectionException {
 		try {
 			final String url = Constants.SCRATCH_CONVERTER_API_DEFAULT_PROJECTS_URL;
 			resultString = getRequestInterruptable(url);

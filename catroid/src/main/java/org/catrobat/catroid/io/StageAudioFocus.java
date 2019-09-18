@@ -31,8 +31,6 @@ public class StageAudioFocus implements OnAudioFocusChangeListener {
 	private AudioManager audioManager = null;
 	private boolean isAudioFocusGranted = false;
 
-	public static final String TAG = StageAudioFocus.class.getSimpleName();
-
 	public StageAudioFocus(Context context) {
 		audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 	}
@@ -44,11 +42,7 @@ public class StageAudioFocus implements OnAudioFocusChangeListener {
 
 		int result = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
-		if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-			isAudioFocusGranted = true;
-		} else {
-			isAudioFocusGranted = false;
-		}
+		isAudioFocusGranted = result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
 	}
 
 	public void releaseAudioFocus() {

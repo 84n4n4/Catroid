@@ -24,7 +24,6 @@ package org.catrobat.catroid.drone.jumpingsumo;
 
 public final class JumpingSumoDataContainer {
 
-	public static final String TAG = JumpingSumoDataContainer.class.getSimpleName();
 	private static JumpingSumoDataContainer ourInstance = new JumpingSumoDataContainer();
 
 	private boolean positionHeadUp = true;

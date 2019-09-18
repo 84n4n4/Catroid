@@ -71,8 +71,6 @@ public class ScratchSearchResultsFragment extends Fragment implements
 		RVAdapter.SelectionListener,
 		RVAdapter.OnItemClickListener<ScratchProgramData> {
 
-	public static final String TAG = ScratchSearchResultsFragment.class.getSimpleName();
-
 	@Retention(RetentionPolicy.SOURCE)
 	@IntDef({NONE, CONVERT})
 	@interface ActionModeType {}
@@ -124,10 +122,6 @@ public class ScratchSearchResultsFragment extends Fragment implements
 			if (searchTask != null) {
 				searchTask.cancel(true);
 			}
-		}
-
-		@Override
-		public void onPreExecute() {
 		}
 
 		@Override

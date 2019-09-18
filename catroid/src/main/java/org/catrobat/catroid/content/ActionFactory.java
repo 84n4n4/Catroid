@@ -66,9 +66,7 @@ import org.catrobat.catroid.content.actions.DronePlayLedAnimationAction;
 import org.catrobat.catroid.content.actions.DroneSwitchCameraAction;
 import org.catrobat.catroid.content.actions.DroneTakeoffAndLandAction;
 import org.catrobat.catroid.content.actions.DroneTurnLeftAction;
-import org.catrobat.catroid.content.actions.DroneTurnLeftWithMagnetometerAction;
 import org.catrobat.catroid.content.actions.DroneTurnRightAction;
-import org.catrobat.catroid.content.actions.DroneTurnRightWithMagnetometerAction;
 import org.catrobat.catroid.content.actions.EventAction;
 import org.catrobat.catroid.content.actions.EventThread;
 import org.catrobat.catroid.content.actions.FlashAction;
@@ -295,15 +293,6 @@ public class ActionFactory extends Actions {
 		GlideToAction action = Actions.action(GlideToAction.class);
 		action.setPosition(x, y);
 		action.setDuration(duration);
-		action.setSprite(sprite);
-		return action;
-	}
-
-	public Action createGlideToAction(Sprite sprite, Formula x, Formula y, Formula duration, Interpolation interpolation) {
-		GlideToAction action = Actions.action(GlideToAction.class);
-		action.setPosition(x, y);
-		action.setDuration(duration);
-		action.setInterpolation(interpolation);
 		action.setSprite(sprite);
 		return action;
 	}
@@ -960,22 +949,6 @@ public class ActionFactory extends Actions {
 
 	public Action createDroneTurnLeftAction(Sprite sprite, Formula seconds, Formula powerInPercent) {
 		DroneTurnLeftAction action = action(DroneTurnLeftAction.class);
-		action.setSprite(sprite);
-		action.setDelay(seconds);
-		action.setPower(powerInPercent);
-		return action;
-	}
-
-	public Action createDroneTurnLeftMagnetoAction(Sprite sprite, Formula seconds, Formula powerInPercent) {
-		DroneTurnLeftWithMagnetometerAction action = action(DroneTurnLeftWithMagnetometerAction.class);
-		action.setSprite(sprite);
-		action.setDelay(seconds);
-		action.setPower(powerInPercent);
-		return action;
-	}
-
-	public Action createDroneTurnRightMagnetoAction(Sprite sprite, Formula seconds, Formula powerInPercent) {
-		DroneTurnRightWithMagnetometerAction action = action(DroneTurnRightWithMagnetometerAction.class);
 		action.setSprite(sprite);
 		action.setDelay(seconds);
 		action.setPower(powerInPercent);

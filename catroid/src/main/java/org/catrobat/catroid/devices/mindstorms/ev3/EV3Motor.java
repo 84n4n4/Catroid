@@ -62,8 +62,4 @@ public class EV3Motor implements MindstormsMotor {
 	@Override
 	public void move(int speed, int degrees, boolean reply) {
 	}
-
-	public byte getOutputField() {
-		return outputField;
-	}
 }

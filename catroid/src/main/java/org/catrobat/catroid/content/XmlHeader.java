@@ -116,14 +116,6 @@ public class XmlHeader implements Serializable {
 		return virtualScreenWidth;
 	}
 
-	public void setVirtualScreenHeight(int height) {
-		virtualScreenHeight = height;
-	}
-
-	public void setVirtualScreenWidth(int width) {
-		virtualScreenWidth = width;
-	}
-
 	public String getProjectName() {
 		return programName;
 	}
@@ -152,56 +144,28 @@ public class XmlHeader implements Serializable {
 		this.catrobatLanguageVersion = catrobatLanguageVersion;
 	}
 
-	public String getPlatform() {
-		return platform;
-	}
-
 	public void setPlatform(String platform) {
 		this.platform = platform;
-	}
-
-	public String getApplicationBuildName() {
-		return applicationBuildName;
 	}
 
 	public void setApplicationBuildName(String applicationBuildName) {
 		this.applicationBuildName = applicationBuildName;
 	}
 
-	public int getApplicationBuildNumber() {
-		return applicationBuildNumber;
-	}
-
 	public void setApplicationBuildNumber(int applicationBuildNumber) {
 		this.applicationBuildNumber = applicationBuildNumber;
-	}
-
-	public String getApplicationName() {
-		return applicationName;
 	}
 
 	public void setApplicationName(String applicationName) {
 		this.applicationName = applicationName;
 	}
 
-	public String getApplicationVersion() {
-		return applicationVersion;
-	}
-
 	public void setApplicationVersion(String applicationVersion) {
 		this.applicationVersion = applicationVersion;
 	}
 
-	public String getDeviceName() {
-		return deviceName;
-	}
-
 	public void setDeviceName(String deviceName) {
 		this.deviceName = deviceName;
-	}
-
-	public String getPlatformVersion() {
-		return platformVersion;
 	}
 
 	public void setPlatformVersion(String platformVersion) {
@@ -238,14 +202,6 @@ public class XmlHeader implements Serializable {
 
 	public String getRemixParentsUrlString() {
 		return this.remixParentsUrlString;
-	}
-
-	public void setRemixParentsUrlString(String remixParentsUrlString) {
-		this.remixParentsUrlString = remixParentsUrlString;
-	}
-
-	public String getApplicationBuildType() {
-		return applicationBuildType;
 	}
 
 	public void setApplicationBuildType(String applicationBuildType) {

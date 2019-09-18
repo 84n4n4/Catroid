@@ -117,10 +117,6 @@ public class ThreadScheduler {
 		stopQueue.addAll(actions);
 	}
 
-	public boolean haveAllThreadsFinished() {
-		return startQueue.size + actor.getActions().size == 0;
-	}
-
 	public void setState(@SchedulerState int schedulerState) {
 		this.state = schedulerState;
 	}

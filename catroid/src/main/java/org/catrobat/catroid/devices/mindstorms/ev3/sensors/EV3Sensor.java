@@ -83,49 +83,6 @@ public abstract class EV3Sensor implements LegoSensor {
 		}
 	}
 
-	public enum SensorConnectionType {
-		CONN_UNKNOWN(0x6F),
-
-		CONN_DAISYCHAIN(0x75),
-		CONN_NXT_COLOR(0x76),
-		CONN_NXT_ANALOG(0x77),
-		CONN_NXT_IIC(0x78),
-
-		CONN_EV3_IN_DUMB(0x79),
-		CONN_EV3_IN_UART(0x7A),
-		CONN_EV3_OUT_DUMB(0x7B),
-		CONN_EV3_OUT_INTELLIGENT(0x7C),
-		CONN_EV3_OUT_TACHO(0x7D),
-
-		CONN_NONE(0x7E),
-		CONN_ERROR(0x7F);
-
-		private int sensorConnectionByteCode;
-
-		private static final SparseArray<SensorConnectionType> LOOKUP = new SparseArray<SensorConnectionType>();
-		static {
-			for (SensorConnectionType c : SensorConnectionType.values()) {
-				LOOKUP.put(c.sensorConnectionByteCode, c);
-			}
-		}
-
-		public static SensorConnectionType getSensorConnectionTypeByValue(byte value) {
-			return LOOKUP.get(value & 0xFF);
-		}
-
-		public static boolean isMember(byte memberToTest) {
-			return LOOKUP.get(memberToTest & 0xFF) != null;
-		}
-
-		SensorConnectionType(int sensorConnectionType) {
-			this.sensorConnectionByteCode = sensorConnectionType;
-		}
-
-		public byte getByte() {
-			return (byte) sensorConnectionByteCode;
-		}
-	}
-
 	public enum CpuCommandFlag {
 		INCLUDE_TYPE_AND_MODE,
 		NO_TYPE_AND_MODE,
@@ -151,28 +108,6 @@ public abstract class EV3Sensor implements LegoSensor {
 		this.sensorMode = sensorMode;
 
 		this.connection = connection;
-	}
-
-	public SensorConnectionType getConnectionType(int chainLayer) {
-		int commandCount = connection.getCommandCounter();
-		byte connectionType = 0x00;
-
-		EV3Command command = new EV3Command(connection.getCommandCounter(), EV3CommandType.DIRECT_COMMAND_REPLY,
-				1, 0, EV3CommandOpCode.OP_INPUT_DEVICE);
-		connection.incCommandCounter();
-
-		command.append(EV3CommandByteCode.INPUT_DEVICE_GET_CONNECTION.getByte());
-		command.append(EV3CommandParamFormat.PARAM_FORMAT_SHORT, chainLayer);
-		command.append(EV3CommandParamFormat.PARAM_FORMAT_SHORT, this.port);
-		command.append(EV3CommandVariableScope.PARAM_VARIABLE_SCOPE_GLOBAL, 0);
-
-		try {
-			EV3Reply reply = sendCommandAndGetReply(command, commandCount);
-			connectionType = reply.getByte(3);
-		} catch (MindstormsException e) {
-			Log.e(TAG, e.getMessage());
-		}
-		return SensorConnectionType.getSensorConnectionTypeByValue(connectionType);
 	}
 
 	protected void initialize() {

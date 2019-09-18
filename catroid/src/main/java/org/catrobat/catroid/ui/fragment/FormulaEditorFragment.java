@@ -346,11 +346,6 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 		super.onStart();
 	}
 
-	@VisibleForTesting
-	public FormulaEditorEditText getFormulaEditorEditText() {
-		return formulaEditorEditText;
-	}
-
 	@Override
 	public void onStop() {
 		super.onStop();

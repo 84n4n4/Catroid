@@ -44,8 +44,6 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
 public class FilePickerActivity extends BaseActivity implements ListProjectFilesTask.OnListProjectFilesListener {
 
-	public static final String TAG = FilePickerActivity.class.getSimpleName();
-
 	private static final int PERMISSIONS_REQUEST_IMPORT_FROM_EXTERNAL_STORAGE = 801;
 
 	private RecyclerView recyclerView;

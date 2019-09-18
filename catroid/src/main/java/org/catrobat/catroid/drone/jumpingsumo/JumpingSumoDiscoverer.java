@@ -61,27 +61,6 @@ public class JumpingSumoDiscoverer {
 	}
 
 	public interface ListenerPicture {
-		/**
-		 * Called when the pic Count changes
-		 * Called in the main thread
-		 * @param pictureCount the count of Pictures
-		 */
-		void onPictureCount(int pictureCount);
-
-		/**
-		 * Called before medias will be downloaded
-		 * Called in the main thread
-		 * @param matchingMedias the number of medias that will be downloaded
-		 */
-		void onMatchingMediasFound(int matchingMedias);
-
-		/**
-		 * Called each time the progress of a download changes
-		 * Called in the main thread
-		 * @param mediaName the name of the media
-		 * @param progress the progress of its download (from 0 to 100)
-		 */
-		void onDownloadProgressed(String mediaName, int progress);
 
 		/**
 		 * Called when a media download has ended
@@ -173,28 +152,6 @@ public class JumpingSumoDiscoverer {
 	}
 
 	/**
-	 * Cleanup the object
-	 * Should be called when the object is not used anymore
-	 */
-	public void cleanup() {
-		stopDiscovering();
-		if (ardiscoveryService != null) {
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					ardiscoveryService.stop();
-					context.unbindService(ardiscoveryServiceConnection);
-					ardiscoveryService = null;
-				}
-			}).start();
-		}
-
-		// unregister receivers
-		LocalBroadcastManager localBroadcastMgr = LocalBroadcastManager.getInstance(context);
-		localBroadcastMgr.unregisterReceiver(ardiscoveryServicesDevicesListUpdatedReceiver);
-	}
-
-	/**
 	 * Start discovering Parrot drones
 	 * For Wifi drones, the device should be on the drone's network
 	 * When drones will be discovered, you will be notified through {@link Listener#onDronesListUpdated(List)}
@@ -207,15 +164,6 @@ public class JumpingSumoDiscoverer {
 		} else {
 			startDiscoveryAfterConnection = true;
 		}
-	}
-	/**
-	 * Stop discovering Parrot drones
-	 */
-	public void stopDiscovering() {
-		if (ardiscoveryService != null) {
-			ardiscoveryService.stop();
-		}
-		startDiscoveryAfterConnection = false;
 	}
 
 	private void notifyServiceDiscovered(List<ARDiscoveryDeviceService> dronesList) {
@@ -253,7 +201,6 @@ public class JumpingSumoDiscoverer {
 
 			sdcardModule = new SDCardModule(ftplistModule, ftpqueueManager);
 			sdcardModule.addListener(sdcardModulelistener);
-			notifyPictureCount(sdcardModule.getPictureCount());
 		} catch (ARUtilsException e) {
 			Log.e(TAG, "Exception", e);
 		}
@@ -263,35 +210,10 @@ public class JumpingSumoDiscoverer {
 		sdcardModule.getallFlightMedias();
 	}
 
-	public void notifyPic() {
-		notifyPictureCount(sdcardModule.getPictureCount());
-	}
-
 	public void onDeleteFile(String mediaName) {
 		sdcardModule.deleteLastReceivedPic(mediaName);
-		notifyPictureCount(sdcardModule.getPictureCount());
 	}
 
-	private void notifyPictureCount(int pictureCount) {
-		List<ListenerPicture> listenersCpy = new ArrayList<>(listenerPictures);
-		for (ListenerPicture listener : listenersCpy) {
-			listener.onPictureCount(pictureCount);
-		}
-	}
-
-	private void notifyMatchingMediasFound(int matchingMedias) {
-		List<ListenerPicture> listenersCpy = new ArrayList<>(listenerPictures);
-		for (ListenerPicture listener : listenersCpy) {
-			listener.onMatchingMediasFound(matchingMedias);
-		}
-	}
-
-	private void notifyDownloadProgressed(String mediaName, int progress) {
-		List<ListenerPicture> listenersCpy = new ArrayList<>(listenerPictures);
-		for (ListenerPicture listener : listenersCpy) {
-			listener.onDownloadProgressed(mediaName, progress);
-		}
-	}
 
 	private void notifyDownloadComplete(String mediaName) {
 		List<ListenerPicture> listenersCpy = new ArrayList<>(listenerPictures);
@@ -303,22 +225,10 @@ public class JumpingSumoDiscoverer {
 	private final SDCardModule.Listener sdcardModulelistener = new SDCardModule.Listener() {
 		@Override
 		public void onMatchingMediasFound(final int matchingMedias) {
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					notifyMatchingMediasFound(matchingMedias);
-				}
-			});
 		}
 
 		@Override
 		public void onDownloadProgressed(final String mediaName, final int progress) {
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					notifyDownloadProgressed(mediaName, progress);
-				}
-			});
 		}
 
 		@Override

@@ -45,10 +45,6 @@ public class GridRowPosition {
 		return noteLength;
 	}
 
-	public void setColumnStartIndex(int columnStartIndex) {
-		this.columnStartIndex = columnStartIndex;
-	}
-
 	public long getStartTicksInTrack() {
 		return columnStartIndex * noteLength.toTicks(Project.DEFAULT_BEATS_PER_MINUTE);
 	}

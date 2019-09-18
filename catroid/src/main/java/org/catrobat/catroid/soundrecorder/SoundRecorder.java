@@ -30,7 +30,6 @@ import java.io.IOException;
 
 public class SoundRecorder {
 
-	public static final String RECORDING_EXTENSION = ".m4a";
 	private MediaRecorder recorder;
 	private boolean isRecording;
 
@@ -69,7 +68,7 @@ public class SoundRecorder {
 		}
 	}
 
-	public void stop() throws IOException {
+	public void stop() {
 		try {
 			recorder.stop();
 		} catch (RuntimeException e) {

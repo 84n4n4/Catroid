@@ -73,8 +73,4 @@ public class EventThread extends ScriptSequenceAction {
 
 		return copy;
 	}
-
-	public void setNotifyAction(NotifyEventWaiterAction notifyAction) {
-		this.notifyAction = notifyAction;
-	}
 }

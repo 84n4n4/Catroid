@@ -32,8 +32,6 @@ import org.catrobat.catroid.content.StartScript;
 import org.catrobat.catroid.content.bricks.AddItemToUserListBrick;
 import org.catrobat.catroid.content.bricks.CompositeBrick;
 import org.catrobat.catroid.content.bricks.IfLogicBeginBrick;
-import org.catrobat.catroid.content.bricks.PhiroIfLogicBeginBrick;
-import org.catrobat.catroid.content.bricks.RaspiIfLogicBeginBrick;
 import org.catrobat.catroid.content.bricks.SetVariableBrick;
 import org.catrobat.catroid.content.bricks.UserListBrick;
 import org.catrobat.catroid.content.bricks.UserVariableBrickWithFormula;
@@ -60,8 +58,6 @@ public class CloneThreePartCompositeBrickUpdateDataTest {
 	public static Iterable<Object[]> data() {
 		return Arrays.asList(new Object[][] {
 				{IfLogicBeginBrick.class.getSimpleName(), IfLogicBeginBrick.class},
-				{PhiroIfLogicBeginBrick.class.getSimpleName(), PhiroIfLogicBeginBrick.class},
-				{RaspiIfLogicBeginBrick.class.getSimpleName(), RaspiIfLogicBeginBrick.class}
 		});
 	}
 

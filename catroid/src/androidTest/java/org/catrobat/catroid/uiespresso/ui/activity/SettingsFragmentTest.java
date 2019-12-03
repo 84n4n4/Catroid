@@ -62,19 +62,8 @@ import static junit.framework.Assert.assertTrue;
 
 import static org.catrobat.catroid.common.SharedPreferenceKeys.ACCESSIBILITY_PROFILE_PREFERENCE_KEY;
 import static org.catrobat.catroid.common.SharedPreferenceKeys.LANGUAGE_CODE;
-import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.PARROT_JUMPING_SUMO_SCREEN_KEY;
-import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_CAST_GLOBALLY_ENABLED;
 import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_CRASH_REPORTS;
-import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_MINDSTORMS_EV3_BRICKS_ENABLED;
-import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_MINDSTORMS_EV3_SHOW_SENSOR_INFO_BOX_DISABLED;
-import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_MINDSTORMS_NXT_BRICKS_ENABLED;
-import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_MINDSTORMS_NXT_SHOW_SENSOR_INFO_BOX_DISABLED;
-import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_SHOW_ARDUINO_BRICKS;
 import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_SHOW_HINTS;
-import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_SHOW_NFC_BRICKS;
-import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_SHOW_PARROT_AR_DRONE_BRICKS;
-import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_SHOW_PHIRO_BRICKS;
-import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_SHOW_RASPI_BRICKS;
 import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.AllOf.allOf;
@@ -87,13 +76,7 @@ public class SettingsFragmentTest {
 	public BaseActivityTestRule<SettingsActivity> baseActivityTestRule = new
 			BaseActivityTestRule<>(SettingsActivity.class, true, false);
 
-	private List<String> allSettings = new ArrayList<>(Arrays.asList(SETTINGS_SHOW_ARDUINO_BRICKS,
-			SETTINGS_SHOW_PHIRO_BRICKS, SETTINGS_SHOW_NFC_BRICKS, SETTINGS_SHOW_HINTS, SETTINGS_CRASH_REPORTS,
-			SETTINGS_MINDSTORMS_NXT_BRICKS_ENABLED, SETTINGS_MINDSTORMS_NXT_SHOW_SENSOR_INFO_BOX_DISABLED,
-			SETTINGS_MINDSTORMS_EV3_BRICKS_ENABLED, SETTINGS_MINDSTORMS_EV3_SHOW_SENSOR_INFO_BOX_DISABLED,
-			SETTINGS_SHOW_PARROT_AR_DRONE_BRICKS, PARROT_JUMPING_SUMO_SCREEN_KEY,
-			SETTINGS_SHOW_RASPI_BRICKS,
-			SETTINGS_CAST_GLOBALLY_ENABLED));
+	private List<String> allSettings = new ArrayList<>(Arrays.asList(SETTINGS_SHOW_HINTS, SETTINGS_CRASH_REPORTS));
 	private Map<String, Boolean> initialSettings = new HashMap<>();
 
 	@Before
@@ -134,12 +117,8 @@ public class SettingsFragmentTest {
 	@Category({Cat.AppUi.class, Level.Smoke.class})
 	@Test
 	public void basicSettingsTest() {
-		checkPreference(R.string.preference_title_enable_arduino_bricks, SETTINGS_SHOW_ARDUINO_BRICKS);
-		checkPreference(R.string.preference_title_enable_phiro_bricks, SETTINGS_SHOW_PHIRO_BRICKS);
-		checkPreference(R.string.preference_title_enable_nfc_bricks, SETTINGS_SHOW_NFC_BRICKS);
 		checkPreference(R.string.preference_title_enable_hints, SETTINGS_SHOW_HINTS);
 		checkPreference(R.string.preference_title_enable_crash_reports, SETTINGS_CRASH_REPORTS);
-		checkPreference(R.string.preference_title_cast_feature_globally_enabled, SETTINGS_CAST_GLOBALLY_ENABLED);
 	}
 
 	@Category({Cat.AppUi.class, Level.Functional.class, Cat.Quarantine.class})
@@ -153,52 +132,6 @@ public class SettingsFragmentTest {
 
 		onView(allOf(withId(R.id.radio_button), withParent(withId(R.id.argus))))
 				.perform(click());
-	}
-
-	@Category({Cat.AppUi.class, Level.Smoke.class, Cat.Gadgets.class})
-	@Test
-	public void legoNxtSettingsTest() {
-		onData(PreferenceMatchers.withTitle(R.string.preference_title_enable_mindstorms_nxt_bricks))
-				.perform(click());
-
-		checkPreference(R.string.preference_title_enable_mindstorms_nxt_bricks, SETTINGS_MINDSTORMS_NXT_BRICKS_ENABLED);
-		checkPreference(R.string.preference_disable_nxt_info_dialog, SETTINGS_MINDSTORMS_NXT_SHOW_SENSOR_INFO_BOX_DISABLED);
-	}
-
-	@Category({Cat.AppUi.class, Level.Smoke.class, Cat.Gadgets.class})
-	@Test
-	public void legoEv3SettingsTest() {
-		onData(PreferenceMatchers.withTitle(R.string.preference_title_enable_mindstorms_ev3_bricks))
-				.perform(click());
-
-		checkPreference(R.string.preference_title_enable_mindstorms_ev3_bricks, SETTINGS_MINDSTORMS_EV3_BRICKS_ENABLED);
-		checkPreference(R.string.preference_disable_nxt_info_dialog,
-				SETTINGS_MINDSTORMS_EV3_SHOW_SENSOR_INFO_BOX_DISABLED);
-	}
-
-	@Category({Cat.AppUi.class, Level.Smoke.class, Cat.Gadgets.class})
-	@Test
-	public void parrotArSettingsTest() {
-		onData(PreferenceMatchers.withTitle(R.string.preference_title_enable_quadcopter_bricks))
-				.perform(click());
-
-		checkPreference(R.string.preference_title_enable_quadcopter_bricks, SETTINGS_SHOW_PARROT_AR_DRONE_BRICKS);
-	}
-
-	@Category({Cat.AppUi.class, Level.Smoke.class, Cat.Gadgets.class})
-	@Test
-	public void parrotJumpingSumoSettingsTest() {
-		onData(PreferenceMatchers.withTitle(R.string.preference_title_enable_jumpingsumo_bricks)).perform(click());
-
-		checkPreference(R.string.preference_title_enable_jumpingsumo_bricks, PARROT_JUMPING_SUMO_SCREEN_KEY);
-	}
-
-	@Test
-	public void rasPiSettingsTest() {
-		onData(PreferenceMatchers.withTitle(R.string.preference_title_enable_raspi_bricks))
-				.perform(click());
-
-		checkPreference(R.string.preference_title_enable_raspi_bricks, SETTINGS_SHOW_RASPI_BRICKS);
 	}
 
 	@Category({Cat.AppUi.class, Level.Smoke.class})

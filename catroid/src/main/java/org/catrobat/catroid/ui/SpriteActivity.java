@@ -38,7 +38,6 @@ import android.widget.RadioButton;
 import org.catrobat.catroid.BuildConfig;
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.cast.CastManager;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.Project;
@@ -60,11 +59,9 @@ import org.catrobat.catroid.ui.recyclerview.dialog.dialoginterface.NewItemInterf
 import org.catrobat.catroid.ui.recyclerview.dialog.textwatcher.NewItemTextWatcher;
 import org.catrobat.catroid.ui.recyclerview.fragment.DataListFragment;
 import org.catrobat.catroid.ui.recyclerview.fragment.LookListFragment;
-import org.catrobat.catroid.ui.recyclerview.fragment.NfcTagListFragment;
 import org.catrobat.catroid.ui.recyclerview.fragment.ScriptFragment;
 import org.catrobat.catroid.ui.recyclerview.fragment.SoundListFragment;
 import org.catrobat.catroid.ui.recyclerview.util.UniqueNameProvider;
-import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
 
 import java.io.File;
 import java.io.IOException;
@@ -178,9 +175,6 @@ public class SpriteActivity extends BaseActivity {
 			case FRAGMENT_SOUNDS:
 				fragmentTransaction.replace(R.id.fragment_container, new SoundListFragment(), SoundListFragment.TAG);
 				break;
-			case FRAGMENT_NFC_TAGS:
-				fragmentTransaction.replace(R.id.fragment_container, new NfcTagListFragment(), NfcTagListFragment.TAG);
-				break;
 			default:
 				throw new IllegalArgumentException("Invalid fragmentPosition in Activity.");
 		}
@@ -190,15 +184,6 @@ public class SpriteActivity extends BaseActivity {
 
 	private Fragment getCurrentFragment() {
 		return getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-
-		if (getCurrentFragment() instanceof NfcTagListFragment) {
-			((NfcTagListFragment) getCurrentFragment()).onNewIntent(intent);
-		}
 	}
 
 	@Override
@@ -267,16 +252,6 @@ public class SpriteActivity extends BaseActivity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-
-		if (resultCode != RESULT_OK) {
-			if (SettingsFragment.isCastSharedPreferenceEnabled(this)
-					&& projectManager.getCurrentProject().isCastProject()
-					&& !CastManager.getInstance().isConnected()) {
-
-				CastManager.getInstance().openDeviceSelectorOrDisconnectDialog(this);
-			}
-			return;
-		}
 
 		Uri uri;
 

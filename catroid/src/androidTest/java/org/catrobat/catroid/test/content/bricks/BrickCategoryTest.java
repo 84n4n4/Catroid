@@ -33,8 +33,6 @@ import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.StartScript;
 import org.catrobat.catroid.content.bricks.AddItemToUserListBrick;
-import org.catrobat.catroid.content.bricks.ArduinoSendDigitalValueBrick;
-import org.catrobat.catroid.content.bricks.ArduinoSendPWMValueBrick;
 import org.catrobat.catroid.content.bricks.AskBrick;
 import org.catrobat.catroid.content.bricks.AskSpeechBrick;
 import org.catrobat.catroid.content.bricks.AssertEqualsBrick;
@@ -58,19 +56,6 @@ import org.catrobat.catroid.content.bricks.CloneBrick;
 import org.catrobat.catroid.content.bricks.ComeToFrontBrick;
 import org.catrobat.catroid.content.bricks.DeleteItemOfUserListBrick;
 import org.catrobat.catroid.content.bricks.DeleteThisCloneBrick;
-import org.catrobat.catroid.content.bricks.DroneEmergencyBrick;
-import org.catrobat.catroid.content.bricks.DroneFlipBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveBackwardBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveDownBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveForwardBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveLeftBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveRightBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveUpBrick;
-import org.catrobat.catroid.content.bricks.DronePlayLedAnimationBrick;
-import org.catrobat.catroid.content.bricks.DroneSwitchCameraBrick;
-import org.catrobat.catroid.content.bricks.DroneTakeOffLandBrick;
-import org.catrobat.catroid.content.bricks.DroneTurnLeftBrick;
-import org.catrobat.catroid.content.bricks.DroneTurnRightBrick;
 import org.catrobat.catroid.content.bricks.FlashBrick;
 import org.catrobat.catroid.content.bricks.ForeverBrick;
 import org.catrobat.catroid.content.bricks.GlideToBrick;
@@ -82,46 +67,17 @@ import org.catrobat.catroid.content.bricks.IfLogicBeginBrick;
 import org.catrobat.catroid.content.bricks.IfOnEdgeBounceBrick;
 import org.catrobat.catroid.content.bricks.IfThenLogicBeginBrick;
 import org.catrobat.catroid.content.bricks.InsertItemIntoUserListBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoAnimationsBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoJumpHighBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoJumpLongBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoMoveBackwardBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoMoveForwardBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoNoSoundBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoRotateLeftBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoRotateRightBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoSoundBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoTakingPictureBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoTurnBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorMoveBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorStopBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorTurnAngleBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3PlayToneBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3SetLedBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorMoveBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorStopBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorTurnAngleBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtPlayToneBrick;
 import org.catrobat.catroid.content.bricks.MoveNStepsBrick;
 import org.catrobat.catroid.content.bricks.NextLookBrick;
 import org.catrobat.catroid.content.bricks.NoteBrick;
 import org.catrobat.catroid.content.bricks.PenDownBrick;
 import org.catrobat.catroid.content.bricks.PenUpBrick;
-import org.catrobat.catroid.content.bricks.PhiroIfLogicBeginBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorMoveBackwardBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorMoveForwardBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorStopBrick;
-import org.catrobat.catroid.content.bricks.PhiroPlayToneBrick;
-import org.catrobat.catroid.content.bricks.PhiroRGBLightBrick;
 import org.catrobat.catroid.content.bricks.PlaceAtBrick;
 import org.catrobat.catroid.content.bricks.PlaySoundAndWaitBrick;
 import org.catrobat.catroid.content.bricks.PlaySoundBrick;
 import org.catrobat.catroid.content.bricks.PointInDirectionBrick;
 import org.catrobat.catroid.content.bricks.PointToBrick;
 import org.catrobat.catroid.content.bricks.PreviousLookBrick;
-import org.catrobat.catroid.content.bricks.RaspiIfLogicBeginBrick;
-import org.catrobat.catroid.content.bricks.RaspiPwmBrick;
-import org.catrobat.catroid.content.bricks.RaspiSendDigitalValueBrick;
 import org.catrobat.catroid.content.bricks.ReadListFromDeviceBrick;
 import org.catrobat.catroid.content.bricks.ReadVariableFromDeviceBrick;
 import org.catrobat.catroid.content.bricks.RepeatBrick;
@@ -154,7 +110,6 @@ import org.catrobat.catroid.content.bricks.ShowTextColorSizeAlignmentBrick;
 import org.catrobat.catroid.content.bricks.SpeakAndWaitBrick;
 import org.catrobat.catroid.content.bricks.SpeakBrick;
 import org.catrobat.catroid.content.bricks.StampBrick;
-import org.catrobat.catroid.content.bricks.StitchBrick;
 import org.catrobat.catroid.content.bricks.StopAllSoundsBrick;
 import org.catrobat.catroid.content.bricks.StopScriptBrick;
 import org.catrobat.catroid.content.bricks.TapAtBrick;
@@ -171,8 +126,6 @@ import org.catrobat.catroid.content.bricks.WhenBackgroundChangesBrick;
 import org.catrobat.catroid.content.bricks.WhenBrick;
 import org.catrobat.catroid.content.bricks.WhenClonedBrick;
 import org.catrobat.catroid.content.bricks.WhenConditionBrick;
-import org.catrobat.catroid.content.bricks.WhenGamepadButtonBrick;
-import org.catrobat.catroid.content.bricks.WhenRaspiPinChangedBrick;
 import org.catrobat.catroid.content.bricks.WhenStartedBrick;
 import org.catrobat.catroid.content.bricks.WhenTouchDownBrick;
 import org.catrobat.catroid.content.bricks.WriteListOnDeviceBrick;
@@ -231,7 +184,6 @@ public class BrickCategoryTest {
 						SetMassBrick.class,
 						SetBounceBrick.class,
 						SetFrictionBrick.class)},
-				{"Embroidery", Arrays.asList(StitchBrick.class)},
 				{"Event", Arrays.asList(WhenStartedBrick.class,
 						WhenBrick.class,
 						WhenTouchDownBrick.class,
@@ -317,58 +269,6 @@ public class BrickCategoryTest {
 						AskBrick.class,
 						AskSpeechBrick.class,
 						WebRequestBrick.class)},
-				{"Lego NXT", Arrays.asList(LegoNxtMotorTurnAngleBrick.class,
-						LegoNxtMotorStopBrick.class,
-						LegoNxtMotorMoveBrick.class,
-						LegoNxtPlayToneBrick.class)},
-				{"Lego EV3", Arrays.asList(LegoEv3MotorTurnAngleBrick.class,
-						LegoEv3MotorMoveBrick.class,
-						LegoEv3MotorStopBrick.class,
-						LegoEv3PlayToneBrick.class,
-						LegoEv3SetLedBrick.class)},
-				{"AR.Drone 2.0", Arrays.asList(DroneTakeOffLandBrick.class,
-						DroneEmergencyBrick.class,
-						DroneMoveUpBrick.class,
-						DroneMoveDownBrick.class,
-						DroneMoveLeftBrick.class,
-						DroneMoveRightBrick.class,
-						DroneMoveForwardBrick.class,
-						DroneMoveBackwardBrick.class,
-						DroneTurnLeftBrick.class,
-						DroneTurnRightBrick.class,
-						DroneFlipBrick.class,
-						DronePlayLedAnimationBrick.class,
-						DroneSwitchCameraBrick.class)},
-				{"Jumping Sumo", Arrays.asList(JumpingSumoMoveForwardBrick.class,
-						JumpingSumoMoveBackwardBrick.class,
-						JumpingSumoAnimationsBrick.class,
-						JumpingSumoSoundBrick.class,
-						JumpingSumoNoSoundBrick.class,
-						JumpingSumoJumpLongBrick.class,
-						JumpingSumoJumpHighBrick.class,
-						JumpingSumoRotateLeftBrick.class,
-						JumpingSumoRotateRightBrick.class,
-						JumpingSumoTurnBrick.class,
-						JumpingSumoTakingPictureBrick.class)},
-				{"Phiro", Arrays.asList(PhiroMotorMoveForwardBrick.class,
-						PhiroMotorMoveBackwardBrick.class,
-						PhiroMotorStopBrick.class,
-						PhiroPlayToneBrick.class,
-						PhiroRGBLightBrick.class,
-						PhiroIfLogicBeginBrick.class,
-						SetVariableBrick.class,
-						SetVariableBrick.class,
-						SetVariableBrick.class,
-						SetVariableBrick.class,
-						SetVariableBrick.class,
-						SetVariableBrick.class)},
-				{"Arduino", Arrays.asList(ArduinoSendDigitalValueBrick.class,
-						ArduinoSendPWMValueBrick.class)},
-				{"Chromecast", Arrays.asList(WhenGamepadButtonBrick.class)},
-				{"Raspberry Pi", Arrays.asList(WhenRaspiPinChangedBrick.class,
-						RaspiIfLogicBeginBrick.class,
-						RaspiSendDigitalValueBrick.class,
-						RaspiPwmBrick.class)},
 				{"Testing", Arrays.asList(AssertEqualsBrick.class,
 						WaitTillIdleBrick.class,
 						TapAtBrick.class)},

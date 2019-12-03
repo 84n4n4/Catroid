@@ -161,9 +161,6 @@ public class ProjectDetailsFragment extends Fragment {
 
 	private String getRemixOf() {
 		String remixOf = project.getXmlHeader().getRemixParentsUrlString();
-		if (remixOf == null || remixOf.equals("")) {
-			return getString(R.string.nxt_no_sensor);
-		}
 		return remixOf;
 	}
 

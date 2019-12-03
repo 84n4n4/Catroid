@@ -36,7 +36,6 @@ import org.catrobat.catroid.common.BrickValues;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.common.Nameable;
-import org.catrobat.catroid.common.NfcTagData;
 import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.actions.EventThread;
 import org.catrobat.catroid.content.bricks.Brick;
@@ -84,7 +83,6 @@ public class Sprite implements Cloneable, Nameable, Serializable {
 	private List<Script> scriptList = new ArrayList<>();
 	private List<LookData> lookList = new ArrayList<>();
 	private List<SoundInfo> soundList = new ArrayList<>();
-	private List<NfcTagData> nfcTagList = new ArrayList<>();
 	private List<UserVariable> userVariables = new ArrayList<>();
 	private List<UserList> userLists = new ArrayList<>();
 
@@ -269,7 +267,6 @@ public class Sprite implements Cloneable, Nameable, Serializable {
 
 		convertedSprite.lookList = lookList;
 		convertedSprite.soundList = soundList;
-		convertedSprite.nfcTagList = nfcTagList;
 		convertedSprite.scriptList = scriptList;
 
 		convertedSprite.userVariables = userVariables;
@@ -354,10 +351,6 @@ public class Sprite implements Cloneable, Nameable, Serializable {
 		for (LookData lookData : getLookList()) {
 			lookData.addRequiredResources(resourcesSet);
 		}
-	}
-
-	public List<NfcTagData> getNfcTagList() {
-		return nfcTagList;
 	}
 
 	@Override

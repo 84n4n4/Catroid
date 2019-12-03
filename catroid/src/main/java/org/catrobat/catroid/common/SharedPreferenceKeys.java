@@ -43,11 +43,7 @@ public final class SharedPreferenceKeys {
 	public static final String SHOW_DETAILS_LOOKS_PREFERENCE_KEY = "showDetailsLookList";
 	public static final String SHOW_DETAILS_PROJECTS_PREFERENCE_KEY = "showDetailsProjectList";
 	public static final String SHOW_DETAILS_SCENES_PREFERENCE_KEY = "showDetailsSceneList";
-	public static final String SHOW_DETAILS_SCRATCH_PROJECTS_PREFERENCE_KEY = "showDetailsScratchProjects";
 	public static final String SHOW_DETAILS_SOUNDS_PREFERENCE_KEY = "showDetailsSoundList";
 	public static final String SHOW_DETAILS_SPRITES_PREFERENCE_KEY = "showDetailsSpriteList";
 
-	public static final String SCRATCH_CONVERTER_CLIENT_ID_PREFERENCE_KEY = "scratchconverter.clientID";
-	public static final String SCRATCH_CONVERTER_DOWNLOAD_STATE_PREFERENCE_KEY = "scratchconverter"
-			+ ".downloadStatePref";
 }

@@ -35,7 +35,6 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import org.catrobat.catroid.CatroidApplication;
-import org.catrobat.catroid.cast.CastManager;
 import org.catrobat.catroid.ui.runtimepermissions.PermissionHandlingActivity;
 import org.catrobat.catroid.ui.runtimepermissions.PermissionRequestActivityExtension;
 import org.catrobat.catroid.ui.runtimepermissions.RequiresPermissionTask;
@@ -58,10 +57,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Permissi
 		Thread.setDefaultUncaughtExceptionHandler(new BaseExceptionHandler(this));
 		checkIfCrashRecoveryAndFinishActivity(this);
 		checkIfProcessRecreatedAndFinishActivity(savedInstanceState);
-
-		if (SettingsFragment.isCastSharedPreferenceEnabled(this)) {
-			CastManager.getInstance().initializeCast(this);
-		}
 	}
 
 	private void checkIfProcessRecreatedAndFinishActivity(Bundle savedInstanceState) {
@@ -85,10 +80,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Permissi
 	protected void onResume() {
 		super.onResume();
 		SettingsFragment.setToChosenLanguage(this);
-
-		if (SettingsFragment.isCastSharedPreferenceEnabled(this)) {
-			CastManager.getInstance().initializeCast(this);
-		}
 
 		invalidateOptionsMenu();
 		googleAnalyticsTrackScreenResume();

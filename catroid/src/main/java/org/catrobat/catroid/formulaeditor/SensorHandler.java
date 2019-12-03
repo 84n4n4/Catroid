@@ -38,22 +38,10 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.WindowManager;
 
-import com.parrot.freeflight.service.DroneControlService;
-
 import org.catrobat.catroid.CatroidApplication;
 import org.catrobat.catroid.ProjectManager;
-import org.catrobat.catroid.bluetooth.base.BluetoothDevice;
-import org.catrobat.catroid.bluetooth.base.BluetoothDeviceService;
 import org.catrobat.catroid.camera.CameraManager;
-import org.catrobat.catroid.cast.CastManager;
-import org.catrobat.catroid.common.CatroidService;
-import org.catrobat.catroid.common.ServiceProvider;
-import org.catrobat.catroid.devices.arduino.phiro.Phiro;
-import org.catrobat.catroid.devices.mindstorms.ev3.LegoEV3;
-import org.catrobat.catroid.devices.mindstorms.nxt.LegoNXT;
-import org.catrobat.catroid.drone.ardrone.DroneServiceWrapper;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
-import org.catrobat.catroid.nfc.NfcHandler;
 import org.catrobat.catroid.utils.TouchUtil;
 
 import java.util.Calendar;
@@ -63,7 +51,6 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 	private static final float RADIAN_TO_DEGREE_CONST = 180f / (float) Math.PI;
 	private static final String TAG = SensorHandler.class.getSimpleName();
 	private static SensorHandler instance = null;
-	private static BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
 	private SensorManagerInterface sensorManager = null;
 	private Sensor linearAccelerationSensor = null;
 	private Sensor accelerometerSensor = null;
@@ -275,7 +262,6 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 		if (instance.sensorManager == null) {
 			return 0d;
 		}
-		DroneControlService dcs = DroneServiceWrapper.getDroneService();
 		Double sensorValue;
 		float[] rotationMatrixOut = new float[16];
 		int rotate;
@@ -465,47 +451,6 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 			case TIME_SECOND:
 				return Double.valueOf(Calendar.getInstance().get(Calendar.SECOND));
 
-			case NXT_SENSOR_1:
-			case NXT_SENSOR_2:
-			case NXT_SENSOR_3:
-			case NXT_SENSOR_4:
-
-				LegoNXT nxt = btService.getDevice(BluetoothDevice.LEGO_NXT);
-				if (nxt != null) {
-					return Double.valueOf(nxt.getSensorValue(sensor));
-				}
-				break;
-
-			case EV3_SENSOR_1:
-			case EV3_SENSOR_2:
-			case EV3_SENSOR_3:
-			case EV3_SENSOR_4:
-				LegoEV3 ev3 = btService.getDevice(BluetoothDevice.LEGO_EV3);
-				if (ev3 != null) {
-					return Double.valueOf(ev3.getSensorValue(sensor));
-				}
-				break;
-
-			case PHIRO_BOTTOM_LEFT:
-			case PHIRO_BOTTOM_RIGHT:
-			case PHIRO_FRONT_LEFT:
-			case PHIRO_FRONT_RIGHT:
-			case PHIRO_SIDE_LEFT:
-			case PHIRO_SIDE_RIGHT:
-				Phiro phiro = btService.getDevice(BluetoothDevice.PHIRO);
-				if (phiro != null) {
-					return Double.valueOf(phiro.getSensorValue(sensor));
-				}
-				break;
-
-			case GAMEPAD_A_PRESSED:
-			case GAMEPAD_B_PRESSED:
-			case GAMEPAD_DOWN_PRESSED:
-			case GAMEPAD_LEFT_PRESSED:
-			case GAMEPAD_RIGHT_PRESSED:
-			case GAMEPAD_UP_PRESSED:
-				return CastManager.getInstance().isButtonPressed(sensor) ? 1.0 : 0.0;
-
 			case LAST_FINGER_INDEX:
 				return Double.valueOf(TouchUtil.getLastTouchIndex());
 			case FINGER_TOUCHED:
@@ -515,75 +460,8 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 			case FINGER_Y:
 				return Double.valueOf(TouchUtil.getY(TouchUtil.getLastTouchIndex()));
 
-			case DRONE_BATTERY_STATUS:
-				return (double) dcs.getDroneNavData().batteryStatus;
-
-			case DRONE_EMERGENCY_STATE:
-				return (double) dcs.getDroneNavData().emergencyState;
-
-			case DRONE_USB_REMAINING_TIME:
-				return (double) dcs.getDroneNavData().usbRemainingTime;
-
-			case DRONE_NUM_FRAMES:
-				return (double) dcs.getDroneNavData().numFrames;
-
-			case DRONE_RECORDING:
-				if (dcs.getDroneNavData().recording) {
-					return 1d;
-				} else {
-					return 0d;
-				}
-
-			case DRONE_FLYING:
-				if (dcs.getDroneNavData().flying) {
-					return 1.0;
-				} else {
-					return 0.0;
-				}
-
-			case DRONE_INITIALIZED:
-				if (dcs.getDroneNavData().initialized) {
-					return 1.0;
-				} else {
-					return 0.0;
-				}
-
-			case DRONE_USB_ACTIVE:
-				if (dcs.getDroneNavData().usbActive) {
-					return 1.0;
-				} else {
-					return 0.0;
-				}
-
-			case DRONE_CAMERA_READY:
-				if (dcs.getDroneNavData().cameraReady) {
-					return 1.0;
-				} else {
-					return 0.0;
-				}
-
-			case DRONE_RECORD_READY:
-				if (dcs.getDroneNavData().recordReady) {
-					return 1.0;
-				} else {
-					return 0.0;
-				}
-			case NFC_TAG_MESSAGE:
-				return String.valueOf(NfcHandler.getLastNfcTagMessage());
-
-			case NFC_TAG_ID:
-				return String.valueOf(NfcHandler.getLastNfcTagId());
 		}
 		return 0d;
-	}
-
-	public static void clearFaceDetectionValues() {
-		if (instance != null) {
-			instance.faceDetected = 0f;
-			instance.faceSize = 0f;
-			instance.facePositionX = 0f;
-			instance.facePositionY = 0f;
-		}
 	}
 
 	@Override

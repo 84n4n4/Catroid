@@ -27,7 +27,6 @@ import android.util.Log;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.common.LookData;
-import org.catrobat.catroid.common.NfcTagData;
 import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Scene;
@@ -67,10 +66,6 @@ public class SpriteController {
 			sprite.getSoundList().add(soundController.copy(sound, dstScene, sprite));
 		}
 
-		for (NfcTagData nfcTag : spriteToCopy.getNfcTagList()) {
-			sprite.getNfcTagList().add(nfcTag.clone());
-		}
-
 		for (UserVariable userVariable : spriteToCopy.getUserVariables()) {
 			sprite.getUserVariables().add(new UserVariable(userVariable));
 		}
@@ -105,7 +100,6 @@ public class SpriteController {
 		}
 
 		sprite.getSoundList().addAll(spriteToCopy.getSoundList());
-		sprite.getNfcTagList().addAll(spriteToCopy.getNfcTagList());
 
 		for (UserVariable originalVariable : spriteToCopy.getUserVariables()) {
 			UserVariable copyVariable = new UserVariable(originalVariable);
@@ -172,10 +166,6 @@ public class SpriteController {
 			soundController.packForSprite(sound, sprite);
 		}
 
-		for (NfcTagData nfcTag : spriteToPack.getNfcTagList()) {
-			sprite.getNfcTagList().add(nfcTag.clone());
-		}
-
 		for (Script script : spriteToPack.getScriptList()) {
 			try {
 				scriptController.packForSprite(script, sprite);
@@ -197,10 +187,6 @@ public class SpriteController {
 
 		for (SoundInfo sound : spriteToUnpack.getSoundList()) {
 			soundController.unpackForSprite(sound, dstScene, sprite);
-		}
-
-		for (NfcTagData nfcTag : spriteToUnpack.getNfcTagList()) {
-			sprite.getNfcTagList().add(nfcTag.clone());
 		}
 
 		for (Script script : spriteToUnpack.getScriptList()) {

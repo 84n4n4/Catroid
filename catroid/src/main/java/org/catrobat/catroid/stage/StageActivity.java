@@ -29,7 +29,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -51,17 +50,11 @@ import com.badlogic.gdx.backends.android.AndroidGraphics;
 import org.catrobat.catroid.BuildConfig;
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.common.CatroidService;
 import org.catrobat.catroid.common.ScreenValues;
-import org.catrobat.catroid.common.ServiceProvider;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.actions.AskAction;
-import org.catrobat.catroid.devices.raspberrypi.RaspberryPiService;
-import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoDeviceController;
-import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoInitializer;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
 import org.catrobat.catroid.io.StageAudioFocus;
-import org.catrobat.catroid.nfc.NfcHandler;
 import org.catrobat.catroid.ui.MarketingActivity;
 import org.catrobat.catroid.ui.dialogs.StageDialog;
 import org.catrobat.catroid.ui.recyclerview.dialog.PlaySceneDialog;
@@ -100,7 +93,6 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 	static int numberOfSpritesCloned;
 
 	public static Handler messageHandler;
-	JumpingSumoDeviceController jumpingSumoDeviceController;
 
 	public static SparseArray<IntentListener> intentListeners = new SparseArray<>();
 	public static Random randomGenerator = new Random();
@@ -207,22 +199,11 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		NfcHandler.processIntent(intent);
-
-		if (nfcTagMessage != null) {
-			Tag currentTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-			synchronized (StageActivity.class) {
-				NfcHandler.writeTag(currentTag, nfcTagMessage);
-				setNfcTagMessage(null);
-			}
-		}
 	}
 
 	@Override
 	public void onBackPressed() {
 		if (BuildConfig.FEATURE_APK_GENERATOR_ENABLED) {
-			ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).disconnectDevices();
-
 			TextToSpeechHolder.getInstance().deleteSpeechFiles();
 			if (FlashUtil.isAvailable()) {
 				FlashUtil.destroy();
@@ -246,8 +227,6 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 
 		TextToSpeechHolder.getInstance().shutDownTextToSpeech();
 
-		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).pause();
-
 		if (FaceDetectionHandler.isFaceDetectionRunning()) {
 			FaceDetectionHandler.stopFaceDetection();
 		}
@@ -255,17 +234,6 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 		if (VibratorUtil.isActive()) {
 			VibratorUtil.pauseVibrator();
 		}
-
-		RaspberryPiService.getInstance().disconnect();
-	}
-
-	public boolean jumpingSumoDisconnect() {
-		boolean success;
-		if (jumpingSumoDeviceController != null && !jumpingSumoDeviceController.isConnected()) {
-			return true;
-		}
-		success = JumpingSumoInitializer.getInstance().disconnect();
-		return success;
 	}
 
 	public boolean getResizePossible() {
@@ -348,26 +316,12 @@ public class StageActivity extends AndroidApplication implements PermissionHandl
 		handler.post(r);
 	}
 
-	public void jsDestroy() {
-		stageListener.finish();
-		manageLoadAndFinish();
-		exit();
-	}
-
 	public static int getAndIncrementNumberOfClonedSprites() {
 		return ++numberOfSpritesCloned;
 	}
 
 	public static void resetNumberOfClonedSprites() {
 		numberOfSpritesCloned = 0;
-	}
-
-	public static void setNfcTagMessage(NdefMessage message) {
-		nfcTagMessage = message;
-	}
-
-	public static NdefMessage getNfcTagMessage() {
-		return nfcTagMessage;
 	}
 
 	public synchronized void queueIntent(IntentListener asker) {

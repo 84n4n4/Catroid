@@ -26,13 +26,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.View;
+import android.widget.BaseAdapter;
 
 import org.catrobat.catroid.BuildConfig;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.ui.recyclerview.dialog.NewProjectDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.fragment.ProjectListFragment;
 
-public class ProjectListActivity extends BaseCastActivity {
+public class ProjectListActivity extends BaseActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

@@ -85,45 +85,6 @@ public final class BrickValues {
 	public static final int STOP_ALL_SCRIPTS = 1;
 	public static final int STOP_OTHER_SCRIPTS = 2;
 
-	//Constants Lego
-	public static final String LEGO_MOTOR = "A";
-	public static final int LEGO_ANGLE = 180;
-	public static final int LEGO_SPEED = 100;
-	public static final double LEGO_DURATION = 1.0;
-	public static final int LEGO_FREQUENCY = 2;
-	public static final int LEGO_VOLUME = 100;
-
-	//Constants Drone
-	public static final int DRONE_MOVE_BRICK_DEFAULT_TIME_MILLISECONDS = 1000;
-	public static final int DRONE_MOVE_BRICK_DEFAULT_POWER_PERCENT = 20;
-	public static final String STRING_VALUE = "default";
-
-	public static final int DRONE_ALTITUDE_MIN = 3;
-	public static final int DRONE_ALTITUDE_INDOOR = 5;
-	public static final int DRONE_ALTITUDE_OUTDOOR = 10;
-	public static final int DRONE_ALTITUDE_MAX = 100;
-
-	public static final int DRONE_VERTICAL_MIN = 200;
-	public static final int DRONE_VERTICAL_INDOOR = 700;
-	public static final int DRONE_VERTICAL_OUTDOOR = 1000;
-	public static final int DRONE_VERTICAL_MAX = 2000;
-
-	public static final int DRONE_ROTATION_MIN = 40;
-	public static final int DRONE_ROTATION_INDOOR = 100;
-	public static final int DRONE_ROTATION_OUTDOOR = 200;
-	public static final int DRONE_ROTATION_MAX = 350;
-
-	public static final int DRONE_TILT_MIN = 5;
-	public static final int DRONE_TILT_INDOOR = 12;
-	public static final int DRONE_TILT_OUTDOOR = 20;
-	public static final int DRONE_TILT_MAX = 30;
-
-	//Constants Jumping Sumo
-	public static final int JUMPING_SUMO_MOVE_BRICK_DEFAULT_TIME_MILLISECONDS = 1000;
-	public static final int JUMPING_SUMO_MOVE_BRICK_DEFAULT_MOVE_POWER_PERCENT = 80;
-	public static final int JUMPING_SUMO_SOUND_BRICK_DEFAULT_VOLUME_PERCENT = 50;
-	public static final int JUMPING_SUMO_ROTATE_DEFAULT_DEGREE = 90;
-
 	//Constants Variables
 	public static final double SET_VARIABLE = 1d;
 	public static final String SHOW_VARIABLE_COLOR = "#FF0000";
@@ -136,44 +97,6 @@ public final class BrickValues {
 	public static final double INSERT_ITEM_INTO_USERLIST_VALUE = 1;
 	public static final int REPLACE_ITEM_IN_USERLIST_INDEX = 1;
 	public static final double REPLACE_ITEM_IN_USERLIST_VALUE = 1;
-
-	//Constants Phiro
-	public static final int PHIRO_SPEED = 100;
-	public static final int PHIRO_DURATION = 1;
-	public static final int PHIRO_VALUE_RED = 0;
-	public static final int PHIRO_VALUE_GREEN = 255;
-	public static final int PHIRO_VALUE_BLUE = 255;
-	public static final String PHIRO_IF_SENSOR_DEFAULT_VALUE = "Front Left Sensor";
-
-	//Constants Arduino
-	public static final int ARDUINO_PWM_INITIAL_PIN_VALUE = 255;
-	public static final int ARDUINO_PWM_INITIAL_PIN_NUMBER = 3;
-	public static final int ARDUINO_DIGITAL_INITIAL_PIN_VALUE = 1;
-	public static final int ARDUINO_DIGITAL_INITIAL_PIN_NUMBER = 13;
-
-	//Constants Raspi
-	public static final int RASPI_DIGITAL_INITIAL_PIN_VALUE = 1;
-	public static final int RASPI_DIGITAL_INITIAL_PIN_NUMBER = 3;
-	public static final String[] RASPI_EVENTS = {"pressed", "released"};
-	public static final double RASPI_PWM_INITIAL_PERCENTAGE = 50.0;
-	public static final double RASPI_PWM_INITIAL_FREQUENCY = 100.0;
-
-	//Constants NFC
-	public static final short TNF_MIME_MEDIA = 0;
-	public static final short TNF_WELL_KNOWN_HTTP = 1;
-	public static final short TNF_WELL_KNOWN_HTTPS = 2;
-	public static final short TNF_WELL_KNOWN_SMS = 3;
-	public static final short TNF_WELL_KNOWN_TEL = 4;
-	public static final short TNF_WELL_KNOWN_MAILTO = 5;
-	public static final short TNF_EXTERNAL_TYPE = 6;
-	public static final short TNF_EMPTY = 7;
-	public static final byte NDEF_PREFIX_HTTP = 0x03;
-	public static final byte NDEF_PREFIX_HTTPS = 0x04;
-	public static final byte NDEF_PREFIX_TEL = 0x05;
-	public static final byte NDEF_PREFIX_MAILTO = 0x06;
-
-	//Constants Embroidery
-	public static final float STITCH_SIZE = 3.15f;
 
 	private BrickValues() {
 		throw new AssertionError("No.");

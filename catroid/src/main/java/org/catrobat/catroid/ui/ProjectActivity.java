@@ -23,11 +23,8 @@
 package org.catrobat.catroid.ui;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -38,18 +35,15 @@ import android.view.View;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.cast.CastManager;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
 import org.catrobat.catroid.formulaeditor.SensorHandler;
 import org.catrobat.catroid.io.StorageOperations;
 import org.catrobat.catroid.io.asynctask.ProjectSaveTask;
 import org.catrobat.catroid.stage.StageActivity;
-import org.catrobat.catroid.ui.dialogs.LegoSensorConfigInfoDialog;
 import org.catrobat.catroid.ui.recyclerview.controller.SceneController;
 import org.catrobat.catroid.ui.recyclerview.dialog.TextInputDialog;
 import org.catrobat.catroid.ui.recyclerview.dialog.textwatcher.NewItemTextWatcher;
@@ -63,18 +57,13 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.catrobat.catroid.common.Constants.DEFAULT_IMAGE_EXTENSION;
-import static org.catrobat.catroid.common.Constants.EV3;
 import static org.catrobat.catroid.common.Constants.IMAGE_DIRECTORY_NAME;
 import static org.catrobat.catroid.common.Constants.MEDIA_LIBRARY_CACHE_DIR;
-import static org.catrobat.catroid.common.Constants.NXT;
 import static org.catrobat.catroid.common.Constants.TMP_IMAGE_FILE_NAME;
 import static org.catrobat.catroid.common.FlavoredConstants.LIBRARY_LOOKS_URL;
 import static org.catrobat.catroid.ui.WebViewActivity.MEDIA_FILE_PATH;
-import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_MINDSTORMS_EV3_SHOW_SENSOR_INFO_BOX_DISABLED;
-import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_MINDSTORMS_NXT_SHOW_SENSOR_INFO_BOX_DISABLED;
-import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.isCastSharedPreferenceEnabled;
 
-public class ProjectActivity extends BaseCastActivity implements ProjectSaveTask.ProjectSaveListener {
+public class ProjectActivity extends BaseActivity implements ProjectSaveTask.ProjectSaveListener {
 
 	public static final String TAG = ProjectActivity.class.getSimpleName();
 
@@ -107,7 +96,6 @@ public class ProjectActivity extends BaseCastActivity implements ProjectSaveTask
 			fragmentPosition = bundle.getInt(EXTRA_FRAGMENT_POSITION, FRAGMENT_SCENES);
 		}
 		loadFragment(fragmentPosition);
-		showLegoSensorConfigInfo();
 	}
 
 	private void loadFragment(int fragmentPosition) {
@@ -216,16 +204,6 @@ public class ProjectActivity extends BaseCastActivity implements ProjectSaveTask
 		if (requestCode == StageActivity.STAGE_ACTIVITY_FINISH) {
 			SensorHandler.stopSensorListeners();
 			FaceDetectionHandler.stopFaceDetection();
-		}
-
-		if (resultCode != RESULT_OK) {
-			if (isCastSharedPreferenceEnabled(this)
-					&& ProjectManager.getInstance().getCurrentProject().isCastProject()
-					&& !CastManager.getInstance().isConnected()) {
-
-				CastManager.getInstance().openDeviceSelectorOrDisconnectDialog(this);
-			}
-			return;
 		}
 
 		Uri uri;
@@ -383,24 +361,5 @@ public class ProjectActivity extends BaseCastActivity implements ProjectSaveTask
 
 	public void handlePlayButton(View view) {
 		StageActivity.handlePlayButton(ProjectManager.getInstance(), this);
-	}
-
-	private void showLegoSensorConfigInfo() {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-		boolean nxtDialogDisabled = preferences
-				.getBoolean(SETTINGS_MINDSTORMS_NXT_SHOW_SENSOR_INFO_BOX_DISABLED, false);
-		boolean ev3DialogDisabled = preferences
-				.getBoolean(SETTINGS_MINDSTORMS_EV3_SHOW_SENSOR_INFO_BOX_DISABLED, false);
-
-		Brick.ResourcesSet resourcesSet = ProjectManager.getInstance().getCurrentProject().getRequiredResources();
-		if (!nxtDialogDisabled && resourcesSet.contains(Brick.BLUETOOTH_LEGO_NXT)) {
-			DialogFragment dialog = LegoSensorConfigInfoDialog.newInstance(NXT);
-			dialog.show(getSupportFragmentManager(), LegoSensorConfigInfoDialog.DIALOG_FRAGMENT_TAG);
-		}
-		if (!ev3DialogDisabled && resourcesSet.contains(Brick.BLUETOOTH_LEGO_EV3)) {
-			DialogFragment dialog = LegoSensorConfigInfoDialog.newInstance(EV3);
-			dialog.show(getSupportFragmentManager(), LegoSensorConfigInfoDialog.DIALOG_FRAGMENT_TAG);
-		}
 	}
 }

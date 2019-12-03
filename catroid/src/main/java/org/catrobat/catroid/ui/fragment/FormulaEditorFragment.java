@@ -184,10 +184,6 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 		showFragment(context, formulaBrick, brickField, false);
 	}
 
-	public static void showCustomFragment(Context context, FormulaBrick formulaBrick, Brick.BrickField brickField) {
-		showFragment(context, formulaBrick, brickField, true);
-	}
-
 	public void updateBrickView() {
 		formulaEditorBrick.removeAllViews();
 

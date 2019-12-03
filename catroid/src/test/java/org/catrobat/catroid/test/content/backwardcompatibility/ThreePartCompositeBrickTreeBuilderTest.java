@@ -29,8 +29,6 @@ import org.catrobat.catroid.content.bricks.CompositeBrick;
 import org.catrobat.catroid.content.bricks.IfLogicBeginBrick;
 import org.catrobat.catroid.content.bricks.IfLogicElseBrick;
 import org.catrobat.catroid.content.bricks.IfLogicEndBrick;
-import org.catrobat.catroid.content.bricks.PhiroIfLogicBeginBrick;
-import org.catrobat.catroid.content.bricks.RaspiIfLogicBeginBrick;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -55,9 +53,7 @@ public class ThreePartCompositeBrickTreeBuilderTest {
 	@Parameterized.Parameters(name = "{0}")
 	public static Iterable<Object[]> data() {
 		return Arrays.asList(new Object[][] {
-				{IfLogicBeginBrick.class.getSimpleName(), IfLogicBeginBrick.class, IfLogicElseBrick.class, IfLogicEndBrick.class},
-				{PhiroIfLogicBeginBrick.class.getSimpleName(), PhiroIfLogicBeginBrick.class, IfLogicElseBrick.class, IfLogicEndBrick.class},
-				{RaspiIfLogicBeginBrick.class.getSimpleName(), RaspiIfLogicBeginBrick.class, IfLogicElseBrick.class, IfLogicEndBrick.class},
+				{IfLogicBeginBrick.class.getSimpleName(), IfLogicBeginBrick.class, IfLogicElseBrick.class, IfLogicEndBrick.class}
 		});
 	}
 

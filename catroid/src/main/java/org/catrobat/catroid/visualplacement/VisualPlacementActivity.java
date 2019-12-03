@@ -54,7 +54,7 @@ import org.catrobat.catroid.common.ScreenValues;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.ui.BaseCastActivity;
+import org.catrobat.catroid.ui.BaseActivity;
 import org.catrobat.catroid.utils.ToastUtil;
 
 import java.io.File;
@@ -75,7 +75,7 @@ import static org.catrobat.catroid.ui.SpriteActivity.EXTRA_BRICK_HASH;
 import static org.catrobat.catroid.ui.SpriteActivity.EXTRA_X_TRANSFORM;
 import static org.catrobat.catroid.ui.SpriteActivity.EXTRA_Y_TRANSFORM;
 
-public class VisualPlacementActivity extends BaseCastActivity implements View.OnTouchListener,
+public class VisualPlacementActivity extends BaseActivity implements View.OnTouchListener,
 		DialogInterface.OnClickListener, CoordinateInterface {
 
 	public static final String TAG = VisualPlacementActivity.class.getSimpleName();

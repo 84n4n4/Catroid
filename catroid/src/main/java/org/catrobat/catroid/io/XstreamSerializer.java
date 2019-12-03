@@ -33,17 +33,13 @@ import com.thoughtworks.xstream.converters.reflection.FieldDictionary;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 
 import org.catrobat.catroid.BuildConfig;
-import org.catrobat.catroid.common.DroneVideoLookData;
 import org.catrobat.catroid.common.LookData;
-import org.catrobat.catroid.common.NfcTagData;
 import org.catrobat.catroid.common.ProjectData;
 import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.BroadcastScript;
 import org.catrobat.catroid.content.GroupItemSprite;
 import org.catrobat.catroid.content.GroupSprite;
-import org.catrobat.catroid.content.LegoNXTSetting;
 import org.catrobat.catroid.content.Project;
-import org.catrobat.catroid.content.RaspiInterruptScript;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Setting;
@@ -54,8 +50,6 @@ import org.catrobat.catroid.content.WhenBackgroundChangesScript;
 import org.catrobat.catroid.content.WhenBounceOffScript;
 import org.catrobat.catroid.content.WhenClonedScript;
 import org.catrobat.catroid.content.WhenConditionScript;
-import org.catrobat.catroid.content.WhenGamepadButtonScript;
-import org.catrobat.catroid.content.WhenNfcScript;
 import org.catrobat.catroid.content.WhenScript;
 import org.catrobat.catroid.content.WhenTouchDownScript;
 import org.catrobat.catroid.content.XmlHeader;
@@ -65,8 +59,6 @@ import org.catrobat.catroid.content.backwardcompatibility.ProjectMetaDataParser;
 import org.catrobat.catroid.content.backwardcompatibility.ProjectUntilLanguageVersion0999;
 import org.catrobat.catroid.content.backwardcompatibility.SceneUntilLanguageVersion0999;
 import org.catrobat.catroid.content.bricks.AddItemToUserListBrick;
-import org.catrobat.catroid.content.bricks.ArduinoSendDigitalValueBrick;
-import org.catrobat.catroid.content.bricks.ArduinoSendPWMValueBrick;
 import org.catrobat.catroid.content.bricks.AskBrick;
 import org.catrobat.catroid.content.bricks.AskSpeechBrick;
 import org.catrobat.catroid.content.bricks.AssertEqualsBrick;
@@ -89,19 +81,6 @@ import org.catrobat.catroid.content.bricks.CloneBrick;
 import org.catrobat.catroid.content.bricks.ComeToFrontBrick;
 import org.catrobat.catroid.content.bricks.DeleteItemOfUserListBrick;
 import org.catrobat.catroid.content.bricks.DeleteThisCloneBrick;
-import org.catrobat.catroid.content.bricks.DroneEmergencyBrick;
-import org.catrobat.catroid.content.bricks.DroneFlipBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveBackwardBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveDownBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveForwardBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveLeftBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveRightBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveUpBrick;
-import org.catrobat.catroid.content.bricks.DronePlayLedAnimationBrick;
-import org.catrobat.catroid.content.bricks.DroneSwitchCameraBrick;
-import org.catrobat.catroid.content.bricks.DroneTakeOffLandBrick;
-import org.catrobat.catroid.content.bricks.DroneTurnLeftBrick;
-import org.catrobat.catroid.content.bricks.DroneTurnRightBrick;
 import org.catrobat.catroid.content.bricks.FlashBrick;
 import org.catrobat.catroid.content.bricks.ForeverBrick;
 import org.catrobat.catroid.content.bricks.GlideToBrick;
@@ -116,26 +95,6 @@ import org.catrobat.catroid.content.bricks.IfOnEdgeBounceBrick;
 import org.catrobat.catroid.content.bricks.IfThenLogicBeginBrick;
 import org.catrobat.catroid.content.bricks.IfThenLogicEndBrick;
 import org.catrobat.catroid.content.bricks.InsertItemIntoUserListBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoAnimationsBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoJumpHighBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoJumpLongBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoMoveBackwardBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoMoveForwardBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoNoSoundBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoRotateLeftBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoRotateRightBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoSoundBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoTakingPictureBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoTurnBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorMoveBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorStopBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorTurnAngleBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3PlayToneBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3SetLedBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorMoveBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorStopBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorTurnAngleBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtPlayToneBrick;
 import org.catrobat.catroid.content.bricks.LoopEndBrick;
 import org.catrobat.catroid.content.bricks.LoopEndlessBrick;
 import org.catrobat.catroid.content.bricks.MoveNStepsBrick;
@@ -143,21 +102,12 @@ import org.catrobat.catroid.content.bricks.NextLookBrick;
 import org.catrobat.catroid.content.bricks.NoteBrick;
 import org.catrobat.catroid.content.bricks.PenDownBrick;
 import org.catrobat.catroid.content.bricks.PenUpBrick;
-import org.catrobat.catroid.content.bricks.PhiroIfLogicBeginBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorMoveBackwardBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorMoveForwardBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorStopBrick;
-import org.catrobat.catroid.content.bricks.PhiroPlayToneBrick;
-import org.catrobat.catroid.content.bricks.PhiroRGBLightBrick;
 import org.catrobat.catroid.content.bricks.PlaceAtBrick;
 import org.catrobat.catroid.content.bricks.PlaySoundAndWaitBrick;
 import org.catrobat.catroid.content.bricks.PlaySoundBrick;
 import org.catrobat.catroid.content.bricks.PointInDirectionBrick;
 import org.catrobat.catroid.content.bricks.PointToBrick;
 import org.catrobat.catroid.content.bricks.PreviousLookBrick;
-import org.catrobat.catroid.content.bricks.RaspiIfLogicBeginBrick;
-import org.catrobat.catroid.content.bricks.RaspiPwmBrick;
-import org.catrobat.catroid.content.bricks.RaspiSendDigitalValueBrick;
 import org.catrobat.catroid.content.bricks.ReadListFromDeviceBrick;
 import org.catrobat.catroid.content.bricks.ReadVariableFromDeviceBrick;
 import org.catrobat.catroid.content.bricks.RepeatBrick;
@@ -175,7 +125,6 @@ import org.catrobat.catroid.content.bricks.SetBrightnessBrick;
 import org.catrobat.catroid.content.bricks.SetColorBrick;
 import org.catrobat.catroid.content.bricks.SetLookBrick;
 import org.catrobat.catroid.content.bricks.SetLookByIndexBrick;
-import org.catrobat.catroid.content.bricks.SetNfcTagBrick;
 import org.catrobat.catroid.content.bricks.SetPenColorBrick;
 import org.catrobat.catroid.content.bricks.SetPenSizeBrick;
 import org.catrobat.catroid.content.bricks.SetRotationStyleBrick;
@@ -192,7 +141,6 @@ import org.catrobat.catroid.content.bricks.ShowTextColorSizeAlignmentBrick;
 import org.catrobat.catroid.content.bricks.SpeakAndWaitBrick;
 import org.catrobat.catroid.content.bricks.SpeakBrick;
 import org.catrobat.catroid.content.bricks.StampBrick;
-import org.catrobat.catroid.content.bricks.StitchBrick;
 import org.catrobat.catroid.content.bricks.StopAllSoundsBrick;
 import org.catrobat.catroid.content.bricks.StopScriptBrick;
 import org.catrobat.catroid.content.bricks.TapAtBrick;
@@ -211,9 +159,6 @@ import org.catrobat.catroid.content.bricks.WhenBackgroundChangesBrick;
 import org.catrobat.catroid.content.bricks.WhenBrick;
 import org.catrobat.catroid.content.bricks.WhenClonedBrick;
 import org.catrobat.catroid.content.bricks.WhenConditionBrick;
-import org.catrobat.catroid.content.bricks.WhenGamepadButtonBrick;
-import org.catrobat.catroid.content.bricks.WhenNfcBrick;
-import org.catrobat.catroid.content.bricks.WhenRaspiPinChangedBrick;
 import org.catrobat.catroid.content.bricks.WhenStartedBrick;
 import org.catrobat.catroid.content.bricks.WhenTouchDownBrick;
 import org.catrobat.catroid.content.bricks.WriteListOnDeviceBrick;
@@ -301,8 +246,6 @@ public final class XstreamSerializer {
 		xstream.omitField(ChooseCameraBrick.class, "spinnerValues");
 		xstream.omitField(FlashBrick.class, "spinnerValues");
 
-		xstream.omitField(SetNfcTagBrick.class, "nfcTagNdefDefaultType");
-
 		xstream.omitField(SpeakAndWaitBrick.class, "speechFile");
 		xstream.omitField(SpeakAndWaitBrick.class, "duration");
 
@@ -321,12 +264,8 @@ public final class XstreamSerializer {
 		xstream.omitField(StartScript.class, "isUserScript");
 		xstream.omitField(WhenScript.class, "action");
 
-		xstream.omitField(RaspiInterruptScript.class, "receivedMessage");
-
 		xstream.alias("look", LookData.class);
-		xstream.alias("droneLook", DroneVideoLookData.class);
 		xstream.alias("sound", SoundInfo.class);
-		xstream.alias("nfcTag", NfcTagData.class);
 		xstream.alias("userVariable", UserVariable.class);
 		xstream.alias("userList", UserList.class);
 
@@ -340,9 +279,7 @@ public final class XstreamSerializer {
 		xstream.alias("script", WhenClonedScript.class);
 		xstream.alias("script", WhenScript.class);
 		xstream.alias("script", WhenConditionScript.class);
-		xstream.alias("script", WhenNfcScript.class);
 		xstream.alias("script", BroadcastScript.class);
-		xstream.alias("script", RaspiInterruptScript.class);
 		xstream.alias("script", WhenTouchDownScript.class);
 		xstream.alias("script", WhenBackgroundChangesScript.class);
 
@@ -383,10 +320,6 @@ public final class XstreamSerializer {
 		xstream.alias("brick", FlashBrick.class);
 		xstream.alias("brick", ChooseCameraBrick.class);
 		xstream.alias("brick", CameraBrick.class);
-		xstream.alias("brick", LegoNxtMotorMoveBrick.class);
-		xstream.alias("brick", LegoNxtMotorStopBrick.class);
-		xstream.alias("brick", LegoNxtMotorTurnAngleBrick.class);
-		xstream.alias("brick", LegoNxtPlayToneBrick.class);
 		xstream.alias("brick", LoopEndBrick.class);
 		xstream.alias("brick", LoopEndlessBrick.class);
 		xstream.alias("brick", MoveNStepsBrick.class);
@@ -450,64 +383,11 @@ public final class XstreamSerializer {
 		xstream.alias("brick", StopScriptBrick.class);
 		xstream.alias("brick", WebRequestBrick.class);
 
-		xstream.alias("brick", WhenNfcBrick.class);
-		xstream.alias("brick", SetNfcTagBrick.class);
-
-		xstream.alias("brick", DronePlayLedAnimationBrick.class);
-		xstream.alias("brick", DroneTakeOffLandBrick.class);
-		xstream.alias("brick", DroneMoveForwardBrick.class);
-		xstream.alias("brick", DroneMoveBackwardBrick.class);
-		xstream.alias("brick", DroneMoveUpBrick.class);
-		xstream.alias("brick", DroneMoveDownBrick.class);
-		xstream.alias("brick", DroneMoveLeftBrick.class);
-		xstream.alias("brick", DroneMoveRightBrick.class);
-		xstream.alias("brick", DroneTurnLeftBrick.class);
-		xstream.alias("brick", DroneTurnRightBrick.class);
-		xstream.alias("brick", DroneSwitchCameraBrick.class);
-		xstream.alias("brick", DroneEmergencyBrick.class);
-
-		xstream.alias("brick", PhiroMotorMoveBackwardBrick.class);
-		xstream.alias("brick", PhiroMotorMoveForwardBrick.class);
-		xstream.alias("brick", PhiroMotorStopBrick.class);
-		xstream.alias("brick", PhiroPlayToneBrick.class);
-		xstream.alias("brick", PhiroRGBLightBrick.class);
-		xstream.alias("brick", PhiroIfLogicBeginBrick.class);
-
-		xstream.alias("brick", LegoEv3PlayToneBrick.class);
-		xstream.alias("brick", LegoEv3MotorMoveBrick.class);
-		xstream.alias("brick", LegoEv3MotorStopBrick.class);
-		xstream.alias("brick", LegoEv3SetLedBrick.class);
-
-		xstream.alias("brick", ArduinoSendPWMValueBrick.class);
-		xstream.alias("brick", ArduinoSendDigitalValueBrick.class);
-
-		xstream.alias("brick", RaspiSendDigitalValueBrick.class);
-		xstream.alias("brick", RaspiIfLogicBeginBrick.class);
-		xstream.alias("brick", RaspiPwmBrick.class);
-
-		xstream.alias("script", WhenGamepadButtonScript.class);
-		xstream.alias("brick", WhenGamepadButtonBrick.class);
-
 		xstream.alias("brick", AssertEqualsBrick.class);
 		xstream.alias("brick", TapAtBrick.class);
-		xstream.alias("brick", DroneFlipBrick.class);
-		xstream.alias("brick", JumpingSumoAnimationsBrick.class);
-		xstream.alias("brick", JumpingSumoJumpHighBrick.class);
-		xstream.alias("brick", JumpingSumoJumpLongBrick.class);
-		xstream.alias("brick", JumpingSumoMoveBackwardBrick.class);
-		xstream.alias("brick", JumpingSumoMoveForwardBrick.class);
-		xstream.alias("brick", JumpingSumoNoSoundBrick.class);
-		xstream.alias("brick", JumpingSumoRotateLeftBrick.class);
-		xstream.alias("brick", JumpingSumoRotateRightBrick.class);
-		xstream.alias("brick", JumpingSumoSoundBrick.class);
-		xstream.alias("brick", JumpingSumoTakingPictureBrick.class);
-		xstream.alias("brick", JumpingSumoTurnBrick.class);
-		xstream.alias("brick", LegoEv3MotorTurnAngleBrick.class);
 		xstream.alias("brick", SetTextBrick.class);
 		xstream.alias("brick", ShowTextColorSizeAlignmentBrick.class);
-		xstream.alias("brick", StitchBrick.class);
 		xstream.alias("brick", WaitTillIdleBrick.class);
-		xstream.alias("brick", WhenRaspiPinChangedBrick.class);
 		xstream.alias("brick", WhenTouchDownBrick.class);
 
 		xstream.alias("script", WhenBounceOffScript.class);
@@ -521,9 +401,6 @@ public final class XstreamSerializer {
 		xstream.alias("brick", SetVelocityBrick.class);
 		xstream.alias("brick", TurnLeftSpeedBrick.class);
 		xstream.alias("brick", TurnRightSpeedBrick.class);
-
-		xstream.alias("setting", LegoNXTSetting.class);
-		xstream.alias("nxtPort", LegoNXTSetting.NXTPort.class);
 	}
 
 	public Project loadProject(File projectDir, Context context) throws IOException, LoadingProjectException {

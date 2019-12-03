@@ -46,12 +46,6 @@
         android:title="@string/show_details"
         app:showAsAction="never" />
     <item
-        android:id="@+id/cast_button"
-        android:title="@string/cast_button_menu_item_title"
-        android:icon="@drawable/ic_cast_white"
-        android:visible="false"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/merge"
         android:title="@string/merge"
         android:visible="false"

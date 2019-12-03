@@ -29,17 +29,12 @@ import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 
 import org.catrobat.catroid.content.BroadcastScript;
-import org.catrobat.catroid.content.RaspiInterruptScript;
 import org.catrobat.catroid.content.StartScript;
 import org.catrobat.catroid.content.WhenBackgroundChangesScript;
 import org.catrobat.catroid.content.WhenBounceOffScript;
 import org.catrobat.catroid.content.WhenConditionScript;
-import org.catrobat.catroid.content.WhenGamepadButtonScript;
-import org.catrobat.catroid.content.WhenNfcScript;
 import org.catrobat.catroid.content.WhenScript;
 import org.catrobat.catroid.content.WhenTouchDownScript;
-import org.catrobat.catroid.content.bricks.ArduinoSendDigitalValueBrick;
-import org.catrobat.catroid.content.bricks.ArduinoSendPWMValueBrick;
 import org.catrobat.catroid.content.bricks.AskBrick;
 import org.catrobat.catroid.content.bricks.AskSpeechBrick;
 import org.catrobat.catroid.content.bricks.Brick.BrickField;
@@ -61,19 +56,6 @@ import org.catrobat.catroid.content.bricks.ClearGraphicEffectBrick;
 import org.catrobat.catroid.content.bricks.CloneBrick;
 import org.catrobat.catroid.content.bricks.ComeToFrontBrick;
 import org.catrobat.catroid.content.bricks.DeleteThisCloneBrick;
-import org.catrobat.catroid.content.bricks.DroneEmergencyBrick;
-import org.catrobat.catroid.content.bricks.DroneFlipBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveBackwardBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveDownBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveForwardBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveLeftBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveRightBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveUpBrick;
-import org.catrobat.catroid.content.bricks.DronePlayLedAnimationBrick;
-import org.catrobat.catroid.content.bricks.DroneSwitchCameraBrick;
-import org.catrobat.catroid.content.bricks.DroneTakeOffLandBrick;
-import org.catrobat.catroid.content.bricks.DroneTurnLeftBrick;
-import org.catrobat.catroid.content.bricks.DroneTurnRightBrick;
 import org.catrobat.catroid.content.bricks.FlashBrick;
 import org.catrobat.catroid.content.bricks.ForeverBrick;
 import org.catrobat.catroid.content.bricks.GlideToBrick;
@@ -87,10 +69,6 @@ import org.catrobat.catroid.content.bricks.IfLogicEndBrick;
 import org.catrobat.catroid.content.bricks.IfOnEdgeBounceBrick;
 import org.catrobat.catroid.content.bricks.IfThenLogicBeginBrick;
 import org.catrobat.catroid.content.bricks.IfThenLogicEndBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorMoveBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorStopBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorTurnAngleBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtPlayToneBrick;
 import org.catrobat.catroid.content.bricks.LoopEndBrick;
 import org.catrobat.catroid.content.bricks.LoopEndlessBrick;
 import org.catrobat.catroid.content.bricks.MoveNStepsBrick;
@@ -98,21 +76,12 @@ import org.catrobat.catroid.content.bricks.NextLookBrick;
 import org.catrobat.catroid.content.bricks.NoteBrick;
 import org.catrobat.catroid.content.bricks.PenDownBrick;
 import org.catrobat.catroid.content.bricks.PenUpBrick;
-import org.catrobat.catroid.content.bricks.PhiroIfLogicBeginBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorMoveBackwardBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorMoveForwardBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorStopBrick;
-import org.catrobat.catroid.content.bricks.PhiroPlayToneBrick;
-import org.catrobat.catroid.content.bricks.PhiroRGBLightBrick;
 import org.catrobat.catroid.content.bricks.PlaceAtBrick;
 import org.catrobat.catroid.content.bricks.PlaySoundAndWaitBrick;
 import org.catrobat.catroid.content.bricks.PlaySoundBrick;
 import org.catrobat.catroid.content.bricks.PointInDirectionBrick;
 import org.catrobat.catroid.content.bricks.PointToBrick;
 import org.catrobat.catroid.content.bricks.PreviousLookBrick;
-import org.catrobat.catroid.content.bricks.RaspiIfLogicBeginBrick;
-import org.catrobat.catroid.content.bricks.RaspiPwmBrick;
-import org.catrobat.catroid.content.bricks.RaspiSendDigitalValueBrick;
 import org.catrobat.catroid.content.bricks.RepeatBrick;
 import org.catrobat.catroid.content.bricks.SayBubbleBrick;
 import org.catrobat.catroid.content.bricks.SayForBubbleBrick;
@@ -123,7 +92,6 @@ import org.catrobat.catroid.content.bricks.SetBackgroundBrick;
 import org.catrobat.catroid.content.bricks.SetBrightnessBrick;
 import org.catrobat.catroid.content.bricks.SetColorBrick;
 import org.catrobat.catroid.content.bricks.SetLookBrick;
-import org.catrobat.catroid.content.bricks.SetNfcTagBrick;
 import org.catrobat.catroid.content.bricks.SetPenColorBrick;
 import org.catrobat.catroid.content.bricks.SetPenSizeBrick;
 import org.catrobat.catroid.content.bricks.SetRotationStyleBrick;
@@ -150,8 +118,6 @@ import org.catrobat.catroid.content.bricks.WaitBrick;
 import org.catrobat.catroid.content.bricks.WhenBrick;
 import org.catrobat.catroid.content.bricks.WhenClonedBrick;
 import org.catrobat.catroid.content.bricks.WhenConditionBrick;
-import org.catrobat.catroid.content.bricks.WhenGamepadButtonBrick;
-import org.catrobat.catroid.content.bricks.WhenNfcBrick;
 import org.catrobat.catroid.content.bricks.WhenStartedBrick;
 import org.catrobat.catroid.physics.content.bricks.SetBounceBrick;
 import org.catrobat.catroid.physics.content.bricks.SetFrictionBrick;
@@ -310,76 +276,11 @@ public class BackwardCompatibleCatrobatLanguageXStream extends XStream {
 		brickInfo = new BrickInfo(FlashBrick.class.getSimpleName());
 		brickInfoMap.put("flashBrick", brickInfo);
 
-		brickInfo = new BrickInfo(LegoNxtMotorMoveBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("speed", BrickField.LEGO_NXT_SPEED);
-		brickInfoMap.put("legoNxtMotorMoveBrick", brickInfo);
-
-		brickInfo = new BrickInfo(LegoNxtMotorStopBrick.class.getSimpleName());
-		brickInfoMap.put("legoNxtMotorStopBrick", brickInfo);
-
-		brickInfo = new BrickInfo(LegoNxtMotorTurnAngleBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("degrees", BrickField.LEGO_NXT_DEGREES);
-		brickInfoMap.put("legoNxtMotorTurnAngleBrick", brickInfo);
-
-		brickInfo = new BrickInfo(LegoNxtPlayToneBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("frequency", BrickField.LEGO_NXT_FREQUENCY);
-		brickInfo.addBrickFieldToMap("durationInSeconds", BrickField.LEGO_NXT_DURATION_IN_SECONDS);
-		brickInfoMap.put("legoNxtPlayToneBrick", brickInfo);
-
-		brickInfo = new BrickInfo(PhiroMotorMoveForwardBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("speed", BrickField.PHIRO_SPEED);
-		brickInfoMap.put("phiroMotorMoveForwardBrick", brickInfo);
-
-		brickInfo = new BrickInfo(PhiroMotorMoveBackwardBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("speed", BrickField.PHIRO_SPEED);
-		brickInfoMap.put("phiroMotorMoveBackwardBrick", brickInfo);
-
-		brickInfo = new BrickInfo(PhiroMotorStopBrick.class.getSimpleName());
-		brickInfoMap.put("phiroMotorStopBrick", brickInfo);
-
-		brickInfo = new BrickInfo(PhiroPlayToneBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("durationInSeconds", BrickField.PHIRO_DURATION_IN_SECONDS);
-		brickInfoMap.put("phiroPlayToneBrick", brickInfo);
-
-		brickInfo = new BrickInfo(PhiroRGBLightBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("light", BrickField.PHIRO_LIGHT_RED);
-		brickInfo.addBrickFieldToMap("light", BrickField.PHIRO_LIGHT_GREEN);
-		brickInfo.addBrickFieldToMap("light", BrickField.PHIRO_LIGHT_BLUE);
-		brickInfoMap.put("phiroRGBLightBrick", brickInfo);
-
-		brickInfo = new BrickInfo(PhiroIfLogicBeginBrick.class.getSimpleName());
-		brickInfoMap.put("phiroSensorBrick", brickInfo);
-
 		brickInfo = new BrickInfo(IfLogicElseBrick.class.getSimpleName());
 		brickInfoMap.put("phiroSensorElseBrick", brickInfo);
 
 		brickInfo = new BrickInfo(IfLogicEndBrick.class.getSimpleName());
 		brickInfoMap.put("phiroSensorEndBrick", brickInfo);
-
-		brickInfo = new BrickInfo(ArduinoSendDigitalValueBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("digitalPinNumber", BrickField.ARDUINO_DIGITAL_PIN_NUMBER);
-		brickInfo.addBrickFieldToMap("digitalPinValue", BrickField.ARDUINO_DIGITAL_PIN_VALUE);
-		brickInfoMap.put("arduinoSendDigitalValueBrick", brickInfo);
-
-		brickInfo = new BrickInfo(ArduinoSendPWMValueBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("pwmPinNumber", BrickField.ARDUINO_ANALOG_PIN_NUMBER);
-		brickInfo.addBrickFieldToMap("pwmPinValue", BrickField.ARDUINO_ANALOG_PIN_VALUE);
-		brickInfoMap.put("arduinoSendPWMValueBrick", brickInfo);
-
-		brickInfo = new BrickInfo(RaspiSendDigitalValueBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("digitalPinNumber", BrickField.RASPI_DIGITAL_PIN_NUMBER);
-		brickInfo.addBrickFieldToMap("digitalPinValue", BrickField.RASPI_DIGITAL_PIN_VALUE);
-		brickInfoMap.put("raspiSendDigitalValueBrick", brickInfo);
-
-		brickInfo = new BrickInfo(RaspiPwmBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("digitalPinNumber", BrickField.RASPI_DIGITAL_PIN_NUMBER);
-		brickInfo.addBrickFieldToMap("pwmFrequency", BrickField.RASPI_PWM_FREQUENCY);
-		brickInfo.addBrickFieldToMap("pwmPercentage", BrickField.RASPI_PWM_PERCENTAGE);
-		brickInfoMap.put("raspiPwmBrick", brickInfo);
-
-		brickInfo = new BrickInfo(RaspiIfLogicBeginBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("digitalPinNumber", BrickField.IF_CONDITION);
-		brickInfoMap.put("raspiIfLogicBeginBrick", brickInfo);
 
 		brickInfo = new BrickInfo(LoopEndBrick.class.getSimpleName());
 		brickInfoMap.put("loopEndBrick", brickInfo);
@@ -535,12 +436,6 @@ public class BackwardCompatibleCatrobatLanguageXStream extends XStream {
 		brickInfo = new BrickInfo(StopScriptBrick.class.getSimpleName());
 		brickInfoMap.put("stopScriptBrick", brickInfo);
 
-		brickInfo = new BrickInfo(WhenNfcBrick.class.getSimpleName());
-		brickInfoMap.put("whenNfcBrick", brickInfo);
-
-		brickInfo = new BrickInfo(SetNfcTagBrick.class.getSimpleName());
-		brickInfoMap.put("setNfcTagBrick", brickInfo);
-
 		brickInfo = new BrickInfo(WhenClonedBrick.class.getSimpleName());
 		brickInfoMap.put("whenClonedBrick", brickInfo);
 
@@ -549,64 +444,6 @@ public class BackwardCompatibleCatrobatLanguageXStream extends XStream {
 
 		brickInfo = new BrickInfo(DeleteThisCloneBrick.class.getSimpleName());
 		brickInfoMap.put("deleteThisCloneBrick", brickInfo);
-
-		brickInfo = new BrickInfo(DronePlayLedAnimationBrick.class.getSimpleName());
-		brickInfoMap.put("dronePlayLedAnimationBrick", brickInfo);
-
-		brickInfo = new BrickInfo(DroneEmergencyBrick.class.getSimpleName());
-		brickInfoMap.put("droneGoEmergencyBrick", brickInfo);
-
-		brickInfo = new BrickInfo(DroneTakeOffLandBrick.class.getSimpleName());
-		brickInfoMap.put("droneTakeOffBrick", brickInfo);
-
-		brickInfo = new BrickInfo(DroneMoveForwardBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("timeToFlyInSeconds", BrickField.DRONE_TIME_TO_FLY_IN_SECONDS);
-		brickInfo.addBrickFieldToMap("powerInPercent", BrickField.DRONE_POWER_IN_PERCENT);
-		brickInfoMap.put("droneMoveForwardBrick", brickInfo);
-
-		brickInfo = new BrickInfo(DroneMoveBackwardBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("timeToFlyInSeconds", BrickField.DRONE_TIME_TO_FLY_IN_SECONDS);
-		brickInfo.addBrickFieldToMap("powerInPercent", BrickField.DRONE_POWER_IN_PERCENT);
-		brickInfoMap.put("droneMoveBackwardBrick", brickInfo);
-
-		brickInfo = new BrickInfo(DroneMoveUpBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("timeToFlyInSeconds", BrickField.DRONE_TIME_TO_FLY_IN_SECONDS);
-		brickInfo.addBrickFieldToMap("powerInPercent", BrickField.DRONE_POWER_IN_PERCENT);
-		brickInfoMap.put("droneMoveUpBrick", brickInfo);
-
-		brickInfo = new BrickInfo(DroneMoveDownBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("timeToFlyInSeconds", BrickField.DRONE_TIME_TO_FLY_IN_SECONDS);
-		brickInfo.addBrickFieldToMap("powerInPercent", BrickField.DRONE_POWER_IN_PERCENT);
-		brickInfoMap.put("droneMoveDownBrick", brickInfo);
-
-		brickInfo = new BrickInfo(DroneMoveLeftBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("timeToFlyInSeconds", BrickField.DRONE_TIME_TO_FLY_IN_SECONDS);
-		brickInfo.addBrickFieldToMap("powerInPercent", BrickField.DRONE_POWER_IN_PERCENT);
-		brickInfoMap.put("droneMoveLeftBrick", brickInfo);
-
-		brickInfo = new BrickInfo(DroneMoveRightBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("timeToFlyInSeconds", BrickField.DRONE_TIME_TO_FLY_IN_SECONDS);
-		brickInfo.addBrickFieldToMap("powerInPercent", BrickField.DRONE_POWER_IN_PERCENT);
-		brickInfoMap.put("droneMoveRightBrick", brickInfo);
-
-		brickInfo = new BrickInfo(DroneTurnLeftBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("timeToFlyInSeconds", BrickField.DRONE_TIME_TO_FLY_IN_SECONDS);
-		brickInfo.addBrickFieldToMap("powerInPercent", BrickField.DRONE_POWER_IN_PERCENT);
-		brickInfoMap.put("droneTurnLeftBrick", brickInfo);
-
-		brickInfo = new BrickInfo(DroneTurnRightBrick.class.getSimpleName());
-		brickInfo.addBrickFieldToMap("timeToFlyInSeconds", BrickField.DRONE_TIME_TO_FLY_IN_SECONDS);
-		brickInfo.addBrickFieldToMap("powerInPercent", BrickField.DRONE_POWER_IN_PERCENT);
-		brickInfoMap.put("droneTurnRightBrick", brickInfo);
-
-		brickInfo = new BrickInfo(DroneSwitchCameraBrick.class.getSimpleName());
-		brickInfoMap.put("droneSwitchCameraBrick", brickInfo);
-
-		brickInfo = new BrickInfo(DroneEmergencyBrick.class.getSimpleName());
-		brickInfoMap.put("droneEmergencyBrick", brickInfo);
-
-		brickInfo = new BrickInfo(DroneFlipBrick.class.getSimpleName());
-		brickInfoMap.put("droneFlipBrick", brickInfo);
 
 		brickInfo = new BrickInfo(SetTextBrick.class.getSimpleName());
 		brickInfo.addBrickFieldToMap("xDestination", BrickField.X_DESTINATION);
@@ -683,9 +520,6 @@ public class BackwardCompatibleCatrobatLanguageXStream extends XStream {
 		brickInfo.addBrickFieldToMap("penColor", BrickField.PEN_COLOR_GREEN);
 		brickInfo.addBrickFieldToMap("penColor", BrickField.PEN_COLOR_BLUE);
 		brickInfoMap.put("setPenColorBrick", brickInfo);
-
-		brickInfo = new BrickInfo(WhenGamepadButtonBrick.class.getSimpleName());
-		brickInfoMap.put("whenGamepadButtonBrick", brickInfo);
 	}
 
 	private void initializeScriptInfoMap() {
@@ -699,11 +533,8 @@ public class BackwardCompatibleCatrobatLanguageXStream extends XStream {
 		scriptInfoMap.put("whenConditionScript", WhenConditionScript.class.getSimpleName());
 		scriptInfoMap.put("whenBackgroundChangesScript", WhenBackgroundChangesScript.class.getSimpleName());
 		scriptInfoMap.put("broadcastScript", BroadcastScript.class.getSimpleName());
-		scriptInfoMap.put("raspiInterruptScript", RaspiInterruptScript.class.getSimpleName());
-		scriptInfoMap.put("whenNfcScript", WhenNfcScript.class.getSimpleName());
 		scriptInfoMap.put("collisionScript", WhenBounceOffScript.class.getSimpleName());
 		scriptInfoMap.put("whenTouchDownScript", WhenTouchDownScript.class.getSimpleName());
-		scriptInfoMap.put("whenGamepadButtonScript", WhenGamepadButtonScript.class.getSimpleName());
 	}
 
 	private void modifyXMLToSupportUnknownFields(File file) {

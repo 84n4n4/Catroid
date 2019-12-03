@@ -38,9 +38,6 @@ import org.catrobat.catroid.content.bricks.FormulaBrick;
 import org.catrobat.catroid.content.bricks.GlideToBrick;
 import org.catrobat.catroid.content.bricks.GoNStepsBackBrick;
 import org.catrobat.catroid.content.bricks.IfLogicBeginBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorMoveBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorTurnAngleBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtPlayToneBrick;
 import org.catrobat.catroid.content.bricks.MoveNStepsBrick;
 import org.catrobat.catroid.content.bricks.NoteBrick;
 import org.catrobat.catroid.content.bricks.PlaceAtBrick;
@@ -106,10 +103,6 @@ public class CloneBrickWithFormulaTest {
 				{"ChangeYByNBrick", new ChangeYByNBrick(new Formula(BRICK_FORMULA_VALUE)), Brick.BrickField.Y_POSITION_CHANGE},
 				{"GoNStepsBackBrick", new GoNStepsBackBrick(new Formula(BRICK_FORMULA_VALUE)), Brick.BrickField.STEPS},
 				{"IfLogicBeginBrick", new IfLogicBeginBrick(new Formula(BRICK_FORMULA_VALUE)), Brick.BrickField.IF_CONDITION},
-				{"LegoNxtMotorMoveBrick", new LegoNxtMotorMoveBrick(LegoNxtMotorMoveBrick.Motor.MOTOR_A, new Formula(BRICK_FORMULA_VALUE)), Brick.BrickField.LEGO_NXT_SPEED},
-				{"LegoNxtMotorTurnAngleBrick", new LegoNxtMotorTurnAngleBrick(LegoNxtMotorTurnAngleBrick.Motor.MOTOR_A, new Formula(BRICK_FORMULA_VALUE)), Brick.BrickField.LEGO_NXT_DEGREES},
-				{"LegoNxtPlayToneBrick Frequency", new LegoNxtPlayToneBrick(BRICK_FORMULA_VALUE, BRICK_FORMULA_VALUE), Brick.BrickField.LEGO_NXT_FREQUENCY},
-				{"LegoNxtPlayToneBrick Duration", new LegoNxtPlayToneBrick(BRICK_FORMULA_VALUE, BRICK_FORMULA_VALUE), Brick.BrickField.LEGO_NXT_DURATION_IN_SECONDS},
 				{"MoveNStepsBrick", new MoveNStepsBrick(new Formula(BRICK_FORMULA_VALUE)), Brick.BrickField.STEPS},
 				{"RepeatBrick", new RepeatBrick(new Formula(BRICK_FORMULA_VALUE)), Brick.BrickField.TIMES_TO_REPEAT},
 				{"SetBrightnessBrick", new SetBrightnessBrick(new Formula(BRICK_FORMULA_VALUE)), Brick.BrickField.BRIGHTNESS},

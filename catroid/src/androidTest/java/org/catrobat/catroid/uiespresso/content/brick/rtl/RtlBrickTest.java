@@ -35,8 +35,6 @@ import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.StartScript;
 import org.catrobat.catroid.content.bricks.AddItemToUserListBrick;
-import org.catrobat.catroid.content.bricks.ArduinoSendDigitalValueBrick;
-import org.catrobat.catroid.content.bricks.ArduinoSendPWMValueBrick;
 import org.catrobat.catroid.content.bricks.AskBrick;
 import org.catrobat.catroid.content.bricks.AskSpeechBrick;
 import org.catrobat.catroid.content.bricks.BroadcastBrick;
@@ -57,19 +55,6 @@ import org.catrobat.catroid.content.bricks.ClearGraphicEffectBrick;
 import org.catrobat.catroid.content.bricks.CloneBrick;
 import org.catrobat.catroid.content.bricks.DeleteItemOfUserListBrick;
 import org.catrobat.catroid.content.bricks.DeleteThisCloneBrick;
-import org.catrobat.catroid.content.bricks.DroneEmergencyBrick;
-import org.catrobat.catroid.content.bricks.DroneFlipBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveBackwardBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveDownBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveForwardBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveLeftBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveRightBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveUpBrick;
-import org.catrobat.catroid.content.bricks.DronePlayLedAnimationBrick;
-import org.catrobat.catroid.content.bricks.DroneSwitchCameraBrick;
-import org.catrobat.catroid.content.bricks.DroneTakeOffLandBrick;
-import org.catrobat.catroid.content.bricks.DroneTurnLeftBrick;
-import org.catrobat.catroid.content.bricks.DroneTurnRightBrick;
 import org.catrobat.catroid.content.bricks.FlashBrick;
 import org.catrobat.catroid.content.bricks.ForeverBrick;
 import org.catrobat.catroid.content.bricks.GlideToBrick;
@@ -79,46 +64,17 @@ import org.catrobat.catroid.content.bricks.HideTextBrick;
 import org.catrobat.catroid.content.bricks.IfLogicBeginBrick;
 import org.catrobat.catroid.content.bricks.IfThenLogicBeginBrick;
 import org.catrobat.catroid.content.bricks.InsertItemIntoUserListBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoAnimationsBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoJumpHighBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoJumpLongBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoMoveBackwardBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoMoveForwardBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoNoSoundBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoRotateLeftBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoRotateRightBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoSoundBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoTakingPictureBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoTurnBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorMoveBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorStopBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorTurnAngleBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3PlayToneBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3SetLedBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorMoveBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorStopBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorTurnAngleBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtPlayToneBrick;
 import org.catrobat.catroid.content.bricks.MoveNStepsBrick;
 import org.catrobat.catroid.content.bricks.NextLookBrick;
 import org.catrobat.catroid.content.bricks.NoteBrick;
 import org.catrobat.catroid.content.bricks.PenDownBrick;
 import org.catrobat.catroid.content.bricks.PenUpBrick;
-import org.catrobat.catroid.content.bricks.PhiroIfLogicBeginBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorMoveBackwardBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorMoveForwardBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorStopBrick;
-import org.catrobat.catroid.content.bricks.PhiroPlayToneBrick;
-import org.catrobat.catroid.content.bricks.PhiroRGBLightBrick;
 import org.catrobat.catroid.content.bricks.PlaceAtBrick;
 import org.catrobat.catroid.content.bricks.PlaySoundAndWaitBrick;
 import org.catrobat.catroid.content.bricks.PlaySoundBrick;
 import org.catrobat.catroid.content.bricks.PointInDirectionBrick;
 import org.catrobat.catroid.content.bricks.PointToBrick;
 import org.catrobat.catroid.content.bricks.PreviousLookBrick;
-import org.catrobat.catroid.content.bricks.RaspiIfLogicBeginBrick;
-import org.catrobat.catroid.content.bricks.RaspiPwmBrick;
-import org.catrobat.catroid.content.bricks.RaspiSendDigitalValueBrick;
 import org.catrobat.catroid.content.bricks.RepeatBrick;
 import org.catrobat.catroid.content.bricks.RepeatUntilBrick;
 import org.catrobat.catroid.content.bricks.ReplaceItemInUserListBrick;
@@ -130,7 +86,6 @@ import org.catrobat.catroid.content.bricks.SetBackgroundByIndexAndWaitBrick;
 import org.catrobat.catroid.content.bricks.SetBackgroundByIndexBrick;
 import org.catrobat.catroid.content.bricks.SetBrightnessBrick;
 import org.catrobat.catroid.content.bricks.SetColorBrick;
-import org.catrobat.catroid.content.bricks.SetNfcTagBrick;
 import org.catrobat.catroid.content.bricks.SetPenColorBrick;
 import org.catrobat.catroid.content.bricks.SetPenSizeBrick;
 import org.catrobat.catroid.content.bricks.SetRotationStyleBrick;
@@ -156,8 +111,6 @@ import org.catrobat.catroid.content.bricks.WhenBackgroundChangesBrick;
 import org.catrobat.catroid.content.bricks.WhenBrick;
 import org.catrobat.catroid.content.bricks.WhenClonedBrick;
 import org.catrobat.catroid.content.bricks.WhenConditionBrick;
-import org.catrobat.catroid.content.bricks.WhenNfcBrick;
-import org.catrobat.catroid.content.bricks.WhenRaspiPinChangedBrick;
 import org.catrobat.catroid.content.bricks.WhenStartedBrick;
 import org.catrobat.catroid.content.bricks.WhenTouchDownBrick;
 import org.catrobat.catroid.physics.content.bricks.SetBounceBrick;
@@ -284,8 +237,6 @@ public class RtlBrickTest {
 		checkIfBrickISRtl(WhenBackgroundChangesBrick.class, R.id.brick_when_background_layout);
 
 		checkIfBrickISRtl(WhenClonedBrick.class, R.id.brick_when_cloned_layout);
-
-		checkIfBrickISRtl(WhenNfcBrick.class, R.id.brick_when_nfc_layout);
 	}
 
 	@Category({Cat.AppUi.class, Level.Smoke.class, Cat.RTLTests.class})
@@ -322,8 +273,6 @@ public class RtlBrickTest {
 		checkIfBrickISRtl(DeleteThisCloneBrick.class, R.id.brick_delete_clone_layout);
 
 		checkIfBrickISRtl(WhenClonedBrick.class, R.id.brick_when_cloned_layout);
-
-		checkIfBrickISRtl(SetNfcTagBrick.class, R.id.brick_set_nfc_tag_layout);
 	}
 
 	@Category({Cat.AppUi.class, Level.Smoke.class, Cat.RTLTests.class})
@@ -399,8 +348,6 @@ public class RtlBrickTest {
 
 		checkIfBrickISRtl(SpeakAndWaitBrick.class, R.id.brick_speak_and_wait_layout);
 
-		checkIfBrickISRtl(PhiroPlayToneBrick.class, R.id.brick_phiro_play_tone_layout);
-
 		checkIfBrickISRtl(AskSpeechBrick.class, R.id.brick_set_variable_layout);
 	}
 
@@ -455,7 +402,6 @@ public class RtlBrickTest {
 
 		checkIfBrickISRtl(FlashBrick.class, R.id.brick_flash_layout);
 
-		checkIfBrickISRtl(PhiroRGBLightBrick.class, R.id.brick_phiro_rgb_led_layout);
 	}
 
 	@Category({Cat.AppUi.class, Level.Smoke.class, Cat.RTLTests.class})
@@ -505,144 +451,6 @@ public class RtlBrickTest {
 
 		checkIfBrickISRtl(AskSpeechBrick.class, R.id.brick_set_variable_layout);
 	}
-
-	@Category({Cat.AppUi.class, Level.Smoke.class, Cat.RTLTests.class})
-	@Test
-	public void legoNxtBricks() {
-		assertEquals(arLocale.getDisplayLanguage(), Locale.getDefault().getDisplayLanguage());
-		assertTrue(RtlUiTestUtils.checkTextDirectionIsRtl(Locale.getDefault().getDisplayName()));
-		openCategory(R.string.category_lego_nxt);
-
-		checkIfBrickISRtl(LegoNxtMotorTurnAngleBrick.class, R.id.brick_nxt_motor_turn_layout);
-
-		checkIfBrickISRtl(LegoNxtMotorStopBrick.class, R.id.brick_nxt_motor_stop_layout);
-
-		checkIfBrickISRtl(LegoNxtMotorMoveBrick.class, R.id.brick_nxt_motor_action_layout);
-
-		checkIfBrickISRtl(LegoNxtPlayToneBrick.class, R.id.brick_nxt_play_tone_layout);
-	}
-
-	@Category({Cat.AppUi.class, Level.Smoke.class, Cat.RTLTests.class})
-	@Test
-	public void legoEv3Bricks() {
-		assertEquals(arLocale.getDisplayLanguage(), Locale.getDefault().getDisplayLanguage());
-		assertTrue(RtlUiTestUtils.checkTextDirectionIsRtl(Locale.getDefault().getDisplayName()));
-		openCategory(R.string.category_lego_ev3);
-
-		checkIfBrickISRtl(LegoEv3MotorTurnAngleBrick.class, R.id.brick_ev3_motor_turn_layout);
-
-		checkIfBrickISRtl(LegoEv3MotorMoveBrick.class, R.id.brick_ev3_motor_move_layout);
-
-		checkIfBrickISRtl(LegoEv3MotorStopBrick.class, R.id.brick_ev3_motor_stop_layout);
-
-		checkIfBrickISRtl(LegoEv3PlayToneBrick.class, R.id.brick_ev3_play_tone_layout);
-
-		checkIfBrickISRtl(LegoEv3SetLedBrick.class, R.id.brick_ev3_set_led_layout);
-	}
-
-	@Category({Cat.AppUi.class, Level.Smoke.class, Cat.RTLTests.class})
-	@Test
-	public void arDroneBricks() {
-		assertEquals(arLocale.getDisplayLanguage(), Locale.getDefault().getDisplayLanguage());
-		assertTrue(RtlUiTestUtils.checkTextDirectionIsRtl(Locale.getDefault().getDisplayName()));
-		openCategory(R.string.category_drone);
-
-		checkIfBrickISRtl(DroneTakeOffLandBrick.class, R.id.brick_drone_takeoff_land_layout);
-
-		checkIfBrickISRtl(DroneEmergencyBrick.class, R.id.brick_drone_emergency_layout);
-
-		checkIfBrickISRtl(DroneMoveUpBrick.class, R.id.brick_drone_move_up_layout);
-
-		checkIfBrickISRtl(DroneMoveDownBrick.class, R.id.brick_drone_move_down_layout);
-
-		checkIfBrickISRtl(DroneMoveLeftBrick.class, R.id.brick_drone_move_left_layout);
-
-		checkIfBrickISRtl(DroneMoveRightBrick.class, R.id.brick_drone_move_right_layout);
-
-		checkIfBrickISRtl(DroneMoveForwardBrick.class, R.id.brick_drone_move_forward_layout);
-
-		checkIfBrickISRtl(DroneMoveBackwardBrick.class, R.id.brick_drone_move_backward_layout);
-
-		checkIfBrickISRtl(DroneTurnLeftBrick.class, R.id.brick_drone_turn_left_layout);
-
-		checkIfBrickISRtl(DroneTurnRightBrick.class, R.id.brick_drone_turn_right_layout);
-
-		checkIfBrickISRtl(DroneFlipBrick.class, R.id.brick_drone_flip_layout);
-
-		checkIfBrickISRtl(DronePlayLedAnimationBrick.class, R.id.brick_drone_play_led_animation_layout);
-
-		checkIfBrickISRtl(DroneSwitchCameraBrick.class, R.id.brick_drone_switch_camera_layout);
-	}
-
-	@Category({Cat.AppUi.class, Level.Smoke.class, Cat.RTLTests.class})
-	@Test
-	public void jumpingSumoBricks() {
-		assertEquals(arLocale.getDisplayLanguage(), Locale.getDefault().getDisplayLanguage());
-		assertTrue(RtlUiTestUtils.checkTextDirectionIsRtl(Locale.getDefault().getDisplayName()));
-		openCategory(R.string.category_jumping_sumo);
-
-		checkIfBrickISRtl(JumpingSumoMoveForwardBrick.class, R.id.brick_jumping_sumo_move_forward_layout);
-
-		checkIfBrickISRtl(JumpingSumoMoveBackwardBrick.class, R.id.brick_jumping_sumo_move_backward_layout);
-
-		checkIfBrickISRtl(JumpingSumoAnimationsBrick.class, R.id.brick_jumping_sumo_animation_layout);
-
-		checkIfBrickISRtl(JumpingSumoSoundBrick.class, R.id.brick_jumping_sumo_sound_layout);
-
-		checkIfBrickISRtl(JumpingSumoNoSoundBrick.class, R.id.brick_jumping_sumo_nosound_layout);
-
-		checkIfBrickISRtl(JumpingSumoJumpLongBrick.class, R.id.brick_jumping_sumo_jump_long_layout);
-
-		checkIfBrickISRtl(JumpingSumoJumpHighBrick.class, R.id.brick_jumping_sumo_jump_high_layout);
-
-		checkIfBrickISRtl(JumpingSumoRotateLeftBrick.class, R.id.brick_jumping_sumo_rotate_left_layout);
-
-		checkIfBrickISRtl(JumpingSumoRotateRightBrick.class, R.id.brick_jumping_sumo_rotate_right_layout);
-
-		checkIfBrickISRtl(JumpingSumoTurnBrick.class, R.id.brick_jumping_sumo_turn_layout);
-
-		checkIfBrickISRtl(JumpingSumoTakingPictureBrick.class, R.id.brick_jumping_sumo_taking_picture_layout);
-	}
-
-	@Category({Cat.AppUi.class, Level.Smoke.class, Cat.RTLTests.class})
-	@Test
-	public void phiroBricks() {
-		assertEquals(arLocale.getDisplayLanguage(), Locale.getDefault().getDisplayLanguage());
-		assertTrue(RtlUiTestUtils.checkTextDirectionIsRtl(Locale.getDefault().getDisplayName()));
-		openCategory(R.string.category_phiro);
-
-		checkIfBrickISRtl(PhiroMotorMoveForwardBrick.class, R.id.brick_phiro_motor_forward_action_layout);
-
-		checkIfBrickISRtl(PhiroMotorMoveBackwardBrick.class, R.id.brick_phiro_motor_backward_action_layout);
-
-		checkIfBrickISRtl(PhiroMotorStopBrick.class, R.id.brick_phiro_motor_stop_layout);
-
-		checkIfBrickISRtl(PhiroPlayToneBrick.class, R.id.brick_phiro_play_tone_layout);
-
-		checkIfBrickISRtl(PhiroRGBLightBrick.class, R.id.brick_phiro_rgb_led_layout);
-
-		checkIfBrickISRtl(PhiroIfLogicBeginBrick.class, R.id.brick_phiro_sensor_layout);
-
-		checkIfBrickAtPositionIsRtl(SetVariableBrick.class, 0, R.id.brick_set_variable_layout);
-		checkIfBrickAtPositionIsRtl(SetVariableBrick.class, 1, R.id.brick_set_variable_layout);
-		checkIfBrickAtPositionIsRtl(SetVariableBrick.class, 2, R.id.brick_set_variable_layout);
-		checkIfBrickAtPositionIsRtl(SetVariableBrick.class, 3, R.id.brick_set_variable_layout);
-		checkIfBrickAtPositionIsRtl(SetVariableBrick.class, 4, R.id.brick_set_variable_layout);
-		checkIfBrickAtPositionIsRtl(SetVariableBrick.class, 5, R.id.brick_set_variable_layout);
-	}
-
-	@Category({Cat.AppUi.class, Level.Smoke.class, Cat.RTLTests.class})
-	@Test
-	public void arduinoBricks() {
-		assertEquals(arLocale.getDisplayLanguage(), Locale.getDefault().getDisplayLanguage());
-		assertTrue(RtlUiTestUtils.checkTextDirectionIsRtl(Locale.getDefault().getDisplayName()));
-		openCategory(R.string.category_arduino);
-
-		checkIfBrickISRtl(ArduinoSendDigitalValueBrick.class, R.id.brick_arduino_send_digital_layout);
-
-		checkIfBrickISRtl(ArduinoSendPWMValueBrick.class, R.id.brick_arduino_send_analog_layout);
-	}
-
 	@Category({Cat.AppUi.class, Level.Smoke.class, Cat.RTLTests.class})
 	@Test
 	public void userBricks() {
@@ -650,22 +458,6 @@ public class RtlBrickTest {
 		assertTrue(RtlUiTestUtils.checkTextDirectionIsRtl(Locale.getDefault().getDisplayName()));
 		openCategory(R.string.category_user_bricks);
 		onView(allOf(withId(android.R.id.list), withParent(withId(R.id.add_brick_fragment_list)))).check(matches(hasChildCount(0)));
-	}
-
-	@Category({Cat.AppUi.class, Level.Smoke.class, Cat.RTLTests.class})
-	@Test
-	public void raspPiBricks() {
-		assertEquals(arLocale.getDisplayLanguage(), Locale.getDefault().getDisplayLanguage());
-		assertTrue(RtlUiTestUtils.checkTextDirectionIsRtl(Locale.getDefault().getDisplayName()));
-		openCategory(R.string.category_raspi);
-
-		checkIfBrickISRtl(WhenRaspiPinChangedBrick.class, R.id.brick_raspi_when_layout);
-
-		checkIfBrickISRtl(RaspiIfLogicBeginBrick.class, R.id.brick_raspi_if_begin_layout);
-
-		checkIfBrickISRtl(RaspiSendDigitalValueBrick.class, R.id.brick_raspi_send_digital_layout);
-
-		checkIfBrickISRtl(RaspiPwmBrick.class, R.id.brick_raspi_pwm_layout);
 	}
 
 	private void checkIfBrickISRtl(Class brickClass, int bricksId) {

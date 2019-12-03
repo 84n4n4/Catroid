@@ -41,7 +41,6 @@ import android.widget.TextView;
 import org.catrobat.catroid.BuildConfig;
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.cast.CastManager;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.io.ZipArchiver;
@@ -65,7 +64,7 @@ import java.io.InputStream;
 import static org.catrobat.catroid.common.FlavoredConstants.DEFAULT_ROOT_DIRECTORY;
 import static org.catrobat.catroid.common.SharedPreferenceKeys.AGREED_TO_PRIVACY_POLICY_VERSION;
 
-public class MainMenuActivity extends BaseCastActivity implements
+public class MainMenuActivity extends BaseActivity implements
 		ProjectLoadTask.ProjectLoadListener {
 
 	public static final String TAG = MainMenuActivity.class.getSimpleName();
@@ -129,10 +128,6 @@ public class MainMenuActivity extends BaseCastActivity implements
 
 		setShowProgressBar(true);
 
-		if (SettingsFragment.isCastSharedPreferenceEnabled(this)) {
-			CastManager.getInstance().initializeCast(this);
-		}
-
 		loadFragment();
 	}
 
@@ -177,16 +172,6 @@ public class MainMenuActivity extends BaseCastActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_main_menu, menu);
-
-		String scratchConverter = getString(R.string.main_menu_scratch_converter);
-		SpannableString scratchConverterBeta = new SpannableString(scratchConverter
-				+ " "
-				+ getString(R.string.beta));
-		scratchConverterBeta.setSpan(
-				new ForegroundColorSpan(getResources().getColor(R.color.beta_label_color)),
-				scratchConverter.length(), scratchConverterBeta.length(),
-				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		menu.findItem(R.id.menu_scratch_converter).setTitle(scratchConverterBeta);
 		return true;
 	}
 
@@ -194,9 +179,6 @@ public class MainMenuActivity extends BaseCastActivity implements
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.findItem(R.id.menu_login).setVisible(!Utils.isUserLoggedIn(this));
 		menu.findItem(R.id.menu_logout).setVisible(Utils.isUserLoggedIn(this));
-		if (!BuildConfig.FEATURE_SCRATCH_CONVERTER_ENABLED) {
-			menu.removeItem(R.id.menu_scratch_converter);
-		}
 		return true;
 	}
 
@@ -221,11 +203,6 @@ public class MainMenuActivity extends BaseCastActivity implements
 				break;
 			case R.id.menu_about:
 				new AboutDialogFragment().show(getSupportFragmentManager(), AboutDialogFragment.TAG);
-				break;
-			case R.id.menu_scratch_converter:
-				if (Utils.checkIsNetworkAvailableAndShowErrorMessage(this)) {
-					startActivity(new Intent(this, ScratchConverterActivity.class));
-				}
 				break;
 			case R.id.settings:
 				startActivity(new Intent(this, SettingsActivity.class));

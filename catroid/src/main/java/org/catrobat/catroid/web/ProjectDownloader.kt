@@ -33,7 +33,6 @@ import android.support.annotation.VisibleForTesting
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import org.catrobat.catroid.R
-import org.catrobat.catroid.scratchconverter.Client.ProjectDownloadCallback
 import org.catrobat.catroid.transfers.project.ProjectDownloadService
 import org.catrobat.catroid.transfers.project.ProjectDownloadService.Companion.ERROR_CODE
 import org.catrobat.catroid.transfers.project.ProjectDownloadService.Companion.SUCCESS_CODE
@@ -53,10 +52,8 @@ import java.util.Locale
 
 class ProjectDownloader(
     private val queue: ProjectDownloadQueue,
-    private val url: String,
-    callback: ProjectDownloadCallback?
+    private val url: String
 ) : Serializable {
-    private val callbackWeakReference = WeakReference<ProjectDownloadCallback>(callback)
 
     companion object {
         private const val serialVersionUID = 42L
@@ -119,7 +116,6 @@ class ProjectDownloader(
         downloadIntent.putExtra(ProjectDownloadService.EXTRA_NOTIFICATION_DATA, notificationData)
         statusBarNotificationManager.showOrUpdateNotification(context, notificationData, 0, null)
 
-        callbackWeakReference.get()?.onDownloadStarted(url)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(downloadIntent)
         } else {
@@ -137,10 +133,8 @@ class ProjectDownloader(
             when (resultCode) {
                 UPDATE_PROGRESS_CODE -> {
                     val progress = resultData.getLong(UPDATE_PROGRESS_EXTRA)
-                    callbackWeakReference.get()?.onDownloadProgress(progress.toInt(), url)
                 }
                 SUCCESS_CODE -> {
-                    callbackWeakReference.get()?.onDownloadFinished(projectName, url)
                     queue.finished(projectName)
                 }
                 ERROR_CODE -> queue.finished(projectName)

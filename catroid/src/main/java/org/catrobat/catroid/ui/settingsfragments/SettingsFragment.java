@@ -41,10 +41,7 @@ import android.util.DisplayMetrics;
 import org.catrobat.catroid.BuildConfig;
 import org.catrobat.catroid.CatroidApplication;
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.common.DroneConfigPreference;
 import org.catrobat.catroid.common.SharedPreferenceKeys;
-import org.catrobat.catroid.devices.mindstorms.ev3.sensors.EV3Sensor;
-import org.catrobat.catroid.devices.mindstorms.nxt.sensors.NXTSensor;
 import org.catrobat.catroid.ui.MainMenuActivity;
 import org.catrobat.catroid.utils.CrashReporter;
 import org.catrobat.catroid.utils.SnackbarUtil;
@@ -60,51 +57,12 @@ import static org.catrobat.catroid.common.SharedPreferenceKeys.LANGUAGE_CODE;
 import static org.catrobat.catroid.common.SharedPreferenceKeys.LANGUAGE_TAG_KEY;
 
 public class SettingsFragment extends PreferenceFragment {
-
-	public static final String SETTINGS_MINDSTORMS_NXT_BRICKS_ENABLED = "settings_mindstorms_nxt_bricks_enabled";
-	public static final String SETTINGS_MINDSTORMS_NXT_SHOW_SENSOR_INFO_BOX_DISABLED = "settings_mindstorms_nxt_show_sensor_info_box_disabled";
-	public static final String SETTINGS_MINDSTORMS_EV3_BRICKS_ENABLED = "settings_mindstorms_ev3_bricks_enabled";
-	public static final String SETTINGS_MINDSTORMS_EV3_SHOW_SENSOR_INFO_BOX_DISABLED = "settings_mindstorms_ev3_show_sensor_info_box_disabled";
-	public static final String SETTINGS_SHOW_PARROT_AR_DRONE_BRICKS = "setting_parrot_ar_drone_bricks";
-	public static final String SETTINGS_SHOW_EMBROIDERY_BRICKS = "setting_embroidery_bricks";
-	public static final String SETTINGS_SHOW_PHIRO_BRICKS = "setting_enable_phiro_bricks";
-	public static final String SETTINGS_SHOW_ARDUINO_BRICKS = "setting_arduino_bricks";
-	public static final String SETTINGS_SHOW_RASPI_BRICKS = "setting_raspi_bricks";
-	public static final String SETTINGS_SHOW_NFC_BRICKS = "setting_nfc_bricks";
-	public static final String SETTINGS_PARROT_AR_DRONE_CATROBAT_TERMS_OF_SERVICE_ACCEPTED_PERMANENTLY = "setting_parrot_ar_drone_catrobat_terms_of_service_accepted_permanently";
-	public static final String SETTINGS_CAST_GLOBALLY_ENABLED = "setting_cast_globally_enabled";
 	public static final String SETTINGS_SHOW_HINTS = "setting_enable_hints";
 	public static final String SETTINGS_MULTILINGUAL = "setting_multilingual";
-	public static final String SETTINGS_PARROT_JUMPING_SUMO_CATROBAT_TERMS_OF_SERVICE_ACCEPTED_PERMANENTLY =
-			"setting_parrot_jumping_sumo_catrobat_terms_of_service_accepted_permanently";
+
 	PreferenceScreen screen = null;
 
 	public static final String ACCESSIBILITY_SCREEN_KEY = "setting_accessibility_screen";
-	public static final String NXT_SCREEN_KEY = "setting_nxt_screen";
-	public static final String EV3_SCREEN_KEY = "setting_ev3_screen";
-	public static final String DRONE_SCREEN_KEY = "settings_drone_screen";
-	public static final String PARROT_JUMPING_SUMO_SCREEN_KEY = "setting_parrot_jumping_sumo_bricks";
-	public static final String RASPBERRY_SCREEN_KEY = "settings_raspberry_screen";
-
-	public static final String NXT_SETTINGS_CATEGORY = "setting_nxt_category";
-	public static final String[] NXT_SENSORS = {"setting_mindstorms_nxt_sensor_1", "setting_mindstorms_nxt_sensor_2",
-			"setting_mindstorms_nxt_sensor_3", "setting_mindstorms_nxt_sensor_4"};
-
-	public static final String EV3_SETTINGS_CATEGORY = "setting_ev3_category";
-	public static final String[] EV3_SENSORS = {"setting_mindstorms_ev3_sensor_1", "setting_mindstorms_ev3_sensor_2",
-			"setting_mindstorms_ev3_sensor_3", "setting_mindstorms_ev3_sensor_4"};
-
-	public static final String DRONE_SETTINGS_CATEGORY = "setting_drone_category";
-	public static final String DRONE_CONFIGS = "setting_drone_basic_configs";
-	public static final String DRONE_ALTITUDE_LIMIT = "setting_drone_altitude_limit";
-	public static final String DRONE_VERTICAL_SPEED = "setting_drone_vertical_speed";
-	public static final String DRONE_ROTATION_SPEED = "setting_drone_rotation_speed";
-	public static final String DRONE_TILT_ANGLE = "setting_drone_tilt_angle";
-
-	public static final String RASPI_CONNECTION_SETTINGS_CATEGORY = "setting_raspi_connection_settings_category";
-	public static final String RASPI_HOST = "setting_raspi_host_preference";
-	public static final String RASPI_PORT = "setting_raspi_port_preference";
-	public static final String RASPI_VERSION_SPINNER = "setting_raspi_version_preference";
 
 	public static final String SETTINGS_CRASH_REPORTS = "setting_enable_crash_reports";
 	public static final String TAG = SettingsFragment.class.getSimpleName();
@@ -121,36 +79,6 @@ public class SettingsFragment extends PreferenceFragment {
 		setLanguage();
 
 		screen = getPreferenceScreen();
-
-		if (!BuildConfig.FEATURE_EMBROIDERY_ENABLED) {
-			CheckBoxPreference embroideryPreference = (CheckBoxPreference) findPreference(SETTINGS_SHOW_EMBROIDERY_BRICKS);
-			embroideryPreference.setEnabled(false);
-			screen.removePreference(embroideryPreference);
-		}
-
-		if (!BuildConfig.FEATURE_PHIRO_ENABLED) {
-			CheckBoxPreference phiroPreference = (CheckBoxPreference) findPreference(SETTINGS_SHOW_PHIRO_BRICKS);
-			phiroPreference.setEnabled(false);
-			screen.removePreference(phiroPreference);
-		}
-
-		if (!BuildConfig.FEATURE_ARDUINO_ENABLED) {
-			CheckBoxPreference arduinoPreference = (CheckBoxPreference) findPreference(SETTINGS_SHOW_ARDUINO_BRICKS);
-			arduinoPreference.setEnabled(false);
-			screen.removePreference(arduinoPreference);
-		}
-
-		if ((!BuildConfig.FEATURE_CAST_ENABLED)) {
-			CheckBoxPreference globalCastPreference = (CheckBoxPreference) findPreference(SETTINGS_CAST_GLOBALLY_ENABLED);
-			globalCastPreference.setEnabled(false);
-			screen.removePreference(globalCastPreference);
-		}
-
-		if (!BuildConfig.FEATURE_NFC_ENABLED) {
-			CheckBoxPreference nfcPreference = (CheckBoxPreference) findPreference(SETTINGS_SHOW_NFC_BRICKS);
-			nfcPreference.setEnabled(false);
-			screen.removePreference(nfcPreference);
-		}
 
 		if (!BuildConfig.CRASHLYTICS_CRASH_REPORT_ENABLED) {
 			CheckBoxPreference crashlyticsPreference = (CheckBoxPreference) findPreference(SETTINGS_CRASH_REPORTS);
@@ -187,38 +115,6 @@ public class SettingsFragment extends PreferenceFragment {
 						.addToBackStack(AccessibilitySettingsFragment.TAG)
 						.commit();
 				break;
-			case NXT_SCREEN_KEY:
-				getFragmentManager().beginTransaction()
-						.replace(R.id.content_frame, new NXTSensorsSettingsFragment(), NXTSensorsSettingsFragment.TAG)
-						.addToBackStack(NXTSensorsSettingsFragment.TAG)
-						.commit();
-				break;
-			case EV3_SCREEN_KEY:
-				getFragmentManager().beginTransaction()
-						.replace(R.id.content_frame, new Ev3SensorsSettingsFragment(), Ev3SensorsSettingsFragment.TAG)
-						.addToBackStack(Ev3SensorsSettingsFragment.TAG)
-						.commit();
-				break;
-			case DRONE_SCREEN_KEY:
-				getFragmentManager().beginTransaction()
-						.replace(R.id.content_frame, new ParrotARDroneSettingsFragment(),
-								ParrotARDroneSettingsFragment.TAG)
-						.addToBackStack(ParrotARDroneSettingsFragment.TAG)
-						.commit();
-				break;
-			case PARROT_JUMPING_SUMO_SCREEN_KEY:
-				getFragmentManager().beginTransaction()
-						.replace(R.id.content_frame, new ParrotJumpingSumoSettingsFragment(),
-								ParrotJumpingSumoSettingsFragment.TAG)
-						.addToBackStack(ParrotJumpingSumoSettingsFragment.TAG)
-						.commit();
-				break;
-			case RASPBERRY_SCREEN_KEY:
-				getFragmentManager().beginTransaction()
-						.replace(R.id.content_frame, new RaspberryPiSettingsFragment(), RaspberryPiSettingsFragment.TAG)
-						.addToBackStack(RaspberryPiSettingsFragment.TAG)
-						.commit();
-				break;
 		}
 		return super.onPreferenceTreeClick(preferenceScreen, preference);
 	}
@@ -235,59 +131,6 @@ public class SettingsFragment extends PreferenceFragment {
 		});
 	}
 
-	public static boolean isEmroiderySharedPreferenceEnabled(Context context) {
-		return getBooleanSharedPreference(false, SETTINGS_SHOW_EMBROIDERY_BRICKS, context);
-	}
-
-	public static boolean isDroneSharedPreferenceEnabled(Context context) {
-		return getBooleanSharedPreference(false, SETTINGS_SHOW_PARROT_AR_DRONE_BRICKS, context);
-	}
-
-	public static boolean isJSSharedPreferenceEnabled(Context context) {
-		return getBooleanSharedPreference(false, PARROT_JUMPING_SUMO_SCREEN_KEY, context);
-	}
-
-	public static boolean isMindstormsNXTSharedPreferenceEnabled(Context context) {
-		return getBooleanSharedPreference(false, SETTINGS_MINDSTORMS_NXT_BRICKS_ENABLED, context);
-	}
-
-	public static boolean isMindstormsEV3SharedPreferenceEnabled(Context context) {
-		return getBooleanSharedPreference(false, SETTINGS_MINDSTORMS_EV3_BRICKS_ENABLED, context);
-	}
-
-	public static boolean isPhiroSharedPreferenceEnabled(Context context) {
-		return getBooleanSharedPreference(false, SETTINGS_SHOW_PHIRO_BRICKS, context);
-	}
-
-	public static boolean isCastSharedPreferenceEnabled(Context context) {
-		return getBooleanSharedPreference(false, SETTINGS_CAST_GLOBALLY_ENABLED, context);
-	}
-
-	public static void setPhiroSharedPreferenceEnabled(Context context, boolean value) {
-		SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-		editor.putBoolean(SETTINGS_SHOW_PHIRO_BRICKS, value);
-		editor.commit();
-	}
-
-	public static void setJumpingSumoSharedPreferenceEnabled(Context context, boolean value) {
-		SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-		editor.putBoolean(PARROT_JUMPING_SUMO_SCREEN_KEY, value);
-		editor.commit();
-	}
-
-	public static void setArduinoSharedPreferenceEnabled(Context context, boolean value) {
-		SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-		editor.putBoolean(SETTINGS_SHOW_ARDUINO_BRICKS, value);
-		editor.commit();
-	}
-
-	public static boolean isArduinoSharedPreferenceEnabled(Context context) {
-		return getBooleanSharedPreference(false, SETTINGS_SHOW_ARDUINO_BRICKS, context);
-	}
-
-	public static boolean isNfcSharedPreferenceEnabled(Context context) {
-		return getBooleanSharedPreference(false, SETTINGS_SHOW_NFC_BRICKS, context);
-	}
 
 	public static void setAutoCrashReportingEnabled(Context context, boolean isEnabled) {
 		SharedPreferences.Editor editor = getSharedPreferences(context).edit();
@@ -304,100 +147,6 @@ public class SettingsFragment extends PreferenceFragment {
 
 	private static SharedPreferences getSharedPreferences(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context);
-	}
-
-	public static NXTSensor.Sensor[] getLegoNXTSensorMapping(Context context) {
-		NXTSensor.Sensor[] sensorMapping = new NXTSensor.Sensor[4];
-		for (int i = 0; i < 4; i++) {
-			String sensor = getSharedPreferences(context).getString(NXT_SENSORS[i], null);
-			sensorMapping[i] = NXTSensor.Sensor.getSensorFromSensorCode(sensor);
-		}
-
-		return sensorMapping;
-	}
-
-	public static EV3Sensor.Sensor[] getLegoEV3SensorMapping(Context context) {
-		EV3Sensor.Sensor[] sensorMapping = new EV3Sensor.Sensor[4];
-		for (int i = 0; i < 4; i++) {
-			String sensor = getSharedPreferences(context).getString(EV3_SENSORS[i], null);
-			sensorMapping[i] = EV3Sensor.Sensor.getSensorFromSensorCode(sensor);
-		}
-
-		return sensorMapping;
-	}
-
-	public static String getRaspiHost(Context context) {
-		return getSharedPreferences(context).getString(RASPI_HOST, null);
-	}
-
-	public static int getRaspiPort(Context context) {
-		return Integer.parseInt(getSharedPreferences(context).getString(RASPI_PORT, null));
-	}
-
-	public static String getRaspiRevision(Context context) {
-		return getSharedPreferences(context).getString(RASPI_VERSION_SPINNER, null);
-	}
-
-	public static void setLegoMindstormsNXTSensorMapping(Context context, NXTSensor.Sensor[] sensorMapping) {
-		SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-		for (int i = 0; i < NXT_SENSORS.length; i++) {
-			editor.putString(NXT_SENSORS[i], sensorMapping[i].getSensorCode());
-		}
-
-		editor.commit();
-	}
-
-	public static void setLegoMindstormsEV3SensorMapping(Context context, EV3Sensor.Sensor[] sensorMapping) {
-		SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-		for (int i = 0; i < EV3_SENSORS.length; i++) {
-			editor.putString(EV3_SENSORS[i], sensorMapping[i].getSensorCode());
-		}
-
-		editor.commit();
-	}
-
-	public static void setLegoMindstormsNXTSensorMapping(Context context, NXTSensor.Sensor sensor, String sensorSetting) {
-		SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-		editor.putString(sensorSetting, sensor.getSensorCode());
-		editor.commit();
-	}
-
-	public static void setLegoMindstormsEV3SensorMapping(Context context, EV3Sensor.Sensor sensor, String sensorSetting) {
-		SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-		editor.putString(sensorSetting, sensor.getSensorCode());
-		editor.commit();
-	}
-
-	public static DroneConfigPreference.Preferences[] getDronePreferenceMapping(Context context) {
-
-		final String[] dronePreferences =
-				new String[] {DRONE_CONFIGS, DRONE_ALTITUDE_LIMIT, DRONE_VERTICAL_SPEED, DRONE_ROTATION_SPEED, DRONE_TILT_ANGLE};
-
-		DroneConfigPreference.Preferences[] preferenceMapping = new DroneConfigPreference.Preferences[5];
-		for (int i = 0; i < 5; i++) {
-			String preference = getSharedPreferences(context).getString(dronePreferences[i], null);
-			preferenceMapping[i] = DroneConfigPreference.Preferences.getPreferenceFromPreferenceCode(preference);
-		}
-
-		return preferenceMapping;
-	}
-
-	public static DroneConfigPreference.Preferences getDronePreferenceMapping(Context context, String
-			preferenceSetting) {
-		String preference = getSharedPreferences(context).getString(preferenceSetting, null);
-		return DroneConfigPreference.Preferences.getPreferenceFromPreferenceCode(preference);
-	}
-
-	public static void enableLegoMindstormsNXTBricks(Context context) {
-		SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-		editor.putBoolean(SETTINGS_MINDSTORMS_NXT_BRICKS_ENABLED, true);
-		editor.commit();
-	}
-
-	public static void enableLegoMindstormsEV3Bricks(Context context) {
-		SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-		editor.putBoolean(SETTINGS_MINDSTORMS_EV3_BRICKS_ENABLED, true);
-		editor.commit();
 	}
 
 	private void setLanguage() {

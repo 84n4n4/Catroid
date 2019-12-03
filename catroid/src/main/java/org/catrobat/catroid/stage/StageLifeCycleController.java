@@ -30,18 +30,13 @@ import android.view.SurfaceView;
 import android.view.WindowManager;
 
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.badlogic.gdx.backends.android.surfaceview.GLSurfaceView20;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.camera.CameraManager;
-import org.catrobat.catroid.cast.CastManager;
-import org.catrobat.catroid.common.CatroidService;
-import org.catrobat.catroid.common.ServiceProvider;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.Brick;
-import org.catrobat.catroid.devices.mindstorms.MindstormsException;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
 import org.catrobat.catroid.formulaeditor.SensorHandler;
 import org.catrobat.catroid.formulaeditor.UserDataWrapper;
@@ -95,15 +90,7 @@ public final class StageLifeCycleController {
 
 		stageActivity.configuration = new AndroidApplicationConfiguration();
 		stageActivity.configuration.r = stageActivity.configuration.g = stageActivity.configuration.b = stageActivity.configuration.a = 8;
-		if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-			stageActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-			stageActivity.setContentView(R.layout.activity_stage_gamepad);
-			CastManager.getInstance().initializeGamepadActivity(stageActivity);
-			CastManager.getInstance()
-					.addStageViewToLayout((GLSurfaceView20) stageActivity.initializeForView(stageActivity.stageListener, stageActivity.configuration));
-		} else {
-			stageActivity.initialize(stageActivity.stageListener, stageActivity.configuration);
-		}
+		stageActivity.initialize(stageActivity.stageListener, stageActivity.configuration);
 
 		//CATROID-105 - TODO: does this make any difference? probably necessary for cast:
 		if (stageActivity.getGdxGraphics().getView() instanceof SurfaceView) {
@@ -144,17 +131,7 @@ public final class StageLifeCycleController {
 				CameraManager.getInstance().pausePreview();
 				CameraManager.getInstance().releaseCamera();
 			}
-			ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).pause();
 			VibratorUtil.pauseVibrator();
-			if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-				CastManager.getInstance().setRemoteLayoutToPauseScreen(stageActivity);
-			}
-			if (stageActivity.stageResourceHolder.droneInitializer != null) {
-				stageActivity.stageResourceHolder.droneInitializer.onPause();
-			}
-			if (stageActivity.stageResourceHolder.droneController != null) {
-				stageActivity.stageResourceHolder.droneController.onPause();
-			}
 		}
 	}
 
@@ -188,16 +165,6 @@ public final class StageLifeCycleController {
 				FaceDetectionHandler.resumeFaceDetection();
 			}
 
-			if (resourcesSet.contains(Brick.BLUETOOTH_LEGO_NXT)
-					|| resourcesSet.contains(Brick.BLUETOOTH_PHIRO)
-					|| resourcesSet.contains(Brick.BLUETOOTH_SENSORS_ARDUINO)) {
-				try {
-					ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).start();
-				} catch (MindstormsException e) {
-					Log.e(TAG, e.getMessage());
-				}
-			}
-
 			if (resourcesSet.contains(Brick.CAMERA_BACK)
 					|| resourcesSet.contains(Brick.CAMERA_FRONT)
 					|| resourcesSet.contains(Brick.VIDEO)) {
@@ -213,10 +180,6 @@ public final class StageLifeCycleController {
 				stageActivity.nfcAdapter.enableForegroundDispatch(stageActivity, stageActivity.pendingIntent, null, null);
 			}
 
-			if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-				CastManager.getInstance().resumeRemoteLayoutFromPauseScreen();
-			}
-
 			if (CameraManager.getInstance() != null) {
 				FaceDetectionHandler.resumeFaceDetection();
 			}
@@ -225,19 +188,11 @@ public final class StageLifeCycleController {
 			if (stageActivity.stageResourceHolder.initFinished()) {
 				stageActivity.stageListener.menuResume();
 			}
-			if (stageActivity.stageResourceHolder.droneInitializer != null) {
-				stageActivity.stageResourceHolder.droneInitializer.onResume();
-			}
-			if (stageActivity.stageResourceHolder.droneController != null) {
-				stageActivity.stageResourceHolder.droneController.onResume();
-			}
 		}
 	}
 
 	static void stageDestroy(StageActivity stageActivity) {
 		if (checkPermission(stageActivity, getProjectsRuntimePermissionList())) {
-			stageActivity.jumpingSumoDisconnect();
-			ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).destroy();
 			VibratorUtil.destroy();
 			SensorHandler.stopSensorListeners();
 			if (CameraManager.getInstance() != null) {
@@ -247,17 +202,9 @@ public final class StageLifeCycleController {
 				CameraManager.getInstance().releaseCamera();
 				CameraManager.getInstance().setToDefaultCamera();
 			}
-			if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-				CastManager.getInstance().onStageDestroyed();
-			}
+
 			stageActivity.stageListener.finish();
 			stageActivity.manageLoadAndFinish();
-			if (stageActivity.stageResourceHolder.droneInitializer != null) {
-				stageActivity.stageResourceHolder.droneInitializer.onDestroy();
-			}
-			if (stageActivity.stageResourceHolder.droneController != null) {
-				stageActivity.stageResourceHolder.droneController.onDestroy();
-			}
 		}
 		ProjectManager.getInstance().setCurrentlyPlayingScene(ProjectManager.getInstance().getCurrentlyEditedScene());
 	}

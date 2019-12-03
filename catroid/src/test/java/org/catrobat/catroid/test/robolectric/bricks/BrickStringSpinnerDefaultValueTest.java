@@ -38,18 +38,6 @@ import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.content.bricks.CameraBrick;
 import org.catrobat.catroid.content.bricks.ChooseCameraBrick;
 import org.catrobat.catroid.content.bricks.FlashBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorMoveBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorStopBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorTurnAngleBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3SetLedBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorMoveBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorStopBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorTurnAngleBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorMoveBackwardBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorMoveForwardBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorStopBrick;
-import org.catrobat.catroid.content.bricks.PhiroPlayToneBrick;
-import org.catrobat.catroid.content.bricks.PhiroRGBLightBrick;
 import org.catrobat.catroid.content.bricks.SetXBrick;
 import org.catrobat.catroid.content.bricks.StopScriptBrick;
 import org.catrobat.catroid.ui.SpriteActivity;
@@ -81,19 +69,7 @@ public class BrickStringSpinnerDefaultValueTest {
 				{"StopScriptBrick - R.id.brick_stop_script_spinner", "Control", StopScriptBrick.class, R.id.brick_stop_script_spinner, "this script"},
 				{"CameraBrick - R.id.brick_video_spinner", "Looks", CameraBrick.class, R.id.brick_video_spinner, "on"},
 				{"ChooseCameraBrick - R.id.brick_choose_camera_spinner", "Looks", ChooseCameraBrick.class, R.id.brick_choose_camera_spinner, "front"},
-				{"FlashBrick - R.id.brick_flash_spinner", "Looks", FlashBrick.class, R.id.brick_flash_spinner, "on"},
-				{"LegoNxtMotorTurnAngleBrick - R.id.lego_motor_turn_angle_spinner", "Lego NXT", LegoNxtMotorTurnAngleBrick.class, R.id.lego_motor_turn_angle_spinner, "A"},
-				{"LegoNxtMotorStopBrick - R.id.stop_motor_spinner", "Lego NXT", LegoNxtMotorStopBrick.class, R.id.stop_motor_spinner, "A"},
-				{"LegoNxtMotorMoveBrick - R.id.lego_motor_action_spinner", "Lego NXT", LegoNxtMotorMoveBrick.class, R.id.lego_motor_action_spinner, "A"},
-				{"LegoEv3MotorTurnAngleBrick - R.id.lego_ev3_motor_turn_angle_spinner", "Lego EV3", LegoEv3MotorTurnAngleBrick.class, R.id.lego_ev3_motor_turn_angle_spinner, "A"},
-				{"LegoEv3MotorMoveBrick - R.id.brick_ev3_motor_move_spinner", "Lego EV3", LegoEv3MotorMoveBrick.class, R.id.brick_ev3_motor_move_spinner, "A"},
-				{"LegoEv3MotorStopBrick - R.id.ev3_stop_motor_spinner", "Lego EV3", LegoEv3MotorStopBrick.class, R.id.ev3_stop_motor_spinner, "A"},
-				{"LegoEv3SetLedBrick - R.id.brick_ev3_set_led_spinner", "Lego EV3", LegoEv3SetLedBrick.class, R.id.brick_ev3_set_led_spinner, "Green"},
-				{"PhiroRGBLightBrick - R.id.brick_phiro_rgb_light_spinner", "Phiro", PhiroRGBLightBrick.class, R.id.brick_phiro_rgb_light_spinner, "Both"},
-				{"PhiroMotorMoveForwardBrick - R.id.brick_phiro_motor_forward_action_spinner", "Phiro", PhiroMotorMoveForwardBrick.class, R.id.brick_phiro_motor_forward_action_spinner, "Left"},
-				{"PhiroMotorMoveBackwardBrick - R.id.brick_phiro_motor_backward_action_spinner", "Phiro", PhiroMotorMoveBackwardBrick.class, R.id.brick_phiro_motor_backward_action_spinner, "Left"},
-				{"PhiroMotorStopBrick - R.id.brick_phiro_stop_motor_spinner", "Phiro", PhiroMotorStopBrick.class, R.id.brick_phiro_stop_motor_spinner, "Both"},
-				{"PhiroPlayToneBrick - R.id.brick_phiro_select_tone_spinner", "Phiro", PhiroPlayToneBrick.class, R.id.brick_phiro_select_tone_spinner, "Do"},
+				{"FlashBrick - R.id.brick_flash_spinner", "Looks", FlashBrick.class, R.id.brick_flash_spinner, "on"}
 		});
 	}
 

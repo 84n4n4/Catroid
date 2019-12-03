@@ -24,8 +24,6 @@ package org.catrobat.catroid.common;
 
 import android.util.Log;
 
-import org.catrobat.catroid.bluetooth.BluetoothDeviceServiceImpl;
-
 import java.util.HashMap;
 
 public final class ServiceProvider {
@@ -68,10 +66,6 @@ public final class ServiceProvider {
 	private static CatroidService createCommonService(Class<? extends CatroidService> serviceType) {
 
 		CatroidService service = null;
-
-		if (serviceType == CatroidService.BLUETOOTH_DEVICE_SERVICE) {
-			service = new BluetoothDeviceServiceImpl();
-		}
 
 //		example for further common services
 //		if (serviceType == CatrobatService.STORAGE_HANDLER) {

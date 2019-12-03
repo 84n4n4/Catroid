@@ -25,7 +25,6 @@ package org.catrobat.catroid.content;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.parrot.freeflight.drone.DroneProxy.ARDRONE_LED_ANIMATION;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.camera.CameraManager;
@@ -33,8 +32,6 @@ import org.catrobat.catroid.common.BrickValues;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.actions.AddItemToUserListAction;
-import org.catrobat.catroid.content.actions.ArduinoSendDigitalValueAction;
-import org.catrobat.catroid.content.actions.ArduinoSendPWMValueAction;
 import org.catrobat.catroid.content.actions.AskAction;
 import org.catrobat.catroid.content.actions.AskSpeechAction;
 import org.catrobat.catroid.content.actions.AssertEqualsAction;
@@ -54,21 +51,6 @@ import org.catrobat.catroid.content.actions.CloneAction;
 import org.catrobat.catroid.content.actions.ComeToFrontAction;
 import org.catrobat.catroid.content.actions.DeleteItemOfUserListAction;
 import org.catrobat.catroid.content.actions.DeleteThisCloneAction;
-import org.catrobat.catroid.content.actions.DroneEmergencyAction;
-import org.catrobat.catroid.content.actions.DroneFlipAction;
-import org.catrobat.catroid.content.actions.DroneMoveBackwardAction;
-import org.catrobat.catroid.content.actions.DroneMoveDownAction;
-import org.catrobat.catroid.content.actions.DroneMoveForwardAction;
-import org.catrobat.catroid.content.actions.DroneMoveLeftAction;
-import org.catrobat.catroid.content.actions.DroneMoveRightAction;
-import org.catrobat.catroid.content.actions.DroneMoveUpAction;
-import org.catrobat.catroid.content.actions.DronePlayLedAnimationAction;
-import org.catrobat.catroid.content.actions.DroneSwitchCameraAction;
-import org.catrobat.catroid.content.actions.DroneTakeoffAndLandAction;
-import org.catrobat.catroid.content.actions.DroneTurnLeftAction;
-import org.catrobat.catroid.content.actions.DroneTurnLeftWithMagnetometerAction;
-import org.catrobat.catroid.content.actions.DroneTurnRightAction;
-import org.catrobat.catroid.content.actions.DroneTurnRightWithMagnetometerAction;
 import org.catrobat.catroid.content.actions.EventAction;
 import org.catrobat.catroid.content.actions.EventThread;
 import org.catrobat.catroid.content.actions.FlashAction;
@@ -79,44 +61,15 @@ import org.catrobat.catroid.content.actions.GoToTouchPositionAction;
 import org.catrobat.catroid.content.actions.HideTextAction;
 import org.catrobat.catroid.content.actions.IfLogicAction;
 import org.catrobat.catroid.content.actions.InsertItemIntoUserListAction;
-import org.catrobat.catroid.content.actions.JumpingSumoAnimationAction;
-import org.catrobat.catroid.content.actions.JumpingSumoJumpHighAction;
-import org.catrobat.catroid.content.actions.JumpingSumoJumpLongAction;
-import org.catrobat.catroid.content.actions.JumpingSumoMoveBackwardAction;
-import org.catrobat.catroid.content.actions.JumpingSumoMoveForwardAction;
-import org.catrobat.catroid.content.actions.JumpingSumoNoSoundAction;
-import org.catrobat.catroid.content.actions.JumpingSumoRotateLeftAction;
-import org.catrobat.catroid.content.actions.JumpingSumoRotateRightAction;
-import org.catrobat.catroid.content.actions.JumpingSumoSoundAction;
-import org.catrobat.catroid.content.actions.JumpingSumoTakingPictureAction;
-import org.catrobat.catroid.content.actions.JumpingSumoTurnAction;
-import org.catrobat.catroid.content.actions.LegoEv3MotorMoveAction;
-import org.catrobat.catroid.content.actions.LegoEv3MotorStopAction;
-import org.catrobat.catroid.content.actions.LegoEv3MotorTurnAngleAction;
-import org.catrobat.catroid.content.actions.LegoEv3PlayToneAction;
-import org.catrobat.catroid.content.actions.LegoEv3SetLedAction;
-import org.catrobat.catroid.content.actions.LegoNxtMotorMoveAction;
-import org.catrobat.catroid.content.actions.LegoNxtMotorStopAction;
-import org.catrobat.catroid.content.actions.LegoNxtMotorTurnAngleAction;
-import org.catrobat.catroid.content.actions.LegoNxtPlayToneAction;
 import org.catrobat.catroid.content.actions.MoveNStepsAction;
 import org.catrobat.catroid.content.actions.NextLookAction;
 import org.catrobat.catroid.content.actions.NotifyEventWaiterAction;
 import org.catrobat.catroid.content.actions.PenDownAction;
 import org.catrobat.catroid.content.actions.PenUpAction;
-import org.catrobat.catroid.content.actions.PhiroMotorMoveBackwardAction;
-import org.catrobat.catroid.content.actions.PhiroMotorMoveForwardAction;
-import org.catrobat.catroid.content.actions.PhiroMotorStopAction;
-import org.catrobat.catroid.content.actions.PhiroPlayToneAction;
-import org.catrobat.catroid.content.actions.PhiroRGBLightAction;
-import org.catrobat.catroid.content.actions.PhiroSensorAction;
 import org.catrobat.catroid.content.actions.PlaySoundAction;
 import org.catrobat.catroid.content.actions.PointInDirectionAction;
 import org.catrobat.catroid.content.actions.PointToAction;
 import org.catrobat.catroid.content.actions.PreviousLookAction;
-import org.catrobat.catroid.content.actions.RaspiIfLogicAction;
-import org.catrobat.catroid.content.actions.RaspiPwmAction;
-import org.catrobat.catroid.content.actions.RaspiSendDigitalValueAction;
 import org.catrobat.catroid.content.actions.ReadListFromDeviceAction;
 import org.catrobat.catroid.content.actions.ReadVariableFromDeviceAction;
 import org.catrobat.catroid.content.actions.RepeatAction;
@@ -131,7 +84,6 @@ import org.catrobat.catroid.content.actions.SetBrightnessAction;
 import org.catrobat.catroid.content.actions.SetColorAction;
 import org.catrobat.catroid.content.actions.SetLookAction;
 import org.catrobat.catroid.content.actions.SetLookByIndexAction;
-import org.catrobat.catroid.content.actions.SetNfcTagAction;
 import org.catrobat.catroid.content.actions.SetPenColorAction;
 import org.catrobat.catroid.content.actions.SetPenSizeAction;
 import org.catrobat.catroid.content.actions.SetRotationStyleAction;
@@ -147,7 +99,6 @@ import org.catrobat.catroid.content.actions.ShowTextAction;
 import org.catrobat.catroid.content.actions.ShowTextColorSizeAlignmentAction;
 import org.catrobat.catroid.content.actions.SpeakAction;
 import org.catrobat.catroid.content.actions.StampAction;
-import org.catrobat.catroid.content.actions.StitchAction;
 import org.catrobat.catroid.content.actions.StopAllScriptsAction;
 import org.catrobat.catroid.content.actions.StopAllSoundsAction;
 import org.catrobat.catroid.content.actions.StopOtherScriptsAction;
@@ -166,20 +117,6 @@ import org.catrobat.catroid.content.actions.WriteListOnDeviceAction;
 import org.catrobat.catroid.content.actions.WriteVariableOnDeviceAction;
 import org.catrobat.catroid.content.actions.conditional.GlideToAction;
 import org.catrobat.catroid.content.actions.conditional.IfOnEdgeBounceAction;
-import org.catrobat.catroid.content.bricks.JumpingSumoAnimationsBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoSoundBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorMoveBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorStopBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorTurnAngleBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3SetLedBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorMoveBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorStopBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorTurnAngleBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorMoveBackwardBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorMoveForwardBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorStopBrick;
-import org.catrobat.catroid.content.bricks.PhiroPlayToneBrick;
-import org.catrobat.catroid.content.bricks.PhiroRGBLightBrick;
 import org.catrobat.catroid.content.eventids.BroadcastEventId;
 import org.catrobat.catroid.content.eventids.EventId;
 import org.catrobat.catroid.formulaeditor.Formula;
@@ -301,15 +238,6 @@ public class ActionFactory extends Actions {
 		return action;
 	}
 
-	public Action createGlideToAction(Sprite sprite, Formula x, Formula y, Formula duration, Interpolation interpolation) {
-		GlideToAction action = Actions.action(GlideToAction.class);
-		action.setPosition(x, y);
-		action.setDuration(duration);
-		action.setInterpolation(interpolation);
-		action.setSprite(sprite);
-		return action;
-	}
-
 	public Action createPlaceAtAction(Sprite sprite, Formula x, Formula y) {
 		GlideToAction action = Actions.action(GlideToAction.class);
 		action.setPosition(x, y);
@@ -357,131 +285,6 @@ public class ActionFactory extends Actions {
 	public Action createIfOnEdgeBounceAction(Sprite sprite) {
 		IfOnEdgeBounceAction action = Actions.action(IfOnEdgeBounceAction.class);
 		action.setSprite(sprite);
-		return action;
-	}
-
-	public Action createLegoNxtMotorMoveAction(Sprite sprite, LegoNxtMotorMoveBrick.Motor motorEnum, Formula speed) {
-		LegoNxtMotorMoveAction action = Actions.action(LegoNxtMotorMoveAction.class);
-		action.setMotorEnum(motorEnum);
-		action.setSprite(sprite);
-		action.setSpeed(speed);
-		return action;
-	}
-
-	public Action createLegoNxtMotorStopAction(LegoNxtMotorStopBrick.Motor motorEnum) {
-		LegoNxtMotorStopAction action = Actions.action(LegoNxtMotorStopAction.class);
-		action.setMotorEnum(motorEnum);
-		return action;
-	}
-
-	public Action createLegoNxtMotorTurnAngleAction(Sprite sprite,
-			LegoNxtMotorTurnAngleBrick.Motor motorEnum, Formula degrees) {
-		LegoNxtMotorTurnAngleAction action = Actions.action(LegoNxtMotorTurnAngleAction.class);
-		action.setMotorEnum(motorEnum);
-		action.setSprite(sprite);
-		action.setDegrees(degrees);
-		return action;
-	}
-
-	public Action createLegoNxtPlayToneAction(Sprite sprite, Formula hertz, Formula durationInSeconds) {
-		LegoNxtPlayToneAction action = Actions.action(LegoNxtPlayToneAction.class);
-		action.setHertz(hertz);
-		action.setSprite(sprite);
-		action.setDurationInSeconds(durationInSeconds);
-		return action;
-	}
-
-	public Action createLegoEv3SingleMotorMoveAction(Sprite sprite,
-			LegoEv3MotorMoveBrick.Motor motorEnum, Formula speed) {
-		LegoEv3MotorMoveAction action = action(LegoEv3MotorMoveAction.class);
-		action.setSprite(sprite);
-		action.setMotorEnum(motorEnum);
-		action.setSpeed(speed);
-		return action;
-	}
-
-	public Action createLegoEv3MotorStopAction(LegoEv3MotorStopBrick.Motor motorEnum) {
-		LegoEv3MotorStopAction action = action(LegoEv3MotorStopAction.class);
-		action.setMotorEnum(motorEnum);
-		return action;
-	}
-
-	public Action createLegoEv3SetLedAction(LegoEv3SetLedBrick.LedStatus ledStatusEnum) {
-		LegoEv3SetLedAction action = action(LegoEv3SetLedAction.class);
-		action.setLedStatusEnum(ledStatusEnum);
-		return action;
-	}
-
-	public Action createLegoEv3PlayToneAction(Sprite sprite, Formula hertz, Formula
-			durationInSeconds, Formula volumeInPercent) {
-		LegoEv3PlayToneAction action = action(LegoEv3PlayToneAction.class);
-		action.setHertz(hertz);
-		action.setSprite(sprite);
-		action.setDurationInSeconds(durationInSeconds);
-		action.setVolumeInPercent(volumeInPercent);
-		return action;
-	}
-
-	public Action createLegoEv3MotorTurnAngleAction(Sprite sprite,
-			LegoEv3MotorTurnAngleBrick.Motor motorEnum, Formula degrees) {
-		LegoEv3MotorTurnAngleAction action = action(LegoEv3MotorTurnAngleAction.class);
-		action.setMotorEnum(motorEnum);
-		action.setSprite(sprite);
-		action.setDegrees(degrees);
-		return action;
-	}
-
-	public Action createPhiroPlayToneActionAction(Sprite sprite, PhiroPlayToneBrick.Tone toneEnum,
-			Formula duration) {
-		PhiroPlayToneAction action = action(PhiroPlayToneAction.class);
-		action.setSelectedTone(toneEnum);
-		action.setSprite(sprite);
-		action.setDurationInSeconds(duration);
-		return action;
-	}
-
-	public Action createPhiroMotorMoveForwardActionAction(Sprite sprite, PhiroMotorMoveForwardBrick.Motor motorEnum,
-			Formula speed) {
-		PhiroMotorMoveForwardAction action = action(PhiroMotorMoveForwardAction.class);
-		action.setMotorEnum(motorEnum);
-		action.setSprite(sprite);
-		action.setSpeed(speed);
-		return action;
-	}
-
-	public Action createPhiroMotorMoveBackwardActionAction(Sprite sprite, PhiroMotorMoveBackwardBrick.Motor motorEnum,
-			Formula speed) {
-		PhiroMotorMoveBackwardAction action = action(PhiroMotorMoveBackwardAction.class);
-		action.setMotorEnum(motorEnum);
-		action.setSprite(sprite);
-		action.setSpeed(speed);
-		return action;
-	}
-
-	public Action createPhiroRgbLedEyeActionAction(Sprite sprite, PhiroRGBLightBrick.Eye eye,
-			Formula red, Formula green, Formula blue) {
-		PhiroRGBLightAction action = action(PhiroRGBLightAction.class);
-		action.setSprite(sprite);
-		action.setEyeEnum(eye);
-		action.setRed(red);
-		action.setGreen(green);
-		action.setBlue(blue);
-		return action;
-	}
-
-	public Action createPhiroSendSelectedSensorAction(Sprite sprite, int sensorNumber, Action ifAction, Action
-			elseAction) {
-		PhiroSensorAction action = action(PhiroSensorAction.class);
-		action.setSprite(sprite);
-		action.setSensor(sensorNumber);
-		action.setIfAction(ifAction);
-		action.setElseAction(elseAction);
-		return action;
-	}
-
-	public Action createPhiroMotorStopActionAction(PhiroMotorStopBrick.Motor motorEnum) {
-		PhiroMotorStopAction action = action(PhiroMotorStopAction.class);
-		action.setMotorEnum(motorEnum);
 		return action;
 	}
 
@@ -850,12 +653,6 @@ public class ActionFactory extends Actions {
 		return action;
 	}
 
-	public static Action createStitchAction(Sprite sprite) {
-		StitchAction action = Actions.action(StitchAction.class);
-		action.setSprite(sprite);
-		return action;
-	}
-
 	public static Action eventSequence(Script script) {
 		return new ScriptSequenceAction(script);
 	}
@@ -894,172 +691,6 @@ public class ActionFactory extends Actions {
 
 	public Action createSetFrictionAction(Sprite sprite, Formula friction) {
 		throw new RuntimeException("No physics action available in non-physics sprite!");
-	}
-
-	public Action createDroneTakeOffAndLandAction() {
-		return action(DroneTakeoffAndLandAction.class);
-	}
-
-	public Action createDroneFlipAction() {
-		return action(DroneFlipAction.class);
-	}
-
-	public Action createDroneMoveUpAction(Sprite sprite, Formula seconds, Formula powerInPercent) {
-		DroneMoveUpAction action = action(DroneMoveUpAction.class);
-		action.setSprite(sprite);
-		action.setDelay(seconds);
-		action.setPower(powerInPercent);
-		return action;
-	}
-
-	public Action createDroneMoveDownAction(Sprite sprite, Formula seconds, Formula powerInPercent) {
-		DroneMoveDownAction action = action(DroneMoveDownAction.class);
-		action.setSprite(sprite);
-		action.setDelay(seconds);
-		action.setPower(powerInPercent);
-		return action;
-	}
-
-	public Action createDroneMoveLeftAction(Sprite sprite, Formula seconds, Formula powerInPercent) {
-		DroneMoveLeftAction action = action(DroneMoveLeftAction.class);
-		action.setSprite(sprite);
-		action.setDelay(seconds);
-		action.setPower(powerInPercent);
-		return action;
-	}
-
-	public Action createDroneMoveRightAction(Sprite sprite, Formula seconds, Formula powerInPercent) {
-		DroneMoveRightAction action = action(DroneMoveRightAction.class);
-		action.setSprite(sprite);
-		action.setDelay(seconds);
-		action.setPower(powerInPercent);
-		return action;
-	}
-
-	public Action createDroneMoveForwardAction(Sprite sprite, Formula seconds, Formula powerInPercent) {
-		DroneMoveForwardAction action = action(DroneMoveForwardAction.class);
-		action.setSprite(sprite);
-		action.setDelay(seconds);
-		action.setPower(powerInPercent);
-		return action;
-	}
-
-	public Action createDroneMoveBackwardAction(Sprite sprite, Formula seconds, Formula powerInPercent) {
-		DroneMoveBackwardAction action = action(DroneMoveBackwardAction.class);
-		action.setSprite(sprite);
-		action.setDelay(seconds);
-		action.setPower(powerInPercent);
-		return action;
-	}
-
-	public Action createDroneTurnRightAction(Sprite sprite, Formula seconds, Formula powerInPercent) {
-		DroneTurnRightAction action = action(DroneTurnRightAction.class);
-		action.setSprite(sprite);
-		action.setDelay(seconds);
-		action.setPower(powerInPercent);
-		return action;
-	}
-
-	public Action createDroneTurnLeftAction(Sprite sprite, Formula seconds, Formula powerInPercent) {
-		DroneTurnLeftAction action = action(DroneTurnLeftAction.class);
-		action.setSprite(sprite);
-		action.setDelay(seconds);
-		action.setPower(powerInPercent);
-		return action;
-	}
-
-	public Action createDroneTurnLeftMagnetoAction(Sprite sprite, Formula seconds, Formula powerInPercent) {
-		DroneTurnLeftWithMagnetometerAction action = action(DroneTurnLeftWithMagnetometerAction.class);
-		action.setSprite(sprite);
-		action.setDelay(seconds);
-		action.setPower(powerInPercent);
-		return action;
-	}
-
-	public Action createDroneTurnRightMagnetoAction(Sprite sprite, Formula seconds, Formula powerInPercent) {
-		DroneTurnRightWithMagnetometerAction action = action(DroneTurnRightWithMagnetometerAction.class);
-		action.setSprite(sprite);
-		action.setDelay(seconds);
-		action.setPower(powerInPercent);
-		return action;
-	}
-
-	public Action createDronePlayLedAnimationAction(ARDRONE_LED_ANIMATION ledAnimationType) {
-		DronePlayLedAnimationAction action = action(DronePlayLedAnimationAction.class);
-		action.setAnimationType(ledAnimationType);
-		return action;
-	}
-
-	public Action createDroneSwitchCameraAction() {
-		return action(DroneSwitchCameraAction.class);
-	}
-
-	public Action createDroneGoEmergencyAction() {
-		return action(DroneEmergencyAction.class);
-	}
-
-	public Action createJumpingSumoMoveForwardAction(Sprite sprite, Formula seconds, Formula powerInPercent) {
-		JumpingSumoMoveForwardAction action = action(JumpingSumoMoveForwardAction.class);
-		action.setSprite(sprite);
-		action.setDelay(seconds);
-		action.setPower(powerInPercent);
-		return action;
-	}
-
-	public Action createJumpingSumoMoveBackwardAction(Sprite sprite, Formula seconds, Formula powerInPercent) {
-		JumpingSumoMoveBackwardAction action = action(JumpingSumoMoveBackwardAction.class);
-		action.setSprite(sprite);
-		action.setDelay(seconds);
-		action.setPower(powerInPercent);
-		return action;
-	}
-
-	public Action createJumpingSumoAnimationAction(JumpingSumoAnimationsBrick.Animation animationType) {
-		JumpingSumoAnimationAction action = action(JumpingSumoAnimationAction.class);
-		action.setAnimationType(animationType);
-		return action;
-	}
-
-	public Action createJumpingSumoNoSoundAction() {
-		return action(JumpingSumoNoSoundAction.class);
-	}
-
-	public Action createJumpingSumoSoundAction(Sprite sprite, JumpingSumoSoundBrick.Sounds soundType, Formula volume) {
-		JumpingSumoSoundAction action = action(JumpingSumoSoundAction.class);
-		action.setSoundType(soundType);
-		action.setSprite(sprite);
-		action.setVolume(volume);
-		return action;
-	}
-
-	public Action createJumpingSumoJumpLongAction() {
-		return action(JumpingSumoJumpLongAction.class);
-	}
-
-	public Action createJumpingSumoJumpHighAction() {
-		return action(JumpingSumoJumpHighAction.class);
-	}
-
-	public Action createJumpingSumoRotateLeftAction(Sprite sprite, Formula degree) {
-		JumpingSumoRotateLeftAction action = action(JumpingSumoRotateLeftAction.class);
-		action.setSprite(sprite);
-		action.setDegree(degree);
-		return action;
-	}
-
-	public Action createJumpingSumoRotateRightAction(Sprite sprite, Formula degree) {
-		JumpingSumoRotateRightAction action = action(JumpingSumoRotateRightAction.class);
-		action.setSprite(sprite);
-		action.setDegree(degree);
-		return action;
-	}
-
-	public Action createJumpingSumoTurnAction() {
-		return action(JumpingSumoTurnAction.class);
-	}
-
-	public Action createJumpingSumoTakingPictureAction() {
-		return action(JumpingSumoTakingPictureAction.class);
 	}
 
 	public Action createSetTextAction(Sprite sprite, Formula x, Formula y, Formula text) {
@@ -1136,54 +767,6 @@ public class ActionFactory extends Actions {
 		return action;
 	}
 
-	public Action createSendDigitalArduinoValueAction(Sprite sprite, Formula pinNumber,
-			Formula
-					pinValue) {
-		ArduinoSendDigitalValueAction action = action(ArduinoSendDigitalValueAction.class);
-		action.setSprite(sprite);
-		action.setPinNumber(pinNumber);
-		action.setPinValue(pinValue);
-		return action;
-	}
-
-	public Action createSendPWMArduinoValueAction(Sprite sprite, Formula pinNumber, Formula
-			pinValue) {
-		ArduinoSendPWMValueAction action = action(ArduinoSendPWMValueAction.class);
-		action.setSprite(sprite);
-		action.setPinNumber(pinNumber);
-		action.setPinValue(pinValue);
-		return action;
-	}
-
-	public Action createSendDigitalRaspiValueAction(Sprite sprite, Formula pinNumber,
-			Formula pinValue) {
-		RaspiSendDigitalValueAction action = action(RaspiSendDigitalValueAction.class);
-		action.setSprite(sprite);
-		action.setPinNumber(pinNumber);
-		action.setPinValue(pinValue);
-		return action;
-	}
-
-	public Action createSendRaspiPwmValueAction(Sprite sprite, Formula pinNumber, Formula
-			pwmFrequency, Formula pwmPercentage) {
-		RaspiPwmAction action = action(RaspiPwmAction.class);
-		action.setSprite(sprite);
-		action.setPinNumberFormula(pinNumber);
-		action.setPwmFrequencyFormula(pwmFrequency);
-		action.setPwmPercentageFormula(pwmPercentage);
-		return action;
-	}
-
-	public Action createRaspiIfLogicActionAction(Sprite sprite, Formula pinNumber, Action ifAction,
-			Action elseAction) {
-		RaspiIfLogicAction action = action(RaspiIfLogicAction.class);
-		action.setSprite(sprite);
-		action.setPinNumber(pinNumber);
-		action.setIfAction(ifAction);
-		action.setElseAction(elseAction);
-		return action;
-	}
-
 	public Action createPreviousLookAction(Sprite sprite) {
 		PreviousLookAction action = action(PreviousLookAction.class);
 		action.setSprite(sprite);
@@ -1203,14 +786,6 @@ public class ActionFactory extends Actions {
 			default:
 				return Actions.action(StopAllScriptsAction.class);
 		}
-	}
-
-	public Action createSetNfcTagAction(Sprite sprite, Formula nfcNdefMessage, int nfcNdefSpinnerSelection) {
-		SetNfcTagAction setNfcTagAction = Actions.action(SetNfcTagAction.class);
-		setNfcTagAction.setSprite(sprite);
-		setNfcTagAction.setNfcTagNdefSpinnerSelection(nfcNdefSpinnerSelection);
-		setNfcTagAction.setNfcNdefMessage(nfcNdefMessage);
-		return setNfcTagAction;
 	}
 
 	public Action createAssertEqualsAction(Sprite sprite, Formula actual, Formula expected,

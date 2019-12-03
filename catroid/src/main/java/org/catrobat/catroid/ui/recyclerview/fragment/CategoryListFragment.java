@@ -24,7 +24,6 @@
 package org.catrobat.catroid.ui.recyclerview.fragment;
 
 import android.content.DialogInterface;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -38,20 +37,13 @@ import android.view.ViewGroup;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.common.Constants;
-import org.catrobat.catroid.common.Constants.LegoSensorType;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.devices.mindstorms.ev3.sensors.EV3Sensor;
-import org.catrobat.catroid.devices.mindstorms.nxt.sensors.NXTSensor;
 import org.catrobat.catroid.formulaeditor.SensorHandler;
-import org.catrobat.catroid.ui.dialogs.LegoSensorPortConfigDialog;
 import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
 import org.catrobat.catroid.ui.recyclerview.adapter.CategoryListRVAdapter;
 import org.catrobat.catroid.ui.recyclerview.adapter.CategoryListRVAdapter.CategoryListItem;
 import org.catrobat.catroid.ui.recyclerview.adapter.CategoryListRVAdapter.CategoryListItemType;
-import org.catrobat.catroid.ui.settingsfragments.RaspberryPiSettingsFragment;
-import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -150,47 +142,6 @@ public class CategoryListFragment extends Fragment implements CategoryListRVAdap
 			R.string.formula_editor_sensor_date_month, R.string.formula_editor_sensor_date_day,
 			R.string.formula_editor_sensor_date_weekday, R.string.formula_editor_sensor_time_hour,
 			R.string.formula_editor_sensor_time_minute, R.string.formula_editor_sensor_time_second);
-	private static final List<Integer> SENSORS_NXT = Arrays.asList(R.string.formula_editor_sensor_lego_nxt_touch,
-			R.string.formula_editor_sensor_lego_nxt_sound, R.string.formula_editor_sensor_lego_nxt_light,
-			R.string.formula_editor_sensor_lego_nxt_light_active,
-			R.string.formula_editor_sensor_lego_nxt_ultrasonic);
-	private static final List<Integer> SENSORS_EV3 = Arrays.asList(R.string.formula_editor_sensor_lego_ev3_sensor_touch,
-			R.string.formula_editor_sensor_lego_ev3_sensor_infrared,
-			R.string.formula_editor_sensor_lego_ev3_sensor_color,
-			R.string.formula_editor_sensor_lego_ev3_sensor_color_ambient,
-			R.string.formula_editor_sensor_lego_ev3_sensor_color_reflected,
-			R.string.formula_editor_sensor_lego_ev3_sensor_hitechnic_color,
-			R.string.formula_editor_sensor_lego_ev3_sensor_nxt_temperature_c,
-			R.string.formula_editor_sensor_lego_ev3_sensor_nxt_temperature_f,
-			R.string.formula_editor_sensor_lego_ev3_sensor_nxt_light,
-			R.string.formula_editor_sensor_lego_ev3_sensor_nxt_light_active,
-			R.string.formula_editor_sensor_lego_ev3_sensor_nxt_sound,
-			R.string.formula_editor_sensor_lego_ev3_sensor_nxt_ultrasonic);
-	private static final List<Integer> SENSORS_PHIRO = Arrays.asList(R.string.formula_editor_phiro_sensor_front_left,
-			R.string.formula_editor_phiro_sensor_front_right,
-			R.string.formula_editor_phiro_sensor_side_left,
-			R.string.formula_editor_phiro_sensor_side_right,
-			R.string.formula_editor_phiro_sensor_bottom_left,
-			R.string.formula_editor_phiro_sensor_bottom_right);
-	private static final List<Integer> SENSORS_ARDUINO = Arrays.asList(R.string.formula_editor_function_arduino_read_pin_value_analog,
-			R.string.formula_editor_function_arduino_read_pin_value_digital);
-	private static final List<Integer> SENSORS_DRONE = Arrays.asList(R.string.formula_editor_sensor_drone_battery_status,
-			R.string.formula_editor_sensor_drone_emergency_state, R.string.formula_editor_sensor_drone_flying,
-			R.string.formula_editor_sensor_drone_initialized, R.string.formula_editor_sensor_drone_usb_active,
-			R.string.formula_editor_sensor_drone_usb_remaining_time, R.string.formula_editor_sensor_drone_camera_ready,
-			R.string.formula_editor_sensor_drone_record_ready, R.string.formula_editor_sensor_drone_recording,
-			R.string.formula_editor_sensor_drone_num_frames);
-	private static final List<Integer> SENSORS_RASPBERRY = Arrays.asList(R.string.formula_editor_function_raspi_read_pin_value_digital);
-	private static final List<Integer> SENSORS_RASPBERRY_PARAMS = Arrays.asList(R.string.formula_editor_function_pin_default_parameter);
-	private static final List<Integer> SENSORS_NFC = Arrays.asList(R.string.formula_editor_nfc_tag_id,
-			R.string.formula_editor_nfc_tag_message);
-	private static final List<Integer> SENSORS_CAST_GAMEPAD = Arrays.asList(R.string.formula_editor_sensor_gamepad_a_pressed,
-			R.string.formula_editor_sensor_gamepad_b_pressed,
-			R.string.formula_editor_sensor_gamepad_up_pressed,
-			R.string.formula_editor_sensor_gamepad_down_pressed,
-			R.string.formula_editor_sensor_gamepad_left_pressed,
-			R.string.formula_editor_sensor_gamepad_right_pressed);
-
 	private RecyclerView recyclerView;
 
 	@Override
@@ -227,12 +178,6 @@ public class CategoryListFragment extends Fragment implements CategoryListRVAdap
 	@Override
 	public void onItemClick(CategoryListItem item) {
 		switch (item.type) {
-			case CategoryListRVAdapter.NXT:
-				showLegoSensorPortConfigDialog(item.nameResId, Constants.NXT);
-				break;
-			case CategoryListRVAdapter.EV3:
-				showLegoSensorPortConfigDialog(item.nameResId, Constants.EV3);
-				break;
 			case CategoryListRVAdapter.COLLISION:
 				showSelectSpriteDialog();
 				break;
@@ -243,43 +188,6 @@ public class CategoryListFragment extends Fragment implements CategoryListRVAdap
 				getActivity().onBackPressed();
 				break;
 		}
-	}
-
-	private void showLegoSensorPortConfigDialog(int itemNameResId, @LegoSensorType final int type) {
-
-		new LegoSensorPortConfigDialog.Builder(getContext(), type, itemNameResId)
-				.setPositiveButton(getString(R.string.ok), new LegoSensorPortConfigDialog.OnClickListener() {
-
-					@Override
-					public void onPositiveButtonClick(DialogInterface dialog, int selectedPort, Enum selectedSensor) {
-						if (type == Constants.NXT) {
-							SettingsFragment.setLegoMindstormsNXTSensorMapping(getActivity(),
-									(NXTSensor.Sensor) selectedSensor, SettingsFragment.NXT_SENSORS[selectedPort]);
-						} else if (type == Constants.EV3) {
-							SettingsFragment.setLegoMindstormsEV3SensorMapping(getActivity(),
-									(EV3Sensor.Sensor) selectedSensor, SettingsFragment.EV3_SENSORS[selectedPort]);
-						}
-
-						FormulaEditorFragment formulaEditor = (FormulaEditorFragment) getFragmentManager()
-								.findFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
-
-						int sensorPortsId = type == Constants.NXT
-								? R.array.formula_editor_nxt_ports
-								: R.array.formula_editor_ev3_ports;
-						TypedArray sensorPorts = getResources().obtainTypedArray(sensorPortsId);
-						try {
-							int resourceId = sensorPorts.getResourceId(selectedPort, 0);
-							if (resourceId != 0) {
-								formulaEditor.addResourceToActiveFormula(resourceId);
-								formulaEditor.updateButtonsOnKeyboardAndInvalidateOptionsMenu();
-							}
-						} finally {
-							sensorPorts.recycle();
-						}
-						getActivity().onBackPressed();
-					}
-				})
-				.show();
 	}
 
 	private void showSelectSpriteDialog() {
@@ -407,14 +315,6 @@ public class CategoryListFragment extends Fragment implements CategoryListRVAdap
 		result.addAll(getTouchDetectionSensorItems());
 		result.addAll(getFaceDetectionSensorItems());
 		result.addAll(getDateTimeSensorItems());
-		result.addAll(getNxtSensorItems());
-		result.addAll(getEv3SensorItems());
-		result.addAll(getPhiroSensorItems());
-		result.addAll(getArduinoSensorItems());
-		result.addAll(getDroneSensorItems());
-		result.addAll(getRaspberrySensorItems());
-		result.addAll(getNfcItems());
-		result.addAll(getCastGamepadSensorItems());
 		return result;
 	}
 
@@ -467,53 +367,5 @@ public class CategoryListFragment extends Fragment implements CategoryListRVAdap
 
 	private List<CategoryListItem> getDateTimeSensorItems() {
 		return addHeader(toCategoryListItems(SENSORS_DATE_TIME), getString(R.string.formula_editor_device_date_and_time));
-	}
-
-	private List<CategoryListItem> getNxtSensorItems() {
-		return SettingsFragment.isMindstormsNXTSharedPreferenceEnabled(getActivity().getApplicationContext())
-				? addHeader(toCategoryListItems(SENSORS_NXT, CategoryListRVAdapter.NXT), getString(R.string.formula_editor_device_lego_nxt))
-				: Collections.<CategoryListItem>emptyList();
-	}
-
-	private List<CategoryListItem> getEv3SensorItems() {
-		return SettingsFragment.isMindstormsEV3SharedPreferenceEnabled(getActivity().getApplicationContext())
-				? addHeader(toCategoryListItems(SENSORS_EV3, CategoryListRVAdapter.EV3), getString(R.string.formula_editor_device_lego_ev3))
-				: Collections.<CategoryListItem>emptyList();
-	}
-
-	private List<CategoryListItem> getPhiroSensorItems() {
-		return SettingsFragment.isPhiroSharedPreferenceEnabled(getActivity().getApplicationContext())
-				? addHeader(toCategoryListItems(SENSORS_PHIRO), getString(R.string.formula_editor_device_phiro))
-				: Collections.<CategoryListItem>emptyList();
-	}
-
-	private List<CategoryListItem> getArduinoSensorItems() {
-		return SettingsFragment.isArduinoSharedPreferenceEnabled(getActivity().getApplicationContext())
-				? addHeader(toCategoryListItems(SENSORS_ARDUINO), getString(R.string.formula_editor_device_arduino))
-				: Collections.<CategoryListItem>emptyList();
-	}
-
-	private List<CategoryListItem> getDroneSensorItems() {
-		return SettingsFragment.isDroneSharedPreferenceEnabled(getActivity().getApplicationContext())
-				? addHeader(toCategoryListItems(SENSORS_DRONE), getString(R.string.formula_editor_device_drone))
-				: Collections.<CategoryListItem>emptyList();
-	}
-
-	private List<CategoryListItem> getRaspberrySensorItems() {
-		return RaspberryPiSettingsFragment.isRaspiSharedPreferenceEnabled(getActivity().getApplicationContext())
-				? addHeader(toCategoryListItems(SENSORS_RASPBERRY, SENSORS_RASPBERRY_PARAMS), getString(R.string.formula_editor_device_raspberry))
-				: Collections.<CategoryListItem>emptyList();
-	}
-
-	private List<CategoryListItem> getNfcItems() {
-		return SettingsFragment.isNfcSharedPreferenceEnabled(getActivity().getApplicationContext())
-				? addHeader(toCategoryListItems(SENSORS_NFC), getString(R.string.formula_editor_device_nfc))
-				: Collections.<CategoryListItem>emptyList();
-	}
-
-	private List<CategoryListItem> getCastGamepadSensorItems() {
-		return ProjectManager.getInstance().getCurrentProject().isCastProject()
-				? addHeader(toCategoryListItems(SENSORS_CAST_GAMEPAD), getString(R.string.formula_editor_device_cast))
-				: Collections.<CategoryListItem>emptyList();
 	}
 }

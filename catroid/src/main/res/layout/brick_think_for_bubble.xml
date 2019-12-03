@@ -76,7 +76,7 @@
         <TextView
             android:id="@+id/brick_seconds_label"
             style="@style/BrickText.SingleLine"
-            android:text="@string/phiro_seconds">
+            android:text="@string/formula_editor_sensor_time_second">
         </TextView>
     </org.catrobat.catroid.ui.BrickLayout>
 

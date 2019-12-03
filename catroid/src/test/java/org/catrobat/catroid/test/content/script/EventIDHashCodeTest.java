@@ -25,7 +25,6 @@ package org.catrobat.catroid.test.content.script;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.eventids.BroadcastEventId;
-import org.catrobat.catroid.content.eventids.RaspiEventId;
 import org.catrobat.catroid.content.eventids.SetBackgroundEventId;
 import org.catrobat.catroid.content.eventids.WhenConditionEventId;
 import org.catrobat.catroid.formulaeditor.Formula;
@@ -67,18 +66,6 @@ public class EventIDHashCodeTest {
 	public void whenConditionNullTest() {
 		WhenConditionEventId whenConditionEventId = new WhenConditionEventId(null);
 		assertEquals(whenConditionEventId.hashCode(), 0);
-	}
-
-	@Test
-	public void raspiTest() {
-		RaspiEventId raspiEventId = new RaspiEventId(null, EVENT_STRING);
-		assertEquals(raspiEventId.hashCode(), EVENT_STRING.hashCode());
-	}
-
-	@Test
-	public void raspiNullTest() {
-		RaspiEventId raspiEventId = new RaspiEventId(null, null);
-		assertEquals(raspiEventId.hashCode(), 0);
 	}
 
 	@Test

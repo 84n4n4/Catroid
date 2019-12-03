@@ -82,11 +82,6 @@ public class OrientationDialogFragment extends DialogFragment {
 
 		int title = R.string.project_orientation_title;
 
-		if (SettingsFragment.isCastSharedPreferenceEnabled(getActivity())) {
-			title = R.string.project_select_screen_title;
-			view.findViewById(R.id.cast).setVisibility(View.VISIBLE);
-		}
-
 		return new AlertDialog.Builder(getContext())
 				.setTitle(title)
 				.setView(view)
@@ -97,9 +92,6 @@ public class OrientationDialogFragment extends DialogFragment {
 							break;
 						case R.id.landscape_mode:
 							createProject(true);
-							break;
-						case R.id.cast:
-							createCastProject();
 							break;
 						default:
 							throw new IllegalStateException(TAG + ": No radio button id match, check layout?");
@@ -117,21 +109,6 @@ public class OrientationDialogFragment extends DialogFragment {
 			} else {
 				ProjectManager.getInstance()
 						.createNewExampleProject(projectName, getContext(), PROJECT_CREATOR_DEFAULT, landscape);
-			}
-			getActivity().startActivity(new Intent(getActivity(), ProjectActivity.class));
-		} catch (IOException e) {
-			ToastUtil.showError(getActivity(), R.string.error_new_project);
-		}
-	}
-
-	void createCastProject() {
-		try {
-			if (createEmptyProject) {
-				ProjectManager.getInstance()
-						.createNewEmptyProject(projectName, getContext(), false, true);
-			} else {
-				ProjectManager.getInstance()
-						.createNewExampleProject(projectName, getContext(), PROJECT_CREATOR_CAST, false);
 			}
 			getActivity().startActivity(new Intent(getActivity(), ProjectActivity.class));
 		} catch (IOException e) {

@@ -29,18 +29,13 @@ import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.StartScript;
-import org.catrobat.catroid.content.WhenGamepadButtonScript;
 import org.catrobat.catroid.content.bricks.AskSpeechBrick;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.content.bricks.CameraBrick;
 import org.catrobat.catroid.content.bricks.ForeverBrick;
 import org.catrobat.catroid.content.bricks.IfLogicBeginBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorMoveBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorTurnAngleBrick;
 import org.catrobat.catroid.content.bricks.RepeatBrick;
 import org.catrobat.catroid.content.bricks.SetVariableBrick;
-import org.catrobat.catroid.content.bricks.WhenGamepadButtonBrick;
-import org.catrobat.catroid.content.bricks.WhenNfcBrick;
 import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.FormulaElement;
 import org.catrobat.catroid.formulaeditor.UserVariable;
@@ -55,13 +50,7 @@ import java.util.List;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.ACCESS_WIFI_STATE;
-import static android.Manifest.permission.BLUETOOTH;
-import static android.Manifest.permission.BLUETOOTH_ADMIN;
 import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.CHANGE_WIFI_MULTICAST_STATE;
-import static android.Manifest.permission.CHANGE_WIFI_STATE;
-import static android.Manifest.permission.NFC;
 import static android.Manifest.permission.RECORD_AUDIO;
 
 import static org.junit.Assert.assertTrue;
@@ -76,12 +65,7 @@ public class BrickPermissionTest {
 	public static Iterable<Object[]> data() {
 		return Arrays.asList(new Object[][] {
 				{"CameraBrick", new Brick[]{new CameraBrick()}, new String[]{CAMERA}},
-				{"LegoNxtMotorMoveBrick", new Brick[]{new LegoNxtMotorMoveBrick()}, new String[]{BLUETOOTH_ADMIN, BLUETOOTH}},
-				{"CameraBrick + LegoNxtMotorTurnAngleBrick", new Brick[]{new CameraBrick(), new LegoNxtMotorTurnAngleBrick()}, new String[]{CAMERA, BLUETOOTH_ADMIN, BLUETOOTH}},
 				{"AskSpeechBrick", new Brick[]{new AskSpeechBrick()}, new String[]{RECORD_AUDIO}},
-				{"WhenGamepadButtonBrick", new Brick[]{new WhenGamepadButtonBrick(new WhenGamepadButtonScript())}, new String[]{CHANGE_WIFI_MULTICAST_STATE, CHANGE_WIFI_STATE, ACCESS_WIFI_STATE}},
-				{"WhenNfcBrick", new Brick[]{new WhenNfcBrick()}, new String[]{NFC}},
-				{"WhenNfcBrick + GPS", new Brick[]{new WhenNfcBrick(), brickWithGPS}, new String[]{NFC, ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}},
 				{"Brick With GPS Formula", new Brick[]{brickWithGPS}, new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}}
 		});
 	}

@@ -24,7 +24,6 @@ package org.catrobat.catroid.test.common;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import org.catrobat.catroid.bluetooth.base.BluetoothDeviceService;
 import org.catrobat.catroid.common.CatroidService;
 import org.catrobat.catroid.common.ServiceProvider;
 import org.junit.Test;
@@ -32,18 +31,9 @@ import org.junit.runner.RunWith;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class ServiceProviderTest {
-
-	@Test
-	public void testCommonServices() {
-		CatroidService service = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
-
-		assertNotNull(service);
-		assertTrue(service instanceof BluetoothDeviceService);
-	}
 
 	@Test
 	public void testRegisterAndGetService() {

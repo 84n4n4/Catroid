@@ -65,7 +65,7 @@ public class ProjectDownloaderTest {
 	@Before
 	public void setUp() {
 		queueMock = Mockito.mock(ProjectDownloader.ProjectDownloadQueue.class);
-		downloaderSpy = PowerMockito.spy(new ProjectDownloader(queueMock, URL, null));
+		downloaderSpy = PowerMockito.spy(new ProjectDownloader(queueMock, URL));
 		activityMock = Mockito.mock(AppCompatActivity.class);
 	}
 

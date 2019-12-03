@@ -34,11 +34,7 @@ import android.widget.TextView;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.bluetooth.base.BluetoothDevice;
-import org.catrobat.catroid.bluetooth.base.BluetoothDeviceService;
 import org.catrobat.catroid.camera.CameraManager;
-import org.catrobat.catroid.common.CatroidService;
-import org.catrobat.catroid.common.ServiceProvider;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
 import org.catrobat.catroid.formulaeditor.Formula;
@@ -87,26 +83,6 @@ public class FormulaEditorComputeDialog extends AlertDialog implements SensorEve
 			FaceDetectionHandler.startFaceDetection();
 		}
 
-		if (resourcesSet.contains(Brick.BLUETOOTH_LEGO_NXT)) {
-			BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
-			btService.connectDevice(BluetoothDevice.LEGO_NXT, this.getContext());
-		}
-
-		if (resourcesSet.contains(Brick.BLUETOOTH_LEGO_EV3)) {
-			BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
-			btService.connectDevice(BluetoothDevice.LEGO_EV3, this.getContext());
-		}
-
-		if (resourcesSet.contains(Brick.BLUETOOTH_SENSORS_ARDUINO)) {
-			BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
-			btService.connectDevice(BluetoothDevice.ARDUINO, this.getContext());
-		}
-
-		if (resourcesSet.contains(Brick.BLUETOOTH_PHIRO)) {
-			BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
-			btService.connectDevice(BluetoothDevice.PHIRO, this.getContext());
-		}
-
 		if (formula.containsElement(ElementType.SENSOR)) {
 			SensorHandler.startSensorListener(context);
 			SensorHandler.registerListener(this);
@@ -117,7 +93,6 @@ public class FormulaEditorComputeDialog extends AlertDialog implements SensorEve
 	protected void onStop() {
 		SensorHandler.unregisterListener(this);
 
-		ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).pause();
 
 		FaceDetectionHandler.stopFaceDetection();
 		super.onStop();

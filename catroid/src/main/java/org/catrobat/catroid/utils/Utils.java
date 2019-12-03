@@ -32,13 +32,10 @@ import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.google.common.base.Splitter;
-
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.DefaultProjectHandler;
-import org.catrobat.catroid.common.ScratchProgramData;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.XmlHeader;
 import org.catrobat.catroid.io.StorageOperations;
@@ -54,8 +51,6 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -184,51 +179,6 @@ public final class Utils {
 		}
 
 		return extractedUrls;
-	}
-
-	public static Date getScratchSecondReleasePublishedDate() {
-		final Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.YEAR, Constants.SCRATCH_SECOND_RELEASE_PUBLISHED_DATE_YEAR);
-		calendar.set(Calendar.MONTH, Constants.SCRATCH_SECOND_RELEASE_PUBLISHED_DATE_MONTH);
-		calendar.set(Calendar.DAY_OF_MONTH, Constants.SCRATCH_SECOND_RELEASE_PUBLISHED_DATE_DAY);
-		return calendar.getTime();
-	}
-
-	public static boolean isDeprecatedScratchProgram(final ScratchProgramData programData) {
-		// NOTE: ignoring old Scratch 1.x programs -> converter only supports version 2.x and later
-		//       Scratch 1.x programs are created before May 9, 2013 (see: https://wiki.scratch.mit.edu/wiki/Scratch_2.0)
-		final Date releasePublishedDate = getScratchSecondReleasePublishedDate();
-		if (programData.getModifiedDate() != null && programData.getModifiedDate().before(releasePublishedDate)) {
-			return true;
-		} else {
-			return programData.getCreatedDate() != null && programData.getCreatedDate().before(releasePublishedDate);
-		}
-	}
-
-	public static long extractScratchJobIDFromURL(final String url) {
-		if (!url.startsWith(Constants.SCRATCH_CONVERTER_BASE_URL)) {
-			return Constants.INVALID_SCRATCH_PROGRAM_ID;
-		}
-
-		final String query = url.split("\\?")[1];
-		final String jobIDString = Splitter.on('&').trimResults().withKeyValueSeparator("=").split(query).get("job_id");
-		if (jobIDString == null) {
-			return Constants.INVALID_SCRATCH_PROGRAM_ID;
-		}
-
-		final long jobID = Long.parseLong(jobIDString);
-		return jobID > 0 ? jobID : Constants.INVALID_SCRATCH_PROGRAM_ID;
-	}
-
-	public static String changeSizeOfScratchImageURL(final String url, int newHeight) {
-		// example: https://cdn2.scratch.mit.edu/get_image/project/10205819_480x360.png
-		//    ->    https://cdn2.scratch.mit.edu/get_image/project/10205819_240x180.png
-		final int width = Constants.SCRATCH_IMAGE_DEFAULT_WIDTH;
-		final int height = Constants.SCRATCH_IMAGE_DEFAULT_HEIGHT;
-		final int newWidth = Math.round(((float) width) / ((float) height) * newHeight);
-
-		return url.replace(width + "x", Integer.toString(newWidth) + "x")
-				.replace("x" + height, "x" + Integer.toString(newHeight));
 	}
 
 	public static String md5Checksum(File file) {

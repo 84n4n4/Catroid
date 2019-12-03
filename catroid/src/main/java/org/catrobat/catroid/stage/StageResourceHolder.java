@@ -31,42 +31,20 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.nfc.NfcAdapter;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.VisibleForTesting;
-import android.text.Html;
 import android.util.Log;
-import android.view.View;
-import android.widget.CheckBox;
-import android.widget.TextView;
 
-import org.catrobat.catroid.BuildConfig;
-import org.catrobat.catroid.CatroidApplication;
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.bluetooth.base.BluetoothDevice;
-import org.catrobat.catroid.bluetooth.base.BluetoothDeviceService;
 import org.catrobat.catroid.camera.CameraManager;
-import org.catrobat.catroid.cast.CastManager;
-import org.catrobat.catroid.common.CatroidService;
-import org.catrobat.catroid.common.ServiceProvider;
-import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.bricks.Brick;
-import org.catrobat.catroid.devices.mindstorms.MindstormsException;
-import org.catrobat.catroid.devices.raspberrypi.RaspberryPiService;
-import org.catrobat.catroid.drone.ardrone.DroneController;
-import org.catrobat.catroid.drone.ardrone.DroneInitializer;
-import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoDeviceController;
-import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoInitializer;
-import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoServiceWrapper;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
 import org.catrobat.catroid.formulaeditor.SensorHandler;
 import org.catrobat.catroid.formulaeditor.SensorLoudness;
 import org.catrobat.catroid.sensing.GatherCollisionInformationTask;
 import org.catrobat.catroid.ui.runtimepermissions.BrickResourcesToRuntimePermissions;
-import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
 import org.catrobat.catroid.utils.FlashUtil;
-import org.catrobat.catroid.utils.ToastUtil;
 import org.catrobat.catroid.utils.TouchUtil;
 import org.catrobat.catroid.utils.Utils;
 import org.catrobat.catroid.utils.VibratorUtil;
@@ -80,10 +58,6 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.VIBRATOR_SERVICE;
 
-import static org.catrobat.catroid.common.Constants.CATROBAT_TERMS_OF_USE_URL;
-import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_PARROT_AR_DRONE_CATROBAT_TERMS_OF_SERVICE_ACCEPTED_PERMANENTLY;
-import static org.catrobat.catroid.ui.settingsfragments.SettingsFragment.SETTINGS_PARROT_JUMPING_SUMO_CATROBAT_TERMS_OF_SERVICE_ACCEPTED_PERMANENTLY;
-
 public class StageResourceHolder implements GatherCollisionInformationTask.OnPolygonLoadedListener {
 	private static final String TAG = StageResourceHolder.class.getSimpleName();
 
@@ -93,12 +67,6 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 	private Brick.ResourcesSet requiredResourcesSet;
 	private int requiredResourceCounter;
 	private Set<Integer> failedResources;
-
-	public DroneInitializer droneInitializer;
-	private JumpingSumoInitializer jumpingSumoInitializer;
-
-	public DroneController droneController;
-
 	private StageActivity stageActivity;
 
 	StageResourceHolder(final StageActivity stageActivity) {
@@ -162,118 +130,6 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 			TextToSpeechHolder.getInstance().initTextToSpeech(stageActivity, this);
 		}
 
-		if (requiredResourcesSet.contains(Brick.BLUETOOTH_LEGO_NXT)) {
-			connectBTDevice(BluetoothDevice.LEGO_NXT);
-		}
-
-		if (requiredResourcesSet.contains(Brick.BLUETOOTH_LEGO_EV3)) {
-			connectBTDevice(BluetoothDevice.LEGO_EV3);
-		}
-
-		if (requiredResourcesSet.contains(Brick.BLUETOOTH_PHIRO)) {
-			connectBTDevice(BluetoothDevice.PHIRO);
-		}
-
-		if (requiredResourcesSet.contains(Brick.BLUETOOTH_SENSORS_ARDUINO)) {
-			connectBTDevice(BluetoothDevice.ARDUINO);
-		}
-
-		if (requiredResourcesSet.contains(Brick.ARDRONE_SUPPORT) && BuildConfig.FEATURE_PARROT_AR_DRONE_ENABLED) {
-			boolean agreedToDroneTermsOfUsePermanently = PreferenceManager.getDefaultSharedPreferences(stageActivity)
-					.getBoolean(SETTINGS_PARROT_AR_DRONE_CATROBAT_TERMS_OF_SERVICE_ACCEPTED_PERMANENTLY, false);
-
-			if (agreedToDroneTermsOfUsePermanently) {
-				onDroneTermsOfUseAgreed();
-			} else {
-				View dialogView = View.inflate(stageActivity, R.layout.dialog_terms_of_use, null);
-				final AlertDialog alertDialog = new AlertDialog.Builder(stageActivity)
-						.setTitle(R.string.dialog_terms_of_use_title)
-						.setView(dialogView)
-						.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								CheckBox checkBox = ((AlertDialog) dialog)
-										.findViewById(R.id.dialog_terms_of_use_check_box_agree_permanently);
-								PreferenceManager.getDefaultSharedPreferences(stageActivity)
-										.edit()
-										.putBoolean(SETTINGS_PARROT_AR_DRONE_CATROBAT_TERMS_OF_SERVICE_ACCEPTED_PERMANENTLY, checkBox.isChecked());
-								onDroneTermsOfUseAgreed();
-							}
-						})
-						.setCancelable(false)
-						.create();
-
-				alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-					@Override
-					public void onShow(DialogInterface dialog) {
-						TextView textView = alertDialog.findViewById(R.id.dialog_terms_of_use_text_view_info);
-						textView.setText(R.string.dialog_terms_of_use_parrot_reminder_text);
-
-						CheckBox checkBox = alertDialog
-								.findViewById(R.id.dialog_terms_of_use_check_box_agree_permanently);
-						checkBox.setText(R.string.dialog_terms_of_use_parrot_reminder_do_not_remind_again);
-
-						String url = alertDialog.getContext()
-								.getString(R.string.dialog_terms_of_use_link_text_parrot_reminder);
-						url = alertDialog.getContext()
-								.getString(R.string.terms_of_use_link_template, CATROBAT_TERMS_OF_USE_URL, url);
-						TextView urlView = alertDialog.findViewById(R.id.dialog_terms_of_use_text_view_url);
-						urlView.setText(Html.fromHtml(url));
-					}
-				});
-
-				alertDialog.show();
-			}
-		}
-
-		if (BuildConfig.FEATURE_PARROT_JUMPING_SUMO_ENABLED && requiredResourcesSet.contains(Brick.JUMPING_SUMO)) {
-			boolean agreedToDroneTermsOfUsePermanently = PreferenceManager.getDefaultSharedPreferences(stageActivity)
-					.getBoolean(SETTINGS_PARROT_AR_DRONE_CATROBAT_TERMS_OF_SERVICE_ACCEPTED_PERMANENTLY, false);
-			if (agreedToDroneTermsOfUsePermanently) {
-				onJSDroneTermsOfUseAgreed();
-			} else {
-				View dialogView = View.inflate(stageActivity, R.layout.dialog_terms_of_use, null);
-				final AlertDialog alertDialog = new AlertDialog.Builder(stageActivity)
-						.setTitle(R.string.dialog_terms_of_use_title)
-						.setView(dialogView)
-						.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								CheckBox checkBox = ((AlertDialog) dialog)
-										.findViewById(R.id.dialog_terms_of_use_check_box_agree_permanently);
-								PreferenceManager.getDefaultSharedPreferences(stageActivity)
-										.edit()
-										.putBoolean(SETTINGS_PARROT_JUMPING_SUMO_CATROBAT_TERMS_OF_SERVICE_ACCEPTED_PERMANENTLY,
-												checkBox.isChecked());
-								onJSDroneTermsOfUseAgreed();
-							}
-						})
-						.setCancelable(false)
-						.create();
-
-				alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-					@Override
-					public void onShow(DialogInterface dialog) {
-						TextView textView = alertDialog.findViewById(R.id.dialog_terms_of_use_text_view_info);
-						textView.setText(R.string.dialog_terms_of_use_parrot_reminder_text);
-
-						CheckBox checkBox = alertDialog
-								.findViewById(R.id.dialog_terms_of_use_check_box_agree_permanently);
-						checkBox.setText(R.string.dialog_terms_of_use_parrot_reminder_do_not_remind_again);
-
-						String url = alertDialog.getContext()
-								.getString(R.string.dialog_terms_of_use_jumpingsumo_reminder_text);
-						url = alertDialog.getContext()
-								.getString(R.string.terms_of_use_link_template, CATROBAT_TERMS_OF_USE_URL, url);
-						TextView urlView = alertDialog.findViewById(R.id.dialog_terms_of_use_text_view_url);
-						urlView.setText(Html.fromHtml(url));
-					}
-				});
-
-				alertDialog.show();
-			}
-		}
-
 		if (requiredResourcesSet.contains(Brick.CAMERA_BACK)) {
 			CameraManager.makeInstance();
 			if (CameraManager.getInstance().hasBackCamera()) {
@@ -322,23 +178,6 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 			}
 		}
 
-		if (requiredResourcesSet.contains(Brick.NFC_ADAPTER)) {
-			if (requiredResourcesSet.contains(Brick.FACE_DETECTION)) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(stageActivity);
-				builder.setMessage(stageActivity.getString(R.string.nfc_facedetection_support)).setCancelable(false)
-						.setPositiveButton(stageActivity.getString(R.string.ok), new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int id) {
-								nfcInitialize();
-							}
-						});
-				AlertDialog alert = builder.create();
-				alert.show();
-			} else {
-				nfcInitialize();
-			}
-		}
-
 		if (requiredResourcesSet.contains(Brick.FACE_DETECTION)) {
 			CameraManager.makeInstance();
 			FaceDetectionHandler.resetFaceDedection();
@@ -348,22 +187,6 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 				resourceInitialized();
 			} else {
 				resourceFailed(Brick.FACE_DETECTION);
-			}
-		}
-
-		if (requiredResourcesSet.contains(Brick.CAST_REQUIRED)) {
-			if (CastManager.getInstance().isConnected()) {
-				resourceInitialized();
-			} else {
-
-				if (!SettingsFragment.isCastSharedPreferenceEnabled(stageActivity)) {
-					ToastUtil.showError(stageActivity, stageActivity.getString(R.string.cast_enable_cast_feature));
-				} else if (ProjectManager.getInstance().getCurrentProject().isCastProject()) {
-					ToastUtil.showError(stageActivity, stageActivity.getString(R.string.cast_error_not_connected_msg));
-				} else {
-					ToastUtil.showError(stageActivity, stageActivity.getString(R.string.cast_error_cast_bricks_in_no_cast_project));
-				}
-				endStageActivity();
 			}
 		}
 
@@ -401,12 +224,6 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 			}
 		}
 
-		if (requiredResourcesSet.contains(Brick.SOCKET_RASPI)) {
-			Project currentProject = ProjectManager.getInstance().getCurrentProject();
-			RaspberryPiService.getInstance().enableRaspberryInterruptPinsForProject(currentProject);
-			connectRaspberrySocket();
-		}
-
 		if (initFinished()) {
 			initFinishedRunStage();
 		}
@@ -417,19 +234,9 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 	}
 
 	public void initFinishedRunStage() {
-		try {
-			ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).initialise();
-		} catch (MindstormsException e) {
-			Log.e(TAG, e.getMessage());
-		}
 		stageActivity.setupAskHandler();
 		stageActivity.pendingIntent = PendingIntent.getActivity(stageActivity, 0,
 				new Intent(stageActivity, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-		stageActivity.jumpingSumoDeviceController = JumpingSumoDeviceController.getInstance();
-		JumpingSumoInitializer.getInstance().setStageActivity(stageActivity);
-		if (droneController != null) {
-			droneController.onCreate();
-		}
 
 		stageActivity.nfcAdapter = NfcAdapter.getDefaultAdapter(stageActivity);
 		if (CameraManager.getInstance() != null) {
@@ -503,10 +310,6 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 					failedResourcesMessage = failedResourcesMessage + stageActivity.getString(R.string
 							.prestage_no_camera_available);
 					break;
-				case Brick.JUMPING_SUMO:
-					failedResourcesMessage = failedResourcesMessage + stageActivity.getString(R.string
-							.prestage_no_jumping_sumo_available);
-					break;
 				default:
 					failedResourcesMessage = failedResourcesMessage + stageActivity.getString(R.string
 							.prestage_default_resource_not_available);
@@ -514,21 +317,6 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 			}
 		}
 
-		AlertDialog.Builder failedResourceAlertBuilder = new AlertDialog.Builder(stageActivity);
-		failedResourceAlertBuilder.setTitle(R.string.prestage_resource_not_available_title);
-		failedResourceAlertBuilder.setMessage(failedResourcesMessage).setCancelable(false)
-				.setPositiveButton(stageActivity.getString(R.string.ok), new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						endStageActivity();
-					}
-				});
-		AlertDialog alert = failedResourceAlertBuilder.create();
-		alert.show();
-	}
-
-	public void showResourceInUseErrorDialog() {
-		String failedResourcesMessage = stageActivity.getString(R.string.prestage_resource_in_use_text);
 		AlertDialog.Builder failedResourceAlertBuilder = new AlertDialog.Builder(stageActivity);
 		failedResourceAlertBuilder.setTitle(R.string.prestage_resource_not_available_title);
 		failedResourceAlertBuilder.setMessage(failedResourcesMessage).setCancelable(false)
@@ -566,96 +354,6 @@ public class StageResourceHolder implements GatherCollisionInformationTask.OnPol
 				endStageActivity();
 				break;
 		}
-	}
-
-	private void onJSDroneTermsOfUseAgreed() {
-		if (CatroidApplication.OS_ARCH.startsWith("arm") && CatroidApplication.loadJumpingSumoSDKLib()) {
-			jumpingSumoInitializer = getJumpingSumoInitialiser(stageActivity);
-			JumpingSumoServiceWrapper.initJumpingSumo(stageActivity);
-		} else {
-			new AlertDialog.Builder(stageActivity)
-					.setTitle(R.string.error_jumpingsumo_wrong_platform_title)
-					.setMessage(R.string.error_jumpingsumo_wrong_platform)
-					.setCancelable(false)
-					.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							resourceFailed(Brick.JUMPING_SUMO);
-						}
-					});
-		}
-	}
-
-	private void onDroneTermsOfUseAgreed() {
-		if (CatroidApplication.OS_ARCH.startsWith("arm") && CatroidApplication.loadNativeLibs()) {
-			droneInitializer = new DroneInitializer(stageActivity, this);
-			droneInitializer.startDroneNetworkAvailabilityTask();
-		} else {
-			new AlertDialog.Builder(stageActivity)
-					.setTitle(R.string.error_drone_wrong_platform_title)
-					.setMessage(R.string.error_drone_wrong_platform)
-					.setCancelable(false)
-					.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							resourceFailed(Brick.ARDRONE_SUPPORT);
-						}
-					});
-		}
-	}
-
-	public void onDroneInitialized() {
-		droneInitializer = null;
-		resourceInitialized();
-		droneController = new DroneController(stageActivity);
-	}
-
-	public void onDroneInitFailed() {
-		droneInitializer = null;
-		resourceFailed(Brick.ARDRONE_SUPPORT);
-	}
-
-	private void connectBTDevice(Class<? extends BluetoothDevice> service) {
-		BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
-
-		if (btService.connectDevice(service, stageActivity, REQUEST_CONNECT_DEVICE)
-				== BluetoothDeviceService.ConnectDeviceResult.ALREADY_CONNECTED) {
-			resourceInitialized();
-		}
-	}
-
-	private void connectRaspberrySocket() {
-		String host = SettingsFragment.getRaspiHost(stageActivity);
-		int port = SettingsFragment.getRaspiPort(stageActivity);
-
-		if (RaspberryPiService.getInstance().connect(host, port)) {
-			resourceInitialized();
-		} else {
-			ToastUtil.showError(stageActivity, stageActivity.getString(R.string.error_connecting_to, host, port));
-			endStageActivity();
-		}
-	}
-
-	private JumpingSumoInitializer getJumpingSumoInitialiser(StageActivity stageActivity) {
-		if (jumpingSumoInitializer == null) {
-			jumpingSumoInitializer = JumpingSumoInitializer.getInstance();
-			jumpingSumoInitializer.setStageActivity(stageActivity);
-			jumpingSumoInitializer.setStageResourceHolder(this);
-		}
-		return jumpingSumoInitializer;
-	}
-
-	private void nfcInitialize() {
-		NfcAdapter adapter = NfcAdapter.getDefaultAdapter(stageActivity);
-		if (adapter != null && !adapter.isEnabled()) {
-			ToastUtil.showError(stageActivity, R.string.nfc_not_activated);
-			Intent intent = new Intent(Settings.ACTION_NFC_SETTINGS);
-			stageActivity.startActivity(intent);
-		} else if (adapter == null) {
-			ToastUtil.showError(stageActivity, R.string.no_nfc_available);
-			// TODO: resourceFailed() & startActivityForResult(), if behaviour needed
-		}
-		resourceInitialized();
 	}
 
 	// for GatherCollisionInformationTask.OnPolygonLoadedListener, this is NOT any Activity or Lifecycle event

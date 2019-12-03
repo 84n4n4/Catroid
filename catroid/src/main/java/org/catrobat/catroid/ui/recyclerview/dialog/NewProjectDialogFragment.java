@@ -31,10 +31,8 @@ import android.widget.RadioGroup;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoServiceWrapper;
 import org.catrobat.catroid.merge.NewProjectNameTextWatcher;
 import org.catrobat.catroid.ui.ProjectActivity;
-import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
 import org.catrobat.catroid.utils.ToastUtil;
 
 import java.io.IOException;
@@ -51,14 +49,6 @@ public class NewProjectDialogFragment extends DialogFragment {
 		View view = View.inflate(getActivity(), R.layout.dialog_new_project, null);
 
 		final RadioGroup radioGroup = view.findViewById(R.id.radio_group);
-
-		if (SettingsFragment.isDroneSharedPreferenceEnabled(getContext())) {
-			view.findViewById(R.id.project_default_drone_radio_button).setVisibility(View.VISIBLE);
-		}
-
-		if (JumpingSumoServiceWrapper.isJumpingSumoSharedPreferenceEnabled()) {
-			view.findViewById(R.id.project_default_jumping_sumo_radio_button).setVisibility(View.VISIBLE);
-		}
 
 		TextInputDialog.Builder builder = new TextInputDialog.Builder(getContext())
 				.setHint(getString(R.string.project_name_label))

@@ -116,9 +116,6 @@ public class LoadProjectsTest {
 		ProjectManager.updateSetPenColorFormulasTo994(projectMock);
 
 		PowerMockito.verifyStatic(ProjectManager.class, times(1));
-		ProjectManager.updateArduinoValuesTo995(projectMock);
-
-		PowerMockito.verifyStatic(ProjectManager.class, times(1));
 		ProjectManager.updateCollisionScriptsTo996(projectMock);
 
 		PowerMockito.verifyStatic(ProjectManager.class, times(1));
@@ -144,9 +141,6 @@ public class LoadProjectsTest {
 
 		PowerMockito.verifyStatic(ProjectManager.class, times(0));
 		ProjectManager.updateSetPenColorFormulasTo994(projectMock);
-
-		PowerMockito.verifyStatic(ProjectManager.class, times(0));
-		ProjectManager.updateArduinoValuesTo995(projectMock);
 
 		PowerMockito.verifyStatic(ProjectManager.class, times(0));
 		ProjectManager.updateCollisionScriptsTo996(projectMock);

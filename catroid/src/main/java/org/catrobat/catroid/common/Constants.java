@@ -39,10 +39,6 @@ public final class Constants {
 
 	public static final float CURRENT_CATROBAT_LANGUAGE_VERSION = 0.99994f;
 
-	public static final String REMOTE_DISPLAY_APP_ID = "CEBB9229";
-	public static final int CAST_CONNECTION_TIMEOUT = 5000; //in milliseconds
-	public static final int CAST_NOT_SEEING_DEVICE_TIMEOUT = 3000; //in milliseconds
-
 	public static final String PLATFORM_NAME = "Android";
 	public static final int APPLICATION_BUILD_NUMBER = 0; // updated from jenkins nightly/release build
 	public static final String APPLICATION_BUILD_NAME = ""; // updated from jenkins nightly/release build
@@ -60,7 +56,6 @@ public final class Constants {
 	public static final String CATROBAT_EXTENSION = ".catrobat";
 	public static final String DEFAULT_IMAGE_EXTENSION = ".png";
 	public static final String DEFAULT_SOUND_EXTENSION = ".wav";
-	public static final String EMBROIDERY_FILE_EXTENSION = ".dst";
 	public static final char REMIX_URL_PREFIX_INDICATOR = '[';
 	public static final char REMIX_URL_SUFIX_INDICATOR = ']';
 	public static final char REMIX_URL_SEPARATOR = ',';
@@ -114,14 +109,6 @@ public final class Constants {
 
 	public static final String PLAY_STORE_PAGE_LINK = "https://play.google.com/store/apps/details?id=";
 
-	// XStream:
-	public static final String BLUETOOTH_LEGO_NXT = "BLUETOOTH_LEGO_NXT";
-	public static final String ARDRONE_SUPPORT = "ARDRONE_SUPPORT";
-	public static final String NFC = "NFC";
-
-	//Broadcast system:
-	public static final String RASPI_BROADCAST_PREFIX = "#RASPI#";
-
 	// Login:
 	public static final String CATROBAT_TOKEN_LOGIN_AMP_TOKEN = "&token=";
 	public static final String TOKEN = "token";
@@ -157,48 +144,6 @@ public final class Constants {
 
 	public static final String WHATSAPP_URI = "whatsapp://";
 
-	// Scratch Converter
-	public static final long INVALID_SCRATCH_PROGRAM_ID = 0;
-
-	public static final String SCRATCH_CONVERTER_HOST = "scratch2.catrob.at";
-	public static final String SCRATCH_SEARCH_URL = "https://api.scratch.mit.edu/search/projects";
-	public static final int SCRATCH_CONVERTER_MAX_NUMBER_OF_JOBS_PER_CLIENT = 3;
-	public static final String SCRATCH_CONVERTER_WEB_SOCKET = "ws://" + SCRATCH_CONVERTER_HOST + "/convertersocket";
-	public static final String SCRATCH_CONVERTER_BASE_URL = "http://" + SCRATCH_CONVERTER_HOST + "/";
-	public static final String SCRATCH_CONVERTER_API_BASE_URL = SCRATCH_CONVERTER_BASE_URL + "api/v1/";
-	public static final String SCRATCH_CONVERTER_API_DEFAULT_PROJECTS_URL = SCRATCH_CONVERTER_API_BASE_URL + "projects/";
-	public static final int SCRATCH_SECOND_RELEASE_PUBLISHED_DATE_YEAR = 2013;
-	public static final int SCRATCH_SECOND_RELEASE_PUBLISHED_DATE_MONTH = Calendar.MAY;
-	public static final int SCRATCH_SECOND_RELEASE_PUBLISHED_DATE_DAY = 9;
-	public static final int SCRATCH_HTTP_REQUEST_MIN_TIMEOUT = 1_000; // in ms
-	public static final int SCRATCH_HTTP_REQUEST_MAX_NUM_OF_RETRIES = 2;
-	public static final int SCRATCH_IMAGE_DEFAULT_WIDTH = 480;
-	public static final int SCRATCH_IMAGE_DEFAULT_HEIGHT = 360;
-	public static final String DATE_FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss";
-	public static final String DATE_FORMAT_ISO_8601 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-
-	public static final String INTENT_SCRATCH_PROGRAM_DATA = "scratchProgramData";
-	public static final int INTENT_REQUEST_CODE_CONVERT = 1;
-
-	// Lego
-	@Retention(RetentionPolicy.SOURCE)
-	@IntDef({NXT, EV3})
-	public @interface LegoSensorType {
-	}
-
-	public static final int NXT = 0;
-	public static final int EV3 = 1;
-
-	@Retention(RetentionPolicy.SOURCE)
-	@IntDef({PORT_1, PORT_2, PORT_3, PORT_4})
-	public @interface LegoPort {
-	}
-
-	public static final int PORT_1 = 0;
-	public static final int PORT_2 = 1;
-	public static final int PORT_3 = 2;
-	public static final int PORT_4 = 3;
-
 	// Pocket Paint
 	public static final String EXTRA_PICTURE_PATH_POCKET_PAINT = "org.catrobat.extra.PAINTROID_PICTURE_PATH";
 	public static final String POCKET_PAINT_INTENT_ACTIVITY_NAME = "org.catrobat.paintroid.MainActivity";
@@ -227,7 +172,6 @@ public final class Constants {
 	public static final String COLLISION_POLYGON_METADATA_PATTERN = "((((\\d+\\.\\d+);(\\d+\\.\\d+);){2,}(\\d+\\.\\d+);(\\d+\\.\\d+))\\|)*((\\d+\\.\\d+);(\\d+\\.\\d+);){2,}(\\d+\\.\\d+);(\\d+\\.\\d+)";
 	public static final float COLLISION_WITH_FINGER_TOUCH_RADIUS = 50;
 
-	public static final int CAST_IDLE_BACKGROUND_COLOR = 0x66000000;
 
 	public static final int Z_INDEX_BACKGROUND = 0;
 

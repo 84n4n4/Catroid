@@ -36,8 +36,6 @@ import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.StartScript;
 import org.catrobat.catroid.content.bricks.AddItemToUserListBrick;
-import org.catrobat.catroid.content.bricks.ArduinoSendDigitalValueBrick;
-import org.catrobat.catroid.content.bricks.ArduinoSendPWMValueBrick;
 import org.catrobat.catroid.content.bricks.AskBrick;
 import org.catrobat.catroid.content.bricks.AskSpeechBrick;
 import org.catrobat.catroid.content.bricks.AssertEqualsBrick;
@@ -50,40 +48,15 @@ import org.catrobat.catroid.content.bricks.ChangeVolumeByNBrick;
 import org.catrobat.catroid.content.bricks.ChangeXByNBrick;
 import org.catrobat.catroid.content.bricks.ChangeYByNBrick;
 import org.catrobat.catroid.content.bricks.DeleteItemOfUserListBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveBackwardBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveDownBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveForwardBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveLeftBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveRightBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveUpBrick;
-import org.catrobat.catroid.content.bricks.DroneTurnLeftBrick;
-import org.catrobat.catroid.content.bricks.DroneTurnRightBrick;
 import org.catrobat.catroid.content.bricks.FormulaBrick;
 import org.catrobat.catroid.content.bricks.GlideToBrick;
 import org.catrobat.catroid.content.bricks.GoNStepsBackBrick;
 import org.catrobat.catroid.content.bricks.IfLogicBeginBrick;
 import org.catrobat.catroid.content.bricks.IfThenLogicBeginBrick;
 import org.catrobat.catroid.content.bricks.InsertItemIntoUserListBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoMoveBackwardBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoMoveForwardBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoRotateLeftBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoRotateRightBrick;
-import org.catrobat.catroid.content.bricks.JumpingSumoSoundBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorMoveBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3MotorTurnAngleBrick;
-import org.catrobat.catroid.content.bricks.LegoEv3PlayToneBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorMoveBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorTurnAngleBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtPlayToneBrick;
 import org.catrobat.catroid.content.bricks.MoveNStepsBrick;
 import org.catrobat.catroid.content.bricks.NoteBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorMoveBackwardBrick;
-import org.catrobat.catroid.content.bricks.PhiroMotorMoveForwardBrick;
-import org.catrobat.catroid.content.bricks.PhiroPlayToneBrick;
 import org.catrobat.catroid.content.bricks.PointInDirectionBrick;
-import org.catrobat.catroid.content.bricks.RaspiIfLogicBeginBrick;
-import org.catrobat.catroid.content.bricks.RaspiPwmBrick;
-import org.catrobat.catroid.content.bricks.RaspiSendDigitalValueBrick;
 import org.catrobat.catroid.content.bricks.ReplaceItemInUserListBrick;
 import org.catrobat.catroid.content.bricks.SayBubbleBrick;
 import org.catrobat.catroid.content.bricks.SayForBubbleBrick;
@@ -92,7 +65,6 @@ import org.catrobat.catroid.content.bricks.SetBackgroundByIndexBrick;
 import org.catrobat.catroid.content.bricks.SetBrightnessBrick;
 import org.catrobat.catroid.content.bricks.SetColorBrick;
 import org.catrobat.catroid.content.bricks.SetLookByIndexBrick;
-import org.catrobat.catroid.content.bricks.SetNfcTagBrick;
 import org.catrobat.catroid.content.bricks.SetPenSizeBrick;
 import org.catrobat.catroid.content.bricks.SetSizeToBrick;
 import org.catrobat.catroid.content.bricks.SetTransparencyBrick;
@@ -220,65 +192,6 @@ public class BrickSingleFormulaFieldTest {
 				{ReplaceItemInUserListBrick.class.getSimpleName() + " value", new ReplaceItemInUserListBrick(), R.id.brick_replace_item_in_userlist_value_edit_text},
 				{ReplaceItemInUserListBrick.class.getSimpleName() + " index", new ReplaceItemInUserListBrick(), R.id.brick_replace_item_in_userlist_at_index_edit_text},
 				{ReplaceItemInUserListBrick.class.getSimpleName() + " index", new ReplaceItemInUserListBrick(), R.id.brick_replace_item_in_userlist_at_index_edit_text},
-
-				//NFC bricks:
-				{SetNfcTagBrick.class.getSimpleName(), new SetNfcTagBrick(), R.id.brick_set_nfc_tag_edit_text},
-
-				//Lego bricks:
-				{LegoNxtMotorTurnAngleBrick.class.getSimpleName(), new LegoNxtMotorTurnAngleBrick(), R.id.motor_turn_angle_edit_text},
-				{LegoNxtMotorMoveBrick.class.getSimpleName(), new LegoNxtMotorMoveBrick(), R.id.motor_action_speed_edit_text},
-				{LegoNxtPlayToneBrick.class.getSimpleName() + " freq", new LegoNxtPlayToneBrick(), R.id.nxt_tone_freq_edit_text},
-				{LegoNxtPlayToneBrick.class.getSimpleName() + " duration", new LegoNxtPlayToneBrick(), R.id.nxt_tone_duration_edit_text},
-				{LegoEv3MotorTurnAngleBrick.class.getSimpleName(), new LegoEv3MotorTurnAngleBrick(), R.id.ev3_motor_turn_angle_edit_text},
-				{LegoEv3MotorMoveBrick.class.getSimpleName(), new LegoEv3MotorMoveBrick(), R.id.ev3_motor_move_speed_edit_text},
-				{LegoEv3PlayToneBrick.class.getSimpleName() + " freq", new LegoEv3PlayToneBrick(), R.id.brick_ev3_tone_freq_edit_text},
-				{LegoEv3PlayToneBrick.class.getSimpleName() + " duration", new LegoEv3PlayToneBrick(), R.id.brick_ev3_tone_duration_edit_text},
-				{LegoEv3PlayToneBrick.class.getSimpleName() + " volume", new LegoEv3PlayToneBrick(), R.id.brick_ev3_tone_volume_edit_text},
-
-				//Drone Bricks
-				{DroneMoveRightBrick.class.getSimpleName() + " duration", new DroneMoveRightBrick(), R.id.brick_drone_move_right_edit_text_second},
-				{DroneMoveRightBrick.class.getSimpleName() + " power", new DroneMoveRightBrick(), R.id.brick_drone_move_right_edit_text_power},
-				{DroneMoveLeftBrick.class.getSimpleName() + " duration", new DroneMoveLeftBrick(), R.id.brick_drone_move_left_edit_text_second},
-				{DroneMoveLeftBrick.class.getSimpleName() + " power", new DroneMoveLeftBrick(), R.id.brick_drone_move_left_edit_text_power},
-				{DroneMoveDownBrick.class.getSimpleName() + " duration", new DroneMoveDownBrick(), R.id.brick_drone_move_down_edit_text_second},
-				{DroneMoveDownBrick.class.getSimpleName() + " power", new DroneMoveDownBrick(), R.id.brick_drone_move_down_edit_text_power},
-				{DroneMoveUpBrick.class.getSimpleName() + " duration", new DroneMoveUpBrick(), R.id.brick_drone_move_up_edit_text_second},
-				{DroneMoveUpBrick.class.getSimpleName() + " power", new DroneMoveUpBrick(), R.id.brick_drone_move_up_edit_text_power},
-				{DroneMoveForwardBrick.class.getSimpleName() + " duration", new DroneMoveForwardBrick(), R.id.brick_drone_move_forward_edit_text_second},
-				{DroneMoveForwardBrick.class.getSimpleName() + " power", new DroneMoveForwardBrick(), R.id.brick_drone_move_forward_edit_text_power},
-				{DroneMoveBackwardBrick.class.getSimpleName() + " duration", new DroneMoveBackwardBrick(), R.id.brick_drone_move_backward_edit_text_second},
-				{DroneMoveBackwardBrick.class.getSimpleName() + " power", new DroneMoveBackwardBrick(), R.id.brick_drone_move_backward_edit_text_power},
-				{DroneTurnRightBrick.class.getSimpleName() + " duration", new DroneTurnRightBrick(), R.id.brick_drone_turn_right_edit_text_second},
-				{DroneTurnRightBrick.class.getSimpleName() + " power", new DroneTurnRightBrick(), R.id.brick_drone_turn_right_edit_text_power},
-				{DroneTurnLeftBrick.class.getSimpleName() + " duration", new DroneTurnLeftBrick(), R.id.brick_drone_turn_left_edit_text_second},
-				{DroneTurnLeftBrick.class.getSimpleName() + " power", new DroneTurnLeftBrick(), R.id.brick_drone_turn_left_edit_text_power},
-
-				{JumpingSumoMoveForwardBrick.class.getSimpleName() + " duration", new JumpingSumoMoveForwardBrick(), R.id.brick_jumping_sumo_move_forward_edit_text_second},
-				{JumpingSumoMoveForwardBrick.class.getSimpleName() + " power", new JumpingSumoMoveForwardBrick(), R.id.brick_jumping_sumo_move_forward_edit_text_power},
-				{JumpingSumoMoveBackwardBrick.class.getSimpleName() + " duration", new JumpingSumoMoveBackwardBrick(), R.id.brick_jumping_sumo_move_backward_edit_text_second},
-				{JumpingSumoMoveBackwardBrick.class.getSimpleName() + " power", new JumpingSumoMoveBackwardBrick(), R.id.brick_jumping_sumo_move_backward_edit_text_power},
-				{JumpingSumoSoundBrick.class.getSimpleName(), new JumpingSumoSoundBrick(), R.id.brick_jumping_sumo_sound_edit_text},
-				{JumpingSumoRotateLeftBrick.class.getSimpleName(), new JumpingSumoRotateLeftBrick(), R.id.brick_jumping_sumo_change_left_variable_edit_text},
-				{JumpingSumoRotateRightBrick.class.getSimpleName(), new JumpingSumoRotateRightBrick(), R.id.brick_jumping_sumo_change_right_variable_edit_text},
-
-				//Phiro bricks
-				{PhiroMotorMoveBackwardBrick.class.getSimpleName(), new PhiroMotorMoveBackwardBrick(), R.id.brick_phiro_motor_backward_action_speed_edit_text},
-				{PhiroMotorMoveForwardBrick.class.getSimpleName(), new PhiroMotorMoveForwardBrick(), R.id.brick_phiro_motor_forward_action_speed_edit_text},
-				{PhiroPlayToneBrick.class.getSimpleName(), new PhiroPlayToneBrick(), R.id.brick_phiro_play_tone_duration_edit_text},
-
-				//Arduino bricks
-				{ArduinoSendDigitalValueBrick.class.getSimpleName() + " pin", new ArduinoSendDigitalValueBrick(), R.id.brick_arduino_set_digital_pin_edit_text},
-				{ArduinoSendDigitalValueBrick.class.getSimpleName() + " value", new ArduinoSendDigitalValueBrick(), R.id.brick_arduino_set_digital_value_edit_text},
-				{ArduinoSendPWMValueBrick.class.getSimpleName() + " pin", new ArduinoSendPWMValueBrick(), R.id.brick_arduino_set_analog_pin_edit_text},
-				{ArduinoSendPWMValueBrick.class.getSimpleName() + " value", new ArduinoSendPWMValueBrick(), R.id.brick_arduino_set_analog_value_edit_text},
-
-				//Raspberry bricks
-				{RaspiSendDigitalValueBrick.class.getSimpleName() + " pin", new RaspiSendDigitalValueBrick(), R.id.brick_raspi_set_digital_pin_edit_text},
-				{RaspiSendDigitalValueBrick.class.getSimpleName() + " value", new RaspiSendDigitalValueBrick(), R.id.brick_raspi_set_digital_value_edit_text},
-				{RaspiPwmBrick.class.getSimpleName() + " pin", new RaspiPwmBrick(), R.id.brick_raspi_pwm_pin_edit_text},
-				{RaspiPwmBrick.class.getSimpleName() + " frequency", new RaspiPwmBrick(), R.id.brick_raspi_pwm_frequency_edit_text},
-				{RaspiPwmBrick.class.getSimpleName() + " percentage", new RaspiPwmBrick(), R.id.brick_raspi_pwm_percentage_edit_text},
-				{RaspiIfLogicBeginBrick.class.getSimpleName(), new RaspiIfLogicBeginBrick(), R.id.brick_if_begin_edit_text},
 
 				//Testing bricks
 				{TapAtBrick.class.getSimpleName() + " x", new TapAtBrick(), R.id.brick_tap_at_edit_text_x},

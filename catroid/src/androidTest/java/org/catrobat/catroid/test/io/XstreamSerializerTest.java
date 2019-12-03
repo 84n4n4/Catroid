@@ -29,34 +29,24 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
 import org.catrobat.catroid.ProjectManager;
-import org.catrobat.catroid.content.LegoNXTSetting;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Script;
-import org.catrobat.catroid.content.Setting;
 import org.catrobat.catroid.content.SingleSprite;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.StartScript;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.content.bricks.ComeToFrontBrick;
-import org.catrobat.catroid.content.bricks.DroneMoveForwardBrick;
 import org.catrobat.catroid.content.bricks.FormulaBrick;
 import org.catrobat.catroid.content.bricks.HideBrick;
-import org.catrobat.catroid.content.bricks.LegoNxtMotorMoveBrick;
 import org.catrobat.catroid.content.bricks.PlaceAtBrick;
 import org.catrobat.catroid.content.bricks.SetSizeToBrick;
 import org.catrobat.catroid.content.bricks.ShowBrick;
-import org.catrobat.catroid.content.bricks.SpeakBrick;
-import org.catrobat.catroid.devices.mindstorms.nxt.sensors.NXTSensor;
 import org.catrobat.catroid.formulaeditor.Formula;
-import org.catrobat.catroid.formulaeditor.FormulaElement;
-import org.catrobat.catroid.formulaeditor.Sensors;
 import org.catrobat.catroid.io.StorageOperations;
 import org.catrobat.catroid.io.XstreamSerializer;
-import org.catrobat.catroid.io.asynctask.ProjectLoadTask;
 import org.catrobat.catroid.io.asynctask.ProjectSaveTask;
 import org.catrobat.catroid.test.utils.TestUtils;
-import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -71,9 +61,7 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
 import static org.catrobat.catroid.common.Constants.CODE_XML_FILE_NAME;
-import static org.catrobat.catroid.common.Constants.PERMISSIONS_FILE_NAME;
 import static org.catrobat.catroid.common.Constants.TMP_CODE_XML_FILE_NAME;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.number.OrderingComparison.greaterThan;
 import static org.junit.Assert.assertThat;
@@ -243,124 +231,6 @@ public class XstreamSerializerTest {
 		storageHandler.saveProject(project);
 
 		assertFalse(tmpCodeFile.exists());
-	}
-
-	@Test
-	public void testGetRequiredResources() {
-		Brick.ResourcesSet resources = generateMultiplePermissionsProject().getRequiredResources();
-		assertTrue(resources.contains(Brick.ARDRONE_SUPPORT));
-		assertTrue(resources.contains(Brick.FACE_DETECTION));
-		assertTrue(resources.contains(Brick.BLUETOOTH_LEGO_NXT));
-		assertTrue(resources.contains(Brick.TEXT_TO_SPEECH));
-	}
-
-	@Test
-	public void testPermissionFileRemoved() {
-		Project project = generateMultiplePermissionsProject();
-		ProjectManager.getInstance().setCurrentProject(project);
-		XstreamSerializer.getInstance().saveProject(project);
-
-		File permissionsFile = new File(project.getDirectory(), PERMISSIONS_FILE_NAME);
-		assertFalse(permissionsFile.exists());
-	}
-
-	@Test
-	public void testSerializeSettings() {
-		NXTSensor.Sensor[] sensorMapping = new NXTSensor.Sensor[] {
-				NXTSensor.Sensor.TOUCH,
-				NXTSensor.Sensor.SOUND,
-				NXTSensor.Sensor.LIGHT_INACTIVE,
-				NXTSensor.Sensor.ULTRASONIC
-		};
-
-		Project project = generateMultiplePermissionsProject();
-		ProjectManager.getInstance().setCurrentProject(project);
-
-		SettingsFragment.setLegoMindstormsNXTSensorMapping(InstrumentationRegistry.getTargetContext(), sensorMapping);
-
-		ProjectSaveTask.task(project, InstrumentationRegistry.getTargetContext());
-
-		Setting setting = project.getSettings().get(0);
-
-		assertTrue(setting instanceof LegoNXTSetting);
-
-		LegoNXTSetting nxtSetting = (LegoNXTSetting) setting;
-		NXTSensor.Sensor[] actualSensorMapping = nxtSetting.getSensorMapping();
-
-		assertEquals(4, actualSensorMapping.length);
-
-		assertEquals(sensorMapping[0], actualSensorMapping[0]);
-		assertEquals(sensorMapping[1], actualSensorMapping[1]);
-		assertEquals(sensorMapping[2], actualSensorMapping[2]);
-		assertEquals(sensorMapping[3], actualSensorMapping[3]);
-
-		NXTSensor.Sensor[] changedSensorMapping = sensorMapping.clone();
-		changedSensorMapping[0] = NXTSensor.Sensor.LIGHT_ACTIVE;
-
-		SettingsFragment
-				.setLegoMindstormsNXTSensorMapping(InstrumentationRegistry.getTargetContext(), changedSensorMapping);
-
-		assertTrue(ProjectLoadTask
-				.task(project.getDirectory(), InstrumentationRegistry.getTargetContext()));
-
-		actualSensorMapping = SettingsFragment.getLegoNXTSensorMapping(InstrumentationRegistry.getTargetContext());
-
-		assertEquals(4, actualSensorMapping.length);
-
-		assertEquals(sensorMapping[0], actualSensorMapping[0]);
-		assertEquals(sensorMapping[1], actualSensorMapping[1]);
-		assertEquals(sensorMapping[2], actualSensorMapping[2]);
-		assertEquals(sensorMapping[3], actualSensorMapping[3]);
-
-		project = ProjectManager.getInstance().getCurrentProject();
-
-		setting = project.getSettings().get(0);
-		nxtSetting = (LegoNXTSetting) setting;
-
-		assertThat(setting, instanceOf(LegoNXTSetting.class));
-
-		actualSensorMapping = nxtSetting.getSensorMapping();
-
-		assertEquals(4, actualSensorMapping.length);
-
-		assertEquals(sensorMapping[0], actualSensorMapping[0]);
-		assertEquals(sensorMapping[1], actualSensorMapping[1]);
-		assertEquals(sensorMapping[2], actualSensorMapping[2]);
-		assertEquals(sensorMapping[3], actualSensorMapping[3]);
-	}
-
-	private Project generateMultiplePermissionsProject() {
-		Project project = new Project(InstrumentationRegistry.getTargetContext(), projectName);
-
-		LegoNxtMotorMoveBrick motorBrick = new LegoNxtMotorMoveBrick(
-				LegoNxtMotorMoveBrick.Motor.MOTOR_A, SET_SPEED_INITIALLY);
-
-		SetSizeToBrick setSizeToBrick = new SetSizeToBrick(
-				new Formula(
-						new FormulaElement(FormulaElement.ElementType.SENSOR, Sensors.FACE_SIZE.name(), null)));
-
-		Brick moveBrick = new DroneMoveForwardBrick(
-				DEFAULT_MOVE_TIME_IN_MILLISECONDS,
-				DEFAULT_MOVE_POWER_IN_PERCENT);
-
-		Sprite firstSprite = new SingleSprite("first");
-		Script testScript = new StartScript();
-		testScript.addBrick(new HideBrick());
-		testScript.addBrick(new ShowBrick());
-		testScript.addBrick(new SpeakBrick(""));
-		testScript.addBrick(motorBrick);
-		firstSprite.addScript(testScript);
-
-		Sprite secondSprite = new SingleSprite("second");
-		Script otherScript = new StartScript();
-		otherScript.addBrick(setSizeToBrick);
-		otherScript.addBrick(moveBrick);
-		secondSprite.addScript(otherScript);
-
-		project.getDefaultScene().addSprite(firstSprite);
-		project.getDefaultScene().addSprite(secondSprite);
-
-		return project;
 	}
 
 	@Test

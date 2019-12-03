@@ -23,10 +23,6 @@
 
 package org.catrobat.catroid.ui.recyclerview.controller;
 
-import android.util.Log;
-
-import org.catrobat.catroid.ProjectManager;
-import org.catrobat.catroid.cast.CastManager;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Script;
@@ -148,14 +144,6 @@ public class ScriptController {
 	public void unpack(Script scriptToUnpack, Sprite dstSprite) throws CloneNotSupportedException {
 		Script script = scriptToUnpack.clone();
 
-		for (Brick brick : script.getBrickList()) {
-			if (ProjectManager.getInstance().getCurrentProject().isCastProject()
-					&& CastManager.unsupportedBricks.contains(brick.getClass())) {
-				Log.e(TAG, "CANNOT insert bricks into ChromeCast project");
-				return;
-			}
-		}
-
 		dstSprite.getScriptList().add(script);
 	}
 
@@ -164,11 +152,6 @@ public class ScriptController {
 		Script script = scriptToUnpack.clone();
 
 		for (Brick brick : script.getBrickList()) {
-			if (ProjectManager.getInstance().getCurrentProject().isCastProject()
-					&& CastManager.unsupportedBricks.contains(brick.getClass())) {
-				Log.e(TAG, "CANNOT insert bricks into ChromeCast project");
-				return;
-			}
 
 			if (brick instanceof SetLookBrick && ((SetLookBrick) brick).getLook() != null) {
 				((SetLookBrick) brick)

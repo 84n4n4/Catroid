@@ -25,20 +25,13 @@ package org.catrobat.catroid.formulaeditor;
 import android.content.res.Resources;
 
 import org.catrobat.catroid.ProjectManager;
-import org.catrobat.catroid.bluetooth.base.BluetoothDevice;
-import org.catrobat.catroid.common.CatroidService;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.LookData;
-import org.catrobat.catroid.common.ServiceProvider;
 import org.catrobat.catroid.content.GroupSprite;
 import org.catrobat.catroid.content.Look;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.Brick;
-import org.catrobat.catroid.devices.arduino.Arduino;
-import org.catrobat.catroid.devices.raspberrypi.RPiSocketConnection;
-import org.catrobat.catroid.devices.raspberrypi.RaspberryPiService;
-import org.catrobat.catroid.nfc.NfcHandler;
 import org.catrobat.catroid.sensing.CollisionDetection;
 import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.utils.TouchUtil;
@@ -188,21 +181,6 @@ public class FormulaElement implements Serializable {
 		}
 		if (type == ElementType.USER_LIST && value.equals(oldName)) {
 			value = newName;
-		}
-	}
-
-	public void getVariableAndListNames(List<String> variables, List<String> lists) {
-		if (leftChild != null) {
-			leftChild.getVariableAndListNames(variables, lists);
-		}
-		if (rightChild != null) {
-			rightChild.getVariableAndListNames(variables, lists);
-		}
-		if (type == ElementType.USER_VARIABLE && !variables.contains(value)) {
-			variables.add(value);
-		}
-		if (type == ElementType.USER_LIST && !lists.contains(value)) {
-			lists.add(value);
 		}
 	}
 
@@ -500,35 +478,6 @@ public class FormulaElement implements Serializable {
 				return interpretFunctionJoin(sprite);
 			case REGEX:
 				return interpretFunctionRegex(sprite);
-			case ARDUINODIGITAL:
-				Arduino arduinoDigital = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).getDevice(BluetoothDevice.ARDUINO);
-				if (arduinoDigital != null && doubleValueOfLeftChild != null) {
-					if (doubleValueOfLeftChild < 0 || doubleValueOfLeftChild > 13) {
-						return defaultReturnValue;
-					}
-					return arduinoDigital.getDigitalArduinoPin(doubleValueOfLeftChild.intValue());
-				}
-				break;
-			case ARDUINOANALOG:
-				Arduino arduinoAnalog = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).getDevice(BluetoothDevice.ARDUINO);
-				if (arduinoAnalog != null && doubleValueOfLeftChild != null) {
-					if (doubleValueOfLeftChild < 0 || doubleValueOfLeftChild > 5) {
-						return defaultReturnValue;
-					}
-					return arduinoAnalog.getAnalogArduinoPin(doubleValueOfLeftChild.intValue());
-				}
-				break;
-			case RASPIDIGITAL:
-				RPiSocketConnection connection = RaspberryPiService.getInstance().connection;
-				if (doubleValueOfLeftChild != null) {
-					int pin = doubleValueOfLeftChild.intValue();
-					try {
-						return connection.getPin(pin) ? 1d : 0d;
-					} catch (Exception e) {
-						//This is expected
-					}
-				}
-				break;
 			case MULTI_FINGER_TOUCHED:
 				return (doubleValueOfLeftChild != null && TouchUtil.isFingerTouching(doubleValueOfLeftChild.intValue()))
 						? 1d : defaultReturnValue;
@@ -920,12 +869,6 @@ public class FormulaElement implements Serializable {
 			case OBJECT_DISTANCE_TO:
 				returnValue = (double) sprite.look.getDistanceToTouchPositionInUserInterfaceDimensions();
 				break;
-			case NFC_TAG_MESSAGE:
-				returnValue = NfcHandler.getLastNfcTagMessage();
-				break;
-			case NFC_TAG_ID:
-				returnValue = NfcHandler.getLastNfcTagId();
-				break;
 			case COLLIDES_WITH_EDGE:
 				if (StageActivity.stageListener != null) {
 					returnValue = StageActivity.stageListener.firstFrameDrawn ? CollisionDetection.collidesWithEdge(sprite
@@ -1157,62 +1100,12 @@ public class FormulaElement implements Serializable {
 				case FACE_Y_POSITION:
 					requiredResourcesSet.add(Brick.FACE_DETECTION);
 					break;
-
-				case NXT_SENSOR_1:
-				case NXT_SENSOR_2:
-				case NXT_SENSOR_3:
-				case NXT_SENSOR_4:
-					requiredResourcesSet.add(Brick.BLUETOOTH_LEGO_NXT);
-					break;
-
-				case EV3_SENSOR_1:
-				case EV3_SENSOR_2:
-				case EV3_SENSOR_3:
-				case EV3_SENSOR_4:
-					requiredResourcesSet.add(Brick.BLUETOOTH_LEGO_EV3);
-					break;
-
-				case PHIRO_FRONT_LEFT:
-				case PHIRO_FRONT_RIGHT:
-				case PHIRO_SIDE_LEFT:
-				case PHIRO_SIDE_RIGHT:
-				case PHIRO_BOTTOM_LEFT:
-				case PHIRO_BOTTOM_RIGHT:
-					requiredResourcesSet.add(Brick.BLUETOOTH_PHIRO);
-					break;
-
-				case DRONE_BATTERY_STATUS:
-				case DRONE_CAMERA_READY:
-				case DRONE_EMERGENCY_STATE:
-				case DRONE_FLYING:
-				case DRONE_INITIALIZED:
-				case DRONE_NUM_FRAMES:
-				case DRONE_RECORD_READY:
-				case DRONE_RECORDING:
-				case DRONE_USB_ACTIVE:
-				case DRONE_USB_REMAINING_TIME:
-					requiredResourcesSet.add(Brick.ARDRONE_SUPPORT);
-					break;
-
-				case NFC_TAG_MESSAGE:
-				case NFC_TAG_ID:
-					requiredResourcesSet.add(Brick.NFC_ADAPTER);
-					break;
-
+					
 				case COLLIDES_WITH_EDGE:
 					requiredResourcesSet.add(Brick.COLLISION);
 					break;
 				case COLLIDES_WITH_FINGER:
 					requiredResourcesSet.add(Brick.COLLISION);
-					break;
-
-				case GAMEPAD_A_PRESSED:
-				case GAMEPAD_B_PRESSED:
-				case GAMEPAD_DOWN_PRESSED:
-				case GAMEPAD_UP_PRESSED:
-				case GAMEPAD_LEFT_PRESSED:
-				case GAMEPAD_RIGHT_PRESSED:
-					requiredResourcesSet.add(Brick.CAST_REQUIRED);
 					break;
 
 				case LOUDNESS:

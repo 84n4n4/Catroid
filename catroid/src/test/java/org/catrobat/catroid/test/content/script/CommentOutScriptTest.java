@@ -27,7 +27,6 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 
 import org.catrobat.catroid.content.ActionFactory;
 import org.catrobat.catroid.content.BroadcastScript;
-import org.catrobat.catroid.content.RaspiInterruptScript;
 import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.StartScript;
@@ -35,8 +34,6 @@ import org.catrobat.catroid.content.WhenBackgroundChangesScript;
 import org.catrobat.catroid.content.WhenBounceOffScript;
 import org.catrobat.catroid.content.WhenClonedScript;
 import org.catrobat.catroid.content.WhenConditionScript;
-import org.catrobat.catroid.content.WhenGamepadButtonScript;
-import org.catrobat.catroid.content.WhenNfcScript;
 import org.catrobat.catroid.content.WhenScript;
 import org.catrobat.catroid.content.WhenTouchDownScript;
 import org.catrobat.catroid.content.actions.EventThread;
@@ -62,13 +59,10 @@ public class CommentOutScriptTest {
 		return Arrays.asList(new Object[][] {
 				{BroadcastScript.class.getSimpleName(), BroadcastScript.class},
 				{WhenBounceOffScript.class.getSimpleName(), WhenBounceOffScript.class},
-				{RaspiInterruptScript.class.getSimpleName(), RaspiInterruptScript.class},
 				{StartScript.class.getSimpleName(), StartScript.class},
 				{WhenBackgroundChangesScript.class.getSimpleName(), WhenBackgroundChangesScript.class},
 				{WhenClonedScript.class.getSimpleName(), WhenClonedScript.class},
 				{WhenConditionScript.class.getSimpleName(), WhenConditionScript.class},
-				{WhenGamepadButtonScript.class.getSimpleName(), WhenGamepadButtonScript.class},
-				{WhenNfcScript.class.getSimpleName(), WhenNfcScript.class},
 				{WhenScript.class.getSimpleName(), WhenScript.class},
 				{WhenTouchDownScript.class.getSimpleName(), WhenTouchDownScript.class},
 		});

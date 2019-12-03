@@ -152,14 +152,6 @@ public class InternFormulaKeyboardAdapter {
 						InternTokenType.USER_LIST, "list name",
 						InternTokenType.NUMBER, "1");
 
-			case R.string.formula_editor_function_arduino_read_pin_value_digital:
-				return buildSingleParameterFunction(Functions.ARDUINODIGITAL, InternTokenType.NUMBER, "0");
-			case R.string.formula_editor_function_arduino_read_pin_value_analog:
-				return buildSingleParameterFunction(Functions.ARDUINOANALOG, InternTokenType.NUMBER, "0");
-
-			case R.string.formula_editor_function_raspi_read_pin_value_digital:
-				return buildSingleParameterFunction(Functions.RASPIDIGITAL, InternTokenType.NUMBER, "0");
-
 			case R.string.formula_editor_function_finger_x:
 				return buildSensor(Sensors.FINGER_X);
 			case R.string.formula_editor_function_finger_y:
@@ -205,18 +197,6 @@ public class InternFormulaKeyboardAdapter {
 				return buildSensor(Sensors.FACE_X_POSITION);
 			case R.string.formula_editor_sensor_face_y_position:
 				return buildSensor(Sensors.FACE_Y_POSITION);
-			case R.string.formula_editor_phiro_sensor_front_left:
-				return buildSensor(Sensors.PHIRO_FRONT_LEFT);
-			case R.string.formula_editor_phiro_sensor_front_right:
-				return buildSensor(Sensors.PHIRO_FRONT_RIGHT);
-			case R.string.formula_editor_phiro_sensor_side_left:
-				return buildSensor(Sensors.PHIRO_SIDE_LEFT);
-			case R.string.formula_editor_phiro_sensor_side_right:
-				return buildSensor(Sensors.PHIRO_SIDE_RIGHT);
-			case R.string.formula_editor_phiro_sensor_bottom_left:
-				return buildSensor(Sensors.PHIRO_BOTTOM_LEFT);
-			case R.string.formula_editor_phiro_sensor_bottom_right:
-				return buildSensor(Sensors.PHIRO_BOTTOM_RIGHT);
 			case R.string.formula_editor_sensor_date_year:
 				return buildSensor(Sensors.DATE_YEAR);
 			case R.string.formula_editor_sensor_date_month:
@@ -231,63 +211,6 @@ public class InternFormulaKeyboardAdapter {
 				return buildSensor(Sensors.TIME_MINUTE);
 			case R.string.formula_editor_sensor_time_second:
 				return buildSensor(Sensors.TIME_SECOND);
-			case R.string.formula_editor_nfc_tag_id:
-				return buildSensor(Sensors.NFC_TAG_ID);
-			case R.string.formula_editor_nfc_tag_message:
-				return buildSensor(Sensors.NFC_TAG_MESSAGE);
-
-			case R.string.formula_editor_sensor_lego_nxt_1:
-				return buildSensor(Sensors.NXT_SENSOR_1);
-			case R.string.formula_editor_sensor_lego_nxt_2:
-				return buildSensor(Sensors.NXT_SENSOR_2);
-			case R.string.formula_editor_sensor_lego_nxt_3:
-				return buildSensor(Sensors.NXT_SENSOR_3);
-			case R.string.formula_editor_sensor_lego_nxt_4:
-				return buildSensor(Sensors.NXT_SENSOR_4);
-
-			case R.string.formula_editor_sensor_lego_ev3_1:
-				return buildSensor(Sensors.EV3_SENSOR_1);
-			case R.string.formula_editor_sensor_lego_ev3_2:
-				return buildSensor(Sensors.EV3_SENSOR_2);
-			case R.string.formula_editor_sensor_lego_ev3_3:
-				return buildSensor(Sensors.EV3_SENSOR_3);
-			case R.string.formula_editor_sensor_lego_ev3_4:
-				return buildSensor(Sensors.EV3_SENSOR_4);
-
-			case R.string.formula_editor_sensor_gamepad_a_pressed:
-				return buildSensor(Sensors.GAMEPAD_A_PRESSED);
-			case R.string.formula_editor_sensor_gamepad_b_pressed:
-				return buildSensor(Sensors.GAMEPAD_B_PRESSED);
-			case R.string.formula_editor_sensor_gamepad_up_pressed:
-				return buildSensor(Sensors.GAMEPAD_UP_PRESSED);
-			case R.string.formula_editor_sensor_gamepad_down_pressed:
-				return buildSensor(Sensors.GAMEPAD_DOWN_PRESSED);
-			case R.string.formula_editor_sensor_gamepad_left_pressed:
-				return buildSensor(Sensors.GAMEPAD_LEFT_PRESSED);
-			case R.string.formula_editor_sensor_gamepad_right_pressed:
-				return buildSensor(Sensors.GAMEPAD_RIGHT_PRESSED);
-
-			case R.string.formula_editor_sensor_drone_battery_status:
-				return buildSensor(Sensors.DRONE_BATTERY_STATUS);
-			case R.string.formula_editor_sensor_drone_emergency_state:
-				return buildSensor(Sensors.DRONE_EMERGENCY_STATE);
-			case R.string.formula_editor_sensor_drone_flying:
-				return buildSensor(Sensors.DRONE_FLYING);
-			case R.string.formula_editor_sensor_drone_initialized:
-				return buildSensor(Sensors.DRONE_INITIALIZED);
-			case R.string.formula_editor_sensor_drone_usb_active:
-				return buildSensor(Sensors.DRONE_USB_ACTIVE);
-			case R.string.formula_editor_sensor_drone_usb_remaining_time:
-				return buildSensor(Sensors.DRONE_USB_REMAINING_TIME);
-			case R.string.formula_editor_sensor_drone_camera_ready:
-				return buildSensor(Sensors.DRONE_CAMERA_READY);
-			case R.string.formula_editor_sensor_drone_record_ready:
-				return buildSensor(Sensors.DRONE_RECORD_READY);
-			case R.string.formula_editor_sensor_drone_recording:
-				return buildSensor(Sensors.DRONE_RECORDING);
-			case R.string.formula_editor_sensor_drone_num_frames:
-				return buildSensor(Sensors.DRONE_NUM_FRAMES);
-
 			case R.id.formula_editor_keyboard_decimal_mark:
 				return buildPeriod();
 
